@@ -25,17 +25,31 @@ import {
 
 type HeroStat = { value: number; suffix: string; prefix?: string; label: string; decimals?: number };
 
-const AnimatedStat = ({ stat }: { stat: HeroStat }) => {
+const AnimatedStat = ({ stat, className = "font-display text-3xl font-bold text-gradient" }: { stat: HeroStat; className?: string }) => {
   const v = useCountUp(stat.value, 1800, stat.decimals ?? 0);
   const formatted = (stat.decimals ?? 0) > 0 ? v.toFixed(stat.decimals) : Math.round(v).toString();
   return (
     <div>
-      <div className="font-display text-3xl font-bold text-gradient">
+      <div className={className}>
         {stat.prefix ?? ""}{formatted}{stat.suffix}
       </div>
-      <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
+      {stat.label ? <div className="text-sm text-muted-foreground mt-1">{stat.label}</div> : null}
     </div>
   );
+};
+
+/** Parse strings like "-30%", "+2x", "95%", "360°", "10x", "+40%" into a HeroStat */
+const parseStat = (raw: string): HeroStat => {
+  const m = raw.match(/^([+-]?)(\d+(?:\.\d+)?)(.*)$/);
+  if (!m) return { value: 0, suffix: raw, label: "" };
+  const [, sign, num, suffix] = m;
+  return {
+    value: parseFloat(num),
+    prefix: sign === "+" ? "+" : sign === "-" ? "-" : "",
+    suffix,
+    decimals: num.includes(".") ? 1 : 0,
+    label: "",
+  };
 };
 
 const Index = () => {
