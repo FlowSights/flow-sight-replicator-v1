@@ -139,13 +139,23 @@ const Index = () => {
             <img src={logo} alt="FlowSights logo" width={36} height={36} className="w-9 h-9 object-contain" />
             <span>FlowSights</span>
           </a>
-          <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
-            {navLinks.map((l) => (
-              <a key={l.href} href={l.href} className="hover:text-foreground transition-colors">{l.label}</a>
-            ))}
-          </div>
           <div className="flex items-center gap-2">
             <ThemeToggle />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="gap-2">
+                  <Menu className="w-4 h-4" />
+                  <span className="hidden sm:inline">Menú</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56 bg-background/95 backdrop-blur-xl">
+                {navLinks.map((l) => (
+                  <DropdownMenuItem key={l.href} asChild>
+                    <a href={l.href} className="cursor-pointer">{l.label}</a>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Button variant="hero" size="sm" asChild>
               <a href="#contacto">Diagnóstico gratuito</a>
             </Button>
