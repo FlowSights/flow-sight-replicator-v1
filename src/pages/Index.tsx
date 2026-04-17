@@ -180,9 +180,13 @@ const Index = () => {
               En FlowSights ayudamos a empresas a limpiar sus datos, optimizar procesos y detectar oportunidades ocultas en sus operaciones.
             </p>
             <div className="flex flex-wrap gap-3">
-              {["Limpieza de datos", "Insights operativos", "Dashboards en tiempo real"].map((t) => (
-                <span key={t} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-card/50 text-sm">
-                  <Check className="w-4 h-4 text-primary" /> {t}
+              {["Limpieza de datos", "Insights operativos", "Dashboards en tiempo real"].map((t, i) => (
+                <span
+                  key={t}
+                  style={{ animationDelay: `${i * 0.4}s` }}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-card/50 text-sm animate-float cursor-default transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:border-primary/60 hover:bg-primary/10 hover:text-foreground hover:shadow-[0_8px_24px_-8px_hsl(var(--primary)/0.4)]"
+                >
+                  <Check className="w-4 h-4 text-primary transition-transform duration-300 group-hover:rotate-12" /> {t}
                 </span>
               ))}
             </div>
@@ -195,15 +199,12 @@ const Index = () => {
               </Button>
             </div>
             <div className="grid grid-cols-3 gap-6 pt-8 border-t border-border/60 max-w-lg">
-              {[
-                { v: "30%", l: "Reducción de costos" },
-                { v: "2x", l: "Mayor productividad" },
-                { v: "95%", l: "Precisión de datos" },
-              ].map((s) => (
-                <div key={s.l}>
-                  <div className="font-display text-3xl font-bold text-gradient">{s.v}</div>
-                  <div className="text-sm text-muted-foreground mt-1">{s.l}</div>
-                </div>
+              {([
+                { value: 30, suffix: "%", label: "Reducción de costos" },
+                { value: 2, suffix: "x", label: "Mayor productividad" },
+                { value: 95, suffix: "%", label: "Precisión de datos" },
+              ] as HeroStat[]).map((s) => (
+                <AnimatedStat key={s.label} stat={s} />
               ))}
             </div>
           </div>
