@@ -8,13 +8,35 @@ import {
   ArrowRight, ArrowDown, ArrowUp, Play, Check, Sparkles, Database, LineChart,
   Workflow, BarChart3, Activity, Factory, Truck, Hotel, UtensilsCrossed,
   Stethoscope, ShoppingBag, HardHat, Plus, Mail, ShieldCheck, Zap, Eye,
-  TrendingUp, Clock, DollarSign,
+  TrendingUp, Clock, DollarSign, Menu,
 } from "lucide-react";
 import heroDashboard from "@/assets/hero-dashboard.png";
 import logo from "@/assets/logo.png";
 import { useState } from "react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { supabase } from "@/integrations/supabase/client";
+import { useCountUp } from "@/hooks/useCountUp";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+type HeroStat = { value: number; suffix: string; prefix?: string; label: string; decimals?: number };
+
+const AnimatedStat = ({ stat }: { stat: HeroStat }) => {
+  const v = useCountUp(stat.value, 1800, stat.decimals ?? 0);
+  const formatted = (stat.decimals ?? 0) > 0 ? v.toFixed(stat.decimals) : Math.round(v).toString();
+  return (
+    <div>
+      <div className="font-display text-3xl font-bold text-gradient">
+        {stat.prefix ?? ""}{formatted}{stat.suffix}
+      </div>
+      <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
+    </div>
+  );
+};
 
 const Index = () => {
   const { toast } = useToast();
