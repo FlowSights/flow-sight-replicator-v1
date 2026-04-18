@@ -527,7 +527,7 @@ const Index = () => {
 
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             {team.map((m) => (
-              <Card key={m.name} className="p-7 glass-card text-center hover:border-primary/50 transition-all">
+              <Card key={m.name} className="p-7 glass-card text-center hover:border-primary/60 hover:-translate-y-1 hover:shadow-glow transition-all group">
                 <div className="w-20 h-20 rounded-full bg-gradient-primary grid place-items-center text-primary-foreground font-bold text-xl mx-auto mb-4 shadow-glow">
                   {m.initials}
                 </div>
