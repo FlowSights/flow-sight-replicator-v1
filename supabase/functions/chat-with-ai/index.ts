@@ -69,7 +69,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY");
+    const GEMINI_API_KEY = Deno.env.get("GEMINI_SECRET_KEY");
     if (!GEMINI_API_KEY) throw new Error("GEMINI_API_KEY is not configured");
 
     const body = (await req.json()) as Partial<ChatPayload>;
