@@ -8,14 +8,17 @@ import {
   ArrowRight, ArrowDown, ArrowUp, Play, Check, Sparkles, Database, LineChart,
   Workflow, BarChart3, Activity, Factory, Truck, Hotel, UtensilsCrossed,
   Stethoscope, ShoppingBag, HardHat, Plus, Mail, ShieldCheck, Zap, Eye,
-  TrendingUp, Clock, DollarSign, Menu,
+  TrendingUp, Clock, DollarSign, Menu, MessageCircle,
 } from "lucide-react";
+import { Instagram } from "@/components/icons/Instagram";
 import heroDashboard from "@/assets/hero-dashboard.png";
 import logo from "@/assets/logo.png";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { supabase } from "@/integrations/supabase/client";
 import { useCountUp } from "@/hooks/useCountUp";
+import { ToolsMarquee } from "@/components/ToolsMarquee";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,15 +26,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+const WHATSAPP_URL = "https://wa.me/message/FVHDA5OZHN66P1";
+const EMAIL_URL = "mailto:contacto@flowsights.it.com";
+const INSTAGRAM_URL = "https://www.instagram.com/flowsights_cr/";
+
 type HeroStat = { value: number; suffix: string; prefix?: string; label: string; decimals?: number };
 
 const AnimatedStat = ({ stat, className = "font-display text-3xl font-bold text-gradient" }: { stat: HeroStat; className?: string }) => {
-  const v = useCountUp(stat.value, 1800, stat.decimals ?? 0);
-  const formatted = (stat.decimals ?? 0) > 0 ? v.toFixed(stat.decimals) : Math.round(v).toString();
+  const { value, ref } = useCountUp(stat.value, 1800, stat.decimals ?? 0);
+  const formatted = (stat.decimals ?? 0) > 0 ? value.toFixed(stat.decimals) : Math.round(value).toString();
   return (
     <div>
       <div className={className}>
-        {stat.prefix ?? ""}{formatted}{stat.suffix}
+        <span ref={ref}>{stat.prefix ?? ""}{formatted}{stat.suffix}</span>
       </div>
       {stat.label ? <div className="text-sm text-muted-foreground mt-1">{stat.label}</div> : null}
     </div>
@@ -121,12 +128,12 @@ const Index = () => {
   const testimonials = [
     { quote: "FlowSights nos ayudó a identificar que teníamos un 18% de duplicados en nuestra base de clientes. Después de la limpieza, nuestros reportes son mucho más precisos y ahorramos tiempo en cada cierre mensual.", initials: "CM", name: "Carlos Mendoza", role: "Director de Operaciones · Grupo Logístico Norte", sector: "Logística" },
     { quote: "Teníamos datos de ocupación dispersos en tres sistemas diferentes. FlowSights los unificó y nos entregó un dashboard que ahora usamos todos los días para tomar decisiones de pricing.", initials: "AR", name: "Ana Rodríguez", role: "Gerente General · Hotel Palmas Reales", sector: "Hotelería" },
-    { quote: "Detectaron un problema en nuestro inventario que nos estaba costando $200,000 pesos al mes en sobre-stock. En 3 semanas ya teníamos el proceso corregido y los datos en orden.", initials: "RF", name: "Roberto Fuentes", role: "CEO · Manufactura Fuentes S.A.", sector: "Manufactura" },
+    { quote: "Detectaron un problema en nuestro inventario que nos estaba costando ₡120.000.000 (colones) al mes en sobre-stock. En 3 semanas ya teníamos el proceso corregido y los datos en orden.", initials: "RF", name: "Roberto Fuentes", role: "CEO · Manufactura Fuentes S.A.", sector: "Manufactura" },
   ];
 
   const team = [
     { initials: "MG", name: "Marcos García", role: "Ingeniero Industrial", desc: "Amplio conocimiento en optimización de procesos", tags: ["Optimización de procesos", "Análisis operativo", "Eficiencia"] },
-    { initials: "SP", name: "Steven Pineda", role: "International Operations", desc: "Customer Experience & Sales Professional con más de 5 años de experiencia en múltiples industrias", tags: ["Experiencia del cliente", "Operaciones internacionales", "Ventas"] },
+    { initials: "SP", name: "Steven Pineda", role: "AI Data Analyst Junior · International Operations", desc: "AI Data Analyst Junior y Customer Experience & Sales Professional con más de 5 años de experiencia en múltiples industrias.", tags: ["AI Data Analyst Junior", "Experiencia del cliente", "Operaciones internacionales"] },
     { initials: "OZ", name: "Oscar Zapata", role: "Especialista en Control de Inventarios", desc: "Especialista en control de inventarios, manejo de operaciones y ventas", tags: ["Control de inventarios", "Manejo de operaciones", "Ventas"] },
   ];
 
@@ -159,11 +166,11 @@ const Index = () => {
     <div className="min-h-screen overflow-x-hidden">
       {/* NAVBAR */}
       <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-xl bg-background/70 border-b border-border/50">
-        <nav className="container flex items-center justify-between h-16">
-          <a href="#" className="flex items-center gap-2 font-display font-bold text-lg">
-            <img src={logo} alt="FlowSights logo" width={36} height={36} className="w-9 h-9 object-contain" />
+        <nav className="container flex items-center justify-between h-20">
+          <Link to="/" className="flex items-center gap-2.5 font-display font-bold text-xl md:text-2xl hover:opacity-90 transition-opacity">
+            <img src={logo} alt="FlowSights logo" width={48} height={48} className="w-12 h-12 object-contain" />
             <span>FlowSights</span>
-          </a>
+          </Link>
           <div className="flex items-center gap-2">
             <ThemeToggle />
             <DropdownMenu>
@@ -181,7 +188,7 @@ const Index = () => {
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button variant="hero" size="sm" asChild>
+            <Button variant="hero" size="sm" asChild className="hidden sm:inline-flex">
               <a href="#contacto">Diagnóstico gratuito</a>
             </Button>
           </div>
@@ -197,11 +204,11 @@ const Index = () => {
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse-glow" />
               Plataforma de Inteligencia Operativa
             </span>
-            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05]">
+            <h1 className="font-display text-6xl md:text-7xl lg:text-8xl font-bold leading-[1.05]">
               Convierte tus datos en{" "}
               <span className="text-gradient">decisiones inteligentes</span>
             </h1>
-            <p className="text-lg text-muted-foreground max-w-xl leading-relaxed">
+            <p className="text-xl md:text-2xl text-muted-foreground max-w-xl leading-relaxed">
               En FlowSights ayudamos a empresas a limpiar sus datos, optimizar procesos y detectar oportunidades ocultas en sus operaciones.
             </p>
             <div className="flex flex-wrap gap-3">
@@ -211,12 +218,17 @@ const Index = () => {
                 </span>
               ))}
             </div>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-3">
               <Button variant="hero" size="lg" asChild>
                 <a href="#contacto">Solicitar diagnóstico gratuito <ArrowRight className="ml-1" /></a>
               </Button>
+              <Button size="lg" asChild className="bg-[#25D366] hover:bg-[#20bd5a] text-white">
+                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                  <MessageCircle className="mr-1" /> WhatsApp
+                </a>
+              </Button>
               <Button variant="outline" size="lg" asChild>
-                <a href="#proceso"><Play className="mr-1" /> Ver cómo funciona</a>
+                <a href={EMAIL_URL}><Mail className="mr-1" /> Contáctanos</a>
               </Button>
             </div>
             <div className="grid grid-cols-3 gap-6 pt-8 border-t border-border/60 max-w-lg">
@@ -257,7 +269,10 @@ const Index = () => {
         </div>
       </section>
 
-      {/* PROBLEM */}
+      {/* TOOLS MARQUEE */}
+      <ToolsMarquee />
+
+
       <section className="py-24 relative">
         <div className="container">
           <div className="text-center max-w-2xl mx-auto mb-16">
@@ -478,7 +493,7 @@ const Index = () => {
 
           <div className="grid md:grid-cols-3 gap-6">
             {testimonials.map((t) => (
-              <Card key={t.name} className="p-7 glass-card hover:border-primary/40 transition-all flex flex-col">
+              <Card key={t.name} className="p-7 glass-card hover:border-primary/60 hover:-translate-y-1 hover:shadow-glow transition-all flex flex-col group">
                 <div className="text-primary text-4xl font-display leading-none mb-3">"</div>
                 <p className="text-foreground/90 leading-relaxed flex-1">{t.quote}</p>
                 <div className="flex items-center gap-3 mt-6 pt-6 border-t border-border/60">
@@ -512,7 +527,7 @@ const Index = () => {
 
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             {team.map((m) => (
-              <Card key={m.name} className="p-7 glass-card text-center hover:border-primary/50 transition-all">
+              <Card key={m.name} className="p-7 glass-card text-center hover:border-primary/60 hover:-translate-y-1 hover:shadow-glow transition-all group">
                 <div className="w-20 h-20 rounded-full bg-gradient-primary grid place-items-center text-primary-foreground font-bold text-xl mx-auto mb-4 shadow-glow">
                   {m.initials}
                 </div>
@@ -595,7 +610,7 @@ const Index = () => {
                 {submitting ? "Enviando..." : <>Solicitar diagnóstico gratuito <ArrowRight className="ml-1" /></>}
               </Button>
               <p className="text-xs text-muted-foreground text-center">
-                Al enviar este formulario aceptas nuestra <a href="#" className="text-primary hover:underline">política de privacidad</a>.
+                Al enviar este formulario aceptas nuestra <Link to="/privacidad" className="text-primary hover:underline">política de privacidad</Link>.
               </p>
             </form>
           </Card>
@@ -645,14 +660,38 @@ const Index = () => {
                   <Mail className="w-4 h-4" /> contacto@flowsights.it.com
                 </a>
               </li>
+              <li>
+                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-primary transition-colors">
+                  <MessageCircle className="w-4 h-4" /> WhatsApp
+                </a>
+              </li>
+              <li>
+                <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-primary transition-colors">
+                  <Instagram className="w-4 h-4" /> @flowsights_cr
+                </a>
+              </li>
               <li>San José, Costa Rica</li>
+              <li>
+                <Link to="/privacidad" className="hover:text-primary transition-colors">Política de privacidad</Link>
+              </li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-border/50">
-          <div className="container py-6 text-center text-sm text-muted-foreground">
-            © {new Date().getFullYear()} FlowSights. Todos los derechos reservados.
+          <div className="container py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+            <span>© {new Date().getFullYear()} FlowSights. Todos los derechos reservados.</span>
+            <div className="flex items-center gap-3">
+              <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-9 h-9 grid place-items-center rounded-full border border-border/60 hover:border-primary/50 hover:text-primary transition-colors">
+                <Instagram className="w-4 h-4" />
+              </a>
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="w-9 h-9 grid place-items-center rounded-full border border-border/60 hover:border-primary/50 hover:text-primary transition-colors">
+                <MessageCircle className="w-4 h-4" />
+              </a>
+              <a href={EMAIL_URL} aria-label="Email" className="w-9 h-9 grid place-items-center rounded-full border border-border/60 hover:border-primary/50 hover:text-primary transition-colors">
+                <Mail className="w-4 h-4" />
+              </a>
+            </div>
           </div>
         </div>
       </footer>
