@@ -725,6 +725,9 @@ const Index = () => {
               </li>
               <li>San José, Costa Rica</li>
               <li>
+                <Link to="/blog" className="hover:text-primary transition-colors">Blog</Link>
+              </li>
+              <li>
                 <Link to="/privacidad" className="hover:text-primary transition-colors">Política de privacidad</Link>
               </li>
             </ul>
