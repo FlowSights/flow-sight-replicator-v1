@@ -8,8 +8,9 @@ import {
   ArrowRight, ArrowDown, ArrowUp, Play, Check, Sparkles, Database, LineChart,
   Workflow, BarChart3, Activity, Factory, Truck, Hotel, UtensilsCrossed,
   Stethoscope, ShoppingBag, HardHat, Plus, Mail, ShieldCheck, Zap, Eye,
-  TrendingUp, Clock, DollarSign, Menu, MessageCircle, Instagram,
+  TrendingUp, Clock, DollarSign, Menu, MessageCircle,
 } from "lucide-react";
+import { Instagram } from "@/components/icons/Instagram";
 import heroDashboard from "@/assets/hero-dashboard.png";
 import logo from "@/assets/logo.png";
 import { useState } from "react";
