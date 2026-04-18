@@ -3,6 +3,12 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
 import {
   ArrowRight, ArrowDown, ArrowUp, Play, Check, Sparkles, Database, LineChart,
@@ -82,6 +88,7 @@ const Index = () => {
     { label: "Servicios", href: "#servicios" },
     { label: "Industrias", href: "#industrias" },
     { label: "Quiénes somos", href: "#equipo" },
+    { label: "FAQ", href: "#faq" },
     { label: "Blog", href: "/blog" },
     { label: "Contacto", href: "#contacto" },
   ];
@@ -612,6 +619,86 @@ const Index = () => {
             <Button variant="outline" size="lg" asChild>
               <Link to="/blog">Ver todos los artículos <ArrowRight className="ml-1" /></Link>
             </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section id="faq" className="py-24 border-t border-border/50">
+        <div className="container">
+          <div className="text-center mb-16">
+            <span className="text-sm font-semibold text-primary uppercase tracking-wider">Preguntas frecuentes</span>
+            <h2 className="font-display text-4xl md:text-5xl font-bold mt-3">
+              Respuestas a tus <span className="text-gradient">dudas</span>
+            </h2>
+            <p className="text-muted-foreground mt-4 text-lg max-w-2xl mx-auto">
+              Todo lo que necesitas saber sobre cómo FlowSights puede transformar tus datos en decisiones.
+            </p>
+          </div>
+
+          <div className="max-w-3xl mx-auto">
+            <Accordion type="single" collapsible className="space-y-3">
+              <AccordionItem value="item-1" className="border border-border/50 rounded-lg px-6 py-4 data-[state=open]:bg-card/50">
+                <AccordionTrigger className="hover:no-underline text-lg font-semibold">
+                  ¿Cuánto tiempo tarda el diagnóstico gratuito?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground pt-4">
+                  El diagnóstico inicial toma entre 24 a 48 horas. Nuestro equipo analiza tu operación actual, identifica los principales problemas de datos y te presenta un reporte detallado con recomendaciones específicas para tu industria.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="item-2" className="border border-border/50 rounded-lg px-6 py-4 data-[state=open]:bg-card/50">
+                <AccordionTrigger className="hover:no-underline text-lg font-semibold">
+                  ¿Qué información necesitan para el diagnóstico?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground pt-4">
+                  Solo necesitamos acceso a tus datos operativos actuales (inventarios, ventas, procesos, etc.). No requiere información financiera sensible. Todos los datos se manejan con total confidencialidad bajo acuerdos de NDA.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="item-3" className="border border-border/50 rounded-lg px-6 py-4 data-[state=open]:bg-card/50">
+                <AccordionTrigger className="hover:no-underline text-lg font-semibold">
+                  ¿Cuál es la diferencia entre FlowSights y otras herramientas de BI?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground pt-4">
+                  FlowSights se especializa en PyMEs y empresas medianas. No vendemos software genérico: diseñamos soluciones específicas para tu industria. Nuestro enfoque es en optimización operativa, no solo en visualización de datos.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="item-4" className="border border-border/50 rounded-lg px-6 py-4 data-[state=open]:bg-card/50">
+                <AccordionTrigger className="hover:no-underline text-lg font-semibold">
+                  ¿Necesito personal técnico para usar FlowSights?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground pt-4">
+                  No. Nuestros dashboards están diseñados para que cualquier gerente o supervisor pueda usarlos sin conocimientos técnicos. Incluimos capacitación completa y soporte continuo.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="item-5" className="border border-border/50 rounded-lg px-6 py-4 data-[state=open]:bg-card/50">
+                <AccordionTrigger className="hover:no-underline text-lg font-semibold">
+                  ¿Cuánto cuesta la implementación?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground pt-4">
+                  Los costos varían según la complejidad de tu operación y los sistemas que necesites integrar. Por eso ofrecemos el diagnóstico gratuito: para darte una propuesta personalizada y transparente, sin sorpresas.
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="item-6" className="border border-border/50 rounded-lg px-6 py-4 data-[state=open]:bg-card/50">
+                <AccordionTrigger className="hover:no-underline text-lg font-semibold">
+                  ¿Qué pasa si no estoy satisfecho con los resultados?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground pt-4">
+                  Nos comprometemos a que veas mejoras en 90 días. Si no ves el impacto esperado, trabajamos contigo sin costo adicional hasta lograrlo. Tu éxito es nuestro éxito.
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
+
+          <div className="text-center mt-12">
+            <p className="text-muted-foreground mb-4">¿Tienes otra pregunta?</p>
+            <a href="mailto:contacto@flowsights.it.com" className="inline-flex items-center gap-2 text-primary font-medium hover:underline">
+              <Mail className="w-4 h-4" /> Contáctanos directamente
+            </a>
           </div>
         </div>
       </section>
