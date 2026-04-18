@@ -563,6 +563,48 @@ const Index = () => {
         </div>
       </section>
 
+      {/* BLOG PREVIEW */}
+      <section id="blog" className="py-24 border-t border-border/50">
+        <div className="container">
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <span className="text-sm font-semibold text-primary uppercase tracking-wider">Blog & Recursos</span>
+            <h2 className="font-display text-4xl md:text-5xl font-bold mt-3">
+              Aprende a operar con <span className="text-gradient">datos confiables</span>
+            </h2>
+            <p className="text-muted-foreground mt-4 text-lg">
+              Artículos cortos y prácticos sobre operaciones, calidad de datos y decisiones inteligentes.
+            </p>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-3">
+            {blogPreview.map((post, i) => {
+              const a = pickAccent(i);
+              return (
+                <Link key={post.slug} to={`/blog/${post.slug}`} className="group">
+                  <Card className={`p-6 h-full glass-card border border-border/60 transition-all duration-300 hover:-translate-y-1 hover:shadow-glow ${a.border}`}>
+                    <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
+                      <span className={`px-2 py-0.5 rounded-full ${a.bg} ${a.text} font-medium`}>{post.category}</span>
+                      <span>{post.readingTime}</span>
+                    </div>
+                    <h3 className="font-display text-lg font-bold leading-snug group-hover:text-primary transition-colors">{post.title}</h3>
+                    <p className="text-sm text-muted-foreground mt-3 leading-relaxed">{post.excerpt}</p>
+                    <span className="inline-flex items-center gap-1 mt-5 text-primary text-sm font-medium">
+                      Leer artículo <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+                    </span>
+                  </Card>
+                </Link>
+              );
+            })}
+          </div>
+
+          <div className="text-center mt-10">
+            <Button variant="outline" size="lg" asChild>
+              <Link to="/blog">Ver todos los artículos <ArrowRight className="ml-1" /></Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* CONTACT */}
       <section id="contacto" className="py-24 bg-card/30 border-t border-border/50">
         <div className="container grid lg:grid-cols-2 gap-12">
