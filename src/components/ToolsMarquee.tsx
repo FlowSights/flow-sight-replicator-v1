@@ -1,4 +1,4 @@
-import { Bot, FileSpreadsheet, BarChart3, Sparkles, Search, Stars, Layers, Share2 } from "lucide-react";
+import { Bot, FileSpreadsheet, BarChart3, Sparkles, Search, Stars, Layers, Globe } from "lucide-react";
 
 const tools = [
   { name: "ChatGPT", icon: Bot },
@@ -10,7 +10,7 @@ const tools = [
   { name: "Excel", icon: FileSpreadsheet },
   { name: "Microsoft 365", icon: Layers },
   { name: "Google Workspace", icon: Layers },
-  { name: "Meta", icon: Share2 },
+  { name: "Meta", icon: Globe },
 ];
 
 export const ToolsMarquee = () => {
