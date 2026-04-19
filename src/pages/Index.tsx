@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
 import {
-  ArrowRight, ArrowDown, ArrowUp, Play, Check, Sparkles, Database, LineChart,
+  ArrowRight, ArrowDown, ArrowUp, Play, Check, CheckCircle2, Sparkles, Database, LineChart,
   Workflow, BarChart3, Activity, Factory, Truck, Hotel, UtensilsCrossed,
   Stethoscope, ShoppingBag, HardHat, Plus, Mail, ShieldCheck, Zap, Eye,
   TrendingUp, Clock, DollarSign, Menu, MessageCircle,
@@ -156,6 +156,7 @@ const Index = () => {
   ];
 
   const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -166,8 +167,8 @@ const Index = () => {
         body: form,
       });
       if (error) throw error;
-      toast({ title: "¡Solicitud enviada!", description: "Te contactaremos en menos de 24 horas." });
       setForm({ name: "", email: "", company: "", message: "" });
+      setSubmitted(true);
     } catch (err) {
       console.error(err);
       toast({
@@ -738,33 +739,58 @@ const Index = () => {
           </div>
 
           <Card className="p-8 glass-card shadow-elevated">
-            <h3 className="font-display text-2xl font-bold">Solicitar diagnóstico gratuito</h3>
-            <p className="text-sm text-muted-foreground mt-2">Completa el formulario y te contactamos en menos de 24 horas.</p>
+            {submitted ? (
+              <div className="flex flex-col items-center justify-center text-center py-8 animate-fade-in">
+                <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-6 ring-4 ring-primary/20">
+                  <CheckCircle2 className="w-12 h-12 text-primary" />
+                </div>
+                <h3 className="font-display text-2xl font-bold mb-3">¡Solicitud enviada con éxito!</h3>
+                <p className="text-muted-foreground max-w-sm mb-2">
+                  Hemos recibido tu información correctamente.
+                </p>
+                <p className="text-foreground font-medium mb-8">
+                  Te contactaremos en menos de <span className="text-primary">24 horas</span>.
+                </p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setSubmitted(false)}
+                  className="mt-2"
+                >
+                  Enviar otra solicitud
+                </Button>
+              </div>
+            ) : (
+              <>
+                <h3 className="font-display text-2xl font-bold">Solicitar diagnóstico gratuito</h3>
+                <p className="text-sm text-muted-foreground mt-2">Completa el formulario y te contactamos en menos de 24 horas.</p>
 
-            <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-              <div>
-                <Label htmlFor="name">Nombre completo *</Label>
-                <Input id="name" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="mt-1.5" placeholder="Tu nombre" />
-              </div>
-              <div>
-                <Label htmlFor="email">Correo electrónico *</Label>
-                <Input id="email" type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="mt-1.5" placeholder="tu@empresa.com" />
-              </div>
-              <div>
-                <Label htmlFor="company">Empresa *</Label>
-                <Input id="company" required value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} className="mt-1.5" placeholder="Nombre de tu empresa" />
-              </div>
-              <div>
-                <Label htmlFor="message">Mensaje</Label>
-                <Textarea id="message" rows={4} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className="mt-1.5" placeholder="Cuéntanos brevemente tu situación..." />
-              </div>
-              <Button type="submit" variant="hero" size="lg" className="w-full" disabled={submitting}>
-                {submitting ? "Enviando..." : <>Solicitar diagnóstico gratuito <ArrowRight className="ml-1" /></>}
-              </Button>
-              <p className="text-xs text-muted-foreground text-center">
-                Al enviar este formulario aceptas nuestra <Link to="/privacidad" className="text-primary hover:underline">política de privacidad</Link>.
-              </p>
-            </form>
+                <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+                  <div>
+                    <Label htmlFor="name">Nombre completo *</Label>
+                    <Input id="name" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="mt-1.5" placeholder="Tu nombre" />
+                  </div>
+                  <div>
+                    <Label htmlFor="email">Correo electrónico *</Label>
+                    <Input id="email" type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="mt-1.5" placeholder="tu@empresa.com" />
+                  </div>
+                  <div>
+                    <Label htmlFor="company">Empresa *</Label>
+                    <Input id="company" required value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} className="mt-1.5" placeholder="Nombre de tu empresa" />
+                  </div>
+                  <div>
+                    <Label htmlFor="message">Mensaje</Label>
+                    <Textarea id="message" rows={4} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className="mt-1.5" placeholder="Cuéntanos brevemente tu situación..." />
+                  </div>
+                  <Button type="submit" variant="hero" size="lg" className="w-full" disabled={submitting}>
+                    {submitting ? "Enviando..." : <>Solicitar diagnóstico gratuito <ArrowRight className="ml-1" /></>}
+                  </Button>
+                  <p className="text-xs text-muted-foreground text-center">
+                    Al enviar este formulario aceptas nuestra <Link to="/privacidad" className="text-primary hover:underline">política de privacidad</Link>.
+                  </p>
+                </form>
+              </>
+            )}
           </Card>
         </div>
       </section>
