@@ -505,10 +505,10 @@ const Index = () => {
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="text-sm font-semibold text-primary uppercase tracking-wider">Resultados reales</span>
             <h2 className="font-display text-4xl md:text-5xl font-bold mt-3">
-              Resultados que puedes <span className="text-gradient">esperar</span>
+              Lo que vas a <span className="text-gradient">ganar</span>
             </h2>
             <p className="text-muted-foreground mt-4 text-lg">
-              Nuestros clientes ven mejoras medibles desde las primeras semanas de trabajo.
+              Resultados medibles en menos de 90 días: menos costos, más ventas y un negocio bajo control.
             </p>
           </div>
 
