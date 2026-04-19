@@ -558,7 +558,7 @@ const Index = () => {
 
           <div className="mt-10 text-center">
             <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-primary/10 border border-primary/30 text-primary font-semibold">
-              <Sparkles className="w-4 h-4" /> +150 empresas optimizadas
+              <Sparkles className="w-4 h-4" /> +150 empresas tomando mejores decisiones
             </span>
           </div>
         </div>
