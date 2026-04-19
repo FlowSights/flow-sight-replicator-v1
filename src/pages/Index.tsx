@@ -1016,7 +1016,7 @@ const Index = () => {
               FlowSights
             </div>
             <p className="text-sm text-muted-foreground mt-4 leading-relaxed">
-              Transformamos datos empresariales en decisiones inteligentes. Limpieza de datos, insights operativos y optimización de procesos para empresas en crecimiento.
+              Ayudamos a PyMEs a vender más, gastar menos y tomar mejores decisiones con la información que ya tienen.
             </p>
           </div>
 
