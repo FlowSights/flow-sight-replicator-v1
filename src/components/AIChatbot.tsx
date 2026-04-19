@@ -133,13 +133,13 @@ export const AIChatbot = () => {
       {/* Ventana del chat */}
       {open && (
         <div className="fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 z-50 sm:w-[380px] sm:max-w-[calc(100vw-3rem)] sm:h-[600px] sm:max-h-[calc(100vh-3rem)] border border-white/30 sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 duration-300" style={{
-          background: "rgba(255, 255, 255, 0.08)",
-          backdropFilter: "blur(40px) saturate(250%) brightness(1.1)",
-          WebkitBackdropFilter: "blur(40px) saturate(250%) brightness(1.1)",
+          background: "rgba(20, 20, 30, 0.08)",
+          backdropFilter: "blur(40px) saturate(280%) brightness(1.15)",
+          WebkitBackdropFilter: "blur(40px) saturate(280%) brightness(1.15)",
         }}>
           {/* Header */}
-          <div className="px-4 py-3 flex items-center justify-between text-primary-foreground border-b border-white/10" style={{
-            background: "transparent",
+          <div className="px-4 py-3 flex items-center justify-between text-primary-foreground border-b border-primary/30" style={{
+            background: "hsl(158, 75%, 38%)",
             backdropFilter: "blur(20px) saturate(200%)",
             WebkitBackdropFilter: "blur(20px) saturate(200%)",
           }}>
