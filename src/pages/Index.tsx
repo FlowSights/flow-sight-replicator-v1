@@ -330,10 +330,10 @@ const Index = () => {
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="text-sm font-semibold text-primary uppercase tracking-wider">El problema</span>
             <h2 className="font-display text-4xl md:text-5xl font-bold mt-3">
-              Tus datos pueden estar <span className="text-gradient">costándote dinero</span>
+              Tus datos te están <span className="text-gradient">costando dinero</span>
             </h2>
             <p className="text-muted-foreground mt-4 text-lg">
-              La mayoría de las empresas operan con datos desorganizados sin saberlo. Cada error en tus datos es una oportunidad perdida o un costo evitable.
+              La mayoría de empresas pierden entre 15% y 25% de sus ingresos por datos sucios y procesos sin control. La buena noticia: cada problema tiene solución cuando lo puedes ver claro.
             </p>
           </div>
 
