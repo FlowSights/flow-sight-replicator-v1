@@ -570,10 +570,10 @@ const Index = () => {
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="text-sm font-semibold text-primary uppercase tracking-wider">Sectores</span>
             <h2 className="font-display text-4xl md:text-5xl font-bold mt-3">
-              Industrias que <span className="text-gradient">ayudamos</span>
+              Industrias donde ya generamos <span className="text-gradient">resultados</span>
             </h2>
             <p className="text-muted-foreground mt-4 text-lg">
-              Experiencia comprobada en múltiples sectores, adaptando nuestras soluciones a los desafíos específicos de cada industria.
+              Conocemos los retos operativos de cada sector. Adaptamos cada solución a la realidad de tu negocio, no al revés.
             </p>
           </div>
 
