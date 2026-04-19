@@ -784,7 +784,7 @@ const Index = () => {
               Aprende a operar con <span className="text-gradient">datos confiables</span>
             </h2>
             <p className="text-muted-foreground mt-4 text-lg">
-              Artículos cortos y prácticos sobre operaciones, calidad de datos y decisiones inteligentes.
+              Ideas prácticas para vender más, gastar menos y tomar mejores decisiones cada semana.
             </p>
           </div>
 
