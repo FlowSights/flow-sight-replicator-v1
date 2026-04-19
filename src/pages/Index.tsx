@@ -98,52 +98,52 @@ const Index = () => {
   ];
 
   const blogPreview = [
-    { slug: "5-senales-datos-sucios", category: "Calidad de Datos", title: "5 señales de que tus datos están saboteando tus decisiones", excerpt: "Si tus reportes nunca cuadran o cada gerente trae un número distinto, probablemente tienes un problema de calidad de datos.", readingTime: "4 min" },
-    { slug: "como-empezar-dashboard-operativo", category: "Dashboards", title: "Cómo empezar con un dashboard operativo (sin morir en el intento)", excerpt: "No necesitas un equipo de BI ni un software caro para empezar. 4 pasos para construir tu primer dashboard útil.", readingTime: "5 min" },
-    { slug: "kpis-operativos-que-importan", category: "Operaciones", title: "Los 7 KPIs operativos que realmente importan en una PyME", excerpt: "Olvídate de los tableros con 40 métricas. Estos son los indicadores que cualquier gerente debería revisar cada semana.", readingTime: "6 min" },
+    { slug: "5-senales-datos-sucios", category: "Calidad de Datos", title: "5 señales de que tus datos están saboteando tus decisiones", excerpt: "Si cada reporte muestra un número distinto, estás perdiendo dinero sin saberlo. Aprende a detectarlo a tiempo.", readingTime: "4 min" },
+    { slug: "como-empezar-dashboard-operativo", category: "Dashboards", title: "Cómo empezar con un dashboard operativo (sin morir en el intento)", excerpt: "Tu primer dashboard útil en menos de 2 semanas. 4 pasos prácticos, sin equipos técnicos ni software caro.", readingTime: "5 min" },
+    { slug: "kpis-operativos-que-importan", category: "Operaciones", title: "Los 7 KPIs operativos que realmente importan en una PyME", excerpt: "Deja de medirlo todo. Estos 7 indicadores te dicen, cada semana, dónde está el dinero y dónde se está fugando.", readingTime: "6 min" },
   ];
 
   const problems = [
-    { title: "Datos duplicados", desc: "Registros repetidos que distorsionan tus reportes y generan decisiones incorrectas." },
-    { title: "Inventarios incorrectos", desc: "Discrepancias entre el sistema y la realidad que generan sobre-stock o faltantes." },
-    { title: "Procesos ineficientes", desc: "Flujos de trabajo con cuellos de botella que ralentizan la operación y elevan costos." },
-    { title: "Costos innecesarios", desc: "Gastos ocultos que no se detectan porque los datos están desorganizados o incompletos." },
-    { title: "Falta de visibilidad", desc: "Sin reportes claros, los gerentes toman decisiones a ciegas o con información desactualizada." },
-    { title: "Decisiones sin datos", desc: "Estrategias basadas en intuición en lugar de métricas reales que respalden cada acción." },
+    { title: "Reportes que no cuadran", desc: "Cada área trae un número distinto y nadie sabe cuál es el correcto. Resultado: decisiones lentas y desconfianza." },
+    { title: "Inventario que no coincide", desc: "Lo que dice el sistema no es lo que hay en bodega. Pierdes ventas por faltantes y dinero por exceso de stock." },
+    { title: "Procesos que cuestan de más", desc: "Cuellos de botella invisibles ralentizan tu operación, atrasan entregas e inflan tus costos cada mes." },
+    { title: "Fugas de dinero ocultas", desc: "Gastos que nadie revisa, mermas que no se registran y márgenes que se erosionan sin que te des cuenta." },
+    { title: "Operación sin visibilidad", desc: "Te enteras de los problemas cuando ya son crisis. Sin alertas a tiempo, reaccionas tarde y pagas más caro." },
+    { title: "Decisiones por intuición", desc: "Cuando los datos no son confiables, todos vuelven al instinto. Y el instinto no escala con tu negocio." },
   ];
 
   const steps = [
-    { n: "01", title: "Recibimos tus datos", desc: "Nos compartes tus archivos, bases de datos o sistemas actuales. Trabajamos con Excel, CSV, ERP, sistemas POS y más. El proceso es seguro y confidencial." },
-    { n: "02", title: "Limpiamos y validamos la información", desc: "Nuestro equipo identifica y corrige duplicados, errores, inconsistencias y datos faltantes. Entregamos datos limpios y confiables." },
-    { n: "03", title: "Analizamos patrones y problemas", desc: "Aplicamos análisis estadístico y modelos operativos para detectar cuellos de botella, costos ocultos y oportunidades de mejora en tu negocio." },
-    { n: "04", title: "Entregamos recomendaciones accionables", desc: "Recibes un informe claro con insights priorizados, dashboards visuales y un plan de acción concreto para implementar mejoras de inmediato." },
+    { n: "01", title: "Conectamos tus datos", desc: "Trabajamos con lo que ya tienes: Excel, POS, ERP, WhatsApp, correos. Sin migraciones complejas y con total confidencialidad." },
+    { n: "02", title: "Limpiamos lo que no sirve", desc: "Eliminamos duplicados, corregimos errores y unificamos formatos. Una única fuente de verdad en la que todos confían." },
+    { n: "03", title: "Detectamos problemas y oportunidades", desc: "Encontramos fugas de dinero, cuellos de botella y tendencias que tu equipo no estaba viendo. Te mostramos dónde actuar primero." },
+    { n: "04", title: "Te entregamos un plan accionable", desc: "Dashboards claros, alertas automáticas y un plan priorizado por impacto. Listo para implementar y medir resultados desde la primera semana." },
   ];
 
   const services = [
-    { icon: Database, tag: "Limpieza de Datos", title: "Data Cleaning", desc: "Identificamos y corregimos datos duplicados, inconsistentes o incompletos en tus sistemas. Garantizamos que tu información sea precisa y confiable para la toma de decisiones.", items: ["Deduplicación", "Validación de formatos", "Normalización", "Auditoría de calidad"], popular: false },
-    { icon: LineChart, tag: "Insights Operativos", title: "Operational Insights", desc: "Analizamos tus datos operativos para descubrir patrones ocultos, ineficiencias y oportunidades de mejora que impactan directamente en tu rentabilidad.", items: ["Análisis de tendencias", "Detección de anomalías", "KPIs operativos", "Alertas inteligentes"], popular: true },
-    { icon: Workflow, tag: "Optimización de Procesos", title: "Process Optimization", desc: "Mapeamos y rediseñamos tus flujos de trabajo para eliminar cuellos de botella, reducir tiempos y maximizar la eficiencia operativa de tu empresa.", items: ["Mapeo de procesos", "Análisis de cuellos de botella", "Automatización", "Mejora continua"] },
-    { icon: BarChart3, tag: "Creación de Dashboards", title: "Dashboard Creation", desc: "Diseñamos y construimos dashboards visuales personalizados que te permiten monitorear en tiempo real los indicadores más importantes de tu negocio.", items: ["Visualizaciones interactivas", "Reportes automáticos", "Acceso multiplataforma", "Actualización en tiempo real"] },
-    { icon: Activity, tag: "Monitoreo de Desempeño", title: "Performance Monitoring", desc: "Implementamos sistemas de seguimiento continuo para que puedas detectar desviaciones y tomar acciones correctivas antes de que los problemas escalen.", items: ["Monitoreo 24/7", "Alertas en tiempo real", "Reportes periódicos", "Benchmarking"] },
+    { icon: Database, tag: "Datos Confiables", title: "Limpieza de Datos", desc: "Convertimos tu información dispersa y desordenada en una base limpia y confiable. Decisiones más rápidas y reportes en los que todos confían.", items: ["Eliminación de duplicados", "Estandarización de formatos", "Validación automática", "Auditoría de calidad"], popular: false },
+    { icon: LineChart, tag: "Inteligencia Operativa", title: "Insights Operativos", desc: "Detectamos fugas de dinero, riesgos y oportunidades de crecimiento ocultos en tus operaciones, antes de que se conviertan en pérdidas.", items: ["Tendencias de ventas", "Alertas de anomalías", "KPIs accionables", "Avisos en tiempo real"], popular: true },
+    { icon: Workflow, tag: "Procesos Más Rentables", title: "Optimización de Procesos", desc: "Identificamos los cuellos de botella que te cuestan tiempo y dinero. Rediseñamos tus flujos para producir y entregar más, con los mismos recursos.", items: ["Mapeo de procesos", "Eliminación de cuellos de botella", "Automatización de tareas", "Mejora continua"] },
+    { icon: BarChart3, tag: "Visibilidad Total", title: "Dashboards a la Medida", desc: "Reportes visuales y simples que muestran lo que importa: ventas, márgenes, inventario y desempeño. Sin Excel, sin esperar al cierre de mes.", items: ["Visualizaciones simples", "Actualización en tiempo real", "Acceso desde cualquier dispositivo", "Reportes automáticos"] },
+    { icon: Activity, tag: "Control Continuo", title: "Monitoreo de Desempeño", desc: "Te avisamos cuando algo se sale de lo normal: ventas que caen, costos que suben o procesos que fallan. Reaccionas a tiempo, no cuando ya es tarde.", items: ["Monitoreo 24/7", "Alertas inmediatas", "Reportes semanales", "Comparativos por periodo"] },
   ];
 
   const results = [
-    { icon: DollarSign, value: "-30%", label: "costos promedio", title: "Reducción de costos", desc: "Identifica y elimina gastos innecesarios detectados en tus datos operativos." },
-    { icon: TrendingUp, value: "+2x", label: "eficiencia operativa", title: "Mayor productividad", desc: "Procesos optimizados que permiten a tu equipo hacer más con los mismos recursos." },
-    { icon: ShieldCheck, value: "95%", label: "precisión de datos", title: "Menos errores", desc: "Datos limpios y validados que eliminan decisiones basadas en información incorrecta." },
-    { icon: Eye, value: "360°", label: "visibilidad total", title: "Mejor control operativo", desc: "Dashboards en tiempo real para monitorear cada área de tu negocio." },
-    { icon: Clock, value: "10x", label: "más rápido", title: "Decisiones más rápidas", desc: "Accede a insights claros cuando los necesitas, sin esperar reportes manuales." },
-    { icon: Sparkles, value: "+40%", label: "rentabilidad", title: "Mayor rentabilidad", desc: "El resultado final: un negocio más eficiente, con menores costos y mayores márgenes." },
+    { icon: DollarSign, value: "-30%", label: "menos costos operativos", title: "Reduce costos ocultos", desc: "Detectamos gastos y fugas que estaban pasando desapercibidos en tu operación." },
+    { icon: TrendingUp, value: "+2x", label: "más productividad", title: "Haz más con lo mismo", desc: "Tu equipo deja de pelear con datos sucios y se enfoca en lo que sí mueve la aguja." },
+    { icon: ShieldCheck, value: "95%", label: "precisión en tus reportes", title: "Cero decisiones a ciegas", desc: "Datos limpios y validados para que cada decisión esté respaldada por información real." },
+    { icon: Eye, value: "360°", label: "visibilidad de tu operación", title: "Control total del negocio", desc: "Una vista clara de ventas, costos e inventario en un solo lugar, en tiempo real." },
+    { icon: Clock, value: "10x", label: "decisiones más rápidas", title: "Responde antes que la competencia", desc: "Insights al instante, sin esperar a fin de mes ni depender de reportes manuales." },
+    { icon: Sparkles, value: "+40%", label: "más rentabilidad", title: "Margen que se nota", desc: "Menos costos, más ventas y procesos más ágiles. Un negocio más rentable y más fácil de manejar." },
   ];
 
   const industries = [
-    { icon: Factory, title: "Manufactura", desc: "Control de producción, inventarios y calidad. Detectamos ineficiencias en líneas de producción y reducimos desperdicios.", tags: ["Control de inventario", "Eficiencia de línea", "Calidad de producto"] },
-    { icon: Truck, title: "Logística", desc: "Optimización de rutas, tiempos de entrega y gestión de flota. Reducimos costos de transporte y mejoramos la puntualidad.", tags: ["Optimización de rutas", "Gestión de flota", "Tiempos de entrega"] },
-    { icon: Hotel, title: "Hoteles", desc: "Análisis de ocupación, costos operativos y satisfacción del huésped. Maximizamos la rentabilidad por habitación.", tags: ["Análisis de ocupación", "Costos operativos", "Experiencia del huésped"] },
-    { icon: UtensilsCrossed, title: "Restaurantes", desc: "Control de mermas, análisis de menú y eficiencia de cocina. Reducimos desperdicios y optimizamos el costo por plato.", tags: ["Control de mermas", "Análisis de menú", "Eficiencia de cocina"] },
-    { icon: Stethoscope, title: "Clínicas", desc: "Gestión de citas, inventario médico y eficiencia operativa. Mejoramos la experiencia del paciente y reducimos tiempos de espera.", tags: ["Gestión de citas", "Inventario médico", "Tiempos de espera"] },
-    { icon: ShoppingBag, title: "Retail", desc: "Análisis de ventas, rotación de inventario y comportamiento del cliente. Optimizamos el surtido y reducimos el sobre-stock.", tags: ["Análisis de ventas", "Rotación de inventario", "Comportamiento del cliente"] },
-    { icon: HardHat, title: "Construcción", desc: "Control de materiales, avance de obra y costos de proyecto. Detectamos desviaciones presupuestales antes de que escalen.", tags: ["Control de materiales", "Avance de obra", "Control presupuestal"] },
+    { icon: Factory, title: "Manufactura", desc: "Reduce desperdicios, controla la producción y detecta ineficiencias en tu línea antes de que afecten el margen.", tags: ["Control de inventario", "Eficiencia de línea", "Calidad de producto"] },
+    { icon: Truck, title: "Logística", desc: "Entrega a tiempo, baja costos de transporte y aprovecha mejor cada vehículo de tu flota.", tags: ["Optimización de rutas", "Gestión de flota", "Tiempos de entrega"] },
+    { icon: Hotel, title: "Hoteles", desc: "Aumenta la rentabilidad por habitación con análisis de ocupación, pricing inteligente y control de costos diarios.", tags: ["Análisis de ocupación", "Costos operativos", "Experiencia del huésped"] },
+    { icon: UtensilsCrossed, title: "Restaurantes", desc: "Controla mermas, optimiza el costo por plato y descubre qué del menú realmente te deja dinero.", tags: ["Control de mermas", "Análisis de menú", "Eficiencia de cocina"] },
+    { icon: Stethoscope, title: "Clínicas", desc: "Reduce tiempos de espera, controla el inventario médico y mejora la experiencia del paciente sin contratar más personal.", tags: ["Gestión de citas", "Inventario médico", "Tiempos de espera"] },
+    { icon: ShoppingBag, title: "Retail", desc: "Vende más con menos stock: optimiza tu surtido, evita el sobre-inventario y entiende qué compra realmente tu cliente.", tags: ["Análisis de ventas", "Rotación de inventario", "Comportamiento del cliente"] },
+    { icon: HardHat, title: "Construcción", desc: "Controla materiales y avance de obra. Detecta desviaciones presupuestales antes de que se conviertan en pérdidas.", tags: ["Control de materiales", "Avance de obra", "Control presupuestal"] },
   ];
 
   const testimonials = [
