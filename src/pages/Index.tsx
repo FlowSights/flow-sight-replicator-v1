@@ -98,52 +98,52 @@ const Index = () => {
   ];
 
   const blogPreview = [
-    { slug: "5-senales-datos-sucios", category: "Calidad de Datos", title: "5 señales de que tus datos están saboteando tus decisiones", excerpt: "Si tus reportes nunca cuadran o cada gerente trae un número distinto, probablemente tienes un problema de calidad de datos.", readingTime: "4 min" },
-    { slug: "como-empezar-dashboard-operativo", category: "Dashboards", title: "Cómo empezar con un dashboard operativo (sin morir en el intento)", excerpt: "No necesitas un equipo de BI ni un software caro para empezar. 4 pasos para construir tu primer dashboard útil.", readingTime: "5 min" },
-    { slug: "kpis-operativos-que-importan", category: "Operaciones", title: "Los 7 KPIs operativos que realmente importan en una PyME", excerpt: "Olvídate de los tableros con 40 métricas. Estos son los indicadores que cualquier gerente debería revisar cada semana.", readingTime: "6 min" },
+    { slug: "5-senales-datos-sucios", category: "Calidad de Datos", title: "5 señales de que tus datos están saboteando tus decisiones", excerpt: "Si cada reporte muestra un número distinto, estás perdiendo dinero sin saberlo. Aprende a detectarlo a tiempo.", readingTime: "4 min" },
+    { slug: "como-empezar-dashboard-operativo", category: "Dashboards", title: "Cómo empezar con un dashboard operativo (sin morir en el intento)", excerpt: "Tu primer dashboard útil en menos de 2 semanas. 4 pasos prácticos, sin equipos técnicos ni software caro.", readingTime: "5 min" },
+    { slug: "kpis-operativos-que-importan", category: "Operaciones", title: "Los 7 KPIs operativos que realmente importan en una PyME", excerpt: "Deja de medirlo todo. Estos 7 indicadores te dicen, cada semana, dónde está el dinero y dónde se está fugando.", readingTime: "6 min" },
   ];
 
   const problems = [
-    { title: "Datos duplicados", desc: "Registros repetidos que distorsionan tus reportes y generan decisiones incorrectas." },
-    { title: "Inventarios incorrectos", desc: "Discrepancias entre el sistema y la realidad que generan sobre-stock o faltantes." },
-    { title: "Procesos ineficientes", desc: "Flujos de trabajo con cuellos de botella que ralentizan la operación y elevan costos." },
-    { title: "Costos innecesarios", desc: "Gastos ocultos que no se detectan porque los datos están desorganizados o incompletos." },
-    { title: "Falta de visibilidad", desc: "Sin reportes claros, los gerentes toman decisiones a ciegas o con información desactualizada." },
-    { title: "Decisiones sin datos", desc: "Estrategias basadas en intuición en lugar de métricas reales que respalden cada acción." },
+    { title: "Reportes que no cuadran", desc: "Cada área trae un número distinto y nadie sabe cuál es el correcto. Resultado: decisiones lentas y desconfianza." },
+    { title: "Inventario que no coincide", desc: "Lo que dice el sistema no es lo que hay en bodega. Pierdes ventas por faltantes y dinero por exceso de stock." },
+    { title: "Procesos que cuestan de más", desc: "Cuellos de botella invisibles ralentizan tu operación, atrasan entregas e inflan tus costos cada mes." },
+    { title: "Fugas de dinero ocultas", desc: "Gastos que nadie revisa, mermas que no se registran y márgenes que se erosionan sin que te des cuenta." },
+    { title: "Operación sin visibilidad", desc: "Te enteras de los problemas cuando ya son crisis. Sin alertas a tiempo, reaccionas tarde y pagas más caro." },
+    { title: "Decisiones por intuición", desc: "Cuando los datos no son confiables, todos vuelven al instinto. Y el instinto no escala con tu negocio." },
   ];
 
   const steps = [
-    { n: "01", title: "Recibimos tus datos", desc: "Nos compartes tus archivos, bases de datos o sistemas actuales. Trabajamos con Excel, CSV, ERP, sistemas POS y más. El proceso es seguro y confidencial." },
-    { n: "02", title: "Limpiamos y validamos la información", desc: "Nuestro equipo identifica y corrige duplicados, errores, inconsistencias y datos faltantes. Entregamos datos limpios y confiables." },
-    { n: "03", title: "Analizamos patrones y problemas", desc: "Aplicamos análisis estadístico y modelos operativos para detectar cuellos de botella, costos ocultos y oportunidades de mejora en tu negocio." },
-    { n: "04", title: "Entregamos recomendaciones accionables", desc: "Recibes un informe claro con insights priorizados, dashboards visuales y un plan de acción concreto para implementar mejoras de inmediato." },
+    { n: "01", title: "Conectamos tus datos", desc: "Trabajamos con lo que ya tienes: Excel, POS, ERP, WhatsApp, correos. Sin migraciones complejas y con total confidencialidad." },
+    { n: "02", title: "Limpiamos lo que no sirve", desc: "Eliminamos duplicados, corregimos errores y unificamos formatos. Una única fuente de verdad en la que todos confían." },
+    { n: "03", title: "Detectamos problemas y oportunidades", desc: "Encontramos fugas de dinero, cuellos de botella y tendencias que tu equipo no estaba viendo. Te mostramos dónde actuar primero." },
+    { n: "04", title: "Te entregamos un plan accionable", desc: "Dashboards claros, alertas automáticas y un plan priorizado por impacto. Listo para implementar y medir resultados desde la primera semana." },
   ];
 
   const services = [
-    { icon: Database, tag: "Limpieza de Datos", title: "Data Cleaning", desc: "Identificamos y corregimos datos duplicados, inconsistentes o incompletos en tus sistemas. Garantizamos que tu información sea precisa y confiable para la toma de decisiones.", items: ["Deduplicación", "Validación de formatos", "Normalización", "Auditoría de calidad"], popular: false },
-    { icon: LineChart, tag: "Insights Operativos", title: "Operational Insights", desc: "Analizamos tus datos operativos para descubrir patrones ocultos, ineficiencias y oportunidades de mejora que impactan directamente en tu rentabilidad.", items: ["Análisis de tendencias", "Detección de anomalías", "KPIs operativos", "Alertas inteligentes"], popular: true },
-    { icon: Workflow, tag: "Optimización de Procesos", title: "Process Optimization", desc: "Mapeamos y rediseñamos tus flujos de trabajo para eliminar cuellos de botella, reducir tiempos y maximizar la eficiencia operativa de tu empresa.", items: ["Mapeo de procesos", "Análisis de cuellos de botella", "Automatización", "Mejora continua"] },
-    { icon: BarChart3, tag: "Creación de Dashboards", title: "Dashboard Creation", desc: "Diseñamos y construimos dashboards visuales personalizados que te permiten monitorear en tiempo real los indicadores más importantes de tu negocio.", items: ["Visualizaciones interactivas", "Reportes automáticos", "Acceso multiplataforma", "Actualización en tiempo real"] },
-    { icon: Activity, tag: "Monitoreo de Desempeño", title: "Performance Monitoring", desc: "Implementamos sistemas de seguimiento continuo para que puedas detectar desviaciones y tomar acciones correctivas antes de que los problemas escalen.", items: ["Monitoreo 24/7", "Alertas en tiempo real", "Reportes periódicos", "Benchmarking"] },
+    { icon: Database, tag: "Datos Confiables", title: "Limpieza de Datos", desc: "Convertimos tu información dispersa y desordenada en una base limpia y confiable. Decisiones más rápidas y reportes en los que todos confían.", items: ["Eliminación de duplicados", "Estandarización de formatos", "Validación automática", "Auditoría de calidad"], popular: false },
+    { icon: LineChart, tag: "Inteligencia Operativa", title: "Insights Operativos", desc: "Detectamos fugas de dinero, riesgos y oportunidades de crecimiento ocultos en tus operaciones, antes de que se conviertan en pérdidas.", items: ["Tendencias de ventas", "Alertas de anomalías", "KPIs accionables", "Avisos en tiempo real"], popular: true },
+    { icon: Workflow, tag: "Procesos Más Rentables", title: "Optimización de Procesos", desc: "Identificamos los cuellos de botella que te cuestan tiempo y dinero. Rediseñamos tus flujos para producir y entregar más, con los mismos recursos.", items: ["Mapeo de procesos", "Eliminación de cuellos de botella", "Automatización de tareas", "Mejora continua"] },
+    { icon: BarChart3, tag: "Visibilidad Total", title: "Dashboards a la Medida", desc: "Reportes visuales y simples que muestran lo que importa: ventas, márgenes, inventario y desempeño. Sin Excel, sin esperar al cierre de mes.", items: ["Visualizaciones simples", "Actualización en tiempo real", "Acceso desde cualquier dispositivo", "Reportes automáticos"] },
+    { icon: Activity, tag: "Control Continuo", title: "Monitoreo de Desempeño", desc: "Te avisamos cuando algo se sale de lo normal: ventas que caen, costos que suben o procesos que fallan. Reaccionas a tiempo, no cuando ya es tarde.", items: ["Monitoreo 24/7", "Alertas inmediatas", "Reportes semanales", "Comparativos por periodo"] },
   ];
 
   const results = [
-    { icon: DollarSign, value: "-30%", label: "costos promedio", title: "Reducción de costos", desc: "Identifica y elimina gastos innecesarios detectados en tus datos operativos." },
-    { icon: TrendingUp, value: "+2x", label: "eficiencia operativa", title: "Mayor productividad", desc: "Procesos optimizados que permiten a tu equipo hacer más con los mismos recursos." },
-    { icon: ShieldCheck, value: "95%", label: "precisión de datos", title: "Menos errores", desc: "Datos limpios y validados que eliminan decisiones basadas en información incorrecta." },
-    { icon: Eye, value: "360°", label: "visibilidad total", title: "Mejor control operativo", desc: "Dashboards en tiempo real para monitorear cada área de tu negocio." },
-    { icon: Clock, value: "10x", label: "más rápido", title: "Decisiones más rápidas", desc: "Accede a insights claros cuando los necesitas, sin esperar reportes manuales." },
-    { icon: Sparkles, value: "+40%", label: "rentabilidad", title: "Mayor rentabilidad", desc: "El resultado final: un negocio más eficiente, con menores costos y mayores márgenes." },
+    { icon: DollarSign, value: "-30%", label: "menos costos operativos", title: "Reduce costos ocultos", desc: "Detectamos gastos y fugas que estaban pasando desapercibidos en tu operación." },
+    { icon: TrendingUp, value: "+2x", label: "más productividad", title: "Haz más con lo mismo", desc: "Tu equipo deja de pelear con datos sucios y se enfoca en lo que sí mueve la aguja." },
+    { icon: ShieldCheck, value: "95%", label: "precisión en tus reportes", title: "Cero decisiones a ciegas", desc: "Datos limpios y validados para que cada decisión esté respaldada por información real." },
+    { icon: Eye, value: "360°", label: "visibilidad de tu operación", title: "Control total del negocio", desc: "Una vista clara de ventas, costos e inventario en un solo lugar, en tiempo real." },
+    { icon: Clock, value: "10x", label: "decisiones más rápidas", title: "Responde antes que la competencia", desc: "Insights al instante, sin esperar a fin de mes ni depender de reportes manuales." },
+    { icon: Sparkles, value: "+40%", label: "más rentabilidad", title: "Margen que se nota", desc: "Menos costos, más ventas y procesos más ágiles. Un negocio más rentable y más fácil de manejar." },
   ];
 
   const industries = [
-    { icon: Factory, title: "Manufactura", desc: "Control de producción, inventarios y calidad. Detectamos ineficiencias en líneas de producción y reducimos desperdicios.", tags: ["Control de inventario", "Eficiencia de línea", "Calidad de producto"] },
-    { icon: Truck, title: "Logística", desc: "Optimización de rutas, tiempos de entrega y gestión de flota. Reducimos costos de transporte y mejoramos la puntualidad.", tags: ["Optimización de rutas", "Gestión de flota", "Tiempos de entrega"] },
-    { icon: Hotel, title: "Hoteles", desc: "Análisis de ocupación, costos operativos y satisfacción del huésped. Maximizamos la rentabilidad por habitación.", tags: ["Análisis de ocupación", "Costos operativos", "Experiencia del huésped"] },
-    { icon: UtensilsCrossed, title: "Restaurantes", desc: "Control de mermas, análisis de menú y eficiencia de cocina. Reducimos desperdicios y optimizamos el costo por plato.", tags: ["Control de mermas", "Análisis de menú", "Eficiencia de cocina"] },
-    { icon: Stethoscope, title: "Clínicas", desc: "Gestión de citas, inventario médico y eficiencia operativa. Mejoramos la experiencia del paciente y reducimos tiempos de espera.", tags: ["Gestión de citas", "Inventario médico", "Tiempos de espera"] },
-    { icon: ShoppingBag, title: "Retail", desc: "Análisis de ventas, rotación de inventario y comportamiento del cliente. Optimizamos el surtido y reducimos el sobre-stock.", tags: ["Análisis de ventas", "Rotación de inventario", "Comportamiento del cliente"] },
-    { icon: HardHat, title: "Construcción", desc: "Control de materiales, avance de obra y costos de proyecto. Detectamos desviaciones presupuestales antes de que escalen.", tags: ["Control de materiales", "Avance de obra", "Control presupuestal"] },
+    { icon: Factory, title: "Manufactura", desc: "Reduce desperdicios, controla la producción y detecta ineficiencias en tu línea antes de que afecten el margen.", tags: ["Control de inventario", "Eficiencia de línea", "Calidad de producto"] },
+    { icon: Truck, title: "Logística", desc: "Entrega a tiempo, baja costos de transporte y aprovecha mejor cada vehículo de tu flota.", tags: ["Optimización de rutas", "Gestión de flota", "Tiempos de entrega"] },
+    { icon: Hotel, title: "Hoteles", desc: "Aumenta la rentabilidad por habitación con análisis de ocupación, pricing inteligente y control de costos diarios.", tags: ["Análisis de ocupación", "Costos operativos", "Experiencia del huésped"] },
+    { icon: UtensilsCrossed, title: "Restaurantes", desc: "Controla mermas, optimiza el costo por plato y descubre qué del menú realmente te deja dinero.", tags: ["Control de mermas", "Análisis de menú", "Eficiencia de cocina"] },
+    { icon: Stethoscope, title: "Clínicas", desc: "Reduce tiempos de espera, controla el inventario médico y mejora la experiencia del paciente sin contratar más personal.", tags: ["Gestión de citas", "Inventario médico", "Tiempos de espera"] },
+    { icon: ShoppingBag, title: "Retail", desc: "Vende más con menos stock: optimiza tu surtido, evita el sobre-inventario y entiende qué compra realmente tu cliente.", tags: ["Análisis de ventas", "Rotación de inventario", "Comportamiento del cliente"] },
+    { icon: HardHat, title: "Construcción", desc: "Controla materiales y avance de obra. Detecta desviaciones presupuestales antes de que se conviertan en pérdidas.", tags: ["Control de materiales", "Avance de obra", "Control presupuestal"] },
   ];
 
   const testimonials = [
@@ -241,7 +241,7 @@ const Index = () => {
               </DropdownMenuContent>
             </DropdownMenu>
             <Button variant="hero" size="sm" asChild className="hidden sm:inline-flex">
-              <a href="#contacto">Diagnóstico gratuito</a>
+              <a href="#contacto">Analiza mi negocio</a>
             </Button>
           </div>
         </nav>
@@ -254,17 +254,17 @@ const Index = () => {
           <div className="space-y-8 animate-fade-up">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm">
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse-glow" />
-              Plataforma de Inteligencia Operativa
+              Inteligencia Operativa para PyMEs
             </span>
             <h1 className="font-display text-6xl md:text-7xl lg:text-8xl font-bold leading-[1.05]">
-              Convierte tus datos en{" "}
-              <span className="text-gradient">decisiones inteligentes</span>
+              Tus datos, convertidos en{" "}
+              <span className="text-gradient">decisiones que generan dinero</span>
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground max-w-xl leading-relaxed">
-              En FlowSights ayudamos a empresas a limpiar sus datos, optimizar procesos y detectar oportunidades ocultas en sus operaciones.
+              Unificamos tu Excel, POS, inventario y WhatsApp para mostrarte qué reduce costos, qué aumenta ventas y qué corregir hoy en tu operación.
             </p>
             <div className="flex flex-wrap gap-3">
-              {["Limpieza de datos", "Insights operativos", "Dashboards en tiempo real"].map((t) => (
+              {["Reportes en los que sí confías", "Alertas antes de perder dinero", "Visión clara del negocio"].map((t) => (
                 <span key={t} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-card/50 text-sm">
                   <Check className="w-4 h-4 text-primary" /> {t}
                 </span>
@@ -287,27 +287,27 @@ const Index = () => {
             >
               <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
                 <Button variant="hero" size="lg" asChild>
-                  <a href="#contacto">Solicitar diagnóstico gratuito <ArrowRight className="ml-1" /></a>
+                  <a href="#contacto">Analizar mi negocio gratis <ArrowRight className="ml-1" /></a>
                 </Button>
               </motion.div>
               <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
                 <Button size="lg" asChild className="bg-[#25D366] hover:bg-[#20bd5a] text-white">
                   <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-                    <MessageCircle className="mr-1" /> WhatsApp
+                    <MessageCircle className="mr-1" /> Hablar por WhatsApp
                   </a>
                 </Button>
               </motion.div>
               <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
                 <Button variant="outline" size="lg" asChild>
-                  <a href={EMAIL_URL}><Mail className="mr-1" /> Contáctanos</a>
+                  <a href={EMAIL_URL}><Mail className="mr-1" /> Escríbenos</a>
                 </Button>
               </motion.div>
             </motion.div>
             <div className="grid grid-cols-3 gap-6 pt-8 border-t border-border/60 max-w-lg">
               {([
-                { value: 30, suffix: "%", label: "Reducción de costos" },
-                { value: 2, suffix: "x", label: "Mayor productividad" },
-                { value: 95, suffix: "%", label: "Precisión de datos" },
+                { value: 30, suffix: "%", label: "Menos costos" },
+                { value: 2, suffix: "x", label: "Más productividad" },
+                { value: 95, suffix: "%", label: "Reportes confiables" },
               ] as HeroStat[]).map((s) => (
                 <AnimatedStat key={s.label} stat={s} />
               ))}
@@ -330,10 +330,10 @@ const Index = () => {
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="text-sm font-semibold text-primary uppercase tracking-wider">El problema</span>
             <h2 className="font-display text-4xl md:text-5xl font-bold mt-3">
-              Tus datos pueden estar <span className="text-gradient">costándote dinero</span>
+              Tus datos te están <span className="text-gradient">costando dinero</span>
             </h2>
             <p className="text-muted-foreground mt-4 text-lg">
-              La mayoría de las empresas operan con datos desorganizados sin saberlo. Cada error en tus datos es una oportunidad perdida o un costo evitable.
+              La mayoría de empresas pierden entre 15% y 25% de sus ingresos por datos sucios y procesos sin control. La buena noticia: cada problema tiene solución cuando lo puedes ver claro.
             </p>
           </div>
 
@@ -375,10 +375,10 @@ const Index = () => {
           <Card className="mt-10 p-8 md:p-10 glass-card border-primary/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 bg-gradient-to-br from-primary/10 to-accent/5">
             <div>
               <h3 className="font-display text-2xl font-bold">¿Cuánto te están costando tus datos sucios?</h3>
-              <p className="text-muted-foreground mt-2">Las empresas pierden en promedio el 15-25% de sus ingresos por problemas de calidad de datos.</p>
+              <p className="text-muted-foreground mt-2">Te mostramos en 48 horas y sin costo dónde se está fugando dinero en tu operación.</p>
             </div>
             <Button variant="hero" size="lg" asChild>
-              <a href="#contacto">Descúbrelo gratis <ArrowRight className="ml-1" /></a>
+              <a href="#contacto">Quiero saberlo gratis <ArrowRight className="ml-1" /></a>
             </Button>
           </Card>
         </div>
@@ -393,7 +393,7 @@ const Index = () => {
               Así funciona <span className="text-gradient">FlowSights</span>
             </h2>
             <p className="text-muted-foreground mt-4 text-lg">
-              Un proceso claro y estructurado para transformar tus datos en ventajas competitivas.
+              Un proceso simple y probado: en pocas semanas pasas de datos desordenados a decisiones que mueven tu negocio.
             </p>
           </div>
 
@@ -441,10 +441,10 @@ const Index = () => {
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="text-sm font-semibold text-primary uppercase tracking-wider">Lo que hacemos</span>
             <h2 className="font-display text-4xl md:text-5xl font-bold mt-3">
-              Nuestros <span className="text-gradient">servicios</span>
+              Soluciones que <span className="text-gradient">generan resultados</span>
             </h2>
             <p className="text-muted-foreground mt-4 text-lg">
-              Soluciones integrales para transformar tus datos en ventajas competitivas reales.
+              No vendemos software. Resolvemos problemas concretos de tu operación: menos pérdidas, más control y decisiones más rápidas.
             </p>
           </div>
 
@@ -505,10 +505,10 @@ const Index = () => {
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="text-sm font-semibold text-primary uppercase tracking-wider">Resultados reales</span>
             <h2 className="font-display text-4xl md:text-5xl font-bold mt-3">
-              Resultados que puedes <span className="text-gradient">esperar</span>
+              Lo que vas a <span className="text-gradient">ganar</span>
             </h2>
             <p className="text-muted-foreground mt-4 text-lg">
-              Nuestros clientes ven mejoras medibles desde las primeras semanas de trabajo.
+              Resultados medibles en menos de 90 días: menos costos, más ventas y un negocio bajo control.
             </p>
           </div>
 
@@ -558,7 +558,7 @@ const Index = () => {
 
           <div className="mt-10 text-center">
             <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-primary/10 border border-primary/30 text-primary font-semibold">
-              <Sparkles className="w-4 h-4" /> +150 empresas optimizadas
+              <Sparkles className="w-4 h-4" /> +150 empresas tomando mejores decisiones
             </span>
           </div>
         </div>
@@ -570,10 +570,10 @@ const Index = () => {
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="text-sm font-semibold text-primary uppercase tracking-wider">Sectores</span>
             <h2 className="font-display text-4xl md:text-5xl font-bold mt-3">
-              Industrias que <span className="text-gradient">ayudamos</span>
+              Industrias donde ya generamos <span className="text-gradient">resultados</span>
             </h2>
             <p className="text-muted-foreground mt-4 text-lg">
-              Experiencia comprobada en múltiples sectores, adaptando nuestras soluciones a los desafíos específicos de cada industria.
+              Conocemos los retos operativos de cada sector. Adaptamos cada solución a la realidad de tu negocio, no al revés.
             </p>
           </div>
 
@@ -627,9 +627,9 @@ const Index = () => {
                   <Plus className="w-5 h-5" />
                 </div>
                 <h3 className="font-display text-xl font-bold mb-2">¿Tu industria no está aquí?</h3>
-                <p className="text-sm text-muted-foreground mb-4">Trabajamos con cualquier empresa que maneje datos operativos. Contáctanos para una consulta personalizada.</p>
+                <p className="text-sm text-muted-foreground mb-4">Si tu empresa maneja datos operativos, podemos ayudarte. Cuéntanos tu caso y te decimos cómo aportarte valor.</p>
                 <a href="#contacto" className="text-primary text-sm font-semibold inline-flex items-center gap-1 hover:gap-2 transition-all">
-                  Contáctanos <ArrowRight className="w-4 h-4" />
+                  Hablar con un experto <ArrowRight className="w-4 h-4" />
                 </a>
               </Card>
             </motion.div>
@@ -643,10 +643,10 @@ const Index = () => {
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="text-sm font-semibold text-primary uppercase tracking-wider">Clientes</span>
             <h2 className="font-display text-4xl md:text-5xl font-bold mt-3">
-              Lo que dicen nuestros <span className="text-gradient">clientes</span>
+              Empresas que ya están <span className="text-gradient">ganando con sus datos</span>
             </h2>
             <p className="text-muted-foreground mt-4 text-lg">
-              Empresas reales que transformaron sus operaciones con FlowSights.
+              Casos reales de PyMEs que dejaron de adivinar y empezaron a decidir con información clara.
             </p>
           </div>
 
@@ -700,7 +700,7 @@ const Index = () => {
               Quiénes <span className="text-gradient">Somos</span>
             </h2>
             <p className="text-muted-foreground mt-4 text-lg">
-              Somos un equipo apasionado por transformar datos en decisiones inteligentes. Creada en Costa Rica, FlowSights nace de la experiencia y visión de profesionales comprometidos con la excelencia operativa.
+              Un equipo costarricense con experiencia real en operaciones, ventas e inventarios. Hablamos tu idioma, no el de los técnicos: te ayudamos a tomar mejores decisiones, no a entender un software.
             </p>
           </div>
 
@@ -769,7 +769,7 @@ const Index = () => {
           <Card className="p-10 glass-card text-center max-w-3xl mx-auto bg-gradient-to-br from-primary/10 to-accent/5 border-primary/20">
             <h3 className="font-display text-2xl font-bold mb-3">Nuestra Misión</h3>
             <p className="text-muted-foreground leading-relaxed">
-              Empoderamos a empresas de todos los tamaños para que tomen decisiones basadas en datos confiables. Creemos que la calidad de los datos es la base de la excelencia operativa, y nuestro compromiso es transformar la complejidad en claridad.
+              Que cada PyME pueda decidir con la misma claridad que una gran empresa. Convertimos datos dispersos en información simple y útil para que vendas más, gastes menos y mantengas el control de tu operación.
             </p>
           </Card>
         </div>
@@ -784,7 +784,7 @@ const Index = () => {
               Aprende a operar con <span className="text-gradient">datos confiables</span>
             </h2>
             <p className="text-muted-foreground mt-4 text-lg">
-              Artículos cortos y prácticos sobre operaciones, calidad de datos y decisiones inteligentes.
+              Ideas prácticas para vender más, gastar menos y tomar mejores decisiones cada semana.
             </p>
           </div>
 
@@ -843,10 +843,10 @@ const Index = () => {
           <div className="text-center mb-16">
             <span className="text-sm font-semibold text-primary uppercase tracking-wider">Preguntas frecuentes</span>
             <h2 className="font-display text-4xl md:text-5xl font-bold mt-3">
-              Respuestas a tus <span className="text-gradient">dudas</span>
+              Resolvemos tus <span className="text-gradient">dudas</span>
             </h2>
             <p className="text-muted-foreground mt-4 text-lg max-w-2xl mx-auto">
-              Todo lo que necesitas saber sobre cómo FlowSights puede transformar tus datos en decisiones.
+              Lo más importante que necesitas saber antes de transformar tus datos en mejores decisiones.
             </p>
           </div>
 
@@ -857,25 +857,25 @@ const Index = () => {
                   ¿Cuánto tiempo tarda el diagnóstico gratuito?
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground pt-4">
-                  El diagnóstico inicial toma entre 24 a 48 horas. Nuestro equipo analiza tu operación actual, identifica los principales problemas de datos y te presenta un reporte detallado con recomendaciones específicas para tu industria.
+                  Entre 24 y 48 horas. Revisamos tu operación, identificamos tus principales fugas de dinero y te entregamos un reporte con recomendaciones concretas para tu industria.
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="item-2" className="border border-border/50 rounded-lg px-6 py-4 data-[state=open]:bg-card/50">
                 <AccordionTrigger className="hover:no-underline text-lg font-semibold">
-                  ¿Qué información necesitan para el diagnóstico?
+                  ¿Qué información necesitan para empezar?
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground pt-4">
-                  Solo necesitamos acceso a tus datos operativos actuales (inventarios, ventas, procesos, etc.). No requiere información financiera sensible. Todos los datos se manejan con total confidencialidad bajo acuerdos de NDA.
+                  Solo lo que ya tienes: ventas, inventarios o procesos. No pedimos información financiera sensible y todo se maneja bajo acuerdo de confidencialidad (NDA).
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="item-3" className="border border-border/50 rounded-lg px-6 py-4 data-[state=open]:bg-card/50">
                 <AccordionTrigger className="hover:no-underline text-lg font-semibold">
-                  ¿Cuál es la diferencia entre FlowSights y otras herramientas de BI?
+                  ¿En qué se diferencia FlowSights de un software de BI?
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground pt-4">
-                  FlowSights se especializa en PyMEs y empresas medianas. No vendemos software genérico: diseñamos soluciones específicas para tu industria. Nuestro enfoque es en optimización operativa, no solo en visualización de datos.
+                  Un software de BI solo te muestra gráficos. Nosotros te decimos qué hacer con ellos. Diseñamos soluciones específicas para PyMEs y empresas medianas, enfocadas en mejorar la operación, no solo en visualizar datos.
                 </AccordionContent>
               </AccordionItem>
 
@@ -884,25 +884,25 @@ const Index = () => {
                   ¿Necesito personal técnico para usar FlowSights?
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground pt-4">
-                  No. Nuestros dashboards están diseñados para que cualquier gerente o supervisor pueda usarlos sin conocimientos técnicos. Incluimos capacitación completa y soporte continuo.
+                  No. Diseñamos todo para que cualquier dueño, gerente o supervisor lo entienda en minutos. Incluye capacitación completa y soporte continuo, sin tecnicismos.
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="item-5" className="border border-border/50 rounded-lg px-6 py-4 data-[state=open]:bg-card/50">
                 <AccordionTrigger className="hover:no-underline text-lg font-semibold">
-                  ¿Cuánto cuesta la implementación?
+                  ¿Cuánto cuesta?
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground pt-4">
-                  Los costos varían según la complejidad de tu operación y los sistemas que necesites integrar. Por eso ofrecemos el diagnóstico gratuito: para darte una propuesta personalizada y transparente, sin sorpresas.
+                  La inversión depende del tamaño de tu operación y de los sistemas que integremos. Por eso el diagnóstico es gratis: te damos una propuesta clara, transparente y sin sorpresas.
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="item-6" className="border border-border/50 rounded-lg px-6 py-4 data-[state=open]:bg-card/50">
                 <AccordionTrigger className="hover:no-underline text-lg font-semibold">
-                  ¿Qué pasa si no estoy satisfecho con los resultados?
+                  ¿Y si no veo resultados?
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground pt-4">
-                  Nos comprometemos a que veas mejoras en 90 días. Si no ves el impacto esperado, trabajamos contigo sin costo adicional hasta lograrlo. Tu éxito es nuestro éxito.
+                  Nos comprometemos con resultados medibles en 90 días. Si no ves el impacto esperado, seguimos trabajando contigo sin costo adicional hasta lograrlo.
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
@@ -926,15 +926,15 @@ const Index = () => {
               Descubre lo que tus datos están <span className="text-gradient">diciendo</span>
             </h2>
             <p className="text-muted-foreground mt-4 text-lg">
-              Solicita tu diagnóstico gratuito y en 48 horas te diremos exactamente qué oportunidades de mejora existen en tu operación.
+              Solicita tu diagnóstico gratuito. En menos de 48 horas te mostramos dónde se está fugando dinero en tu operación y cómo recuperarlo.
             </p>
 
             <ul className="mt-8 space-y-3">
               {[
-                "Diagnóstico inicial completamente gratuito",
+                "Diagnóstico 100% gratuito y sin compromiso",
                 "Respuesta en menos de 24 horas",
-                "Sin compromiso ni contratos",
-                "Consulta personalizada para tu industria",
+                "Recomendaciones específicas para tu industria",
+                "Sin contratos largos ni letra pequeña",
               ].map((b) => (
                 <li key={b} className="flex items-center gap-3">
                   <span className="w-6 h-6 rounded-full bg-primary/20 text-primary grid place-items-center shrink-0">
@@ -974,8 +974,8 @@ const Index = () => {
               </div>
             ) : (
               <>
-                <h3 className="font-display text-2xl font-bold">Solicitar diagnóstico gratuito</h3>
-                <p className="text-sm text-muted-foreground mt-2">Completa el formulario y te contactamos en menos de 24 horas.</p>
+                <h3 className="font-display text-2xl font-bold">Analiza mi negocio gratis</h3>
+                <p className="text-sm text-muted-foreground mt-2">Cuéntanos un poco de tu empresa y te respondemos en menos de 24 horas.</p>
 
                 <form onSubmit={handleSubmit} className="mt-6 space-y-4">
                   <div>
@@ -991,11 +991,11 @@ const Index = () => {
                     <Input id="company" required value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} className="mt-1.5" placeholder="Nombre de tu empresa" />
                   </div>
                   <div>
-                    <Label htmlFor="message">Mensaje</Label>
-                    <Textarea id="message" rows={4} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className="mt-1.5" placeholder="Cuéntanos brevemente tu situación..." />
+                    <Label htmlFor="message">¿Qué te gustaría mejorar?</Label>
+                    <Textarea id="message" rows={4} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className="mt-1.5" placeholder="Ej: Quiero entender por qué mis reportes no cuadran y reducir mermas de inventario." />
                   </div>
                   <Button type="submit" variant="hero" size="lg" className="w-full" disabled={submitting}>
-                    {submitting ? "Enviando..." : <>Solicitar diagnóstico gratuito <ArrowRight className="ml-1" /></>}
+                    {submitting ? "Enviando..." : <>Quiero mi diagnóstico gratis <ArrowRight className="ml-1" /></>}
                   </Button>
                   <p className="text-xs text-muted-foreground text-center">
                     Al enviar este formulario aceptas nuestra <Link to="/privacidad" className="text-primary hover:underline">política de privacidad</Link>.
@@ -1016,7 +1016,7 @@ const Index = () => {
               FlowSights
             </div>
             <p className="text-sm text-muted-foreground mt-4 leading-relaxed">
-              Transformamos datos empresariales en decisiones inteligentes. Limpieza de datos, insights operativos y optimización de procesos para empresas en crecimiento.
+              Ayudamos a PyMEs a vender más, gastar menos y tomar mejores decisiones con la información que ya tienen.
             </p>
           </div>
 
