@@ -843,10 +843,10 @@ const Index = () => {
           <div className="text-center mb-16">
             <span className="text-sm font-semibold text-primary uppercase tracking-wider">Preguntas frecuentes</span>
             <h2 className="font-display text-4xl md:text-5xl font-bold mt-3">
-              Respuestas a tus <span className="text-gradient">dudas</span>
+              Resolvemos tus <span className="text-gradient">dudas</span>
             </h2>
             <p className="text-muted-foreground mt-4 text-lg max-w-2xl mx-auto">
-              Todo lo que necesitas saber sobre cómo FlowSights puede transformar tus datos en decisiones.
+              Lo más importante que necesitas saber antes de transformar tus datos en mejores decisiones.
             </p>
           </div>
 
@@ -857,25 +857,25 @@ const Index = () => {
                   ¿Cuánto tiempo tarda el diagnóstico gratuito?
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground pt-4">
-                  El diagnóstico inicial toma entre 24 a 48 horas. Nuestro equipo analiza tu operación actual, identifica los principales problemas de datos y te presenta un reporte detallado con recomendaciones específicas para tu industria.
+                  Entre 24 y 48 horas. Revisamos tu operación, identificamos tus principales fugas de dinero y te entregamos un reporte con recomendaciones concretas para tu industria.
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="item-2" className="border border-border/50 rounded-lg px-6 py-4 data-[state=open]:bg-card/50">
                 <AccordionTrigger className="hover:no-underline text-lg font-semibold">
-                  ¿Qué información necesitan para el diagnóstico?
+                  ¿Qué información necesitan para empezar?
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground pt-4">
-                  Solo necesitamos acceso a tus datos operativos actuales (inventarios, ventas, procesos, etc.). No requiere información financiera sensible. Todos los datos se manejan con total confidencialidad bajo acuerdos de NDA.
+                  Solo lo que ya tienes: ventas, inventarios o procesos. No pedimos información financiera sensible y todo se maneja bajo acuerdo de confidencialidad (NDA).
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="item-3" className="border border-border/50 rounded-lg px-6 py-4 data-[state=open]:bg-card/50">
                 <AccordionTrigger className="hover:no-underline text-lg font-semibold">
-                  ¿Cuál es la diferencia entre FlowSights y otras herramientas de BI?
+                  ¿En qué se diferencia FlowSights de un software de BI?
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground pt-4">
-                  FlowSights se especializa en PyMEs y empresas medianas. No vendemos software genérico: diseñamos soluciones específicas para tu industria. Nuestro enfoque es en optimización operativa, no solo en visualización de datos.
+                  Un software de BI solo te muestra gráficos. Nosotros te decimos qué hacer con ellos. Diseñamos soluciones específicas para PyMEs y empresas medianas, enfocadas en mejorar la operación, no solo en visualizar datos.
                 </AccordionContent>
               </AccordionItem>
 
@@ -884,25 +884,25 @@ const Index = () => {
                   ¿Necesito personal técnico para usar FlowSights?
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground pt-4">
-                  No. Nuestros dashboards están diseñados para que cualquier gerente o supervisor pueda usarlos sin conocimientos técnicos. Incluimos capacitación completa y soporte continuo.
+                  No. Diseñamos todo para que cualquier dueño, gerente o supervisor lo entienda en minutos. Incluye capacitación completa y soporte continuo, sin tecnicismos.
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="item-5" className="border border-border/50 rounded-lg px-6 py-4 data-[state=open]:bg-card/50">
                 <AccordionTrigger className="hover:no-underline text-lg font-semibold">
-                  ¿Cuánto cuesta la implementación?
+                  ¿Cuánto cuesta?
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground pt-4">
-                  Los costos varían según la complejidad de tu operación y los sistemas que necesites integrar. Por eso ofrecemos el diagnóstico gratuito: para darte una propuesta personalizada y transparente, sin sorpresas.
+                  La inversión depende del tamaño de tu operación y de los sistemas que integremos. Por eso el diagnóstico es gratis: te damos una propuesta clara, transparente y sin sorpresas.
                 </AccordionContent>
               </AccordionItem>
 
               <AccordionItem value="item-6" className="border border-border/50 rounded-lg px-6 py-4 data-[state=open]:bg-card/50">
                 <AccordionTrigger className="hover:no-underline text-lg font-semibold">
-                  ¿Qué pasa si no estoy satisfecho con los resultados?
+                  ¿Y si no veo resultados?
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground pt-4">
-                  Nos comprometemos a que veas mejoras en 90 días. Si no ves el impacto esperado, trabajamos contigo sin costo adicional hasta lograrlo. Tu éxito es nuestro éxito.
+                  Nos comprometemos con resultados medibles en 90 días. Si no ves el impacto esperado, seguimos trabajando contigo sin costo adicional hasta lograrlo.
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
