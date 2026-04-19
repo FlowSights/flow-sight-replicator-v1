@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Instagram } from "@/components/icons/Instagram";
+import { LinkedIn } from "@/components/icons/LinkedIn";
 import heroDashboard from "@/assets/hero-dashboard.png";
 import logo from "@/assets/logo.png";
 import stevenPhoto from "@/assets/team-steven.jpg";
@@ -152,9 +153,35 @@ const Index = () => {
   ];
 
   const team = [
-    { initials: "MG", name: "Marcos García", role: "Ingeniero Industrial", desc: "Amplio conocimiento en optimización de procesos", tags: ["Optimización de procesos", "Análisis operativo", "Eficiencia"], photo: marcosPhoto },
-    { initials: "SP", name: "Steven Pineda", role: "AI Data Analyst Junior · International Operations", desc: "AI Data Analyst Junior y Customer Experience & Sales Professional con más de 5 años de experiencia en múltiples industrias.", tags: ["AI Data Analyst Junior", "Experiencia del cliente", "Operaciones internacionales"], photo: stevenPhoto },
-    { initials: "OZ", name: "Oscar Zapata", role: "Especialista en Control de Inventarios", desc: "Especialista en control de inventarios, manejo de operaciones y ventas", tags: ["Control de inventarios", "Manejo de operaciones", "Ventas"], photo: oscarPhoto }
+    { 
+      initials: "SP", 
+      name: "Steven Pineda", 
+      role: "CEO", 
+      originalRole: "AI Data Analyst Junior · International Operations",
+      desc: "AI Data Analyst Junior y Customer Experience & Sales Professional con más de 5 años de experiencia en múltiples industrias.", 
+      tags: ["AI Data Analyst Junior", "Experiencia del cliente", "Operaciones internacionales"], 
+      photo: stevenPhoto,
+      linkedin: "https://www.linkedin.com/in/spineda07"
+    },
+    { 
+      initials: "MG", 
+      name: "Marcos García", 
+      role: "CO-FOUNDER", 
+      originalRole: "Ingeniero Industrial",
+      desc: "Amplio conocimiento en optimización de procesos", 
+      tags: ["Optimización de procesos", "Análisis operativo", "Eficiencia"], 
+      photo: marcosPhoto,
+      linkedin: "https://www.linkedin.com/in/marco-garcía-8a45b72b2/"
+    },
+    { 
+      initials: "OZ", 
+      name: "Oscar Zapata", 
+      role: "CO-FOUNDER", 
+      originalRole: "Especialista en Control de Inventarios",
+      desc: "Especialista en control de inventarios, manejo de operaciones y ventas", 
+      tags: ["Control de inventarios", "Manejo de operaciones", "Ventas"], 
+      photo: oscarPhoto 
+    }
   ];
 
   const [submitting, setSubmitting] = useState(false);
@@ -698,7 +725,18 @@ const Index = () => {
                   visible: { opacity: 1, y: 0 }
                 }}
               >
-                <Card className="p-7 glass-card h-full text-center hover:border-primary/60 hover:-translate-y-1 hover:shadow-glow transition-all group">
+                <Card className="p-7 glass-card h-full text-center hover:border-primary/60 hover:-translate-y-1 hover:shadow-glow transition-all group relative overflow-hidden">
+                  {m.linkedin && (
+                    <a 
+                      href={m.linkedin} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="absolute top-4 right-4 text-muted-foreground hover:text-primary transition-colors"
+                      aria-label={`LinkedIn de ${m.name}`}
+                    >
+                      <LinkedIn className="w-5 h-5" />
+                    </a>
+                  )}
                   {m.photo ? (
                     <img
                       src={m.photo}
@@ -710,8 +748,13 @@ const Index = () => {
                       {m.initials}
                     </div>
                   )}
-                  <h3 className="font-display text-xl font-bold">{m.name}</h3>
-                  <div className="text-primary text-sm font-medium mt-1">{m.role}</div>
+                  <div className="flex flex-col items-center gap-1">
+                    <h3 className="font-display text-xl font-bold">{m.name}</h3>
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+                      {m.role}
+                    </span>
+                  </div>
+                  <div className="text-muted-foreground text-xs font-medium mt-2 italic">{m.originalRole}</div>
                   <p className="text-sm text-muted-foreground mt-3 leading-relaxed">{m.desc}</p>
                   <div className="flex flex-wrap justify-center gap-2 mt-4">
                     {m.tags.map((t) => (
