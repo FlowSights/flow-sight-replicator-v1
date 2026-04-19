@@ -769,7 +769,7 @@ const Index = () => {
           <Card className="p-10 glass-card text-center max-w-3xl mx-auto bg-gradient-to-br from-primary/10 to-accent/5 border-primary/20">
             <h3 className="font-display text-2xl font-bold mb-3">Nuestra Misión</h3>
             <p className="text-muted-foreground leading-relaxed">
-              Empoderamos a empresas de todos los tamaños para que tomen decisiones basadas en datos confiables. Creemos que la calidad de los datos es la base de la excelencia operativa, y nuestro compromiso es transformar la complejidad en claridad.
+              Que cada PyME pueda decidir con la misma claridad que una gran empresa. Convertimos datos dispersos en información simple y útil para que vendas más, gastes menos y mantengas el control de tu operación.
             </p>
           </Card>
         </div>
