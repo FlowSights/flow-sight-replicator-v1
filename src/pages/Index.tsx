@@ -287,19 +287,19 @@ const Index = () => {
             >
               <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
                 <Button variant="hero" size="lg" asChild>
-                  <a href="#contacto">Solicitar diagnóstico gratuito <ArrowRight className="ml-1" /></a>
+                  <a href="#contacto">Analizar mi negocio gratis <ArrowRight className="ml-1" /></a>
                 </Button>
               </motion.div>
               <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
                 <Button size="lg" asChild className="bg-[#25D366] hover:bg-[#20bd5a] text-white">
                   <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-                    <MessageCircle className="mr-1" /> WhatsApp
+                    <MessageCircle className="mr-1" /> Hablar por WhatsApp
                   </a>
                 </Button>
               </motion.div>
               <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
                 <Button variant="outline" size="lg" asChild>
-                  <a href={EMAIL_URL}><Mail className="mr-1" /> Contáctanos</a>
+                  <a href={EMAIL_URL}><Mail className="mr-1" /> Escríbenos</a>
                 </Button>
               </motion.div>
             </motion.div>
