@@ -241,7 +241,7 @@ const Index = () => {
               </DropdownMenuContent>
             </DropdownMenu>
             <Button variant="hero" size="sm" asChild className="hidden sm:inline-flex">
-              <a href="#contacto">Diagnóstico gratuito</a>
+              <a href="#contacto">Analiza mi negocio</a>
             </Button>
           </div>
         </nav>
@@ -254,17 +254,17 @@ const Index = () => {
           <div className="space-y-8 animate-fade-up">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm">
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse-glow" />
-              Plataforma de Inteligencia Operativa
+              Inteligencia Operativa para PyMEs
             </span>
             <h1 className="font-display text-6xl md:text-7xl lg:text-8xl font-bold leading-[1.05]">
-              Convierte tus datos en{" "}
-              <span className="text-gradient">decisiones inteligentes</span>
+              Tus datos, convertidos en{" "}
+              <span className="text-gradient">decisiones que generan dinero</span>
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground max-w-xl leading-relaxed">
-              En FlowSights ayudamos a empresas a limpiar sus datos, optimizar procesos y detectar oportunidades ocultas en sus operaciones.
+              Unificamos tu Excel, POS, inventario y WhatsApp para mostrarte qué reduce costos, qué aumenta ventas y qué corregir hoy en tu operación.
             </p>
             <div className="flex flex-wrap gap-3">
-              {["Limpieza de datos", "Insights operativos", "Dashboards en tiempo real"].map((t) => (
+              {["Reportes en los que sí confías", "Alertas antes de perder dinero", "Visión clara del negocio"].map((t) => (
                 <span key={t} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-card/50 text-sm">
                   <Check className="w-4 h-4 text-primary" /> {t}
                 </span>
