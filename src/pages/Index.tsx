@@ -305,9 +305,9 @@ const Index = () => {
             </motion.div>
             <div className="grid grid-cols-3 gap-6 pt-8 border-t border-border/60 max-w-lg">
               {([
-                { value: 30, suffix: "%", label: "Reducción de costos" },
-                { value: 2, suffix: "x", label: "Mayor productividad" },
-                { value: 95, suffix: "%", label: "Precisión de datos" },
+                { value: 30, suffix: "%", label: "Menos costos" },
+                { value: 2, suffix: "x", label: "Más productividad" },
+                { value: 95, suffix: "%", label: "Reportes confiables" },
               ] as HeroStat[]).map((s) => (
                 <AnimatedStat key={s.label} stat={s} />
               ))}
