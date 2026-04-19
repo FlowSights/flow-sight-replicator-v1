@@ -375,10 +375,10 @@ const Index = () => {
           <Card className="mt-10 p-8 md:p-10 glass-card border-primary/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 bg-gradient-to-br from-primary/10 to-accent/5">
             <div>
               <h3 className="font-display text-2xl font-bold">¿Cuánto te están costando tus datos sucios?</h3>
-              <p className="text-muted-foreground mt-2">Las empresas pierden en promedio el 15-25% de sus ingresos por problemas de calidad de datos.</p>
+              <p className="text-muted-foreground mt-2">Te mostramos en 48 horas y sin costo dónde se está fugando dinero en tu operación.</p>
             </div>
             <Button variant="hero" size="lg" asChild>
-              <a href="#contacto">Descúbrelo gratis <ArrowRight className="ml-1" /></a>
+              <a href="#contacto">Quiero saberlo gratis <ArrowRight className="ml-1" /></a>
             </Button>
           </Card>
         </div>
