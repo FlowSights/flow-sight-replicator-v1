@@ -90,6 +90,7 @@ const Index = () => {
   const scrolled = useScrolled(80);
 
   const navLinks = [
+    { label: "Diagnóstico gratuito", href: "/diagnostico" },
     { label: "Cómo funciona", href: "#proceso" },
     { label: "Servicios", href: "#servicios" },
     { label: "Industrias", href: "#industrias" },
@@ -354,7 +355,7 @@ const Index = () => {
             >
               <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
                 <Button variant="hero" size="lg" asChild>
-                  <a href="#contacto">Analizar mi negocio gratis <ArrowRight className="ml-1" /></a>
+                  <Link to="/diagnostico">Diagnóstico gratuito <ArrowRight className="ml-1" /></Link>
                 </Button>
               </motion.div>
               <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}>
