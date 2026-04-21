@@ -21,28 +21,29 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <HelmetProvider>
       <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <AuthProvider>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/blog/:slug" element={<BlogPost />} />
-              <Route path="/privacidad" element={<Privacy />} />
-              <Route path="/diagnostico" element={<DiagnosticQuiz />} />
-              <Route path="/auth" element={<Auth />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            {/* AI Chatbot disponible globalmente en todas las páginas */}
-            <AIChatbot />
-          </AuthProvider>
-        </BrowserRouter>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <AuthProvider>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:slug" element={<BlogPost />} />
+                <Route path="/privacidad" element={<Privacy />} />
+                <Route path="/diagnostico" element={<DiagnosticQuiz />} />
+                <Route path="/auth" element={<Auth />} />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+              {/* AI Chatbot disponible globalmente en todas las páginas */}
+              <AIChatbot />
+            </AuthProvider>
+          </BrowserRouter>
+        </TooltipProvider>
       </ThemeProvider>
     </HelmetProvider>
-  </QueryClientProvider>>
+  </QueryClientProvider>
 );
 
 export default App;
