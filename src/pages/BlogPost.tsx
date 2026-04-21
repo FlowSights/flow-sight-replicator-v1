@@ -47,7 +47,11 @@ const BlogPost = () => {
     <div className="min-h-screen">
       <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-xl bg-background/70 border-b border-border/50">
         <nav className="container flex items-center justify-between h-20">
-          <Link to="/" className="flex items-center gap-2.5 font-display font-bold text-xl md:text-2xl hover:opacity-90 transition-opacity">
+          <Link 
+            to="/" 
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="flex items-center gap-2.5 font-display font-bold text-xl md:text-2xl hover:opacity-90 transition-opacity"
+          >
             <img src={logo} alt="FlowSights logo" width={48} height={48} className="w-12 h-12 object-contain" />
             <span>FlowSights</span>
           </Link>

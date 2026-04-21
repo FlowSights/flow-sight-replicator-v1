@@ -221,7 +221,7 @@ const Index = () => {
            which creates the symmetric pill-collapse effect.
            border-radius transitions from 0 → 9999px to morph into a pill. */}
       <header
-        className="fixed z-50 left-0 right-0"
+        className="fixed z-[60] left-0 right-0"
         style={{
           // Vertical position: slides up slightly when collapsed
           top: scrolled ? "1rem" : "0px",
@@ -269,7 +269,12 @@ const Index = () => {
             marginInline: scrolled ? undefined : "auto",
           }}
         >
-          <Link to="/" aria-label="FlowSights — ir al inicio" className="flex items-center gap-2.5 font-display font-bold text-xl md:text-2xl hover:opacity-90 transition-opacity relative z-20 pointer-events-auto shrink-0 cursor-pointer">
+          <Link 
+            to="/" 
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            aria-label="FlowSights — ir al inicio" 
+            className="flex items-center gap-2.5 font-display font-bold text-xl md:text-2xl hover:opacity-90 transition-opacity relative z-[60] pointer-events-auto shrink-0 cursor-pointer"
+          >
             <img
               src={logo}
               alt="FlowSights logo"
