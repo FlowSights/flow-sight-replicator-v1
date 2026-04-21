@@ -21,6 +21,7 @@ import { Instagram } from "@/components/icons/Instagram";
 import { LinkedIn } from "@/components/icons/LinkedIn";
 import heroDashboard from "@/assets/hero-dashboard.png";
 import logo from "@/assets/logo.png";
+import arenalVolcano from "@/assets/arenal-volcano.webp";
 import stevenPhoto from "@/assets/team-steven.jpg";
 import marcosPhoto from "@/assets/team-marcos.png";
 import oscarPhoto from "@/assets/team-oscar.png";
@@ -367,8 +368,17 @@ const Index = () => {
       </header>
 
       {/* HERO */}
-      <section className="relative pt-32 pb-24 md:pt-40 md:pb-32">
-        <div className="absolute inset-0 grid-bg pointer-events-none" />
+      <section className="relative pt-32 pb-24 md:pt-40 md:pb-32 overflow-hidden">
+        <div 
+          className="absolute inset-0 z-0 pointer-events-none"
+          style={{
+            backgroundImage: `url(${arenalVolcano})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: 0.25,
+          }}
+        />
+        <div className="absolute inset-0 grid-bg pointer-events-none opacity-50" />
         <div className="container relative grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
           <div className="space-y-8 animate-fade-up">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm">
