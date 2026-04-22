@@ -35,6 +35,7 @@ import { ToolsMarquee } from "@/components/ToolsMarquee";
 import SEO from "@/components/SEO";
 
 import { ExplodedLaptop } from "@/components/ExplodedLaptop";
+import { InstagramFeed } from "@/components/InstagramFeed";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -1037,6 +1038,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* INSTAGRAM FEED */}
+      <InstagramFeed />
 
       {/* CONTACT */}
       <section id="contacto" className="py-24 bg-card/30 border-t border-border/50">
