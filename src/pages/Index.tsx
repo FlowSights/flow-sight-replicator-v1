@@ -36,6 +36,7 @@ import SEO from "@/components/SEO";
 
 import { ExplodedLaptop } from "@/components/ExplodedLaptop";
 import { InstagramFeed } from "@/components/InstagramFeed";
+import { Showcase } from "@/components/Showcase";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -95,6 +96,7 @@ const Index = () => {
   const navLinks = [
     { label: "Diagnóstico gratuito", href: "/diagnostico" },
     { label: "Cómo funciona", href: "#proceso" },
+    { label: "Showcase", href: "#showcase" },
     { label: "Servicios", href: "#servicios" },
     { label: "Industrias", href: "#industrias" },
     { label: "Quiénes somos", href: "#equipo" },
@@ -1038,6 +1040,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* SHOWCASE SECTION */}
+      <Showcase />
 
       {/* INSTAGRAM FEED */}
       <InstagramFeed />
