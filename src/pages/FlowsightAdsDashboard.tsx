@@ -1,20 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabaseClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
-import { ArrowLeft, Sparkles, LogOut, Zap, Target, Image as ImageIcon, BarChart3 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { ArrowLeft, Sparkles, LogOut, Zap, Target, Image as ImageIcon, BarChart3, Upload, X, Check } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 type CampaignType = 'campaigns' | 'ads' | null;
 
+interface UploadedImage {
+  id: string;
+  url: string;
+  file: File;
+  selected: boolean;
+}
+
 const FlowsightAdsDashboard: React.FC = () => {
   const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [campaignType, setCampaignType] = useState<CampaignType>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('');
+  const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
+  const [showImageUpload, setShowImageUpload] = useState(false);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -23,6 +33,37 @@ const FlowsightAdsDashboard: React.FC = () => {
 
   const handleSelectCampaignType = (type: CampaignType) => {
     setCampaignType(type);
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    Array.from(files).forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const newImage: UploadedImage = {
+          id: Math.random().toString(36).substr(2, 9),
+          url: event.target?.result as string,
+          file: file,
+          selected: false,
+        };
+        setUploadedImages([...uploadedImages, newImage]);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const toggleImageSelection = (id: string) => {
+    setUploadedImages(
+      uploadedImages.map((img) =>
+        img.id === id ? { ...img, selected: !img.selected } : img
+      )
+    );
+  };
+
+  const removeImage = (id: string) => {
+    setUploadedImages(uploadedImages.filter((img) => img.id !== id));
   };
 
   const handleGenerateContent = async (type: 'campaigns' | 'ads') => {
@@ -282,6 +323,68 @@ const FlowsightAdsDashboard: React.FC = () => {
                     className="rounded-lg"
                   />
                 </div>
+
+                {campaignType === 'ads' && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Imágenes (Opcional)
+                    </label>
+                    <div className="space-y-4">
+                      <button
+                        onClick={() => fileInputRef.current?.click()}
+                        className="w-full border-2 border-dashed border-emerald-300 dark:border-emerald-700 rounded-lg p-6 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors"
+                      >
+                        <Upload className="w-6 h-6 mx-auto mb-2 text-emerald-600 dark:text-emerald-400" />
+                        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Carga tus imágenes</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">o la IA generará nuevas</p>
+                      </button>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="hidden"
+                      />
+                      
+                      {uploadedImages.length > 0 && (
+                        <div className="grid grid-cols-3 gap-2">
+                          <AnimatePresence>
+                            {uploadedImages.map((img) => (
+                              <motion.div
+                                key={img.id}
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.8 }}
+                                className="relative group"
+                              >
+                                <img
+                                  src={img.url}
+                                  alt="Uploaded"
+                                  className={`w-full h-24 object-cover rounded-lg cursor-pointer transition-all ${
+                                    img.selected ? 'ring-2 ring-emerald-500' : ''
+                                  }`}
+                                  onClick={() => toggleImageSelection(img.id)}
+                                />
+                                {img.selected && (
+                                  <div className="absolute inset-0 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                                    <Check className="w-6 h-6 text-white" />
+                                  </div>
+                                )}
+                                <button
+                                  onClick={() => removeImage(img.id)}
+                                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                                >
+                                  <X className="w-4 h-4" />
+                                </button>
+                              </motion.div>
+                            ))}
+                          </AnimatePresence>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
 
                 <Button 
                   onClick={() => handleGenerateContent(campaignType as 'campaigns' | 'ads')}
