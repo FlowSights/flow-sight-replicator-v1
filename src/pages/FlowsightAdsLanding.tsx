@@ -218,11 +218,15 @@ const FlowsightAdsLanding: React.FC = () => {
             <span className="text-[10px] font-bold text-gray-500 uppercase tracking-tighter">Meta</span>
           </div>
           <div className="flex flex-col items-center gap-1">
-            <svg className="w-8 h-8" viewBox="0 0 24 24">
-              <path fill="#FBBC05" d="M15.5 1.1l-9 15.6c-.2.4-.1.9.3 1.1l5.3 3.1c.4.2.9.1 1.1-.3l9-15.6c.2-.4.1-.9-.3-1.1l-5.3-3.1c-.4-.2-.9-.1-1.1.3z"/>
-              <path fill="#4285F4" d="M5.5 12.1l-3.1 5.3c-.2.4-.1.9.3 1.1l5.3 3.1c.4.2.9.1 1.1-.3l3.1-5.3c.2-.4.1-.9-.3-1.1l-5.3-3.1c-.4-.2-.9-.1-1.1.3z"/>
-              <circle fill="#34A853" cx="12.5" cy="17.6" r="3.5"/>
-            </svg>
+            <img 
+              src="https://www.gstatic.com/images/branding/product/2x/google_ads_64dp.png" 
+              alt="Google Ads" 
+              className="w-8 h-8 object-contain"
+              onError={(e) => {
+                // Fallback en caso de error de carga de imagen externa
+                e.currentTarget.src = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Google_Ads_logo.svg/512px-Google_Ads_logo.svg.png";
+              }}
+            />
             <span className="text-[10px] font-bold text-gray-500 uppercase tracking-tighter">Google Ads</span>
           </div>
           <div className="flex flex-col items-center gap-1">
