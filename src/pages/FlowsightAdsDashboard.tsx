@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
 import { ArrowLeft, Sparkles, LogOut, Zap, Target, Image as ImageIcon, BarChart3, Upload, X, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MetaPreview, TikTokPreview, LinkedInPreview, GoogleAdsPreview } from '@/components/PlatformPreviewsNative';
 
 type CampaignType = 'campaigns' | 'ads' | null;
 
@@ -17,6 +18,13 @@ interface UploadedImage {
   selected: boolean;
 }
 
+interface GeneratedAd {
+  headline: string;
+  description: string;
+  cta: string;
+  imageUrl?: string;
+}
+
 const FlowsightAdsDashboard: React.FC = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -24,7 +32,10 @@ const FlowsightAdsDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('');
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
-  const [showImageUpload, setShowImageUpload] = useState(false);
+  const [generatedAds, setGeneratedAds] = useState<GeneratedAd[]>([]);
+  const [showPreview, setShowPreview] = useState(false);
+  const [selectedPlatform, setSelectedPlatform] = useState<'meta' | 'tiktok' | 'linkedin' | 'google'>('meta');
+  const [currentAdIndex, setCurrentAdIndex] = useState(0);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -82,10 +93,33 @@ const FlowsightAdsDashboard: React.FC = () => {
       setLoadingMessage(messages[i]);
     }
 
+    const ads: GeneratedAd[] = [
+      {
+        headline: 'Transforma tu negocio con FlowSights',
+        description: 'Crea campañas de publicidad con IA en minutos. Resultados comprobados para empresas de todos los tamaños.',
+        cta: 'Comenzar ahora',
+        imageUrl: uploadedImages[0]?.url || 'https://via.placeholder.com/1200x628/10b981/ffffff?text=Anuncio+1',
+      },
+      {
+        headline: 'Anuncios que convierten',
+        description: 'Nuestra IA analiza tu audiencia y crea anuncios personalizados. Aumenta tus ventas hasta un 300%.',
+        cta: 'Ver más',
+        imageUrl: uploadedImages[1]?.url || 'https://via.placeholder.com/1200x628/14b8a6/ffffff?text=Anuncio+2',
+      },
+      {
+        headline: 'Publicidad inteligente',
+        description: 'Optimiza automáticamente tus campañas. Menos tiempo, más resultados.',
+        cta: 'Probar gratis',
+        imageUrl: uploadedImages[2]?.url || 'https://via.placeholder.com/1200x628/0d9488/ffffff?text=Anuncio+3',
+      },
+    ];
+
+    setGeneratedAds(ads);
+    setShowPreview(true);
+    setCurrentAdIndex(0);
     setIsLoading(false);
   };
 
-  // Pantalla de Carga Full-Screen
   if (isLoading) {
     return (
       <div className="fixed inset-0 bg-gradient-to-br from-emerald-50 via-teal-50 to-emerald-100 dark:from-emerald-950 dark:via-teal-950 dark:to-emerald-900 flex items-center justify-center z-50">
@@ -130,11 +164,9 @@ const FlowsightAdsDashboard: React.FC = () => {
     );
   }
 
-  // Selector de Tipo de Campaña
   if (!campaignType) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-emerald-100 dark:from-emerald-950 dark:via-teal-950 dark:to-emerald-900">
-        {/* Header */}
         <header className="sticky top-0 z-40 backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 border-b border-white/20 dark:border-gray-800">
           <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <button
@@ -155,7 +187,6 @@ const FlowsightAdsDashboard: React.FC = () => {
           </div>
         </header>
 
-        {/* Main Content */}
         <div className="max-w-7xl mx-auto px-6 py-20">
           <div className="text-center mb-16">
             <h1 className="text-5xl md:text-6xl font-bold font-display bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400 bg-clip-text text-transparent mb-4">
@@ -167,7 +198,6 @@ const FlowsightAdsDashboard: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {/* Campañas (Google Ads) */}
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -204,7 +234,6 @@ const FlowsightAdsDashboard: React.FC = () => {
               </Card>
             </motion.div>
 
-            {/* Anuncios (Social Media) */}
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -246,10 +275,8 @@ const FlowsightAdsDashboard: React.FC = () => {
     );
   }
 
-  // Interfaz de Configuración Full-Screen
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-emerald-100 dark:from-emerald-950 dark:via-teal-950 dark:to-emerald-900">
-      {/* Header */}
       <header className="sticky top-0 z-40 backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 border-b border-white/20 dark:border-gray-800">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <button
@@ -272,10 +299,8 @@ const FlowsightAdsDashboard: React.FC = () => {
         </div>
       </header>
 
-      {/* Full-Screen Configuration */}
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Configuración */}
           <div className="lg:col-span-2">
             <Card className="glass-card backdrop-blur-xl bg-white/90 dark:bg-gray-900/90 border border-white/20 dark:border-gray-800 p-8 rounded-3xl">
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
@@ -397,18 +422,78 @@ const FlowsightAdsDashboard: React.FC = () => {
             </Card>
           </div>
 
-          {/* Preview */}
           <div>
-            <Card className="glass-card backdrop-blur-xl bg-white/90 dark:bg-gray-900/90 border border-white/20 dark:border-gray-800 p-8 rounded-3xl sticky top-24">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
-                Vista Previa
-              </h3>
-              <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 min-h-64 flex items-center justify-center text-center">
-                <p className="text-gray-500 dark:text-gray-400">
-                  La vista previa aparecerá aquí después de generar contenido
-                </p>
-              </div>
-            </Card>
+            {showPreview && generatedAds.length > 0 ? (
+              <Card className="glass-card backdrop-blur-xl bg-white/90 dark:bg-gray-900/90 border border-white/20 dark:border-gray-800 p-8 rounded-3xl sticky top-24">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
+                  Vista Previa
+                </h3>
+                
+                {campaignType === 'ads' && (
+                  <div className="grid grid-cols-2 gap-2 mb-6">
+                    {(['meta', 'tiktok', 'linkedin'] as const).map((platform) => (
+                      <button
+                        key={platform}
+                        onClick={() => setSelectedPlatform(platform)}
+                        className={`py-2 px-3 rounded-lg text-sm font-medium transition-all ${
+                          selectedPlatform === platform
+                            ? 'bg-emerald-500 text-white'
+                            : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300'
+                        }`}
+                      >
+                        {platform.charAt(0).toUpperCase() + platform.slice(1)}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                <div className="mb-4 overflow-auto max-h-96">
+                  {selectedPlatform === 'meta' && (
+                    <MetaPreview {...generatedAds[currentAdIndex]} platform="meta" />
+                  )}
+                  {selectedPlatform === 'tiktok' && (
+                    <TikTokPreview {...generatedAds[currentAdIndex]} platform="tiktok" />
+                  )}
+                  {selectedPlatform === 'linkedin' && (
+                    <LinkedInPreview {...generatedAds[currentAdIndex]} platform="linkedin" />
+                  )}
+                  {campaignType === 'campaigns' && (
+                    <GoogleAdsPreview {...generatedAds[currentAdIndex]} platform="google" />
+                  )}
+                </div>
+
+                <div className="flex gap-2 justify-between items-center">
+                  <button
+                    onClick={() => setCurrentAdIndex(Math.max(0, currentAdIndex - 1))}
+                    disabled={currentAdIndex === 0}
+                    className="px-3 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg disabled:opacity-50"
+                  >
+                    ← Anterior
+                  </button>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                    {currentAdIndex + 1} / {generatedAds.length}
+                  </span>
+                  <button
+                    onClick={() => setCurrentAdIndex(Math.min(generatedAds.length - 1, currentAdIndex + 1))}
+                    disabled={currentAdIndex === generatedAds.length - 1}
+                    className="px-3 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg disabled:opacity-50"
+                  >
+                    Siguiente →
+                  </button>
+                </div>
+              </Card>
+            ) : (
+              <Card className="glass-card backdrop-blur-xl bg-white/90 dark:bg-gray-900/90 border border-white/20 dark:border-gray-800 p-8 rounded-3xl sticky top-24">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
+                  Vista Previa
+                </h3>
+                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 min-h-64 flex items-center justify-center text-center">
+                  <p className="text-gray-500 dark:text-gray-400">
+                    La vista previa aparecerá aquí después de generar contenido
+                  </p>
+                </div>
+              </Card>
+            )}
           </div>
         </div>
       </div>
