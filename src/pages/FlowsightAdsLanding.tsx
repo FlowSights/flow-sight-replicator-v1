@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
-import { Sparkles, Mail, Lock, User, Phone, MapPin, ArrowRight, Eye, EyeOff, Info, Facebook, Target, Music2, Linkedin } from 'lucide-react';
+import { Sparkles, Mail, Lock, User, Phone, MapPin, ArrowRight, Eye, EyeOff, Info, Globe, Target, Music, Linkedin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -212,15 +212,21 @@ const FlowsightAdsLanding: React.FC = () => {
 
         <div className="flex justify-center items-center gap-8 mb-8">
           <div className="flex flex-col items-center gap-1">
-            <Facebook className="w-8 h-8 text-[#0668E1]" />
+            <svg className="w-8 h-8 text-[#0668E1]" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M16.845 6.002c-1.325 0-2.486.586-3.245 1.492-.76-.906-1.92-1.492-3.245-1.492-2.396 0-4.346 1.914-4.346 4.266 0 2.352 1.95 4.266 4.346 4.266 1.325 0 2.486-.586 3.245-1.492.76.906 1.92 1.492 3.245 1.492 2.396 0 4.346-1.914 4.346-4.266 0-2.352-1.95-4.266-4.346-4.266zm0 7.032c-1.536 0-2.787-1.241-2.787-2.766s1.251-2.766 2.787-2.766 2.787 1.241 2.787 2.766-1.251 2.766-2.787 2.766zm-6.49 0c-1.536 0-2.787-1.241-2.787-2.766s1.251-2.766 2.787-2.766 2.787 1.241 2.787 2.766-1.251 2.766-2.787 2.766z"/>
+            </svg>
             <span className="text-[10px] font-bold text-gray-500 uppercase tracking-tighter">Meta</span>
           </div>
           <div className="flex flex-col items-center gap-1">
-            <Target className="w-8 h-8 text-[#FBBC05]" />
+            <svg className="w-8 h-8" viewBox="0 0 24 24">
+              <path fill="#FBBC05" d="M15.5 1.1l-9 15.6c-.2.4-.1.9.3 1.1l5.3 3.1c.4.2.9.1 1.1-.3l9-15.6c.2-.4.1-.9-.3-1.1l-5.3-3.1c-.4-.2-.9-.1-1.1.3z"/>
+              <path fill="#4285F4" d="M5.5 12.1l-3.1 5.3c-.2.4-.1.9.3 1.1l5.3 3.1c.4.2.9.1 1.1-.3l3.1-5.3c.2-.4.1-.9-.3-1.1l-5.3-3.1c-.4-.2-.9-.1-1.1.3z"/>
+              <circle fill="#34A853" cx="12.5" cy="17.6" r="3.5"/>
+            </svg>
             <span className="text-[10px] font-bold text-gray-500 uppercase tracking-tighter">Google Ads</span>
           </div>
           <div className="flex flex-col items-center gap-1">
-            <Music2 className="w-8 h-8 text-black dark:text-white" />
+            <Music className="w-8 h-8 text-black dark:text-white" />
             <span className="text-[10px] font-bold text-gray-500 uppercase tracking-tighter">TikTok</span>
           </div>
           <div className="flex flex-col items-center gap-1">
