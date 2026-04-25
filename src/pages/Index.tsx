@@ -1087,16 +1087,31 @@ const Index = () => {
               ))}
             </ul>
 
-            <div className="flex flex-col gap-3 mt-8">
-              <a href="mailto:contacto@flowsights.it.com" className="inline-flex items-center gap-2 text-primary font-medium hover:underline">
-                <Mail className="w-4 h-4" /> contacto@flowsights.it.com
-              </a>
-              <Button asChild variant="hero" size="lg" className="w-fit">
-                <Link to="/flowsight-ads" className="flex items-center gap-2">
-                  <Sparkles className="w-5 h-5" />
-                  Crear anuncios con IA
-                </Link>
-              </Button>
+            <div className="flex flex-col gap-4 mt-8">
+              <div className="flex flex-col gap-2">
+                <a href="mailto:contacto@flowsights.it.com" className="inline-flex items-center gap-2 text-primary font-medium hover:underline">
+                  <Mail className="w-4 h-4" /> contacto@flowsights.it.com
+                </a>
+                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-primary font-medium hover:underline">
+                  <MessageCircle className="w-4 h-4" /> WhatsApp
+                </a>
+              </div>
+              
+              <div className="flex flex-col gap-3">
+                <Button asChild variant="hero" size="lg" className="w-fit">
+                  <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                    <MessageCircle className="w-5 h-5" />
+                    Contactar por WhatsApp
+                  </a>
+                </Button>
+                
+                <Button asChild variant="outline" size="lg" className="w-fit border-emerald-500/50 text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-900/20">
+                  <Link to="/flowsight-ads" className="flex items-center gap-2">
+                    <Sparkles className="w-5 h-5" />
+                    Flowsight Ads (IA)
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { Sparkles, Mail, Lock, User, Phone, MapPin, ArrowRight, Eye, EyeOff, Info } from 'lucide-react';
@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { useToast } from "@/components/ui/use-toast";
 
 const FlowsightAdsLanding: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -16,6 +17,7 @@ const FlowsightAdsLanding: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [registerData, setRegisterData] = useState({
@@ -28,22 +30,48 @@ const FlowsightAdsLanding: React.FC = () => {
   });
   const [resetEmail, setResetEmail] = useState('');
 
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        navigate('/flowsight-ads/dashboard');
+      }
+    };
+    checkSession();
+  }, [navigate]);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage('');
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email: loginData.email,
         password: loginData.password,
       });
+      
       if (error) throw error;
-      setMessageType('success');
-      setMessage('Inicio de sesión exitoso. Redirigiendo...');
-      setTimeout(() => navigate('/flowsight-ads/dashboard'), 1500);
+
+      if (data.session) {
+        setMessageType('success');
+        setMessage('Inicio de sesión exitoso. Redirigiendo...');
+        toast({
+          title: "¡Bienvenido!",
+          description: "Has iniciado sesión correctamente.",
+        });
+        setTimeout(() => navigate('/flowsight-ads/dashboard'), 1000);
+      } else {
+        setMessageType('error');
+        setMessage('Error inesperado: No se pudo crear la sesión.');
+      }
     } catch (error: any) {
       setMessageType('error');
-      setMessage(error.message || 'Error al iniciar sesión');
+      setMessage(error.message || 'Error al iniciar sesión. Verifica tus credenciales.');
+      toast({
+        variant: "destructive",
+        title: "Error de acceso",
+        description: error.message || "No se pudo iniciar sesión.",
+      });
     } finally {
       setLoading(false);
     }
@@ -64,7 +92,7 @@ const FlowsightAdsLanding: React.FC = () => {
     }
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email: registerData.email,
         password: registerData.password,
         options: {
@@ -76,13 +104,40 @@ const FlowsightAdsLanding: React.FC = () => {
           },
         },
       });
+      
       if (error) throw error;
-      setMessageType('success');
-      setMessage('¡Registro exitoso! Redirigiendo al dashboard...');
-      setTimeout(() => navigate('/flowsight-ads/dashboard'), 1500);
+
+      // Intentar login automático después del registro
+      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+        email: registerData.email,
+        password: registerData.password,
+      });
+
+      if (!signInError && signInData.session) {
+        setMessageType('success');
+        setMessage('¡Registro exitoso! Accediendo a la plataforma...');
+        toast({
+          title: "¡Bienvenido a Flowsight Ads!",
+          description: "Tu cuenta ha sido creada y configurada.",
+        });
+        setTimeout(() => navigate('/flowsight-ads/dashboard'), 1000);
+      } else {
+        // Si el auto-login falla, es probable que se requiera confirmación por email
+        setMessageType('success');
+        setMessage('¡Registro exitoso! Por favor revisa tu correo para confirmar tu cuenta y poder acceder.');
+        toast({
+          title: "Confirma tu correo",
+          description: "Te hemos enviado un enlace de confirmación para activar tu cuenta.",
+        });
+      }
     } catch (error: any) {
       setMessageType('error');
       setMessage(error.message || 'Error al registrarse');
+      toast({
+        variant: "destructive",
+        title: "Error de registro",
+        description: error.message || "No se pudo crear la cuenta.",
+      });
     } finally {
       setLoading(false);
     }
@@ -98,10 +153,19 @@ const FlowsightAdsLanding: React.FC = () => {
       });
       if (error) throw error;
       setMessageType('success');
-      setMessage('Se ha enviado un correo para restablecer tu contraseña');
+      setMessage('Se ha enviado un correo para restablecer tu contraseña. Revisa tu bandeja de entrada.');
+      toast({
+        title: "Correo enviado",
+        description: "Revisa tu bandeja de entrada para restablecer tu contraseña.",
+      });
     } catch (error: any) {
       setMessageType('error');
       setMessage(error.message || 'Error al enviar el correo de recuperación');
+      toast({
+        variant: "destructive",
+        title: "Error de recuperación",
+        description: error.message || "No se pudo enviar el correo.",
+      });
     } finally {
       setLoading(false);
     }
