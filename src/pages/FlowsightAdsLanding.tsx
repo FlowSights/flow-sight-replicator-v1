@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
-import { Sparkles, Mail, Lock, User, Phone, MapPin, ArrowRight, Eye, EyeOff, Info, Chrome, Facebook as FacebookIcon, Apple } from 'lucide-react';
+import { Sparkles, Mail, Lock, User, Phone, MapPin, ArrowRight, Eye, EyeOff, Info, Globe, Facebook as FacebookIcon, Apple } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -298,7 +298,7 @@ const FlowsightAdsLanding: React.FC = () => {
                     <p className="text-center text-sm text-gray-600 dark:text-gray-400 mb-4">O inicia sesión con</p>
                     <div className="grid grid-cols-2 gap-3">
                       <Button onClick={handleLoginWithGoogle} variant="outline" className="w-full" disabled={loading}>
-                        <Chrome className="w-4 h-4 mr-2" />
+                        <Globe className="w-4 h-4 mr-2" />
                         Google
                       </Button>
                       <Button onClick={handleLoginWithApple} variant="outline" className="w-full" disabled={loading}>
