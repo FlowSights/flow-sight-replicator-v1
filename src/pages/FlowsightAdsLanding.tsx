@@ -219,13 +219,9 @@ const FlowsightAdsLanding: React.FC = () => {
           </div>
           <div className="flex flex-col items-center gap-1">
             <img 
-              src="https://www.gstatic.com/images/branding/product/2x/google_ads_64dp.png" 
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI0ZCQkMwNSIgZD0iTTE1LjUgMS4xbC05IDE1LjZjLS4yLjQtLjEuOS4zIDEuMWw1LjMgMy4xYy40LjIuOS4xIDEuMS0uM2w5LTE1LjZjLjItLjQuMS0uOS0uMy0xLjFsLTUuMy0zLjFjLS40LS4yLS45LS4xLTEuMS4zeiIvPjxwYXRoIGZpbGw9IiM0Mjg1RjQiIGQ9Ik01LjUgMTIuMWwtMy4xIDUuM2MtLjIuNC0uMS45LjMgMS4xbDUuMyAzLjFjLjQuMi45LjEgMS4xLS4zbDMuMS01LjNjLjItLjQuMS0uOS0uMy0xLjFsLTUuMy0zLjFjLS40LS4yLS45LS4xLTEuMS4zeiIvPjxjaXJjbGUgZmlsbD0iIzM0QTg1MyIgY3g9IjEyLjUiIGN5PSIxNy42IiByPSIzLjUiLz48L3N2Zz4=" 
               alt="Google Ads" 
               className="w-8 h-8 object-contain"
-              onError={(e) => {
-                // Fallback en caso de error de carga de imagen externa
-                e.currentTarget.src = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Google_Ads_logo.svg/512px-Google_Ads_logo.svg.png";
-              }}
             />
             <span className="text-[10px] font-bold text-gray-500 uppercase tracking-tighter">Google Ads</span>
           </div>
