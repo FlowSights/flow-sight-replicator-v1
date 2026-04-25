@@ -348,7 +348,7 @@ const Index = () => {
               asChild 
               variant="outline" 
               size="sm" 
-              className="hidden md:flex gap-2 rounded-full px-4"
+              className="hidden md:flex gap-2 rounded-full px-4 glass-card backdrop-blur-md bg-white/10 border-white/20 hover:bg-white/20 hover:border-white/30 text-emerald-700 dark:text-emerald-300 dark:bg-white/5 dark:border-white/10 dark:hover:bg-white/10 dark:hover:border-white/20 transition-all"
             >
               <Link to="/flowsight-ads" className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4" />
