@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
-import { Sparkles, Mail, Lock, User, Phone, MapPin, ArrowRight, Eye, EyeOff, Info } from 'lucide-react';
+import { Sparkles, Mail, Lock, User, Phone, MapPin, ArrowRight, Eye, EyeOff, Info, Facebook, Target, Music2, Linkedin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -211,30 +211,22 @@ const FlowsightAdsLanding: React.FC = () => {
         </div>
 
         <div className="flex justify-center items-center gap-8 mb-8">
-          {/* Meta Logo */}
-          <img 
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Meta_Platforms_Inc._logo.svg/1280px-Meta_Platforms_Inc._logo.svg.png" 
-            alt="Meta" 
-            className="h-6 w-auto object-contain"
-          />
-          {/* Google Ads Logo */}
-          <img 
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Google_Ads_logo.svg/1024px-Google_Ads_logo.svg.png" 
-            alt="Google Ads" 
-            className="h-8 w-auto object-contain"
-          />
-          {/* TikTok Logo */}
-          <img 
-            src="https://upload.wikimedia.org/wikipedia/en/thumb/a/a9/TikTok_logo.svg/1200px-TikTok_logo.svg.png" 
-            alt="TikTok" 
-            className="h-8 w-auto object-contain dark:invert"
-          />
-          {/* LinkedIn Logo */}
-          <img 
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/LinkedIn_Logo.svg/1200px-LinkedIn_Logo.svg.png" 
-            alt="LinkedIn" 
-            className="h-6 w-auto object-contain"
-          />
+          <div className="flex flex-col items-center gap-1">
+            <Facebook className="w-8 h-8 text-[#0668E1]" />
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-tighter">Meta</span>
+          </div>
+          <div className="flex flex-col items-center gap-1">
+            <Target className="w-8 h-8 text-[#FBBC05]" />
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-tighter">Google Ads</span>
+          </div>
+          <div className="flex flex-col items-center gap-1">
+            <Music2 className="w-8 h-8 text-black dark:text-white" />
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-tighter">TikTok</span>
+          </div>
+          <div className="flex flex-col items-center gap-1">
+            <Linkedin className="w-8 h-8 text-[#0A66C2]" />
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-tighter">LinkedIn</span>
+          </div>
         </div>
 
         <div className="glass-card backdrop-blur-xl bg-white/90 dark:bg-gray-900/90 rounded-2xl shadow-2xl p-8 border border-white/20 dark:border-gray-800">
