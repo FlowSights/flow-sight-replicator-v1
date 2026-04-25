@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
-import { Sparkles, Mail, Lock, User, Phone, MapPin, ArrowRight, Eye, EyeOff, Info, Globe } from 'lucide-react';
+import { Sparkles, Mail, Lock, User, Phone, MapPin, ArrowRight, Eye, EyeOff, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -211,11 +211,11 @@ const FlowsightAdsLanding: React.FC = () => {
         </div>
 
         <div className="flex justify-center items-center gap-8 mb-8">
-          {/* Meta Logo */}
-          <svg className="h-8 w-10 text-[#0668E1]" viewBox="0 0 24 24" fill="currentColor">
+          {/* Meta Logo (Official Infinity Symbol) */}
+          <svg className="h-8 w-12 text-[#0668E1]" viewBox="0 0 24 24" fill="currentColor">
             <path d="M16.845 6.002c-1.325 0-2.486.586-3.245 1.492-.76-.906-1.92-1.492-3.245-1.492-2.396 0-4.346 1.914-4.346 4.266 0 2.352 1.95 4.266 4.346 4.266 1.325 0 2.486-.586 3.245-1.492.76.906 1.92 1.492 3.245 1.492 2.396 0 4.346-1.914 4.346-4.266 0-2.352-1.95-4.266-4.346-4.266zm0 7.032c-1.536 0-2.787-1.241-2.787-2.766s1.251-2.766 2.787-2.766 2.787 1.241 2.787 2.766-1.251 2.766-2.787 2.766zm-6.49 0c-1.536 0-2.787-1.241-2.787-2.766s1.251-2.766 2.787-2.766 2.787 1.241 2.787 2.766-1.251 2.766-2.787 2.766z"/>
           </svg>
-          {/* Google Ads Logo */}
+          {/* Google Ads Logo (Clean Triangle Version) */}
           <svg className="h-8 w-8" viewBox="0 0 24 24">
             <path fill="#FBBC05" d="M15.5 1.1l-9 15.6c-.2.4-.1.9.3 1.1l5.3 3.1c.4.2.9.1 1.1-.3l9-15.6c.2-.4.1-.9-.3-1.1l-5.3-3.1c-.4-.2-.9-.1-1.1.3z"/>
             <path fill="#4285F4" d="M5.5 12.1l-3.1 5.3c-.2.4-.1.9.3 1.1l5.3 3.1c.4.2.9.1 1.1-.3l3.1-5.3c.2-.4.1-.9-.3-1.1l-5.3-3.1c-.4-.2-.9-.1-1.1.3z"/>
