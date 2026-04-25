@@ -15,6 +15,7 @@ import BlogPost from "./pages/BlogPost.tsx";
 import DiagnosticQuiz from "./pages/DiagnosticQuiz.tsx";
 import Auth from "./pages/Auth.tsx";
 import FlowsightAdsLanding from "./pages/FlowsightAdsLanding";
+import FlowsightAdsInfo from "./pages/FlowsightAdsInfo";
 import FlowsightAdsDashboard from "./pages/FlowsightAdsDashboard";
 import ResetPassword from "./pages/ResetPassword";
 import { supabase } from "./lib/supabaseClient";
@@ -57,6 +58,7 @@ const App = () => {
                 <Route path="/privacidad" element={<Privacy />} />
                 <Route path="/diagnostico" element={<DiagnosticQuiz />} />
                 <Route path="/auth" element={<Auth />} />
+                <Route path="/flowsight-ads-info" element={<FlowsightAdsInfo />} />
                 <Route path="/flowsight-ads" element={<FlowsightAdsLanding />} />
                 <Route path="/flowsight-ads/dashboard" element={<FlowsightAdsDashboard />} />
                 <Route path="/auth/callback" element={<ResetPassword />} />
