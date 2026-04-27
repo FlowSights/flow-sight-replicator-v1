@@ -52,6 +52,7 @@ const FlowsightAdsDashboard: React.FC = () => {
   const [showResults, setShowResults] = useState(false);
   const [selectedAdForLightbox, setSelectedAdForLightbox] = useState<GeneratedAd | null>(null);
   const [isEditingImage, setIsEditingImage] = useState(false);
+  const [metricsVisible, setMetricsVisible] = useState(false);
   
   const [config, setConfig] = useState<CampaignConfig>({
     promote: '',
@@ -113,14 +114,11 @@ const FlowsightAdsDashboard: React.FC = () => {
       await new Promise(resolve => setTimeout(resolve, 1500));
     }
 
-    // Lógica de IA para imágenes: Usamos Unsplash Source con términos de búsqueda dinámicos para mayor relevancia
-    const searchTerms = encodeURIComponent(`${config.promote} ${config.idealCustomer} professional business`);
-    const aiGeneratedImage = `https://source.unsplash.com/featured/1200x630/?${searchTerms}&sig=${Math.random()}`;
+    // Lógica de IA para imágenes: Usamos Unsplash con parámetros de búsqueda optimizados
+    const searchTerms = encodeURIComponent(`${config.promote} business`);
+    const aiGeneratedImage = `https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&auto=format&fit=crop&q=80&query=${searchTerms}&sig=${Date.now()}`;
     
-    // Fallback robusto si Unsplash Source falla o para asegurar carga inmediata
-    const fallbackImage = `https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&auto=format&fit=crop&q=80`;
-    
-    const finalImage = config.userImage || aiGeneratedImage || fallbackImage;
+    const finalImage = config.userImage || aiGeneratedImage;
 
     const ads: GeneratedAd[] = [
       {
@@ -168,6 +166,7 @@ const FlowsightAdsDashboard: React.FC = () => {
     setGeneratedAds(ads);
     setShowResults(true);
     setIsLoading(false);
+    setTimeout(() => setMetricsVisible(true), 500);
   };
 
   const generatePDF = (selectedPlatform?: string) => {
@@ -631,19 +630,30 @@ const FlowsightAdsDashboard: React.FC = () => {
               {/* Métricas Wow */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 {[
-                  { label: "Puntuación de Campaña", value: "94/100", icon: Star, color: "text-yellow-500" },
-                  { label: "CTR Proyectado", value: "4.2%", icon: MousePointer, color: "text-emerald-500" },
-                  { label: "Impresiones Est.", value: (config.budget * 15).toLocaleString(), icon: Eye, color: "text-blue-500" },
-                  { label: "Fuerza del Copy", value: "Excelente", icon: Activity, color: "text-purple-500" }
+                  { label: "Puntuación de Campaña", value: 94, suffix: "/100", icon: Star, color: "text-yellow-500" },
+                  { label: "CTR Proyectado", value: 4.2, suffix: "%", icon: MousePointer, color: "text-emerald-500" },
+                  { label: "Impresiones Est.", value: config.budget * 15, suffix: "", icon: Eye, color: "text-blue-500" },
+                  { label: "Fuerza del Copy", value: "Excelente", suffix: "", icon: Activity, color: "text-purple-500", isText: true }
                 ].map((m, i) => (
-                  <Card key={i} className="p-6 border-gray-100 dark:border-white/5 bg-white dark:bg-white/5 rounded-3xl shadow-xl">
-                    <div className="flex items-center gap-4">
+                  <Card key={i} className="p-6 border-gray-100 dark:border-white/5 bg-white dark:bg-white/5 rounded-3xl shadow-xl overflow-hidden relative group">
+                    <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className="flex items-center gap-4 relative z-10">
                       <div className={`p-3 rounded-2xl bg-gray-50 dark:bg-white/5 ${m.color}`}>
                         <m.icon className="w-6 h-6" />
                       </div>
                       <div>
                         <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">{m.label}</p>
-                        <p className="text-2xl font-black text-gray-900 dark:text-white">{m.value}</p>
+                        <div className="text-2xl font-black text-gray-900 dark:text-white flex items-baseline">
+                          {metricsVisible ? (
+                            m.isText ? (
+                              <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{m.value}</motion.span>
+                            ) : (
+                              <AnimatedStat stat={{ value: m.value as number, suffix: m.suffix, label: "", decimals: typeof m.value === 'number' && m.value % 1 !== 0 ? 1 : 0 }} className="text-2xl font-black" />
+                            )
+                          ) : (
+                            <span>0{m.suffix}</span>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </Card>
