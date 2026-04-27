@@ -20,6 +20,7 @@ import {
   BookOpen, PlayCircle, MousePointerClick
 } from 'lucide-react';
 import { LocationInput } from '@/components/LocationInput';
+import { ROIEstimator } from '@/components/ROIEstimator';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MetaPreview, TikTokPreview, LinkedInPreview, GoogleAdsPreview } from '@/components/PlatformPreviewsNative';
 import { VisualGuideLightbox } from '@/components/VisualGuideLightbox';
@@ -1058,6 +1059,19 @@ const FlowsightAdsDashboard: React.FC = () => {
                 ))}
               </div>
 
+              {/* ROI Estimator Section */}
+              <div className="mt-8 mb-8">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                  <TrendingUp className="w-6 h-6 text-emerald-500" />
+                  Proyección de Retorno
+                </h2>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {generatedAds.slice(0, 2).map((ad, idx) => (
+                    <ROIEstimator key={idx} budget={config.budget} platform={ad.platform} />
+                  ))}
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {generatedAds.map((ad, index) => (
                   <motion.div 
@@ -1085,7 +1099,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                     <div className="mt-4 space-y-3 relative z-20">
                       <Button 
                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); generatePDF(ad.platform); }}
-                        className="w-full bg-white/5 hover:bg-emerald-500/10 text-gray-400 hover:text-emerald-500 border border-white/5 hover:border-emerald-500/20 py-4 rounded-2xl font-bold gap-2 transition-all cursor-pointer"
+                        className="w-full bg-white/5 dark:bg-white/5 hover:bg-emerald-500/10 dark:hover:bg-emerald-500/10 text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 border border-gray-300 dark:border-white/5 hover:border-emerald-500/20 py-4 rounded-2xl font-bold gap-2 transition-all cursor-pointer"
                       >
                         <Download className="w-4 h-4" /> Kit {ad.platform.toUpperCase()}
                       </Button>
@@ -1094,7 +1108,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                         <Button 
                           variant="ghost"
                           onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.open(ad.platformUrl, '_blank'); }}
-                          className="flex-1 bg-emerald-500/5 hover:bg-emerald-500/20 text-emerald-500 rounded-xl py-2 text-xs font-bold gap-1.5 cursor-pointer"
+                          className="flex-1 bg-emerald-500/10 dark:bg-emerald-500/5 hover:bg-emerald-500/20 dark:hover:bg-emerald-500/20 text-emerald-700 dark:text-emerald-500 rounded-xl py-2 text-xs font-bold gap-1.5 cursor-pointer transition-all"
                         >
                           <ExternalLink className="w-3 h-3" /> Publicar
                         </Button>
@@ -1106,7 +1120,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                             setGuideLightboxPlatform(ad.platform);
                             setIsGuideLightboxOpen(true);
                           }}
-                          className="flex-1 bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 rounded-xl py-2 text-xs font-bold gap-1.5 transition-all cursor-pointer"
+                          className="flex-1 bg-blue-500/10 dark:bg-blue-500/10 hover:bg-blue-500/20 dark:hover:bg-blue-500/20 text-blue-700 dark:text-blue-400 rounded-xl py-2 text-xs font-bold gap-1.5 transition-all cursor-pointer"
                         >
                           <BookOpen className="w-3 h-3" /> Guía Visual
                         </Button>
