@@ -268,19 +268,20 @@ const FlowsightAdsLanding: React.FC = () => {
           </div>
 
           {/* Main Card with Auth Form */}
-          <div className="glass-card backdrop-blur-xl bg-white/90 dark:bg-gray-900/90 rounded-2xl shadow-2xl p-8 border border-white/20 dark:border-gray-800 mb-6">
+          <div className="border-white/40 dark:border-white/5 shadow-2xl rounded-[32px] backdrop-blur-3xl bg-white/60 dark:bg-white/[0.02] p-8 relative z-10 overflow-hidden mb-6">
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/[0.03] to-blue-500/[0.03] pointer-events-none" />
             {!isResetMode ? (
               <>
-                <div className="flex gap-2 mb-8 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
+                <div className="flex gap-2 mb-8 bg-gray-100 dark:bg-white/5 p-1.5 rounded-2xl relative z-10">
                   <button 
                     onClick={() => { setIsLogin(true); setMessage(''); }}
-                    className={`flex-1 py-2 px-4 rounded-md font-semibold transition-all ${isLogin ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
+                    className={`flex-1 py-2.5 px-4 rounded-xl font-bold transition-all ${isLogin ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-xl shadow-emerald-500/20' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
                   >
                     Iniciar Sesión
                   </button>
                   <button 
                     onClick={() => { setIsLogin(false); setMessage(''); }}
-                    className={`flex-1 py-2 px-4 rounded-md font-semibold transition-all ${!isLogin ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
+                    className={`flex-1 py-2.5 px-4 rounded-xl font-bold transition-all ${!isLogin ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-xl shadow-emerald-500/20' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'}`}
                   >
                     Registrarse
                   </button>
@@ -330,7 +331,7 @@ const FlowsightAdsLanding: React.FC = () => {
                         </button>
                       </div>
                     </div>
-                    <Button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-6 text-lg" disabled={loading}>
+                    <Button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-8 text-xl font-black rounded-2xl shadow-xl shadow-emerald-500/20 transition-all active:scale-[0.98]" disabled={loading}>
                       {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
                     </Button>
                     <div className="text-center">
