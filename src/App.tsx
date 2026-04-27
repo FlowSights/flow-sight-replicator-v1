@@ -58,7 +58,6 @@ const App = () => {
                 <Route path="/privacidad" element={<Privacy />} />
                 <Route path="/diagnostico" element={<DiagnosticQuiz />} />
                 <Route path="/auth" element={<Auth />} />
-                <Route path="/flowsight-ads-info" element={<FlowsightAdsLanding />} />
                 <Route path="/flowsight-ads" element={<FlowsightAdsLanding />} />
                 <Route path="/flowsight-ads/dashboard" element={<FlowsightAdsDashboard />} />
                 <Route path="/auth/callback" element={<ResetPassword />} />
