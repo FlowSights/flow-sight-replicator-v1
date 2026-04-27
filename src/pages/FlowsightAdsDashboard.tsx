@@ -13,7 +13,8 @@ import {
   ChevronLeft, ChevronRight, MapPin, Users, 
   TrendingUp, ShieldCheck, Star, Rocket,
   Globe, MousePointer2, Layout, FileText,
-  Lightbulb, Info, ArrowRight
+  Lightbulb, Info, ArrowRight, MapPin as MapPinIcon,
+  Upload as UploadIcon, X as XIcon, Sparkles as SparklesIcon
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MetaPreview, TikTokPreview, LinkedInPreview, GoogleAdsPreview } from '@/components/PlatformPreviewsNative';
@@ -63,15 +64,19 @@ const FlowsightAdsDashboard: React.FC = () => {
   ];
 
   const handleLogout = async () => {
-    // Si estamos en el primer paso y no hay resultados, simplemente volvemos a la landing de Ads
-    if (step === 1 && !showResults) {
-      navigate('/flowsight-ads');
-      return;
-    }
-    // Para otros casos, cerramos sesión y volvemos
     await supabase.auth.signOut();
     navigate('/flowsight-ads');
   };
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate('/flowsight-ads');
+      }
+    };
+    checkUser();
+  }, [navigate]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
