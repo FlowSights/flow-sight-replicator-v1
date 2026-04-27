@@ -388,10 +388,20 @@ const Index = () => {
         <div className="absolute inset-0 grid-bg pointer-events-none opacity-50" />
         <div className="container relative grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
           <div className="space-y-8 animate-fade-up">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm">
-              <span className="w-2 h-2 rounded-full bg-primary animate-pulse-glow" />
-              Inteligencia Operativa para PyMEs
-            </span>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm">
+                <span className="w-2 h-2 rounded-full bg-primary animate-pulse-glow" />
+                Inteligencia Operativa para PyMEs
+              </span>
+              <Link 
+                to="/flowsight-ads" 
+                className="group inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-sm font-medium hover:bg-emerald-500/20 transition-all shadow-lg shadow-emerald-500/5"
+              >
+                <Sparkles className="w-4 h-4 text-emerald-500 group-hover:rotate-12 transition-transform" />
+                <span>Flowsight Ads <span className="text-[10px] font-bold bg-emerald-500 text-white px-1.5 py-0.5 rounded ml-1">NUEVO</span></span>
+                <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
             <h1 className="font-display text-6xl md:text-7xl lg:text-8xl font-bold leading-[1.05]">
               Tus datos, convertidos en{" "}
               <span className="text-gradient">decisiones que generan dinero</span>

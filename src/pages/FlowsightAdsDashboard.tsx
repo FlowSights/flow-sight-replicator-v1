@@ -63,6 +63,12 @@ const FlowsightAdsDashboard: React.FC = () => {
   ];
 
   const handleLogout = async () => {
+    // Si estamos en el primer paso y no hay resultados, simplemente volvemos a la landing de Ads
+    if (step === 1 && !showResults) {
+      navigate('/flowsight-ads');
+      return;
+    }
+    // Para otros casos, cerramos sesión y volvemos
     await supabase.auth.signOut();
     navigate('/flowsight-ads');
   };
@@ -418,7 +424,7 @@ const FlowsightAdsDashboard: React.FC = () => {
     <div className="min-h-screen bg-white dark:bg-[#050505] selection:bg-emerald-500/30">
       <header className="sticky top-0 z-50 backdrop-blur-2xl bg-white/80 dark:bg-black/80 border-b border-gray-100 dark:border-white/5">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <button onClick={() => navigate('/flowsight-ads')} className="group flex items-center gap-2 text-gray-400 hover:text-emerald-500 transition-all font-medium">
+          <button onClick={handleLogout} className="group flex items-center gap-2 text-gray-400 hover:text-emerald-500 transition-all font-medium">
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             Salir
           </button>
@@ -475,8 +481,13 @@ const FlowsightAdsDashboard: React.FC = () => {
               </div>
 
               <Button 
+                type="button"
                 disabled={!config.promote}
-                onClick={() => setStep(2)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setStep(2);
+                }}
                 className="w-full py-10 text-xl font-black bg-emerald-600 hover:bg-emerald-700 text-white rounded-3xl shadow-2xl shadow-emerald-500/40 transition-all active:scale-[0.98]"
               >
                 Siguiente Paso
