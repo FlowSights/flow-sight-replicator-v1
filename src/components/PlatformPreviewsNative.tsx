@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Heart, MessageCircle, Share2, Send, Bookmark, MoreHorizontal, Globe, Search, MoreVertical, ThumbsUp, MessageSquare, Repeat2 } from 'lucide-react';
+import { Heart, MessageCircle, Share2, MoreHorizontal, Globe, Search, MoreVertical, ThumbsUp, MessageSquare, Repeat2 } from 'lucide-react';
+import { AdImage } from './AdImage';
 
 interface PreviewProps {
   headline: string;
@@ -39,15 +40,7 @@ export const MetaPreview: React.FC<PreviewProps> = ({ headline, description, cta
       </div>
 
       {/* Image */}
-      <div className="relative aspect-[1.91/1] bg-gray-100 dark:bg-gray-800">
-        {imageUrl ? (
-          <img src={imageUrl} alt="Ad" className="w-full h-full object-cover" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-gray-400">
-            <ImageIcon className="w-12 h-12 opacity-20" />
-          </div>
-        )}
-      </div>
+      <AdImage src={imageUrl} alt={headline} className="aspect-[1.91/1]" />
 
       {/* CTA Bar */}
       <div className="bg-[#f0f2f5] dark:bg-[#3a3b3c] p-3 flex justify-between items-center">
@@ -104,11 +97,9 @@ export const GoogleAdsPreview: React.FC<PreviewProps> = ({ headline, description
               {description}
             </p>
           </div>
-          {imageUrl && (
-            <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 border border-gray-100 dark:border-gray-800">
-              <img src={imageUrl} alt="Ad" className="w-full h-full object-cover" />
-            </div>
-          )}
+          <div className="w-24 h-24 flex-shrink-0">
+            <AdImage src={imageUrl} alt={headline} className="w-24 h-24 rounded-lg min-h-0" />
+          </div>
         </div>
 
         <div className="pt-3 flex gap-6">
@@ -134,9 +125,7 @@ export const TikTokPreview: React.FC<PreviewProps> = ({ headline, description, c
       animate={{ opacity: 1, y: 0 }}
       className="bg-black rounded-[32px] shadow-2xl overflow-hidden max-w-[320px] mx-auto aspect-[9/16] relative border-[8px] border-gray-800"
     >
-      {imageUrl && (
-        <img src={imageUrl} alt="TikTok Ad" className="w-full h-full object-cover opacity-80" />
-      )}
+      <AdImage src={imageUrl} alt={headline} className="absolute inset-0 w-full h-full opacity-80 min-h-0" />
       
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
 
@@ -198,13 +187,13 @@ export const LinkedInPreview: React.FC<PreviewProps> = ({ headline, description,
         <MoreHorizontal className="text-gray-500 w-5 h-5" />
       </div>
 
+      {/* Description */}
       <div className="px-3 pb-3">
         <p className="text-[14px] text-gray-900 dark:text-gray-200 leading-normal">{description}</p>
       </div>
 
-      <div className="relative aspect-video bg-gray-100 dark:bg-gray-800">
-        {imageUrl && <img src={imageUrl} alt="Ad" className="w-full h-full object-cover" />}
-      </div>
+      {/* Image */}
+      <AdImage src={imageUrl} alt={headline} className="aspect-video" />
 
       <div className="p-3 flex justify-between items-center border-b border-gray-100 dark:border-gray-800">
         <div className="flex-1 pr-4">
@@ -232,9 +221,3 @@ export const LinkedInPreview: React.FC<PreviewProps> = ({ headline, description,
     </motion.div>
   );
 };
-
-const ImageIcon = ({ className }: { className?: string }) => (
-  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-  </svg>
-);
