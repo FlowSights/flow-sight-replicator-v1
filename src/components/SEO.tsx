@@ -7,6 +7,7 @@ interface SEOProps {
   url?: string;
   type?: string;
   article?: boolean;
+  noindex?: boolean;
 }
 
 const SEO = ({ 
@@ -15,7 +16,8 @@ const SEO = ({
   image, 
   url, 
   type = "website",
-  article = false 
+  article = false,
+  noindex = false
 }: SEOProps) => {
   const siteName = "FlowSights";
   const fullTitle = title ? `${title} | ${siteName}` : `${siteName} — Convierte tus datos en decisiones inteligentes`;
@@ -23,7 +25,7 @@ const SEO = ({
   const fullDescription = description || defaultDescription;
   const defaultImage = "https://storage.googleapis.com/gpt-engineer-file-uploads/7GdJHUgbeBP6D1AL2fFEaPtiTyj2/social-images/social-1776391379720-ChatGPT_Image_16_abr_2026,_19_47_07.webp";
   const fullImage = image || defaultImage;
-  const siteUrl = "https://flowsights.it.com";
+  const siteUrl = "https://flowsights.it";
   const fullUrl = url ? `${siteUrl}${url}` : siteUrl;
 
   return (
@@ -48,8 +50,8 @@ const SEO = ({
       <meta name="twitter:image" content={fullImage} />
 
       {/* Indexing */}
-      <meta name="robots" content="index, follow" />
-      <meta name="googlebot" content="index, follow" />
+      <meta name="robots" content={noindex ? "noindex, follow" : "index, follow"} />
+      <meta name="googlebot" content={noindex ? "noindex, follow" : "index, follow"} />
     </Helmet>
   );
 };

@@ -8,10 +8,12 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/contexts/AuthContext";
+import SEO from "@/components/SEO";
 import { ArrowLeft, Loader2, Mail, Lock, User as UserIcon } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import logo from "@/assets/logo.png";
 import { z } from "zod";
+import { useState, useEffect } from "react";
 
 const signUpSchema = z.object({
   name: z.string().trim().min(2, "Mínimo 2 caracteres").max(100),
@@ -86,7 +88,14 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <>
+      <SEO 
+        title="Iniciar Sesión" 
+        description="Accede a tu cuenta de FlowSights para gestionar tus proyectos de inteligencia operativa y limpieza de datos."
+        url="/auth"
+        noindex={true}
+      />
+      <div className="min-h-screen">
       <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-xl bg-background/70 border-b border-border/50">
         <nav className="container flex items-center justify-between h-20">
           <Link 
@@ -160,7 +169,7 @@ const Auth = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
-
 export default Auth;

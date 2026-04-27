@@ -23,6 +23,7 @@ import logo from "@/assets/logo.png";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import SEO from "@/components/SEO";
 
 interface Question {
   tag: string;
@@ -349,7 +350,13 @@ export default function DiagnosticQuiz() {
   );
 
   return (
-    <div className="min-h-screen relative">
+    <>
+      <SEO 
+        title="Diagnóstico de Datos" 
+        description="Evalúa la salud de tus datos con nuestro diagnóstico interactivo. Descubre riesgos, oportunidades de optimización y recibe recomendaciones personalizadas para tu negocio."
+        url="/diagnostico"
+      />
+      <div className="min-h-screen relative">
       <DecorativeBackground />
 
       {/* Header */}
@@ -790,5 +797,6 @@ export default function DiagnosticQuiz() {
         </div>
       </main>
     </div>
+    </>
   );
 }

@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Configuración
-const BASE_URL = 'https://flowsights.it.com';
+const BASE_URL = 'https://flowsights.it';
 const OUTPUT_FILE = path.join(__dirname, '../public/sitemap.xml');
 
 // Rutas estáticas
@@ -11,7 +11,7 @@ const staticRoutes = [
   { path: '/blog', priority: '0.9', changefreq: 'daily' },
   { path: '/diagnostico', priority: '0.8', changefreq: 'monthly' },
   { path: '/privacidad', priority: '0.5', changefreq: 'monthly' },
-  { path: '/auth', priority: '0.3', changefreq: 'monthly' },
+  // /auth se excluye del sitemap ya que tiene noindex en el componente SEO
 ];
 
 // Función para obtener posts del blog (simulada leyendo el archivo de datos)
@@ -52,7 +52,7 @@ function generateSitemap() {
   });
 
   // Añadir posts del blog
-  blogSlugs.forEach(slug => {
+  blogSlugs.forEach((slug) => {
     xml += `  <url>\n`;
     xml += `    <loc>${BASE_URL}/blog/${slug}</loc>\n`;
     xml += `    <lastmod>${today}</lastmod>\n`;

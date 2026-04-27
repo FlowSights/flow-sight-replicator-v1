@@ -3,10 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft, ShieldCheck, Lock, FileSignature, Mail } from "lucide-react";
 import logo from "@/assets/logo.png";
+import SEO from "@/components/SEO";
 
 const Privacy = () => {
   return (
-    <div className="min-h-screen">
+    <>
+      <SEO 
+        title="Política de Privacidad" 
+        description="Conoce cómo FlowSights protege tu información. Acuerdos de confidencialidad obligatorios, almacenamiento cifrado y tus derechos garantizados."
+        url="/privacidad"
+      />
+      <div className="min-h-screen">
       <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-xl bg-background/70 border-b border-border/50">
         <nav className="container flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-2 font-display font-bold text-xl">
@@ -93,6 +100,7 @@ const Privacy = () => {
         </p>
       </main>
     </div>
+    </>
   );
 };
 
