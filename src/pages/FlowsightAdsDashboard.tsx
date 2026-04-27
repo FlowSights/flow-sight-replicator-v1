@@ -15,7 +15,7 @@ import {
   Globe, MousePointer2, Layout, FileText,
   Lightbulb, Info, ArrowRight, MapPin as MapPinIcon,
   Upload as UploadIcon, X as XIcon, Sparkles as SparklesIcon,
-  RefreshCw, Wand2, Search, Activity, Eye, MousePointer,
+  RefreshCw, Search, Activity, Eye, MousePointer,
   MapPin as MapPinIconLucide, Upload as UploadIconLucide, X as XIconLucide, Sparkles as SparklesIconLucide
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -55,54 +55,8 @@ interface CampaignConfig {
   idealCustomer: string;
   budget: number;
   userImage: string | null;
-  aiPrompt: string;
 }
 
-// Mapa de seeds de Picsum por categoría de negocio para imágenes relevantes
-const BUSINESS_IMAGE_SEEDS: Record<string, string> = {
-  gimnasio: 'gym',
-  gym: 'gym',
-  fitness: 'gym',
-  deporte: 'sport',
-  restaurante: 'restaurant',
-  comida: 'food',
-  food: 'food',
-  ropa: 'fashion',
-  moda: 'fashion',
-  fashion: 'fashion',
-  tienda: 'store',
-  limpieza: 'cleaning',
-  viaje: 'travel',
-  viajes: 'travel',
-  travel: 'travel',
-  consultoría: 'office',
-  consultoria: 'office',
-  negocio: 'business',
-  tecnología: 'tech',
-  tecnologia: 'tech',
-  tech: 'tech',
-  salud: 'health',
-  belleza: 'beauty',
-  educación: 'education',
-  educacion: 'education',
-};
-
-const getImageSeedForBusiness = (promote: string): string => {
-  const lower = promote.toLowerCase();
-  for (const [keyword, seed] of Object.entries(BUSINESS_IMAGE_SEEDS)) {
-    if (lower.includes(keyword)) return seed;
-  }
-  // Seed determinista basado en el texto para consistencia
-  return promote.replace(/\s+/g, '-').toLowerCase().slice(0, 20) || 'business';
-};
-
-const getReliableImageUrl = (promote: string): string => {
-  const seed = getImageSeedForBusiness(promote);
-  // Picsum Photos: libre, sin API key, sin restricciones de hotlinking
-  const url = `https://picsum.photos/seed/${seed}/1200/630`;
-  console.log('[FlowSightAds] Generated image URL:', url, 'for seed:', seed);
-  return url;
-};
 
 const FlowsightAdsDashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -113,7 +67,6 @@ const FlowsightAdsDashboard: React.FC = () => {
   const [generatedAds, setGeneratedAds] = useState<GeneratedAd[]>([]);
   const [showResults, setShowResults] = useState(false);
   const [selectedAdForLightbox, setSelectedAdForLightbox] = useState<GeneratedAd | null>(null);
-  const [isEditingImage, setIsEditingImage] = useState(false);
   const [metricsVisible, setMetricsVisible] = useState(false);
   
   const [config, setConfig] = useState<CampaignConfig>({
@@ -122,7 +75,6 @@ const FlowsightAdsDashboard: React.FC = () => {
     idealCustomer: '',
     budget: 100,
     userImage: null,
-    aiPrompt: '',
   });
 
   const suggestions = [
@@ -176,13 +128,9 @@ const FlowsightAdsDashboard: React.FC = () => {
       await new Promise(resolve => setTimeout(resolve, 1500));
     }
 
-    // Generar imagen con Picsum Photos (libre, sin restricciones, sin API key)
-    const aiGeneratedImage = getReliableImageUrl(config.promote);
-    console.log('[FlowSightAds] AI image URL:', aiGeneratedImage);
-    console.log('[FlowSightAds] User image:', config.userImage ? 'provided (base64/url)' : 'none');
-    
-    const finalImage = config.userImage || aiGeneratedImage;
-    console.log('[FlowSightAds] Final image to render:', finalImage.startsWith('data:') ? 'base64 image' : finalImage);
+    // La imagen es provista por el usuario (obligatoria desde el paso 3)
+    const finalImage = config.userImage || '';
+    console.log('[FlowSightAds] Rendering with user image:', finalImage.startsWith('data:') ? 'base64 image' : finalImage);
 
     const ads: GeneratedAd[] = [
       {
@@ -562,67 +510,43 @@ const FlowsightAdsDashboard: React.FC = () => {
                       className="text-xl py-8 px-8 rounded-3xl border-none bg-white dark:bg-white/5 shadow-2xl focus:ring-2 focus:ring-emerald-500 min-h-[120px]"
                     />
                     
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div 
-                        onClick={() => fileInputRef.current?.click()}
-                        className={`relative group cursor-pointer border-2 border-dashed rounded-3xl p-8 transition-all ${config.userImage ? 'border-emerald-500 bg-emerald-500/5' : 'border-gray-200 dark:border-white/10 hover:border-emerald-500/50'}`}
-                      >
-                        <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" className="hidden" />
-                        {config.userImage ? (
-                          <div className="flex items-center gap-4">
-                            <img src={config.userImage} className="w-16 h-16 rounded-xl object-cover shadow-lg" alt="Preview" />
-                            <div className="flex-1">
-                              <p className="text-emerald-500 font-bold text-sm">¡Imagen cargada!</p>
-                              <p className="text-xs text-gray-500">Click para cambiar</p>
-                            </div>
-                            <button onClick={(e) => { e.stopPropagation(); setConfig({...config, userImage: null}); }} className="p-2 bg-red-500/10 text-red-500 rounded-full hover:bg-red-500 hover:text-white transition-all">
-                              <XIconLucide className="w-4 h-4" />
-                            </button>
+                    <div
+                      onClick={() => fileInputRef.current?.click()}
+                      className={`relative group cursor-pointer border-2 border-dashed rounded-3xl p-8 transition-all ${config.userImage ? 'border-emerald-500 bg-emerald-500/5' : 'border-gray-200 dark:border-white/10 hover:border-emerald-500/50'}`}
+                    >
+                      <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" className="hidden" />
+                      {config.userImage ? (
+                        <div className="flex items-center gap-4">
+                          <img src={config.userImage} className="w-16 h-16 rounded-xl object-cover shadow-lg" alt="Preview" />
+                          <div className="flex-1">
+                            <p className="text-emerald-500 font-bold text-sm">¡Imagen cargada!</p>
+                            <p className="text-xs text-gray-500">Click para cambiar</p>
                           </div>
-                        ) : (
-                          <div className="text-center space-y-2">
-                            <UploadIconLucide className="w-6 h-6 text-emerald-500 mx-auto" />
-                            <p className="font-bold text-sm dark:text-white">Sube tu foto</p>
-                          </div>
-                        )}
-                      </div>
-
-                      <div 
-                        onClick={() => setIsEditingImage(!isEditingImage)}
-                        className={`relative group cursor-pointer border-2 border-dashed rounded-3xl p-8 transition-all ${config.aiPrompt ? 'border-blue-500 bg-blue-500/5' : 'border-gray-200 dark:border-white/10 hover:border-blue-500/50'}`}
-                      >
-                        <div className="text-center space-y-2">
-                          <Wand2 className="w-6 h-6 text-blue-500 mx-auto" />
-                          <p className="font-bold text-sm dark:text-white">IA Generativa</p>
+                          <button onClick={(e) => { e.stopPropagation(); setConfig({...config, userImage: null}); }} className="p-2 bg-red-500/10 text-red-500 rounded-full hover:bg-red-500 hover:text-white transition-all">
+                            <XIconLucide className="w-4 h-4" />
+                          </button>
                         </div>
-                      </div>
-                    </div>
-
-                    <AnimatePresence>
-                      {isEditingImage && (
-                        <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-                          <div className="p-6 bg-blue-500/5 rounded-3xl border border-blue-500/20 space-y-4">
-                            <p className="text-sm font-bold text-blue-500 flex items-center gap-2">
-                              <Info className="w-4 h-4" /> Personaliza la imagen de la IA
-                            </p>
-                            <Textarea 
-                              value={config.aiPrompt}
-                              onChange={(e) => setConfig({...config, aiPrompt: e.target.value})}
-                              placeholder="Ej: Estilo minimalista, colores neón, ambiente de oficina moderna..."
-                              className="bg-white dark:bg-black/40 border-blue-500/20 focus:ring-blue-500"
-                            />
-                          </div>
-                        </motion.div>
+                      ) : (
+                        <div className="text-center space-y-3">
+                          <UploadIconLucide className="w-8 h-8 text-emerald-500 mx-auto" />
+                          <p className="font-bold text-base dark:text-white">Sube la imagen de tu anuncio</p>
+                          <p className="text-xs text-gray-400">JPG, PNG o WEBP · Recomendado 1200×630 px</p>
+                        </div>
                       )}
-                    </AnimatePresence>
+                    </div>
+                    {!config.userImage && (
+                      <p className="text-xs text-amber-500 font-medium flex items-center gap-1.5">
+                        <Info className="w-3.5 h-3.5" /> La imagen es obligatoria para generar los mockups.
+                      </p>
+                    )}
                   </div>
 
                   <div className="flex gap-4">
                     <Button variant="ghost" onClick={() => setStep(2)} className="flex-1 py-10 text-xl font-bold rounded-3xl hover:bg-gray-100 dark:hover:bg-white/5">Atrás</Button>
                     <Button 
-                      disabled={!config.idealCustomer}
+                      disabled={!config.idealCustomer || !config.userImage}
                       onClick={() => setStep(4)}
-                      className="flex-[2] py-10 text-xl font-black bg-emerald-600 hover:bg-emerald-700 text-white rounded-3xl shadow-2xl shadow-emerald-500/40"
+                      className="flex-[2] py-10 text-xl font-black bg-emerald-600 hover:bg-emerald-700 text-white rounded-3xl shadow-2xl shadow-emerald-500/40 disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       Continuar
                     </Button>
