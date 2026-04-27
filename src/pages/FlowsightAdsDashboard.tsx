@@ -24,6 +24,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { locations } from '@/data/locations';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MetaPreview, TikTokPreview, LinkedInPreview, GoogleAdsPreview } from '@/components/PlatformPreviewsNative';
+import { VisualGuideLightbox } from '@/components/VisualGuideLightbox';
 import jsPDF from 'jspdf';
 import { useCountUp } from '@/hooks/useCountUp';
 
@@ -75,6 +76,8 @@ const FlowsightAdsDashboard: React.FC = () => {
   const [locationSearch, setLocationSearch] = useState('');
   const [isLocationPopoverOpen, setIsLocationPopoverOpen] = useState(false);
   const [activeGuidePlatform, setActiveGuidePlatform] = useState<string | null>(null);
+  const [isGuideLightboxOpen, setIsGuideLightboxOpen] = useState(false);
+  const [guideLightboxPlatform, setGuideLightboxPlatform] = useState<'meta' | 'google' | 'tiktok' | 'linkedin'>('meta');
   
   const [config, setConfig] = useState<CampaignConfig>({
     promote: '',
@@ -1143,48 +1146,16 @@ const FlowsightAdsDashboard: React.FC = () => {
                         </Button>
                         <Button 
                           variant="ghost"
-                          onClick={(e) => { e.stopPropagation(); setActiveGuidePlatform(activeGuidePlatform === ad.platform ? null : ad.platform); }}
-                          className={`flex-1 rounded-xl py-2 text-xs font-bold gap-1.5 transition-all ${activeGuidePlatform === ad.platform ? 'bg-emerald-500 text-white' : 'bg-gray-100 dark:bg-white/5 text-gray-500 hover:bg-gray-200 dark:hover:bg-white/10'}`}
+                          onClick={(e) => { 
+                            e.stopPropagation(); 
+                            setGuideLightboxPlatform(ad.platform);
+                            setIsGuideLightboxOpen(true);
+                          }}
+                          className="flex-1 bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 rounded-xl py-2 text-xs font-bold gap-1.5 transition-all"
                         >
-                          <BookOpen className="w-3 h-3" /> Guía
+                          <BookOpen className="w-3 h-3" /> Guía Visual
                         </Button>
                       </div>
-
-                      <AnimatePresence>
-                        {activeGuidePlatform === ad.platform && (
-                          <motion.div 
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="overflow-hidden"
-                          >
-                            <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl space-y-3 mt-2">
-                              <p className="text-[10px] font-black text-emerald-500 uppercase tracking-widest flex items-center gap-1.5">
-                                <PlayCircle className="w-3 h-3" /> Guía Interactiva {ad.platform.toUpperCase()}
-                              </p>
-                              <div className="space-y-2">
-                                {[
-                                  { step: '1', text: 'Entra al panel de control', icon: ExternalLink },
-                                  { step: '2', text: 'Crea nueva campaña', icon: Sparkles },
-                                  { step: '3', text: 'Copia tus textos y sube imagen', icon: MousePointerClick }
-                                ].map((item, i) => (
-                                  <div key={i} className="flex items-start gap-2">
-                                    <span className="flex-shrink-0 w-4 h-4 rounded-full bg-emerald-500 text-[10px] text-white flex items-center justify-center font-bold mt-0.5">{item.step}</span>
-                                    <p className="text-[11px] text-gray-600 dark:text-gray-300 leading-tight">{item.text}</p>
-                                  </div>
-                                ))}
-                              </div>
-                              <Button 
-                                size="sm" 
-                                className="w-full h-7 text-[10px] bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold"
-                                onClick={(e) => { e.stopPropagation(); generatePDF(ad.platform); }}
-                              >
-                                Ver Guía Completa (PDF)
-                              </Button>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
                     </div>
                   </motion.div>
                 ))}
@@ -1192,6 +1163,13 @@ const FlowsightAdsDashboard: React.FC = () => {
             </motion.div>
           )}
         </AnimatePresence>
+        
+        {/* Visual Guide Lightbox */}
+        <VisualGuideLightbox 
+          isOpen={isGuideLightboxOpen}
+          onClose={() => setIsGuideLightboxOpen(false)}
+          platform={guideLightboxPlatform}
+        />
       </main>
     </div>
   );
