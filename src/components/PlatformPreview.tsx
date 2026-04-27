@@ -16,8 +16,8 @@ export const PlatformPreview: React.FC<PlatformPreviewProps> = ({
   imageUrl,
 }) => {
   const logos = {
-    metaSvg: "/logos/meta-clean.png",
-    googleSvg: "/logos/google-ads-clean.png",
+    metaSvg: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="30" fill="#0A66C2"/><path d="M22 32C22 26.4772 26.4772 22 32 22C37.5228 22 42 26.4772 42 32C42 37.5228 37.5228 42 32 42C26.4772 42 22 37.5228 22 32M26 32C26 34.2091 27.7909 36 30 36C32.2091 36 34 34.2091 34 32C34 29.7909 32.2091 28 30 28C27.7909 28 26 29.7909 26 32" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    googleSvg: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="30" fill="white" stroke="#e8e8e8" stroke-width="0.5"/><circle cx="22" cy="42" r="5" fill="#FBBC04"/><path d="M32 16L44 42H20L32 16Z" fill="#4285F4"/><circle cx="42" cy="42" r="5" fill="#EA4335"/><path d="M32 26L40 40H24L32 26Z" fill="#34A853"/></svg>`,
     meta: "/logos/meta-icon.png",
     google: "/logos/google-ads-icon.png",
     tiktok: "https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg",
@@ -60,7 +60,7 @@ export const PlatformPreview: React.FC<PlatformPreviewProps> = ({
         <div className="bg-white rounded-lg p-6 max-w-2xl mx-auto border border-gray-200 shadow-sm">
           {/* Google Search Ad */}
           <div className="flex items-center gap-2 mb-3">
-            <img src="/logos/google-ads-clean.png" alt="Google Ads" className="h-6 w-auto" />
+            <svg className="h-6 w-auto" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="30" fill="white" stroke="#e8e8e8" stroke-width="0.5"/><circle cx="22" cy="42" r="5" fill="#FBBC04"/><path d="M32 16L44 42H20L32 16Z" fill="#4285F4"/><circle cx="42" cy="42" r="5" fill="#EA4335"/><path d="M32 26L40 40H24L32 26Z" fill="#34A853"/></svg>
             <div className="text-[12px] text-[#202124] border border-gray-300 px-1 rounded">Patrocinado</div>
           </div>
           <div className="text-[14px] text-[#202124] mb-1">
