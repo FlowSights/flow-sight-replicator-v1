@@ -15,7 +15,7 @@ import {
   Globe, MousePointer2, Layout, FileText,
   Lightbulb, Info, ArrowRight, MapPin as MapPinIcon,
   Upload as UploadIcon, X as XIcon, Sparkles as SparklesIcon,
-  RefreshCw, Wand2, Search
+  RefreshCw, Wand2, Search, Activity, Eye, MousePointer
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MetaPreview, TikTokPreview, LinkedInPreview, GoogleAdsPreview } from '@/components/PlatformPreviewsNative';
@@ -60,6 +60,15 @@ const FlowsightAdsDashboard: React.FC = () => {
     userImage: null,
     aiPrompt: '',
   });
+
+  const suggestions = [
+    { label: "Membresía de Gimnasio", icon: "💪" },
+    { label: "Consultoría de Negocios", icon: "📈" },
+    { label: "Restaurante Gourmet", icon: "🍳" },
+    { label: "Tienda de Ropa Online", icon: "👕" },
+    { label: "Servicios de Limpieza", icon: "✨" },
+    { label: "Agencia de Viajes", icon: "✈️" }
+  ];
 
   const loadingMessages = [
     'Analizando tu modelo de negocio...',
@@ -116,7 +125,7 @@ const FlowsightAdsDashboard: React.FC = () => {
         imageUrl: finalImage,
         platform: 'google',
         score: 94,
-        platformUrl: `https://ads.google.com/aw/campaigns/new?ocid=123&step=create&keyword=${encodeURIComponent(config.promote)}`
+        platformUrl: `https://ads.google.com/aw/campaigns/new?keyword=${encodeURIComponent(config.promote)}`
       },
       {
         type: 'Emotional',
@@ -126,7 +135,7 @@ const FlowsightAdsDashboard: React.FC = () => {
         imageUrl: finalImage,
         platform: 'meta',
         score: 89,
-        platformUrl: `https://adsmanager.facebook.com/adsmanager/manage/campaigns?act=123&nav_source=no_nav&business_id=123`
+        platformUrl: `https://adsmanager.facebook.com/adsmanager/manage/campaigns`
       },
       {
         type: 'Urgency',
@@ -136,7 +145,7 @@ const FlowsightAdsDashboard: React.FC = () => {
         imageUrl: finalImage,
         platform: 'tiktok',
         score: 97,
-        platformUrl: `https://ads.tiktok.com/i18n/dashboard?adv_id=123`
+        platformUrl: `https://ads.tiktok.com/i18n/dashboard`
       },
       {
         type: 'Offer',
@@ -146,7 +155,7 @@ const FlowsightAdsDashboard: React.FC = () => {
         imageUrl: finalImage,
         platform: 'linkedin',
         score: 92,
-        platformUrl: `https://www.linkedin.com/campaignmanager/accounts/123/campaign-groups/create`
+        platformUrl: `https://www.linkedin.com/campaignmanager/accounts`
       }
     ];
 
@@ -264,11 +273,6 @@ const FlowsightAdsDashboard: React.FC = () => {
       doc.text(tip, 25, y);
       y += 10;
     });
-
-    // Footer Premium
-    doc.setFontSize(9);
-    doc.setTextColor(150, 150, 150);
-    doc.text('© 2026 FlowSight Ads Premium - Documento Confidencial de Estrategia', pageWidth / 2, 285, { align: 'center' });
 
     doc.save(`FlowSight-Premium-Kit-${selectedPlatform || 'Global'}.pdf`);
   };
@@ -397,15 +401,29 @@ const FlowsightAdsDashboard: React.FC = () => {
                     <p className="text-xl text-gray-500 dark:text-gray-400">Describe tu producto o servicio en una frase potente.</p>
                   </div>
 
-                  <div className="relative group">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-3xl blur opacity-20 group-focus-within:opacity-40 transition duration-1000" />
-                    <SparklesIcon className="absolute left-8 top-1/2 -translate-y-1/2 text-emerald-500 w-8 h-8 z-10" />
-                    <Input 
-                      value={config.promote}
-                      onChange={(e) => setConfig({...config, promote: e.target.value})}
-                      placeholder="Ej: Membresía de Gimnasio, Consultoría IA, Zapatos de Cuero..."
-                      className="relative text-2xl py-10 pl-20 pr-8 rounded-3xl border-none bg-white dark:bg-white/5 shadow-2xl focus:ring-2 focus:ring-emerald-500"
-                    />
+                  <div className="space-y-6">
+                    <div className="relative group">
+                      <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-3xl blur opacity-20 group-focus-within:opacity-40 transition duration-1000" />
+                      <SparklesIcon className="absolute left-8 top-1/2 -translate-y-1/2 text-emerald-500 w-8 h-8 z-10" />
+                      <Input 
+                        value={config.promote}
+                        onChange={(e) => setConfig({...config, promote: e.target.value})}
+                        placeholder="Ej: Membresía de Gimnasio, Consultoría IA..."
+                        className="relative text-2xl py-10 pl-20 pr-8 rounded-3xl border-none bg-white dark:bg-white/5 shadow-2xl focus:ring-2 focus:ring-emerald-500"
+                      />
+                    </div>
+
+                    <div className="flex flex-wrap gap-2">
+                      {suggestions.map((s) => (
+                        <button
+                          key={s.label}
+                          onClick={() => setConfig({...config, promote: s.label})}
+                          className="px-4 py-2 rounded-full bg-gray-100 dark:bg-white/5 text-sm font-bold text-gray-600 dark:text-gray-400 hover:bg-emerald-500 hover:text-white transition-all"
+                        >
+                          {s.icon} {s.label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
 
                   <Button 
@@ -521,7 +539,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                             <Textarea 
                               value={config.aiPrompt}
                               onChange={(e) => setConfig({...config, aiPrompt: e.target.value})}
-                              placeholder="Ej: Estilo minimalista, colores neón, ambiente de oficina moderna, alta resolución..."
+                              placeholder="Ej: Estilo minimalista, colores neón, ambiente de oficina moderna..."
                               className="bg-white dark:bg-black/40 border-blue-500/20 focus:ring-blue-500"
                             />
                           </div>
@@ -601,10 +619,29 @@ const FlowsightAdsDashboard: React.FC = () => {
                   <Button variant="outline" onClick={() => { setShowResults(false); setStep(1); }} className="rounded-2xl py-6 px-6 border-gray-200 dark:border-white/10 font-bold">
                     <RefreshCw className="w-4 h-4 mr-2" /> Nueva Campaña
                   </Button>
-                  <Button onClick={() => generatePDF()} className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl py-6 px-8 font-bold shadow-xl shadow-emerald-500/20">
-                    <Download className="w-4 h-4 mr-2" /> Descargar Kit Global
-                  </Button>
                 </div>
+              </div>
+
+              {/* Métricas Wow */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                {[
+                  { label: "Puntuación de Campaña", value: "94/100", icon: Star, color: "text-yellow-500" },
+                  { label: "CTR Proyectado", value: "4.2%", icon: MousePointer, color: "text-emerald-500" },
+                  { label: "Impresiones Est.", value: (config.budget * 15).toLocaleString(), icon: Eye, color: "text-blue-500" },
+                  { label: "Fuerza del Copy", value: "Excelente", icon: Activity, color: "text-purple-500" }
+                ].map((m, i) => (
+                  <Card key={i} className="p-6 border-gray-100 dark:border-white/5 bg-white dark:bg-white/5 rounded-3xl shadow-xl">
+                    <div className="flex items-center gap-4">
+                      <div className={`p-3 rounded-2xl bg-gray-50 dark:bg-white/5 ${m.color}`}>
+                        <m.icon className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">{m.label}</p>
+                        <p className="text-2xl font-black text-gray-900 dark:text-white">{m.value}</p>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
