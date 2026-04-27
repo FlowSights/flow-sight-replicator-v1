@@ -184,112 +184,520 @@ const FlowsightAdsDashboard: React.FC = () => {
   const generatePDF = (selectedPlatform?: string) => {
     const doc = new jsPDF('p', 'mm', 'a4');
     const pageWidth = doc.internal.pageSize.getWidth();
-    
-    // Header Premium Dark
-    doc.setFillColor(5, 5, 5);
-    doc.rect(0, 0, pageWidth, 60, 'F');
-    
-    doc.setTextColor(16, 185, 129);
-    doc.setFontSize(32);
-    doc.setFont(undefined, 'bold');
-    doc.text('FlowSight Ads', 20, 30);
-    
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(14);
-    doc.setFont(undefined, 'normal');
-    doc.text(`CAMPAIGN KIT: ${selectedPlatform?.toUpperCase() || 'ESTRATEGIA MULTICANAL'}`, 20, 42);
-    doc.setFontSize(10);
-    doc.text(`Generado el ${new Date().toLocaleDateString()} • ID: ${Math.random().toString(36).substr(2, 9).toUpperCase()}`, 20, 50);
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const margin = 20;
+    const contentWidth = pageWidth - margin * 2;
+    const campaignId = Math.random().toString(36).substr(2, 9).toUpperCase();
+    const dateStr = new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
 
-    let y = 75;
-    
-    // Sección Estrategia
-    doc.setTextColor(5, 5, 5);
-    doc.setFontSize(20);
+    // Helper: Dibujar linea decorativa emerald
+    const drawAccentLine = (yPos: number) => {
+      doc.setDrawColor(16, 185, 129);
+      doc.setLineWidth(0.8);
+      doc.line(margin, yPos, margin + 40, yPos);
+    };
+
+    // Helper: Dibujar seccion header
+    const drawSectionHeader = (title: string, yPos: number): number => {
+      drawAccentLine(yPos);
+      doc.setTextColor(5, 5, 5);
+      doc.setFontSize(18);
+      doc.setFont(undefined, 'bold');
+      doc.text(title, margin, yPos + 10);
+      return yPos + 18;
+    };
+
+    // Helper: Check page break
+    const checkPageBreak = (yPos: number, needed: number = 40): number => {
+      if (yPos + needed > pageHeight - 30) {
+        doc.addPage();
+        return 25;
+      }
+      return yPos;
+    };
+
+    // =============================================
+    // PAGINA 1: PORTADA PREMIUM
+    // =============================================
+    doc.setFillColor(5, 5, 5);
+    doc.rect(0, 0, pageWidth, pageHeight, 'F');
+
+    // Acento decorativo superior
+    doc.setFillColor(16, 185, 129);
+    doc.rect(0, 0, pageWidth, 4, 'F');
+
+    // Logo / Marca
+    doc.setTextColor(16, 185, 129);
+    doc.setFontSize(14);
     doc.setFont(undefined, 'bold');
-    doc.text('1. Estrategia de Mercado', 20, y);
-    y += 15;
-    
-    doc.setFontSize(12);
+    doc.text('FLOWSIGHT ADS', margin, 35);
+
+    // Badge Premium
+    doc.setFillColor(16, 185, 129);
+    doc.roundedRect(pageWidth - 65, 27, 45, 12, 2, 2, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(8);
+    doc.text('PREMIUM KIT', pageWidth - 60, 35);
+
+    // Titulo principal
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(42);
+    doc.setFont(undefined, 'bold');
+    doc.text('Campaign', margin, 90);
+    doc.text('Kit', margin, 108);
+
+    // Nombre de plataforma
+    doc.setTextColor(16, 185, 129);
+    doc.setFontSize(42);
+    const platformNames: Record<string, string> = { meta: 'Meta Ads', google: 'Google Ads', tiktok: 'TikTok Ads', linkedin: 'LinkedIn Ads' };
+    doc.text(selectedPlatform ? platformNames[selectedPlatform] || selectedPlatform.toUpperCase() : 'Multicanal', margin, 126);
+
+    // Linea separadora
+    doc.setDrawColor(255, 255, 255);
+    doc.setLineWidth(0.3);
+    doc.line(margin, 140, margin + 60, 140);
+
+    // Datos de la campana en portada
+    doc.setTextColor(180, 180, 180);
+    doc.setFontSize(11);
     doc.setFont(undefined, 'normal');
-    const strategyData = [
-      ['Producto/Servicio:', config.promote],
-      ['Ubicación Objetivo:', config.location],
-      ['Audiencia Ideal:', config.idealCustomer],
-      ['Presupuesto Sugerido:', `$${config.budget} USD / mes`]
+    doc.text(`Producto: ${config.promote}`, margin, 155);
+    doc.text(`Mercado: ${config.location}`, margin, 165);
+    doc.text(`Audiencia: ${config.idealCustomer}`, margin, 175);
+    doc.text(`Inversion: $${config.budget} USD / mes`, margin, 185);
+
+    // Footer portada
+    doc.setTextColor(100, 100, 100);
+    doc.setFontSize(9);
+    doc.text(`Generado el ${dateStr}`, margin, pageHeight - 25);
+    doc.text(`ID: ${campaignId}`, margin, pageHeight - 18);
+    doc.setTextColor(16, 185, 129);
+    doc.text('Documento confidencial y personalizado', pageWidth - 85, pageHeight - 18);
+
+    // =============================================
+    // PAGINA 2: RESUMEN ESTRATEGICO
+    // =============================================
+    doc.addPage();
+    let y = 25;
+
+    // Header de pagina
+    doc.setFillColor(250, 250, 250);
+    doc.rect(0, 0, pageWidth, 15, 'F');
+    doc.setTextColor(16, 185, 129);
+    doc.setFontSize(8);
+    doc.setFont(undefined, 'bold');
+    doc.text('FLOWSIGHT ADS  |  CAMPAIGN KIT PREMIUM', margin, 10);
+    doc.setTextColor(150, 150, 150);
+    doc.text(`${config.promote.toUpperCase()}`, pageWidth - margin - 40, 10);
+
+    y = 30;
+    y = drawSectionHeader('Resumen de tu Estrategia', y);
+    y += 5;
+
+    doc.setFontSize(10);
+    doc.setFont(undefined, 'normal');
+    doc.setTextColor(80, 80, 80);
+    const introLines = doc.splitTextToSize(
+      `Este documento contiene tu campana publicitaria completa, lista para lanzar. Hemos disenado cada elemento pensando en maximizar tus resultados con la menor complejidad posible. Solo necesitas seguir los pasos de esta guia para tener tu anuncio en vivo.`,
+      contentWidth
+    );
+    doc.text(introLines, margin, y);
+    y += introLines.length * 5 + 10;
+
+    // Tabla de estrategia
+    const strategyItems = [
+      { label: 'Que vendes', value: config.promote, icon: 'Producto' },
+      { label: 'Donde esta tu cliente', value: config.location, icon: 'Mercado' },
+      { label: 'A quien le hablas', value: config.idealCustomer, icon: 'Audiencia' },
+      { label: 'Cuanto invertir', value: `$${config.budget} USD / mes`, icon: 'Inversion' },
+      { label: 'Donde publicar', value: selectedPlatform ? platformNames[selectedPlatform] : 'Todas las plataformas', icon: 'Plataforma' },
     ];
 
-    strategyData.forEach(([label, value]) => {
+    strategyItems.forEach((item) => {
+      y = checkPageBreak(y, 22);
+      doc.setFillColor(248, 250, 252);
+      doc.roundedRect(margin, y, contentWidth, 18, 2, 2, 'F');
+      doc.setTextColor(16, 185, 129);
+      doc.setFontSize(8);
       doc.setFont(undefined, 'bold');
-      doc.text(label, 25, y);
+      doc.text(item.icon.toUpperCase(), margin + 5, y + 7);
+      doc.setTextColor(5, 5, 5);
+      doc.setFontSize(10);
       doc.setFont(undefined, 'normal');
-      doc.text(value, 75, y);
-      y += 10;
+      const valLines = doc.splitTextToSize(item.value, contentWidth - 50);
+      doc.text(valLines[0] || '', margin + 45, y + 7);
+      doc.setTextColor(120, 120, 120);
+      doc.setFontSize(8);
+      doc.text(item.label, margin + 45, y + 14);
+      y += 22;
     });
 
-    y += 15;
+    // Metricas proyectadas
+    y += 10;
+    y = checkPageBreak(y, 50);
+    y = drawSectionHeader('Proyecciones Estimadas', y);
+    y += 5;
+
+    const metrics = [
+      { label: 'Alcance Estimado', value: `${(config.budget * 15).toLocaleString()} personas`, desc: 'Personas que veran tu anuncio cada mes' },
+      { label: 'Clics Estimados', value: `${(config.budget * 0.8).toFixed(0)} clics`, desc: 'Visitas esperadas a tu pagina web' },
+      { label: 'ROI Proyectado', value: '3.5x', desc: 'Retorno estimado sobre tu inversion' },
+      { label: 'Costo por Clic', value: `$${(config.budget / (config.budget * 0.8)).toFixed(2)} USD`, desc: 'Lo que pagas por cada visita' },
+    ];
+
+    const metricWidth = (contentWidth - 10) / 2;
+    metrics.forEach((m, i) => {
+      const col = i % 2;
+      if (col === 0 && i > 0) y += 30;
+      if (col === 0) y = checkPageBreak(y, 30);
+      const xPos = margin + col * (metricWidth + 10);
+      doc.setFillColor(5, 5, 5);
+      doc.roundedRect(xPos, y, metricWidth, 25, 2, 2, 'F');
+      doc.setTextColor(16, 185, 129);
+      doc.setFontSize(16);
+      doc.setFont(undefined, 'bold');
+      doc.text(m.value, xPos + 5, y + 12);
+      doc.setTextColor(200, 200, 200);
+      doc.setFontSize(7);
+      doc.setFont(undefined, 'normal');
+      doc.text(m.label.toUpperCase(), xPos + 5, y + 19);
+    });
+    y += 35;
+
+    // =============================================
+    // PAGINA 3: CREATIVOS DEL ANUNCIO
+    // =============================================
+    doc.addPage();
+    y = 25;
+
+    // Header de pagina
+    doc.setFillColor(250, 250, 250);
+    doc.rect(0, 0, pageWidth, 15, 'F');
+    doc.setTextColor(16, 185, 129);
+    doc.setFontSize(8);
     doc.setFont(undefined, 'bold');
-    doc.setFontSize(20);
-    doc.text('2. Creativos y Mockups', 20, y);
-    y += 15;
+    doc.text('FLOWSIGHT ADS  |  CAMPAIGN KIT PREMIUM', margin, 10);
+
+    y = 30;
+    y = drawSectionHeader('Tus Anuncios Listos para Publicar', y);
+    y += 5;
+
+    doc.setFontSize(10);
+    doc.setFont(undefined, 'normal');
+    doc.setTextColor(80, 80, 80);
+    const creativeIntro = doc.splitTextToSize(
+      'A continuacion encontraras los textos de tus anuncios optimizados por IA. Solo necesitas copiar y pegar cada elemento en la plataforma correspondiente.',
+      contentWidth
+    );
+    doc.text(creativeIntro, margin, y);
+    y += creativeIntro.length * 5 + 10;
 
     const adsToPrint = selectedPlatform 
       ? generatedAds.filter(ad => ad.platform === selectedPlatform)
       : generatedAds;
 
-    adsToPrint.forEach((ad, index) => {
-      if (y > 220) { doc.addPage(); y = 25; }
+    adsToPrint.forEach((ad) => {
+      y = checkPageBreak(y, 85);
       
-      doc.setDrawColor(230, 230, 230);
+      // Card del anuncio
       doc.setFillColor(252, 252, 252);
-      doc.roundedRect(20, y, pageWidth - 40, 70, 3, 3, 'FD');
+      doc.setDrawColor(230, 230, 230);
+      doc.roundedRect(margin, y, contentWidth, 75, 3, 3, 'FD');
       
+      // Badge de tipo
+      const typeColors: Record<string, [number, number, number]> = {
+        'Offer': [16, 185, 129],
+        'Emotional': [139, 92, 246],
+        'Urgency': [239, 68, 68],
+      };
+      const badgeColor = typeColors[ad.type] || [16, 185, 129];
+      doc.setFillColor(badgeColor[0], badgeColor[1], badgeColor[2]);
+      doc.roundedRect(margin + 5, y + 5, 35, 8, 2, 2, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(7);
+      doc.setFont(undefined, 'bold');
+      const typeLabels: Record<string, string> = { 'Offer': 'OFERTA', 'Emotional': 'EMOCIONAL', 'Urgency': 'URGENCIA' };
+      doc.text(typeLabels[ad.type] || ad.type.toUpperCase(), margin + 8, y + 10.5);
+
+      // Plataforma
+      doc.setTextColor(150, 150, 150);
+      doc.setFontSize(8);
+      doc.text(ad.platform.toUpperCase(), margin + 45, y + 10.5);
+
+      // Score
       doc.setTextColor(16, 185, 129);
-      doc.setFontSize(13);
-      doc.text(`${ad.type.toUpperCase()} - ${ad.platform.toUpperCase()}`, 25, y + 12);
-      
+      doc.setFontSize(20);
+      doc.setFont(undefined, 'bold');
+      doc.text(`${ad.score}`, margin + contentWidth - 25, y + 13);
+      doc.setTextColor(150, 150, 150);
+      doc.setFontSize(6);
+      doc.text('/100', margin + contentWidth - 12, y + 13);
+
+      // Titulo
       doc.setTextColor(5, 5, 5);
       doc.setFontSize(12);
       doc.setFont(undefined, 'bold');
-      doc.text(`Headline: ${ad.headline}`, 25, y + 25);
+      const headlineLines = doc.splitTextToSize(ad.headline, contentWidth - 20);
+      doc.text(headlineLines, margin + 5, y + 24);
       
+      // Descripcion
       doc.setFont(undefined, 'normal');
-      const descLines = doc.splitTextToSize(`Copy: ${ad.description}`, pageWidth - 60);
-      doc.text(descLines, 25, y + 35);
-      
-      doc.setFont(undefined, 'bold');
-      doc.text(`Llamada a la acción: ${ad.cta}`, 25, y + 55);
-      
-      doc.setTextColor(0, 102, 204);
       doc.setFontSize(10);
-      doc.text(`Enlace de publicación directa: ${ad.platformUrl}`, 25, y + 63);
+      doc.setTextColor(80, 80, 80);
+      const descLines = doc.splitTextToSize(ad.description, contentWidth - 20);
+      doc.text(descLines, margin + 5, y + 38);
       
-      y += 80;
+      // CTA
+      doc.setFillColor(16, 185, 129);
+      doc.roundedRect(margin + 5, y + 52, 40, 10, 2, 2, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(9);
+      doc.setFont(undefined, 'bold');
+      doc.text(ad.cta, margin + 10, y + 58.5);
+
+      // Enlace directo
+      doc.setTextColor(16, 185, 129);
+      doc.setFontSize(8);
+      doc.setFont(undefined, 'normal');
+      doc.text(`Publicar aqui: ${ad.platformUrl}`, margin + 5, y + 70);
+      doc.link(margin + 5, y + 66, contentWidth - 10, 8, { url: ad.platformUrl });
+      
+      y += 82;
     });
 
-    // Guía de Implementación Específica
-    if (y > 200) { doc.addPage(); y = 25; }
-    doc.setTextColor(5, 5, 5);
-    doc.setFontSize(20);
+    // =============================================
+    // PAGINA 4: GUIA DE LANZAMIENTO PASO A PASO
+    // =============================================
+    doc.addPage();
+    y = 25;
+
+    // Header de pagina
+    doc.setFillColor(250, 250, 250);
+    doc.rect(0, 0, pageWidth, 15, 'F');
+    doc.setTextColor(16, 185, 129);
+    doc.setFontSize(8);
     doc.setFont(undefined, 'bold');
-    doc.text('3. Guía de Lanzamiento', 20, y);
-    y += 15;
-    
-    doc.setFontSize(11);
-    doc.setFont(undefined, 'normal');
-    const platformTips: Record<string, string[]> = {
-      google: ['• Usa palabras clave de intención de compra.', '• Configura extensiones de anuncio.', '• Optimiza para CTR alto.'],
-      meta: ['• Segmenta por intereses detallados.', '• Usa el píxel de Meta para retargeting.', '• El visual es el 70% del éxito.'],
-      tiktok: ['• El contenido debe parecer orgánico.', '• Usa música en tendencia.', '• Los primeros 3 segundos son vitales.'],
-      linkedin: ['• Segmenta por cargo y empresa.', '• Usa un tono profesional pero directo.', '• Ideal para B2B de alto valor.']
+    doc.text('FLOWSIGHT ADS  |  CAMPAIGN KIT PREMIUM', margin, 10);
+
+    y = 30;
+    y = drawSectionHeader('Guia de Lanzamiento Paso a Paso', y);
+    y += 5;
+
+    const platformGuides: Record<string, Array<{step: string; title: string; desc: string; link?: string}>> = {
+      google: [
+        { step: '01', title: 'Abre Google Ads', desc: 'Haz clic en el enlace para ir directamente a crear tu campana.', link: 'https://ads.google.com/aw/campaigns/new' },
+        { step: '02', title: 'Elige tu objetivo', desc: 'Selecciona "Ventas" o "Trafico del sitio web" segun tu necesidad.' },
+        { step: '03', title: 'Define tu presupuesto', desc: `Ingresa $${(config.budget / 30).toFixed(0)} USD como presupuesto diario (equivale a $${config.budget}/mes).` },
+        { step: '04', title: 'Agrega palabras clave', desc: 'Piensa como busca tu cliente. Usa frases especificas, no palabras sueltas.' },
+        { step: '05', title: 'Copia tus textos', desc: 'Pega los titulos y descripciones de la pagina anterior en los campos del anuncio.' },
+        { step: '06', title: 'Publica', desc: 'Revisa el resumen y haz clic en "Publicar campana". Google lo revisara en unas horas.' },
+      ],
+      meta: [
+        { step: '01', title: 'Abre el Administrador de Anuncios', desc: 'Haz clic en el enlace para ir directamente a tu cuenta.', link: 'https://adsmanager.facebook.com/adsmanager/manage/campaigns' },
+        { step: '02', title: 'Haz clic en "+ Crear"', desc: 'El boton verde en la esquina superior izquierda.' },
+        { step: '03', title: 'Elige tu objetivo', desc: 'Selecciona "Trafico" para visitas o "Ventas" para conversiones.' },
+        { step: '04', title: 'Define tu audiencia', desc: `Ingresa "${config.location}" como ubicacion y ajusta edad y genero segun tu cliente ideal.` },
+        { step: '05', title: 'Sube tu imagen y textos', desc: 'Carga la imagen que preparamos y pega el copy y titulo de la pagina anterior.' },
+        { step: '06', title: 'Publica', desc: 'Revisa la vista previa y presiona "Publicar". Meta lo revisara en minutos.' },
+      ],
+      tiktok: [
+        { step: '01', title: 'Abre TikTok Ads Manager', desc: 'Haz clic en el enlace para ir a tu panel de control.', link: 'https://ads.tiktok.com/i18n/dashboard' },
+        { step: '02', title: 'Crea una campana', desc: 'Haz clic en "Crear" en la pestana de Campanas.' },
+        { step: '03', title: 'Elige tu objetivo', desc: 'Selecciona "Trafico" para empezar rapido.' },
+        { step: '04', title: 'Configura tu audiencia', desc: `Define ubicacion "${config.location}", edad y genero. Deja los intereses amplios.` },
+        { step: '05', title: 'Sube tu contenido', desc: 'Carga tu imagen o video en formato vertical (9:16) y pega el texto del anuncio.' },
+        { step: '06', title: 'Envia a revision', desc: 'Revisa la vista previa en formato movil y presiona "Enviar".' },
+      ],
+      linkedin: [
+        { step: '01', title: 'Abre Campaign Manager', desc: 'Haz clic en el enlace para ir a tu cuenta publicitaria.', link: 'https://www.linkedin.com/campaignmanager/accounts' },
+        { step: '02', title: 'Crea una campana', desc: 'Selecciona tu cuenta y haz clic en "Crear" > "Campana".' },
+        { step: '03', title: 'Elige tu objetivo', desc: 'Selecciona "Visitas al sitio web" o "Generacion de contactos".' },
+        { step: '04', title: 'Segmenta profesionalmente', desc: 'Usa filtros de cargo, sector y tamano de empresa para llegar a los decisores correctos.' },
+        { step: '05', title: 'Sube tu imagen y textos', desc: 'Elige "Anuncio con imagen", sube la imagen y pega los textos de la pagina anterior.' },
+        { step: '06', title: 'Lanza tu campana', desc: `Confirma tu presupuesto de $${(config.budget / 30).toFixed(0)} USD/dia y haz clic en "Lanzar campana".` },
+      ],
     };
 
-    const tips = selectedPlatform ? platformTips[selectedPlatform] : ['• Mide tus conversiones diariamente.', '• Haz pruebas A/B constantes.', '• Escala el presupuesto en los anuncios ganadores.'];
-    
-    tips.forEach(tip => {
-      doc.text(tip, 25, y);
-      y += 10;
+    const guide = selectedPlatform && platformGuides[selectedPlatform] 
+      ? platformGuides[selectedPlatform] 
+      : platformGuides['meta'];
+
+    guide.forEach((item) => {
+      y = checkPageBreak(y, 30);
+      
+      // Numero de paso
+      doc.setFillColor(16, 185, 129);
+      doc.circle(margin + 6, y + 6, 6, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(9);
+      doc.setFont(undefined, 'bold');
+      doc.text(item.step, margin + 3.5, y + 8);
+
+      // Titulo del paso
+      doc.setTextColor(5, 5, 5);
+      doc.setFontSize(12);
+      doc.setFont(undefined, 'bold');
+      doc.text(item.title, margin + 18, y + 8);
+
+      // Descripcion
+      doc.setTextColor(80, 80, 80);
+      doc.setFontSize(9);
+      doc.setFont(undefined, 'normal');
+      const stepDesc = doc.splitTextToSize(item.desc, contentWidth - 20);
+      doc.text(stepDesc, margin + 18, y + 15);
+
+      // Enlace si existe
+      if (item.link) {
+        const linkY = y + 15 + stepDesc.length * 4;
+        doc.setTextColor(16, 185, 129);
+        doc.setFontSize(8);
+        doc.text(item.link, margin + 18, linkY);
+        doc.link(margin + 18, linkY - 3, contentWidth - 20, 5, { url: item.link });
+        y = linkY + 8;
+      } else {
+        y += 15 + stepDesc.length * 4 + 5;
+      }
     });
+
+    // =============================================
+    // PAGINA 5: CONSEJOS PARA MAXIMIZAR RESULTADOS
+    // =============================================
+    doc.addPage();
+    y = 25;
+
+    // Header de pagina
+    doc.setFillColor(250, 250, 250);
+    doc.rect(0, 0, pageWidth, 15, 'F');
+    doc.setTextColor(16, 185, 129);
+    doc.setFontSize(8);
+    doc.setFont(undefined, 'bold');
+    doc.text('FLOWSIGHT ADS  |  CAMPAIGN KIT PREMIUM', margin, 10);
+
+    y = 30;
+    y = drawSectionHeader('Consejos para Maximizar tus Resultados', y);
+    y += 5;
+
+    const platformAdvice: Record<string, Array<{title: string; desc: string}>> = {
+      google: [
+        { title: 'Usa palabras clave especificas', desc: 'Las frases largas y detalladas ("comprar zapatos deportivos baratos en Madrid") atraen clientes con mayor intencion de compra que las palabras genericas ("zapatos").' },
+        { title: 'Activa las extensiones de anuncio', desc: 'Agrega tu numero de telefono, direccion y enlaces adicionales. Esto hace que tu anuncio ocupe mas espacio en Google y se vea mas profesional, sin costo extra.' },
+        { title: 'No toques nada en 5 dias', desc: 'El sistema de Google necesita entre 3 y 7 dias para aprender quien hace clic en tu anuncio. Si cambias cosas antes, reinicia el aprendizaje.' },
+        { title: 'Revisa el "Informe de terminos de busqueda"', desc: 'Despues de una semana, revisa por que palabras reales te encontraron. Elimina las que no tienen sentido para tu negocio.' },
+      ],
+      meta: [
+        { title: 'La imagen es el 70% del exito', desc: 'En Facebook e Instagram, la gente se detiene por la imagen, no por el texto. Asegurate de que tu visual sea llamativo y profesional.' },
+        { title: 'Deja que Meta optimice por ti', desc: 'Activa "Ubicaciones Advantage+" y "Presupuesto Advantage+". La inteligencia artificial de Meta sabe donde mostrar tu anuncio al menor costo.' },
+        { title: 'Responde los comentarios', desc: 'Cuando alguien comenta en tu anuncio, respondele rapido. Esto mejora la relevancia del anuncio y genera confianza.' },
+        { title: 'Prueba diferentes imagenes', desc: 'Despues de una semana, duplica tu anuncio con una imagen diferente. Compara cual funciona mejor y apaga el perdedor.' },
+      ],
+      tiktok: [
+        { title: 'Que parezca contenido real', desc: 'Los anuncios que parecen videos caseros o naturales funcionan mucho mejor que los que se ven "producidos". La autenticidad es la clave en TikTok.' },
+        { title: 'Los primeros 3 segundos lo son todo', desc: 'Si no captas la atencion en los primeros 3 segundos, la persona seguira de largo. Empieza con algo impactante o una pregunta directa.' },
+        { title: 'Usa musica en tendencia', desc: 'TikTok es una plataforma de audio. Usar una cancion popular puede multiplicar el alcance de tu anuncio.' },
+        { title: 'Formato vertical obligatorio', desc: 'Tu contenido debe ser en formato 9:16 (vertical, pantalla completa). Nunca uses videos horizontales en TikTok.' },
+      ],
+      linkedin: [
+        { title: 'Segmenta por cargo, no por intereses', desc: 'LinkedIn es poderoso porque puedes llegar directamente a "Directores de Marketing" o "CEOs de empresas de tecnologia". Usa esta ventaja.' },
+        { title: 'Manten tu audiencia entre 50K y 300K', desc: 'Si tu audiencia es muy pequena, sera cara. Si es muy grande, sera poco relevante. El punto ideal esta en ese rango.' },
+        { title: 'Tono profesional pero humano', desc: 'Evita sonar como un robot corporativo. Habla como un profesional que le escribe a otro profesional. Directo, claro y con valor.' },
+        { title: 'El mejor horario: martes a jueves', desc: 'Los profesionales estan mas activos en LinkedIn entre martes y jueves, de 8am a 10am y de 5pm a 6pm.' },
+      ],
+    };
+
+    const advice = selectedPlatform && platformAdvice[selectedPlatform]
+      ? platformAdvice[selectedPlatform]
+      : platformAdvice['meta'];
+
+    advice.forEach((item, i) => {
+      y = checkPageBreak(y, 35);
+      
+      // Numero
+      doc.setTextColor(16, 185, 129);
+      doc.setFontSize(24);
+      doc.setFont(undefined, 'bold');
+      doc.text(`${i + 1}`, margin, y + 10);
+
+      // Titulo
+      doc.setTextColor(5, 5, 5);
+      doc.setFontSize(11);
+      doc.setFont(undefined, 'bold');
+      doc.text(item.title, margin + 12, y + 5);
+
+      // Descripcion
+      doc.setTextColor(80, 80, 80);
+      doc.setFontSize(9);
+      doc.setFont(undefined, 'normal');
+      const adviceLines = doc.splitTextToSize(item.desc, contentWidth - 15);
+      doc.text(adviceLines, margin + 12, y + 12);
+      y += 12 + adviceLines.length * 4 + 10;
+    });
+
+    // =============================================
+    // PAGINA FINAL: CHECKLIST Y CIERRE
+    // =============================================
+    y = checkPageBreak(y, 100);
+    if (y < 50) {
+      // Estamos en pagina nueva
+    } else {
+      doc.addPage();
+      y = 25;
+    }
+
+    // Header de pagina
+    doc.setFillColor(250, 250, 250);
+    doc.rect(0, 0, pageWidth, 15, 'F');
+    doc.setTextColor(16, 185, 129);
+    doc.setFontSize(8);
+    doc.setFont(undefined, 'bold');
+    doc.text('FLOWSIGHT ADS  |  CAMPAIGN KIT PREMIUM', margin, 10);
+
+    y = 30;
+    y = drawSectionHeader('Tu Checklist de Lanzamiento', y);
+    y += 5;
+
+    const checklist = [
+      'Tengo una cuenta activa en la plataforma elegida',
+      'Mi imagen/video cumple con las dimensiones recomendadas',
+      'He copiado los textos del anuncio de este documento',
+      'He definido mi presupuesto diario',
+      'He configurado mi audiencia objetivo',
+      'He agregado la URL de mi pagina web o tienda',
+      'He revisado la vista previa del anuncio',
+      'He publicado mi campana',
+    ];
+
+    checklist.forEach((item) => {
+      y = checkPageBreak(y, 12);
+      doc.setDrawColor(200, 200, 200);
+      doc.roundedRect(margin, y, 5, 5, 1, 1, 'S');
+      doc.setTextColor(60, 60, 60);
+      doc.setFontSize(10);
+      doc.setFont(undefined, 'normal');
+      doc.text(item, margin + 10, y + 4);
+      y += 12;
+    });
+
+    y += 15;
+    y = checkPageBreak(y, 50);
+
+    // Bloque de cierre
+    doc.setFillColor(5, 5, 5);
+    doc.roundedRect(margin, y, contentWidth, 45, 3, 3, 'F');
+    doc.setTextColor(16, 185, 129);
+    doc.setFontSize(14);
+    doc.setFont(undefined, 'bold');
+    doc.text('Necesitas ayuda?', margin + 10, y + 15);
+    doc.setTextColor(200, 200, 200);
+    doc.setFontSize(9);
+    doc.setFont(undefined, 'normal');
+    doc.text('Nuestro equipo esta listo para ayudarte a optimizar tus resultados.', margin + 10, y + 25);
+    doc.setTextColor(16, 185, 129);
+    doc.text('contacto@flowsights.com  |  WhatsApp: +54 9 11 1234-5678', margin + 10, y + 35);
+
+    // Footer final
+    doc.setTextColor(150, 150, 150);
+    doc.setFontSize(7);
+    doc.text(`FlowSight Ads  |  Campaign Kit Premium  |  ${dateStr}  |  ID: ${campaignId}`, margin, pageHeight - 10);
 
     doc.save(`FlowSight-Premium-Kit-${selectedPlatform || 'Global'}.pdf`);
   };

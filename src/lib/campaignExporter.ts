@@ -76,112 +76,130 @@ export const generatePlatformCSV = (campaign: CampaignData): string => {
 export const generateInstructions = (platform: 'meta' | 'google' | 'tiktok' | 'linkedin'): string => {
   const instructions: Record<string, string> = {
     meta: `
-# Instrucciones para Publicar en Meta (Facebook/Instagram)
+# 🚀 Guía Premium de Lanzamiento: Meta Ads (Facebook & Instagram)
 
-## Paso 1: Acceder a Meta Ads Manager
-1. Ve a https://business.facebook.com/
-2. Selecciona "Ads Manager"
-3. Haz clic en "Crear" para crear una nueva campaña
+¡Felicidades! Tienes en tus manos una campaña diseñada por IA lista para captar la atención de tu audiencia ideal. Hemos eliminado la complejidad para que puedas lanzar tus anuncios en minutos.
 
-## Paso 2: Configuración de Campaña
-1. Selecciona el objetivo de tu campaña
-2. Define tu presupuesto (usa la recomendación: $500/día)
-3. Selecciona tu audiencia objetivo
+## 🎯 Paso 1: Tu Centro de Control
+Ingresa a tu cuenta publicitaria haciendo clic en este enlace directo:
+👉 https://adsmanager.facebook.com/adsmanager/manage/campaigns
 
-## Paso 3: Crear Anuncio
-1. En "Formato de anuncio", selecciona "Carrusel" o "Imagen única"
-2. Carga las imágenes desde la carpeta "images/" del archivo descargado
-3. Copia el texto del archivo "campaign_config.json" en los campos de titular y descripción
-4. Establece el Call-to-Action (CTA)
+Una vez dentro, busca el botón verde que dice **"+ Crear"**. ¡Aquí empieza la magia!
 
-## Paso 4: Revisar y Publicar
-1. Revisa la vista previa
-2. Haz clic en "Publicar"
+## ⚙️ Paso 2: El Propósito de tu Campaña
+Meta te preguntará qué deseas lograr. Para esta campaña, te sugerimos elegir **"Tráfico"** (si quieres visitas a tu web) o **"Ventas/Clientes Potenciales"** (si buscas conversiones directas).
+*Tip Pro: Deja que Meta optimice el presupuesto automáticamente activando la opción "Presupuesto de la campaña Advantage+".*
 
-¡Tu campaña está en vivo!
+## 👥 Paso 3: Conectando con tu Audiencia
+En la sección de "Conjunto de anuncios", define a quién quieres llegar:
+- **Ubicación:** Ingresa la zona geográfica que definimos en tu estrategia.
+- **Edades y Género:** Ajusta según tu cliente ideal.
+- **Ubicaciones (Placements):** Te recomendamos usar "Ubicaciones Advantage+" para que la IA de Meta muestre tu anuncio donde sea más barato y efectivo (Facebook, Instagram, Stories, Reels).
+
+## 🎨 Paso 4: Dando Vida a tu Anuncio
+Llegamos a la parte divertida. En la sección de "Anuncio":
+1. Sube la imagen que hemos preparado para ti.
+2. Copia y pega el **Texto Principal (Copy)** y el **Título (Headline)** exactamente como te los entregamos. ¡Están optimizados para persuadir!
+3. Elige un botón de llamada a la acción (CTA) que invite a hacer clic, como "Más información" o "Comprar ahora".
+4. Ingresa el enlace de tu página web.
+
+## 🚀 Paso 5: ¡Al Aire!
+Revisa cómo se ve tu anuncio en la vista previa a la derecha. Si todo luce increíble, presiona el botón verde **"Publicar"** en la esquina inferior derecha.
+
+¡Listo! Tu campaña está en revisión y pronto empezará a generar resultados.
     `,
     google: `
-# Instrucciones para Publicar en Google Ads
+# 🚀 Guía Premium de Lanzamiento: Google Ads
 
-## Paso 1: Acceder a Google Ads
-1. Ve a https://ads.google.com/
-2. Inicia sesión con tu cuenta de Google
-3. Haz clic en "Crear campaña"
+¡Excelente! Tienes una campaña de búsqueda estructurada para capturar a las personas exactamente en el momento en que buscan lo que ofreces. Sigue estos sencillos pasos para activarla.
 
-## Paso 2: Seleccionar Tipo de Campaña
-1. Elige "Búsqueda" para anuncios de texto
-2. Define tu presupuesto diario
+## 🎯 Paso 1: Tu Centro de Control
+Ingresa a tu cuenta de Google Ads haciendo clic en este enlace directo:
+👉 https://ads.google.com/aw/campaigns/new
 
-## Paso 3: Crear Grupo de Anuncios
-1. Añade palabras clave relevantes
-2. Establece tu oferta máxima
+Haz clic en **"Nueva campaña"**.
 
-## Paso 4: Crear Anuncio
-1. Copia el titular del archivo "campaign_config.json"
-2. Copia la descripción
-3. Añade la URL de destino
-4. Establece el Call-to-Action
+## ⚙️ Paso 2: El Propósito de tu Campaña
+Google te preguntará tu objetivo. Selecciona **"Ventas"**, **"Clientes potenciales"** o **"Tráfico del sitio web"** según lo que necesites.
+Luego, elige el tipo de campaña **"Búsqueda"** (Search). Esto asegura que aparezcas en los resultados de texto de Google.
 
-## Paso 5: Revisar y Publicar
-1. Revisa todos los detalles
-2. Haz clic en "Publicar"
+## 💰 Paso 3: Inversión Inteligente
+Define tu presupuesto diario. Te sugerimos comenzar con la inversión recomendada en este documento.
+En la sección de "Pujas" (Bidding), concéntrate en **"Clics"** para maximizar el tráfico inicial.
 
-¡Tu campaña está lista!
+## 🔑 Paso 4: Las Palabras Clave
+Google te pedirá que ingreses palabras clave. Piensa en cómo tu cliente ideal buscaría tu producto o servicio en Google. Ingresa de 5 a 10 frases muy específicas (ej. "comprar zapatos deportivos online" en lugar de solo "zapatos").
+
+## 📝 Paso 5: Dando Vida a tu Anuncio
+Copia y pega los **Títulos (Headlines)** y **Descripciones** que hemos generado para ti.
+*Tip Pro: Google rotará estos textos automáticamente para encontrar la combinación que genere más clics. ¡Asegúrate de llenar todos los espacios posibles!*
+
+## 🚀 Paso 6: ¡Al Aire!
+Revisa el resumen de tu campaña. Si Google te da sugerencias, puedes aplicarlas o ignorarlas por ahora. Haz clic en **"Publicar campaña"**.
+
+¡Listo! Estás a punto de aparecer en el buscador más grande del mundo.
     `,
     tiktok: `
-# Instrucciones para Publicar en TikTok Ads
+# 🚀 Guía Premium de Lanzamiento: TikTok Ads
 
-## Paso 1: Acceder a TikTok Ads Manager
-1. Ve a https://ads.tiktok.com/
-2. Inicia sesión o crea una cuenta de publicidad
-3. Haz clic en "Crear campaña"
+¡Prepárate para viralizarte! Tienes una campaña diseñada para capturar la atención rápida y dinámica de la audiencia de TikTok. Sigue estos pasos para lanzar tu anuncio.
 
-## Paso 2: Configuración de Campaña
-1. Selecciona el objetivo: "Conversiones" o "Tráfico"
-2. Define tu presupuesto diario
+## 🎯 Paso 1: Tu Centro de Control
+Ingresa a tu administrador de anuncios haciendo clic en este enlace directo:
+👉 https://ads.tiktok.com/i18n/dashboard
 
-## Paso 3: Crear Grupo de Anuncios
-1. Define tu audiencia objetivo
-2. Selecciona ubicaciones y dispositivos
+Haz clic en el botón rosa **"Crear"** en la pestaña de Campañas.
 
-## Paso 4: Crear Anuncio
-1. Carga el video/imagen desde la carpeta "images/"
-2. Añade el titular y descripción del archivo "campaign_config.json"
-3. Establece el Call-to-Action
+## ⚙️ Paso 2: El Propósito de tu Campaña
+Selecciona tu objetivo publicitario. Para empezar rápido y generar visitas, elige **"Tráfico"**. Si tienes el píxel de TikTok instalado y buscas ventas, elige **"Conversiones"**.
 
-## Paso 5: Revisar y Publicar
-1. Revisa la vista previa
-2. Haz clic en "Publicar"
+## 👥 Paso 3: Conectando con tu Audiencia
+En la configuración del grupo de anuncios:
+- Define la ubicación, edad y género de tu cliente ideal.
+- *Tip Pro:* En TikTok, a menudo es mejor dejar la segmentación por intereses un poco amplia y dejar que el algoritmo encuentre a tu audiencia basándose en quién interactúa con tu anuncio.
 
-¡Tu campaña está en vivo en TikTok!
+## 🎨 Paso 4: Dando Vida a tu Anuncio
+1. Sube el contenido visual que hemos preparado. En TikTok, el formato vertical (9:16) es el rey.
+2. Copia y pega el **Texto del anuncio** que te proporcionamos. Mantenlo breve y directo al punto.
+3. Selecciona un botón de llamada a la acción (CTA) dinámico.
+
+## 🚀 Paso 5: ¡Al Aire!
+Revisa la vista previa de tu anuncio simulando la pantalla de un móvil. Si tiene el "look and feel" nativo de TikTok, presiona **"Enviar"**.
+
+¡Listo! Tu campaña está lista para conquistar el feed "Para Ti".
     `,
     linkedin: `
-# Instrucciones para Publicar en LinkedIn Ads
+# 🚀 Guía Premium de Lanzamiento: LinkedIn Ads
 
-## Paso 1: Acceder a LinkedIn Campaign Manager
-1. Ve a https://www.linkedin.com/campaignmanager/
-2. Inicia sesión con tu cuenta de LinkedIn
-3. Haz clic en "Crear campaña"
+¡Excelente elección! Tienes una campaña B2B estructurada para conectar con profesionales y tomadores de decisiones. Sigue estos pasos para activar tu estrategia en la red profesional más grande.
 
-## Paso 2: Definir Objetivo
-1. Selecciona el objetivo (Clics en el sitio web, Conversiones, etc.)
-2. Define tu presupuesto
+## 🎯 Paso 1: Tu Centro de Control
+Ingresa a tu administrador de campañas haciendo clic en este enlace directo:
+👉 https://www.linkedin.com/campaignmanager/accounts
 
-## Paso 3: Crear Grupo de Anuncios
-1. Define tu audiencia (cargo, industria, ubicación)
-2. Selecciona ubicaciones
+Selecciona tu cuenta publicitaria y haz clic en **"Crear" -> "Campaña"**.
 
-## Paso 4: Crear Anuncio
-1. Carga la imagen desde la carpeta "images/"
-2. Copia el titular del archivo "campaign_config.json"
-3. Copia la descripción
-4. Establece el Call-to-Action
+## ⚙️ Paso 2: El Propósito de tu Campaña
+LinkedIn te pedirá que elijas un objetivo. Selecciona **"Visitas al sitio web"** o **"Generación de contactos"** (Lead Gen) dependiendo de tu estrategia.
 
-## Paso 5: Revisar y Publicar
-1. Revisa la vista previa
-2. Haz clic en "Publicar"
+## 👔 Paso 3: Segmentación Profesional
+Aquí es donde LinkedIn brilla. Define a tu audiencia usando filtros profesionales:
+- Cargos o funciones laborales (ej. "Director de Marketing", "CEO").
+- Sectores de la empresa (ej. "Tecnología", "Salud").
+- Tamaño de la empresa.
+*Tip Pro: Mantén tu audiencia entre 50,000 y 300,000 personas para un equilibrio ideal entre especificidad y alcance.*
 
-¡Tu campaña está lista en LinkedIn!
+## 🎨 Paso 4: Dando Vida a tu Anuncio
+Selecciona el formato **"Anuncio con una sola imagen"**.
+1. Sube la imagen profesional que hemos preparado.
+2. Copia y pega el **Texto introductorio** y el **Titular** que te entregamos.
+3. Añade la URL de destino de tu sitio web.
+4. Elige un botón de llamada a la acción (CTA) adecuado, como "Más información" o "Descargar".
+
+## 🚀 Paso 5: ¡Al Aire!
+Revisa todos los detalles de tu campaña, confirma tu presupuesto diario y haz clic en **"Lanzar campaña"**.
+
+¡Listo! Tu mensaje está en camino a los profesionales correctos.
     `,
   };
 
@@ -207,36 +225,47 @@ export const downloadCampaignPackage = async (campaign: CampaignData) => {
 
   // Crear un blob con el contenido
   const content = `
-PAQUETE DE CAMPAÑA - ${campaign.product.toUpperCase()}
-Plataforma: ${campaign.platform.toUpperCase()}
-Objetivo: ${campaign.objective}
-Audiencia: ${campaign.targetAudience}
-Presupuesto Recomendado: $${campaign.budgetRecommendation.recommended}/día
+================================================================================
+🌟 CAMPAIGN KIT PREMIUM: ${campaign.product.toUpperCase()} 🌟
+================================================================================
 
----
+¡Hola! Aquí tienes tu estrategia publicitaria lista para lanzar. 
+Hemos diseñado este kit para que sea increíblemente fácil de usar.
 
-CONFIGURACIÓN DE CAMPAÑA:
-${campaignJSON}
+📊 RESUMEN ESTRATÉGICO
+--------------------------------------------------------------------------------
+Plataforma Elegida: ${campaign.platform.toUpperCase()}
+Objetivo Principal: ${campaign.objective}
+Tu Cliente Ideal: ${campaign.targetAudience}
+Inversión Sugerida: $${campaign.budgetRecommendation.recommended} USD / día
 
----
-
-DATOS EN FORMATO CSV:
-${campaignCSV}
-
----
-
-INSTRUCCIONES DETALLADAS:
+--------------------------------------------------------------------------------
+📖 TU GUÍA PASO A PASO
+--------------------------------------------------------------------------------
 ${instructions}
 
----
+--------------------------------------------------------------------------------
+💡 MEJORES PRÁCTICAS PARA EL ÉXITO
+--------------------------------------------------------------------------------
+1. La Paciencia Paga: Deja que tu campaña corra al menos 3-5 días sin hacer cambios. El algoritmo necesita tiempo para aprender.
+2. Revisa los Comentarios: Interactúa con las personas que comentan en tus anuncios. ¡Es servicio al cliente en tiempo real!
+3. Mide lo que Importa: Concéntrate en el costo por resultado (CPA) más que en los "Me gusta" o "Compartir".
 
-NOTAS IMPORTANTES:
-- Las imágenes están disponibles en la carpeta "images/" del archivo descargado
-- Asegúrate de tener una cuenta activa en ${campaign.platform}
-- Revisa siempre la vista previa antes de publicar
-- Monitorea el rendimiento de tu campaña después de publicar
+--------------------------------------------------------------------------------
+⚙️ DATOS TÉCNICOS (Para copiar y pegar)
+--------------------------------------------------------------------------------
+A continuación encontrarás los datos estructurados de tu campaña. 
+Solo necesitas copiar y pegar estos textos en la plataforma.
 
-Generado por Flowsight Ads - ${new Date().toLocaleDateString()}
+[FORMATO JSON]
+${campaignJSON}
+
+[FORMATO CSV]
+${campaignCSV}
+
+================================================================================
+Generado con ❤️ por Flowsight Ads - ${new Date().toLocaleDateString()}
+================================================================================
   `;
 
   const blob = new Blob([content], { type: 'text/plain' });
@@ -252,10 +281,10 @@ Generado por Flowsight Ads - ${new Date().toLocaleDateString()}
 
 export const openPlatformEditor = (platform: 'meta' | 'google' | 'tiktok' | 'linkedin') => {
   const urls: Record<string, string> = {
-    meta: 'https://business.facebook.com/adsmanager/',
-    google: 'https://ads.google.com/adsmanager/',
-    tiktok: 'https://ads.tiktok.com/',
-    linkedin: 'https://www.linkedin.com/campaignmanager/',
+    meta: 'https://adsmanager.facebook.com/adsmanager/manage/campaigns',
+    google: 'https://ads.google.com/aw/campaigns/new',
+    tiktok: 'https://ads.tiktok.com/i18n/dashboard',
+    linkedin: 'https://www.linkedin.com/campaignmanager/accounts',
   };
 
   window.open(urls[platform], '_blank');
