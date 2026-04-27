@@ -458,9 +458,9 @@ const FlowsightAdsDashboard: React.FC = () => {
           </div>
         </header>
 
-        <div className="max-w-7xl mx-auto px-6 py-20">
-          <div className="text-center mb-16">
-            <h1 className="text-5xl md:text-6xl font-bold font-display bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400 bg-clip-text text-transparent mb-4">
+        <div className="max-w-7xl mx-auto px-6 py-12 md:py-20">
+          <div className="text-center mb-12 md:mb-16">
+            <h1 className="text-4xl md:text-6xl font-bold font-display bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400 bg-clip-text text-transparent mb-4 leading-tight py-2">
               ¿Qué deseas crear?
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-400">
