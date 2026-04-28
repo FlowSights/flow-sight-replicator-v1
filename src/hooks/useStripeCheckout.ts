@@ -29,14 +29,18 @@ export const useStripeCheckout = () => {
       }
 
       // 1. Crear registro de pago en la tabla 'payments'
+      // Validar si campaignId es un UUID válido, si no, no lo enviamos (será null)
+      const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(options.campaignId);
+      
       const { data: payment, error: paymentError } = await supabase
         .from('payments')
         .insert({
           user_id: session.user.id,
-          campaign_id: options.campaignId,
+          campaign_id: isUuid ? options.campaignId : null,
           amount_cents: options.amount,
           currency: options.currency,
-          status: 'pending'
+          status: 'pending',
+          metadata: { platform_hint: options.campaignId }
         })
         .select()
         .single();
