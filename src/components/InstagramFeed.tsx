@@ -57,15 +57,17 @@ export const InstagramFeed = () => {
             transition={{ duration: 0.6 }}
             className="w-full max-w-4xl"
           >
-            <iframe
-              src="https://www.instagram.com/flowsights_cr/embed"
-              width="100%"
-              height="600"
-              frameBorder="0"
-              scrolling="no"
-              allowTransparency={true}
-              className="rounded-xl shadow-lg"
-            ></iframe>
+            <div className="bg-white dark:bg-[#0a0a0a] p-4 rounded-[32px] shadow-2xl border border-gray-100 dark:border-white/5 transition-colors duration-500">
+              <iframe
+                src="https://www.instagram.com/flowsights_cr/embed"
+                width="100%"
+                height="600"
+                frameBorder="0"
+                scrolling="no"
+                allowTransparency={true}
+                className="rounded-2xl overflow-hidden"
+              ></iframe>
+            </div>
           </motion.div>
         </div>
 
