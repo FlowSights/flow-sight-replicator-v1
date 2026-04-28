@@ -464,7 +464,7 @@ const Index = () => {
                       <Sparkles className="w-5 h-5 text-emerald-400 group-hover:scale-110 transition-transform duration-500" />
                       <div className="absolute inset-0 blur-sm bg-emerald-400/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     </div>
-                    <span className="bg-gradient-to-r from-white via-white to-emerald-200 bg-clip-text text-transparent">
+                    <span className="bg-gradient-to-r from-slate-900 via-slate-800 to-emerald-600 dark:from-white dark:via-white dark:to-emerald-200 bg-clip-text text-transparent">
                       Probar Herramienta de Ads
                     </span>
                     <div className="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 group-hover:bg-emerald-500/40 transition-colors duration-500">

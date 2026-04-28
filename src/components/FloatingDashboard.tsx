@@ -95,7 +95,7 @@ export const FloatingDashboard: React.FC = () => {
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
               <div className="w-3 h-3 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-sm font-semibold text-white/80">FlowSights Analytics</span>
+              <span className="text-sm font-semibold text-slate-900/80 dark:text-white/80">FlowSights Analytics</span>
             </div>
             <div className="flex gap-2">
               <div className="w-2 h-2 rounded-full bg-emerald-400/50" />
@@ -117,7 +117,7 @@ export const FloatingDashboard: React.FC = () => {
                 />
               ))}
             </div>
-            <div className="flex justify-between text-xs text-white/50 mt-2">
+            <div className="flex justify-between text-xs text-slate-900/50 dark:text-white/50 mt-2">
               <span>Lun</span>
               <span>Mié</span>
               <span>Vie</span>
@@ -127,13 +127,13 @@ export const FloatingDashboard: React.FC = () => {
 
           {/* Métricas */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-3 border border-white/10">
-              <div className="text-xs text-white/60 mb-1">CTR</div>
-              <div className="text-lg font-bold text-emerald-400">4.2%</div>
+            <div className="bg-black/5 dark:bg-white/5 backdrop-blur-sm rounded-xl p-3 border border-black/10 dark:border-white/10">
+              <div className="text-xs text-slate-900/60 dark:text-white/60 mb-1">CTR</div>
+              <div className="text-lg font-bold text-emerald-600 dark:text-emerald-400">4.2%</div>
             </div>
-            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-3 border border-white/10">
-              <div className="text-xs text-white/60 mb-1">Conversiones</div>
-              <div className="text-lg font-bold text-blue-400">1,234</div>
+            <div className="bg-black/5 dark:bg-white/5 backdrop-blur-sm rounded-xl p-3 border border-black/10 dark:border-white/10">
+              <div className="text-xs text-slate-900/60 dark:text-white/60 mb-1">Conversiones</div>
+              <div className="text-lg font-bold text-blue-600 dark:text-blue-400">1,234</div>
             </div>
           </div>
         </motion.div>
@@ -152,8 +152,8 @@ export const FloatingDashboard: React.FC = () => {
           <div className="flex items-center gap-2">
             <CheckCircle2 className="w-5 h-5 text-emerald-400" />
             <div>
-              <div className="text-xs font-semibold text-white/80">Optimizado</div>
-              <div className="text-xs text-white/50">Ads listos</div>
+              <div className="text-xs font-semibold text-slate-900/80 dark:text-white/80">Optimizado</div>
+              <div className="text-xs text-slate-900/50 dark:text-white/50">Ads listos</div>
             </div>
           </div>
         </motion.div>
@@ -172,8 +172,8 @@ export const FloatingDashboard: React.FC = () => {
           <div className="flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-blue-400" />
             <div>
-              <div className="text-xs font-semibold text-white/80">ROI</div>
-              <div className="text-xs text-blue-300 font-bold">+450%</div>
+              <div className="text-xs font-semibold text-slate-900/80 dark:text-white/80">ROI</div>
+              <div className="text-xs text-blue-600 dark:text-blue-300 font-bold">+450%</div>
             </div>
           </div>
         </motion.div>
@@ -192,8 +192,8 @@ export const FloatingDashboard: React.FC = () => {
           <div className="flex items-center gap-2">
             <BarChart3 className="w-5 h-5 text-purple-400" />
             <div>
-              <div className="text-xs font-semibold text-white/80">Rendimiento</div>
-              <div className="text-xs text-purple-300 font-bold">Excelente</div>
+              <div className="text-xs font-semibold text-slate-900/80 dark:text-white/80">Rendimiento</div>
+              <div className="text-xs text-purple-600 dark:text-purple-300 font-bold">Excelente</div>
             </div>
           </div>
         </motion.div>
@@ -212,8 +212,8 @@ export const FloatingDashboard: React.FC = () => {
           <div className="flex items-center gap-2">
             <Zap className="w-5 h-5 text-yellow-400" />
             <div>
-              <div className="text-xs font-semibold text-white/80">Potencia IA</div>
-              <div className="text-xs text-yellow-300 font-bold">Activa</div>
+              <div className="text-xs font-semibold text-slate-900/80 dark:text-white/80">Potencia IA</div>
+              <div className="text-xs text-yellow-600 dark:text-yellow-300 font-bold">Activa</div>
             </div>
           </div>
         </motion.div>
