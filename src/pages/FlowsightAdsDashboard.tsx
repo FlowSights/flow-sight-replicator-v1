@@ -802,7 +802,17 @@ const FlowsightAdsDashboard: React.FC = () => {
       <header className="sticky top-0 z-50 backdrop-blur-2xl bg-white/80 dark:bg-black/60 border-b border-gray-100 dark:border-white/5">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <button onClick={() => { if (step > 1) setStep(step - 1); }} className="group flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-emerald-500 dark:hover:text-emerald-500 transition-all font-medium" title="Volver al paso anterior">
+            <button 
+              onClick={() => { 
+                if (step > 1) {
+                  setStep(step - 1);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+              }} 
+              disabled={step === 1}
+              className="group flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-emerald-500 dark:hover:text-emerald-500 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed" 
+              title="Volver al paso anterior"
+            >
               <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
               Atrás
             </button>
@@ -931,18 +941,34 @@ const FlowsightAdsDashboard: React.FC = () => {
                   </div>
 
                   <div className="space-y-6">
-                    <div className="relative group">
+                    <div className="space-y-4">
                       <Textarea 
                         value={config.idealCustomer}
                         onChange={(e) => setConfig({...config, idealCustomer: e.target.value})}
                         placeholder="Ej: Dueños de negocios que buscan escalar, familias jóvenes interesadas en salud..."
                         className="text-xl py-8 px-8 rounded-3xl border-none bg-white dark:bg-white/5 shadow-2xl focus:ring-2 focus:ring-emerald-500 min-h-[120px]"
                       />
-                      {config.idealCustomer.length < 50 && (
-                        <div className="absolute bottom-4 right-4 text-xs text-gray-400 dark:text-gray-500 bg-white dark:bg-white/10 px-3 py-1 rounded-full">
-                          💡 Se especifico: edad, intereses, problemas
-                        </div>
-                      )}
+                      <div className="flex flex-wrap gap-2">
+                        {[
+                          "Familias jóvenes",
+                          "Dueños de negocio",
+                          "Profesionales",
+                          "Estudiantes",
+                          "Emprendedores",
+                          "Padres de familia"
+                        ].map((tag) => (
+                          <button
+                            key={tag}
+                            onClick={() => {
+                              const newValue = config.idealCustomer ? `${config.idealCustomer}, ${tag}` : tag;
+                              setConfig({...config, idealCustomer: newValue});
+                            }}
+                            className="px-4 py-2 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-sm font-medium transition-all border border-emerald-500/20 hover:border-emerald-500/50"
+                          >
+                            + {tag}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                     
                     <div
@@ -1116,25 +1142,25 @@ const FlowsightAdsDashboard: React.FC = () => {
                       </Button>
                       
                       <div className="flex gap-2">
-                        <Button 
-                          variant="ghost"
-                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.open(ad.platformUrl, '_blank'); }}
-                          className="flex-1 bg-emerald-600/30 dark:bg-emerald-500/20 hover:bg-emerald-600/50 dark:hover:bg-emerald-500/40 text-emerald-800 dark:text-emerald-300 rounded-xl py-2 text-xs font-bold gap-1.5 cursor-pointer transition-all border border-emerald-600/40 dark:border-emerald-500/30"
-                        >
-                          <ExternalLink className="w-3 h-3" /> Publicar
-                        </Button>
-                        <Button 
-                          variant="ghost"
-                          onClick={(e) => { 
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setGuideLightboxPlatform(ad.platform);
-                            setIsGuideLightboxOpen(true);
-                          }}
-                          className="flex-1 bg-blue-600/30 dark:bg-blue-500/20 hover:bg-blue-600/50 dark:hover:bg-blue-500/40 text-blue-800 dark:text-blue-300 rounded-xl py-2 text-xs font-bold gap-1.5 transition-all cursor-pointer border border-blue-600/40 dark:border-blue-500/30"
-                        >
-                          <BookOpen className="w-3 h-3" /> Guía Visual
-                        </Button>
+                      <Button 
+                        variant="ghost"
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.open(ad.platformUrl, '_blank'); }}
+                        className="flex-1 bg-transparent hover:bg-emerald-500/10 dark:hover:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 rounded-xl py-2 text-xs font-bold gap-1.5 cursor-pointer transition-all border-2 border-emerald-600 dark:border-emerald-500 hover:border-emerald-700 dark:hover:border-emerald-400"
+                      >
+                        <ExternalLink className="w-3 h-3" /> Publicar
+                      </Button>
+                      <Button 
+                        variant="ghost"
+                        onClick={(e) => { 
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setGuideLightboxPlatform(ad.platform);
+                          setIsGuideLightboxOpen(true);
+                        }}
+                        className="flex-1 bg-transparent hover:bg-blue-500/10 dark:hover:bg-blue-500/20 text-blue-700 dark:text-blue-400 rounded-xl py-2 text-xs font-bold gap-1.5 transition-all cursor-pointer border-2 border-blue-600 dark:border-blue-500 hover:border-blue-700 dark:hover:border-blue-400"
+                      >
+                        <BookOpen className="w-3 h-3" /> Guía Visual
+                      </Button>
                       </div>
                     </div>
                   </motion.div>
