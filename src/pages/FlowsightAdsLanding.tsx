@@ -8,9 +8,11 @@ import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { useToast } from "@/hooks/use-toast";
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { AppleLoader } from '@/components/AppleLoader';
 
 const FlowsightAdsLanding: React.FC = () => {
+  const [showLoader, setShowLoader] = useState(true);
   const [isLogin, setIsLogin] = useState(true);
   const [isResetMode, setIsResetMode] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -106,8 +108,15 @@ const FlowsightAdsLanding: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#050505] flex flex-col transition-colors selection:bg-emerald-500/30">
-      <header className="sticky top-0 z-50 backdrop-blur-2xl bg-white/80 dark:bg-black/60 border-b border-gray-100 dark:border-white/5">
+    <>
+      <AnimatePresence>
+        {showLoader && (
+          <AppleLoader onComplete={() => setShowLoader(false)} />
+        )}
+      </AnimatePresence>
+
+      <div className="min-h-screen bg-white dark:bg-[#050505] flex flex-col transition-colors selection:bg-emerald-500/30">
+        <header className="sticky top-0 z-50 backdrop-blur-2xl bg-white/80 dark:bg-black/60 border-b border-gray-100 dark:border-white/5">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <Button 
             variant="ghost" 
@@ -268,6 +277,7 @@ const FlowsightAdsLanding: React.FC = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
