@@ -18,7 +18,7 @@ import {
   RefreshCw, Search, Activity, Eye, MousePointer,
   MapPin as MapPinIconLucide, Upload as UploadIconLucide, X as XIconLucide, Sparkles as SparklesIconLucide,
   BookOpen, PlayCircle, MousePointerClick, Moon, Sun,
-  Building2, Link2, Globe2
+  Building2, Link2, Globe2, CreditCard
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { LocationInput } from '@/components/LocationInput';
