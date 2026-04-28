@@ -12,7 +12,6 @@ import { useStripeCheckout } from '@/hooks/useStripeCheckout';
 import { 
   ShieldCheck, 
   Zap, 
-  Download, 
   CheckCircle2, 
   CreditCard,
   Loader2
@@ -55,60 +54,61 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !loading && !open && onClose()}>
-      <DialogContent className="sm:max-w-[500px] rounded-[32px] border-none bg-white dark:bg-gray-900 shadow-2xl overflow-hidden p-0">
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-500 to-teal-500" />
+      <DialogContent className="sm:max-w-[500px] rounded-[32px] border border-white/10 bg-[#0A0A0A] shadow-2xl overflow-hidden p-0">
+        {/* Línea de acento superior esmeralda */}
+        <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-500" />
         
         <div className="p-8 space-y-6">
           <DialogHeader>
             <div className="flex justify-center mb-4">
-              <div className="p-4 rounded-full bg-emerald-500/10 text-emerald-500">
+              <div className="p-4 rounded-2xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
                 <Zap className="w-8 h-8" />
               </div>
             </div>
-            <DialogTitle className="text-3xl font-black text-center text-gray-900 dark:text-white">
+            <DialogTitle className="text-3xl font-black text-center text-white tracking-tight">
               Desbloquea tu <span className="text-emerald-500">Campaign Kit</span>
             </DialogTitle>
-            <DialogDescription className="text-center text-lg text-gray-500 dark:text-gray-400 mt-2">
-              Estás a un paso de obtener todo el material profesional para tu campaña de <span className="font-bold text-gray-900 dark:text-white">{campaignName}</span>.
+            <DialogDescription className="text-center text-lg text-gray-400 mt-2 leading-relaxed">
+              Estás a un paso de obtener todo el material profesional para tu campaña de <span className="font-bold text-white">{campaignName}</span>.
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 py-4">
-            <div className="bg-gray-50 dark:bg-white/5 rounded-2xl p-6 space-y-3">
-              <h4 className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <div className="space-y-4 py-2">
+            <div className="bg-white/5 rounded-2xl p-6 border border-white/5 space-y-4">
+              <h4 className="font-bold text-white flex items-center gap-2 text-base">
                 <CheckCircle2 className="w-5 h-5 text-emerald-500" /> ¿Qué incluye este kit?
               </h4>
-              <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-                <li className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              <ul className="space-y-3 text-sm text-gray-400">
+                <li className="flex items-center gap-3">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
                   Descarga de PDF Premium con todos los anuncios
                 </li>
-                <li className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <li className="flex items-center gap-3">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
                   Guía visual paso a paso para publicar
                 </li>
-                <li className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <li className="flex items-center gap-3">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
                   Acceso directo a las plataformas de Ads
                 </li>
-                <li className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <li className="flex items-center gap-3">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
                   Métricas de ROI proyectadas personalizadas
                 </li>
               </ul>
             </div>
 
-            <div className="flex items-center justify-between px-2">
-              <span className="text-gray-500 dark:text-gray-400 font-medium">Total a pagar:</span>
-              <span className="text-3xl font-black text-emerald-500">{formattedAmount}</span>
+            <div className="flex items-center justify-between px-2 pt-2">
+              <span className="text-gray-400 font-medium">Total a pagar:</span>
+              <span className="text-3xl font-black text-emerald-500 tracking-tighter">{formattedAmount}</span>
             </div>
           </div>
 
-          <DialogFooter className="flex-col sm:flex-col gap-3">
+          <DialogFooter className="flex-col sm:flex-col gap-4">
             <Button 
               onClick={handlePayment}
               disabled={loading}
-              className="w-full py-8 text-xl font-black bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl shadow-xl shadow-emerald-500/20 transition-all active:scale-[0.98] gap-3"
+              className="w-full py-8 text-xl font-black bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl shadow-xl shadow-emerald-500/10 transition-all active:scale-[0.98] gap-3 border-0"
             >
               {loading ? (
                 <>
@@ -122,9 +122,11 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                 </>
               )}
             </Button>
-            <p className="text-center text-xs text-gray-400 flex items-center justify-center gap-1.5">
-              <ShieldCheck className="w-3.5 h-3.5" /> Pago seguro procesado por Stripe
-            </p>
+            <div className="flex flex-col items-center gap-2">
+              <p className="text-center text-[10px] uppercase tracking-widest text-gray-500 flex items-center justify-center gap-1.5 font-bold">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-500/50" /> Pago seguro procesado por Stripe
+              </p>
+            </div>
           </DialogFooter>
         </div>
       </DialogContent>
