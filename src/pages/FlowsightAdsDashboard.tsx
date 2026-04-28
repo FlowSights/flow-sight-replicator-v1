@@ -29,6 +29,8 @@ import { VisualGuideLightbox } from '@/components/VisualGuideLightbox';
 import jsPDF from 'jspdf';
 import { useCountUp } from '@/hooks/useCountUp';
 import { useInactivityTimeout } from '@/hooks/useInactivityTimeout';
+import { PaymentModal } from '@/components/PaymentModal';
+import { useStripeCheckout } from '@/hooks/useStripeCheckout';
 
 type HeroStat = { value: number; suffix: string; prefix?: string; label: string; decimals?: number };
 
@@ -83,6 +85,9 @@ const FlowsightAdsDashboard: React.FC = () => {
   const [selectedAdForLightbox, setSelectedAdForLightbox] = useState<GeneratedAd | null>(null);
   const [metricsVisible, setMetricsVisible] = useState(false);
   const [showInactivityModal, setShowInactivityModal] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [selectedCampaignForPayment, setSelectedCampaignForPayment] = useState<string | null>(null);
+  const [hasPaid, setHasPaid] = useState(false);
 
   const [activeGuidePlatform, setActiveGuidePlatform] = useState<string | null>(null);
   const [isGuideLightboxOpen, setIsGuideLightboxOpen] = useState(false);
@@ -134,6 +139,14 @@ const FlowsightAdsDashboard: React.FC = () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         navigate('/flowsight-ads');
+        return;
+      }
+
+      // Verificar si hay un parámetro de éxito en la URL
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('payment') === 'success') {
+        setHasPaid(true);
+        // Podríamos verificar en la DB aquí también
       }
     };
     checkUser();
@@ -1279,6 +1292,14 @@ const FlowsightAdsDashboard: React.FC = () => {
                   <p className="text-gray-500 dark:text-gray-400">Haz clic en cualquier anuncio para verlo en pantalla completa y descargar su kit.</p>
                 </div>
                 <div className="flex gap-3">
+                  {!hasPaid && (
+                    <Button 
+                      onClick={() => setShowPaymentModal(true)}
+                      className="rounded-2xl py-6 px-6 bg-emerald-600 hover:bg-emerald-700 text-white font-bold gap-2 shadow-lg shadow-emerald-500/20"
+                    >
+                      <CreditCard className="w-4 h-4" /> Checkout
+                    </Button>
+                  )}
                   <Button variant="outline" onClick={() => { setShowResults(false); setStep(1); }} className="rounded-2xl py-6 px-6 border-gray-200 dark:border-white/10 font-bold">
                     <RefreshCw className="w-4 h-4 mr-2" /> Nueva Campaña
                   </Button>
@@ -1344,7 +1365,16 @@ const FlowsightAdsDashboard: React.FC = () => {
                     </div>
                     <div className="mt-4 space-y-3 relative z-20">
                       <Button 
-                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); generatePDF(ad.platform); }}
+                        onClick={(e) => { 
+                          e.preventDefault(); 
+                          e.stopPropagation(); 
+                          if (hasPaid) {
+                            generatePDF(ad.platform);
+                          } else {
+                            setSelectedCampaignForPayment(ad.platform);
+                            setShowPaymentModal(true);
+                          }
+                        }}
                         className="w-full bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-700 text-white font-bold gap-2 transition-all cursor-pointer py-4 rounded-2xl border-0"
                       >
                         <Download className="w-4 h-4" /> Kit {ad.platform.toUpperCase()}
@@ -1353,7 +1383,16 @@ const FlowsightAdsDashboard: React.FC = () => {
                       <div className="flex gap-2">
                       <Button 
                         variant="ghost"
-                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.open(ad.platformUrl, '_blank'); }}
+                        onClick={(e) => { 
+                          e.preventDefault(); 
+                          e.stopPropagation(); 
+                          if (hasPaid) {
+                            window.open(ad.platformUrl, '_blank');
+                          } else {
+                            setSelectedCampaignForPayment(ad.platform);
+                            setShowPaymentModal(true);
+                          }
+                        }}
                         className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white dark:bg-transparent dark:hover:bg-emerald-500/20 dark:text-emerald-400 rounded-xl py-2 text-xs font-bold gap-1.5 cursor-pointer transition-all border-2 border-emerald-600 dark:border-emerald-500 hover:border-emerald-700 dark:hover:border-emerald-400"
                       >
                         <ExternalLink className="w-3 h-3" /> Publicar
@@ -1363,8 +1402,13 @@ const FlowsightAdsDashboard: React.FC = () => {
                         onClick={(e) => { 
                           e.preventDefault();
                           e.stopPropagation();
-                          setGuideLightboxPlatform(ad.platform);
-                          setIsGuideLightboxOpen(true);
+                          if (hasPaid) {
+                            setGuideLightboxPlatform(ad.platform);
+                            setIsGuideLightboxOpen(true);
+                          } else {
+                            setSelectedCampaignForPayment(ad.platform);
+                            setShowPaymentModal(true);
+                          }
                         }}
                         className="flex-1 bg-transparent hover:bg-blue-500/10 dark:hover:bg-blue-500/20 text-blue-700 dark:text-blue-400 rounded-xl py-2 text-xs font-bold gap-1.5 transition-all cursor-pointer border-2 border-blue-600 dark:border-blue-500 hover:border-blue-700 dark:hover:border-blue-400"
                       >
@@ -1394,10 +1438,19 @@ const FlowsightAdsDashboard: React.FC = () => {
         </AnimatePresence>
         
         {/* Visual Guide Lightbox */}
-        <VisualGuideLightbox 
-          isOpen={isGuideLightboxOpen}
-          onClose={() => setIsGuideLightboxOpen(false)}
-          platform={guideLightboxPlatform}
+<VisualGuideLightbox 
+          isOpen={isGuideLightboxOpen} 
+          onClose={() => setIsGuideLightboxOpen(false)} 
+          platform={guideLightboxPlatform} 
+        />
+
+        <PaymentModal
+          isOpen={showPaymentModal}
+          onClose={() => setShowPaymentModal(false)}
+          campaignId={generatedAds[0]?.platform || 'premium-kit'}
+          campaignName={config.businessName || 'Tu Campaña'}
+          amount={4999}
+          currency="USD"
         />
 
         {/* Modal de sesión expirada por inactividad */}
