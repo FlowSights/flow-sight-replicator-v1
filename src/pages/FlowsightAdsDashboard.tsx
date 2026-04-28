@@ -142,11 +142,16 @@ const FlowsightAdsDashboard: React.FC = () => {
         return;
       }
 
+      // Lógica de Master Account: Acceso total para el administrador
+      if (session.user.email === 'spineda2014.123@gmail.com') {
+        setHasPaid(true);
+        return;
+      }
+
       // Verificar si hay un parámetro de éxito en la URL
       const params = new URLSearchParams(window.location.search);
       if (params.get('payment') === 'success') {
         setHasPaid(true);
-        // Podríamos verificar en la DB aquí también
       }
     };
     checkUser();
