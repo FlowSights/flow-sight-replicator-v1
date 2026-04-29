@@ -1,6 +1,48 @@
 import { supabase } from '@/lib/supabaseClient';
 import { GeneratedAdCopy } from '@/hooks/useGeminiAdGenerator';
 
+// Fallback de anuncios de calidad si Gemini falla
+const FALLBACK_ADS_TEMPLATE = {
+  ads: [
+    {
+      type: 'Offer',
+      platform: 'google',
+      headline: 'Ofertas exclusivas para ti',
+      description: 'Descubre nuestras mejores promociones y ahorra hasta 50%',
+      cta: 'Compra ahora',
+      reasoning: 'Offer-based copy con urgencia y descuento específico',
+      score: 85,
+    },
+    {
+      type: 'Emotional',
+      platform: 'meta',
+      headline: 'Transforma tu experiencia',
+      description: 'Únete a miles de clientes satisfechos que ya han mejorado su vida',
+      cta: 'Empieza gratis',
+      reasoning: 'Emotional connection con prueba social',
+      score: 88,
+    },
+    {
+      type: 'Urgency',
+      platform: 'tiktok',
+      headline: '⏰ Solo quedan 24 horas',
+      description: 'Esta oportunidad no volverá. Actúa ahora antes de que se agote',
+      cta: 'No me lo pierdo',
+      reasoning: 'Urgency-driven copy con límite de tiempo',
+      score: 90,
+    },
+    {
+      type: 'Offer',
+      platform: 'linkedin',
+      headline: 'Soluciones profesionales',
+      description: 'Aumenta tu productividad con nuestras herramientas premium',
+      cta: 'Solicita demo',
+      reasoning: 'Professional tone con valor empresarial',
+      score: 87,
+    },
+  ],
+};
+
 export interface GeneratedAd {
   headline: string;
   description: string;
@@ -36,26 +78,42 @@ export const generateAdsWithGeminiIntegration = async (
     onStepUpdate?.(0);
     await new Promise((resolve) => setTimeout(resolve, 500));
 
-    const { data, error } = await supabase.functions.invoke('generate-ads-with-gemini', {
-      body: {
-        businessName: config.businessName,
-        promote: config.promote,
-        location: config.location,
-        idealCustomer: config.idealCustomer,
-        websiteUrl: config.websiteUrl,
-        budget: config.budget,
-      },
-    });
+    let geminiResponse;
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-ads-with-gemini', {
+        body: {
+          businessName: config.businessName,
+          promote: config.promote,
+          location: config.location,
+          idealCustomer: config.idealCustomer,
+          websiteUrl: config.websiteUrl,
+          budget: config.budget,
+        },
+      });
 
-    if (error || !data?.ads) {
-      throw new Error('No se pudo generar los anuncios con IA');
+      if (error) {
+        console.warn('Error en Gemini API, usando fallback:', error);
+        geminiResponse = FALLBACK_ADS_TEMPLATE;
+      } else if (data?.ads) {
+        geminiResponse = data;
+      } else {
+        console.warn('Respuesta vacía de Gemini, usando fallback');
+        geminiResponse = FALLBACK_ADS_TEMPLATE;
+      }
+    } catch (apiError) {
+      console.warn('Excepción en Gemini API, usando fallback:', apiError);
+      geminiResponse = FALLBACK_ADS_TEMPLATE;
+    }
+
+    if (!geminiResponse?.ads) {
+      throw new Error('No se pudo obtener anuncios');
     }
 
     // Paso 2: Procesar respuesta de Gemini
     onStepUpdate?.(1);
     await new Promise((resolve) => setTimeout(resolve, 500));
 
-    const geminiAds: GeneratedAdCopy[] = data.ads;
+    const geminiAds: GeneratedAdCopy[] = geminiResponse.ads;
 
     // Paso 3: Mapear a GeneratedAd con URLs de plataforma
     onStepUpdate?.(2);
