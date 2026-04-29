@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Download, Zap, CheckCircle2, ArrowRight, ShieldCheck } from 'lucide-react';
+import { 
+  Download, 
+  Zap, 
+  CheckCircle2, 
+  ArrowRight, 
+  ShieldCheck,
+  BarChart3,
+  FileText 
+} from 'lucide-react';
 import { Button } from './ui/button';
 
 interface PremiumReadyToLaunchProps {
@@ -143,8 +151,3 @@ export const PremiumReadyToLaunch: React.FC<PremiumReadyToLaunchProps> = ({
     </motion.div>
   );
 };
-
-// Re-import missing icon
-import { BarChart3 as BarChart3Icon, FileText as FileTextIcon } from 'lucide-react';
-const BarChart3 = BarChart3Icon;
-const FileText = FileTextIcon;

@@ -95,6 +95,9 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.2.7
         version: 1.2.8(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@stripe/stripe-js':
+        specifier: ^9.3.1
+        version: 9.3.1
       '@supabase/supabase-js':
         specifier: ^2.103.3
         version: 2.104.0
@@ -128,6 +131,9 @@ importers:
       jspdf:
         specifier: ^4.2.1
         version: 4.2.1
+      jspdf-autotable:
+        specifier: ^5.0.7
+        version: 5.0.7(jspdf@4.2.1)
       lucide-react:
         specifier: ^1.8.0
         version: 1.8.0(react@18.3.1)
@@ -1460,6 +1466,10 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@stripe/stripe-js@9.3.1':
+    resolution: {integrity: sha512-oWpAEENuVg8aw4W2OUAM9WxRDtIV2YTLr2nr6qHT+D8tHPW7bya61ufinPpUespyRNUVXqesnHo+jQdUNsGywA==}
+    engines: {node: '>=12.16'}
+
   '@supabase/auth-js@2.104.0':
     resolution: {integrity: sha512-Vs0ndL+s5an7rOmXtS/nbYnGXL8m+KXlCSrPIcw9bR96ma6qyLYILnE6syuM+rpDnf+Tg4PVNxNB2+oDwoy6mA==}
     engines: {node: '>=20.0.0'}
@@ -2489,6 +2499,11 @@ packages:
 
   json-stable-stringify-without-jsonify@1.0.1:
     resolution: {integrity: sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==}
+
+  jspdf-autotable@5.0.7:
+    resolution: {integrity: sha512-2wr7H6liNDBYNwt25hMQwXkEWFOEopgKIvR1Eukuw6Zmprm/ZcnmLTQEjW7Xx3FCbD3v7pflLcnMAv/h1jFDQw==}
+    peerDependencies:
+      jspdf: ^2 || ^3 || ^4
 
   jspdf@4.2.1:
     resolution: {integrity: sha512-YyAXyvnmjTbR4bHQRLzex3CuINCDlQnBqoSYyjJwTP2x9jDLuKDzy7aKUl0hgx3uhcl7xzg32agn5vlie6HIlQ==}
@@ -4311,6 +4326,8 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.60.2':
     optional: true
 
+  '@stripe/stripe-js@9.3.1': {}
+
   '@supabase/auth-js@2.104.0':
     dependencies:
       tslib: 2.8.1
@@ -5403,6 +5420,10 @@ snapshots:
   json-schema-traverse@0.4.1: {}
 
   json-stable-stringify-without-jsonify@1.0.1: {}
+
+  jspdf-autotable@5.0.7(jspdf@4.2.1):
+    dependencies:
+      jspdf: 4.2.1
 
   jspdf@4.2.1:
     dependencies:
