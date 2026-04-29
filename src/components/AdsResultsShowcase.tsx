@@ -106,138 +106,139 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
   const colors = platformColors[selectedPlatform];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={`space-y-8 p-8 rounded-[40px] transition-colors duration-500 ${colors.bg} border-2 ${colors.border}`}
-    >
-      {/* Selector de Plataformas */}
-      <div className="flex flex-wrap gap-3">
-        {platforms.map((platform) => {
-          const pColors = platformColors[platform];
-          const isSelected = selectedPlatform === platform;
-          return (
-            <button
-              key={platform}
-              onClick={() => handlePlatformChange(platform)}
-              className={`px-6 py-3 rounded-2xl font-bold transition-all flex items-center gap-3 ${
-                isSelected
-                  ? `bg-gradient-to-r ${pColors.gradient} text-white shadow-lg scale-105`
-                  : 'bg-white dark:bg-white/5 text-gray-500 hover:bg-gray-100 dark:hover:bg-white/10'
-              }`}
-            >
-              <PlatformIcon platform={platform} size={20} className={isSelected ? 'text-white' : 'text-gray-400'} />
-              {platformNames[platform]}
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        {/* Mockup Visual */}
-        <div className="relative group">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`${selectedPlatform}-${currentIndex}`}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              className="relative z-10 flex justify-center"
-            >
-              {selectedPlatform === 'meta' && <MetaPreview {...currentAd} />}
-              {selectedPlatform === 'google' && <GoogleAdsPreview {...currentAd} />}
-              {selectedPlatform === 'tiktok' && <TikTokPreview {...currentAd} />}
-              {selectedPlatform === 'linkedin' && <LinkedInPreview {...currentAd} />}
-            </motion.div>
-          </AnimatePresence>
-
-          {/* Botón para abrir Lightbox */}
-          <button
-            onClick={() => setLightboxOpen(true)}
-            className="absolute top-4 right-4 z-20 p-3 rounded-full bg-white dark:bg-gray-800 shadow-xl text-gray-800 dark:text-white hover:scale-110 transition-transform hover:bg-emerald-500 hover:text-white"
-            title="Ver anuncio en tamaño completo"
-          >
-            <Maximize2 className="w-5 h-5" />
-          </button>
-
-          {/* Controles de Navegación */}
-          {currentAds.length > 1 && (
-            <div className="absolute inset-y-0 -inset-x-4 flex items-center justify-between pointer-events-none z-20">
+    <>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className={`space-y-8 p-8 rounded-[40px] transition-colors duration-500 ${colors.bg} border-2 ${colors.border}`}
+      >
+        {/* Selector de Plataformas */}
+        <div className="flex flex-wrap gap-3">
+          {platforms.map((platform) => {
+            const pColors = platformColors[platform];
+            const isSelected = selectedPlatform === platform;
+            return (
               <button
-                onClick={handlePrev}
-                className="p-3 rounded-full bg-white dark:bg-gray-800 shadow-xl text-gray-800 dark:text-white pointer-events-auto hover:scale-110 transition-transform"
+                key={platform}
+                onClick={() => handlePlatformChange(platform)}
+                className={`px-6 py-3 rounded-2xl font-bold transition-all flex items-center gap-3 ${
+                  isSelected
+                    ? `bg-gradient-to-r ${pColors.gradient} text-white shadow-lg scale-105`
+                    : 'bg-white dark:bg-white/5 text-gray-500 hover:bg-gray-100 dark:hover:bg-white/10'
+                }`}
               >
-                <ChevronLeft className="w-6 h-6" />
+                <PlatformIcon platform={platform} size={20} className={isSelected ? 'text-white' : 'text-gray-400'} />
+                {platformNames[platform]}
               </button>
-              <button
-                onClick={handleNext}
-                className="p-3 rounded-full bg-white dark:bg-gray-800 shadow-xl text-gray-800 dark:text-white pointer-events-auto hover:scale-110 transition-transform"
-              >
-                <ChevronRight className="w-6 h-6" />
-              </button>
-            </div>
-          )}
+            );
+          })}
         </div>
 
-        {/* Información y Acciones */}
-        <div className="space-y-8">
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className={`px-4 py-1.5 rounded-full bg-gradient-to-r ${colors.gradient} text-white text-xs font-black uppercase tracking-widest`}>
-                {currentAd.type}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Mockup Visual */}
+          <div className="relative group">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`${selectedPlatform}-${currentIndex}`}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                className="relative z-10 flex justify-center"
+              >
+                {selectedPlatform === 'meta' && <MetaPreview {...currentAd} />}
+                {selectedPlatform === 'google' && <GoogleAdsPreview {...currentAd} />}
+                {selectedPlatform === 'tiktok' && <TikTokPreview {...currentAd} />}
+                {selectedPlatform === 'linkedin' && <LinkedInPreview {...currentAd} />}
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Botón para abrir Lightbox */}
+            <button
+              onClick={() => setLightboxOpen(true)}
+              className="absolute top-4 right-4 z-20 p-3 rounded-full bg-white dark:bg-gray-800 shadow-xl text-gray-800 dark:text-white hover:scale-110 transition-transform hover:bg-emerald-500 hover:text-white"
+              title="Ver anuncio en tamaño completo"
+            >
+              <Maximize2 className="w-5 h-5" />
+            </button>
+
+            {/* Controles de Navegación */}
+            {currentAds.length > 1 && (
+              <div className="absolute inset-y-0 -inset-x-4 flex items-center justify-between pointer-events-none z-20">
+                <button
+                  onClick={handlePrev}
+                  className="p-3 rounded-full bg-white dark:bg-gray-800 shadow-xl text-gray-800 dark:text-white pointer-events-auto hover:scale-110 transition-transform"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+                <button
+                  onClick={handleNext}
+                  className="p-3 rounded-full bg-white dark:bg-gray-800 shadow-xl text-gray-800 dark:text-white pointer-events-auto hover:scale-110 transition-transform"
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
               </div>
-              <div className="flex items-center gap-1 text-yellow-500 font-bold">
-                <Sparkles className="w-4 h-4 fill-yellow-500" />
-                {currentAd.score}/100
+            )}
+          </div>
+
+          {/* Información y Acciones */}
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <div className={`px-4 py-1.5 rounded-full bg-gradient-to-r ${colors.gradient} text-white text-xs font-black uppercase tracking-widest`}>
+                  {currentAd.type}
+                </div>
+                <div className="flex items-center gap-1 text-yellow-500 font-bold">
+                  <Sparkles className="w-4 h-4 fill-yellow-500" />
+                  {currentAd.score}/100
+                </div>
               </div>
+              <h3 className="text-4xl font-black text-gray-900 dark:text-white leading-tight">
+                Estrategia de <span className={colors.text}>{platformNames[selectedPlatform]}</span>
+              </h3>
+              <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+                {currentAd.reasoning || "Este anuncio ha sido optimizado por nuestra IA para maximizar el CTR y las conversiones en esta plataforma específica."}
+              </p>
             </div>
-            <h3 className="text-4xl font-black text-gray-900 dark:text-white leading-tight">
-              Estrategia de <span className={colors.text}>{platformNames[selectedPlatform]}</span>
-            </h3>
-            <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
-              {currentAd.reasoning || "Este anuncio ha sido optimizado por nuestra IA para maximizar el CTR y las conversiones en esta plataforma específica."}
-            </p>
-          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Button
-              onClick={() => onViewGuide(selectedPlatform)}
-              variant="outline"
-              className="h-16 rounded-2xl border-2 border-gray-200 dark:border-white/10 font-bold text-lg gap-3"
-            >
-              <BookOpen className="w-5 h-5" /> Guía Visual
-            </Button>
-            <Button
-              onClick={() => onDownloadPDF(selectedPlatform)}
-              className={`h-16 rounded-2xl bg-gradient-to-r ${colors.gradient} text-white font-bold text-lg gap-3 shadow-xl`}
-              title={`Descargar kit de ${platformNames[selectedPlatform]}`}
-            >
-              {!hasPaid ? <Lock className="w-5 h-5" /> : <Download className="w-5 h-5" />}
-              Descargar Kit
-            </Button>
-            <Button
-              onClick={() => onPublish(selectedPlatform, currentAd.platformUrl)}
-              className="h-16 rounded-2xl bg-white dark:bg-white/5 border-2 border-gray-200 dark:border-white/10 text-gray-900 dark:text-white font-bold text-lg gap-3 sm:col-span-2"
-            >
-              <ExternalLink className="w-5 h-5" /> Publicar en {platformNames[selectedPlatform]}
-            </Button>
-          </div>
-
-          {!hasPaid && (
-            <div className="p-6 rounded-3xl bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center text-white shrink-0">
-                <Zap className="w-6 h-6 fill-white" />
-              </div>
-              <div>
-                <p className="font-bold text-gray-900 dark:text-white">Desbloquea tu Campaign Kit</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Obtén acceso completo a todos los activos y guías por solo $49.99</p>
-              </div>
-              <Button onClick={onCheckout} className="ml-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl">
-                Pagar
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Button
+                onClick={() => onViewGuide(selectedPlatform)}
+                variant="outline"
+                className="h-16 rounded-2xl border-2 border-gray-200 dark:border-white/10 font-bold text-lg gap-3"
+              >
+                <BookOpen className="w-5 h-5" /> Guía Visual
+              </Button>
+              <Button
+                onClick={() => onDownloadPDF(selectedPlatform)}
+                className={`h-16 rounded-2xl bg-gradient-to-r ${colors.gradient} text-white font-bold text-lg gap-3 shadow-xl`}
+                title={`Descargar kit de ${platformNames[selectedPlatform]}`}
+              >
+                {!hasPaid ? <Lock className="w-5 h-5" /> : <Download className="w-5 h-5" />}
+                Descargar Kit
+              </Button>
+              <Button
+                onClick={() => onPublish(selectedPlatform, currentAd.platformUrl)}
+                className="h-16 rounded-2xl bg-white dark:bg-white/5 border-2 border-gray-200 dark:border-white/10 text-gray-900 dark:text-white font-bold text-lg gap-3 sm:col-span-2"
+              >
+                <ExternalLink className="w-5 h-5" /> Publicar en {platformNames[selectedPlatform]}
               </Button>
             </div>
-          )}
-          )}
+
+            {!hasPaid && (
+              <div className="p-6 rounded-3xl bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center text-white shrink-0">
+                  <Zap className="w-6 h-6 fill-white" />
+                </div>
+                <div>
+                  <p className="font-bold text-gray-900 dark:text-white">Desbloquea tu Campaign Kit</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Obtén acceso completo a todos los activos y guías por solo $49.99</p>
+                </div>
+                <Button onClick={onCheckout} className="ml-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl">
+                  Pagar
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </motion.div>
 
@@ -249,5 +250,6 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
         description={currentAd?.description || ''}
         onClose={() => setLightboxOpen(false)}
       />
-    );
+    </>
+  );
 };
