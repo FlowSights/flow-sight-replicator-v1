@@ -29,9 +29,13 @@ export const PlatformIcon: React.FC<PlatformIconProps> = ({ platform, size = 24,
 
     case 'tiktok':
       return (
-        <svg viewBox="0 0 24 24" className={iconClass} fill="currentColor" preserveAspectRatio="xMidYMid meet">
-          {/* TikTok Official Logo - Musical Note */}
-          <path d="M12.53.02C3.84 0 0 3.85 0 12.53v10.94c0 8.68 3.85 12.53 12.53 12.53h10.94c8.68 0 12.53-3.85 12.53-12.53V12.53C25.5 3.85 21.65 0 12.53 0zm4.35 9.53c1.19 0 2.37-.3 3.38-.92v4.14a5.77 5.77 0 0 1-3.38 1.16c-3.2 0-5.8-2.6-5.8-5.8 0-3.2 2.6-5.8 5.8-5.8 1.6 0 3.04.64 4.09 1.68v4.26a3.8 3.8 0 0 0-4.09-1.16c-1.6 0-2.9 1.3-2.9 2.9s1.3 2.9 2.9 2.9z" />
+        <svg viewBox="0 0 24 24" className={iconClass} fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path 
+            fillRule="evenodd" 
+            clipRule="evenodd" 
+            d="M12.525 3.035a.05.05 0 0 0-.05-.035H9.61a.05.05 0 0 0-.05.05v13.315a3.15 3.15 0 1 1-3.15-3.15.05.05 0 0 0 .05-.05V10.25a.05.05 0 0 0-.05-.05 6.065 6.065 0 1 0 6.115 6.065V8.12A7.125 7.125 0 0 0 17.51 15.11a.05.05 0 0 0 .05-.05v-2.915a.05.05 0 0 0-.05-.05 4.15 4.15 0 0 1-4.935-4.085V3.035Z" 
+            fill="currentColor"
+          />
         </svg>
       );
 

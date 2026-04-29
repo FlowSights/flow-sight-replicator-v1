@@ -3,11 +3,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, ZoomIn } from 'lucide-react';
 import { AdImage } from './AdImage';
 
+import { MetaPreview, GoogleAdsPreview, TikTokPreview, LinkedInPreview } from './PlatformPreviewsNative';
+
 interface AdContentLightboxProps {
   isOpen: boolean;
   imageUrl?: string;
   headline: string;
   description: string;
+  platform: 'meta' | 'google' | 'tiktok' | 'linkedin';
+  cta: string;
   onClose: () => void;
 }
 
@@ -16,6 +20,8 @@ export const AdContentLightbox: React.FC<AdContentLightboxProps> = ({
   imageUrl,
   headline,
   description,
+  platform,
+  cta,
   onClose,
 }) => {
   return (
@@ -47,16 +53,19 @@ export const AdContentLightbox: React.FC<AdContentLightboxProps> = ({
 
             {/* Content */}
             <div className="flex flex-col h-full overflow-y-auto">
-              {/* Image - Main Focus */}
-              {imageUrl && (
-                <div className="relative w-full bg-gray-100 dark:bg-gray-800">
-                  <AdImage src={imageUrl} alt={headline} className="w-full max-h-[60vh] object-cover" />
-                  <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1.5 bg-emerald-500 text-white rounded-full text-xs font-bold">
-                    <ZoomIn className="w-4 h-4" />
-                    Vista Completa
-                  </div>
+              {/* Preview - Main Focus */}
+              <div className="relative w-full bg-gray-100 dark:bg-gray-800 p-8 flex justify-center">
+                <div className="w-full max-w-md scale-110 origin-top">
+                  {platform === 'meta' && <MetaPreview headline={headline} description={description} cta={cta} imageUrl={imageUrl || ''} platform="meta" type="Offer" score={100} platformUrl="" />}
+                  {platform === 'google' && <GoogleAdsPreview headline={headline} description={description} cta={cta} imageUrl={imageUrl || ''} platform="google" type="Offer" score={100} platformUrl="" />}
+                  {platform === 'tiktok' && <TikTokPreview headline={headline} description={description} cta={cta} imageUrl={imageUrl || ''} platform="tiktok" type="Offer" score={100} platformUrl="" />}
+                  {platform === 'linkedin' && <LinkedInPreview headline={headline} description={description} cta={cta} imageUrl={imageUrl || ''} platform="linkedin" type="Offer" score={100} platformUrl="" />}
                 </div>
-              )}
+                <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1.5 bg-emerald-500 text-white rounded-full text-xs font-bold shadow-lg">
+                  <ZoomIn className="w-4 h-4" />
+                  Vista de Plataforma
+                </div>
+              </div>
 
               {/* Text Content */}
               <div className="p-8 space-y-4">

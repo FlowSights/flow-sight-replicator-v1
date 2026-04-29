@@ -248,6 +248,8 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
         imageUrl={currentAd?.imageUrl}
         headline={currentAd?.headline || ''}
         description={currentAd?.description || ''}
+        platform={selectedPlatform}
+        cta={currentAd?.cta || 'Más información'}
         onClose={() => setLightboxOpen(false)}
       />
     </>
