@@ -34,6 +34,11 @@ import { useInactivityTimeoutStrict } from '@/hooks/useInactivityTimeoutStrict';
 import { MockupLightbox } from '@/components/MockupLightbox';
 import { AppleStyleLoadingScreen } from '@/components/AppleStyleLoadingScreen';
 import { SimplifiedROICalculator } from '@/components/SimplifiedROICalculator';
+import { BentoGridPremium } from '@/components/BentoGridPremium';
+import { PremiumReadyToLaunch } from '@/components/PremiumReadyToLaunch';
+import { PremiumLoadingScreen } from '@/components/PremiumLoadingScreen';
+import { downloadPremiumCampaignKit } from '@/lib/premiumCampaignKitGenerator';
+import { downloadMasterPackage } from '@/lib/masterAssetsExporter';
 import { SmartLocationSelector } from '@/components/SmartLocationSelector';
 import { ClientDashboard } from '@/components/ClientDashboard';
 import { PaymentModal } from '@/components/PaymentModal';
@@ -1428,7 +1433,17 @@ const FlowsightAdsDashboard: React.FC = () => {
                 }}
                 onDownloadPDF={(platform) => {
                   if (hasPaid) {
-                    handleExportPDF();
+                    downloadPremiumCampaignKit({
+                      businessName: config.businessName,
+                      businessDescription: config.promote,
+                      targetAudience: config.idealCustomer,
+                      websiteUrl: config.websiteUrl,
+                      ads: generatedAds.filter(a => a.platform === platform),
+                    });
+                    toast({
+                      title: '✅ Campaign Kit Descargado',
+                      description: `Kit personalizado para ${platform} listo`,
+                    });
                   } else {
                     setShowPaymentModal(true);
                   }
@@ -1457,16 +1472,53 @@ const FlowsightAdsDashboard: React.FC = () => {
                 />
               </AnimatePresence>
 
-              {/* Simplified ROI Calculator */}
+              {/* Bento Grid Premium */}
               <div className="mt-12 pt-8 border-t border-white/10">
-                <h2 className="text-3xl font-black text-gray-900 dark:text-white mb-2 flex items-center gap-3">
-                  <TrendingUp className="w-8 h-8 text-emerald-500" />
-                  Lo que puedes esperar
-                </h2>
-                <p className="text-gray-600 dark:text-gray-400 mb-8 text-lg">Visualiza el potencial de tu inversión en cada plataforma</p>
-                <SimplifiedROICalculator
-                  budget={config.budget}
-                  onBudgetChange={(budget) => setConfig({...config, budget})}
+                <BentoGridPremium />
+              </div>
+
+              {/* Premium Ready to Launch Section */}
+              <div className="mt-12 pt-8 border-t border-white/10">
+                <PremiumReadyToLaunch
+                  businessName={config.businessName}
+                  hasPaid={hasPaid}
+                  onDownloadComplete={() => {
+                    if (hasPaid) {
+                      downloadPremiumCampaignKit({
+                        businessName: config.businessName,
+                        businessDescription: config.promote,
+                        targetAudience: config.idealCustomer,
+                        websiteUrl: config.websiteUrl,
+                        ads: generatedAds,
+                      });
+                      toast({
+                        title: '✅ Campaign Kit Premium Descargado',
+                        description: 'Tu estrategia de 15 páginas está lista',
+                      });
+                    } else {
+                      setShowPaymentModal(true);
+                    }
+                  }}
+                  onDownloadAll={() => {
+                    if (hasPaid) {
+                      downloadMasterPackage({
+                        businessName: config.businessName,
+                        websiteUrl: config.websiteUrl,
+                        ads: {
+                          google: generatedAds.filter(a => a.platform === 'google'),
+                          meta: generatedAds.filter(a => a.platform === 'meta'),
+                          tiktok: generatedAds.filter(a => a.platform === 'tiktok'),
+                          linkedin: generatedAds.filter(a => a.platform === 'linkedin'),
+                        },
+                      });
+                      toast({
+                        title: '✅ Paquete Maestro Descargado',
+                        description: 'Todos tus kits están listos',
+                      });
+                    } else {
+                      setShowPaymentModal(true);
+                    }
+                  }}
                 />
               </div>
 
