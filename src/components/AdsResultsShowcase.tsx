@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ChevronLeft,
@@ -11,10 +11,12 @@ import {
   Sparkles,
   Lock,
   Zap,
+  Maximize2,
 } from 'lucide-react';
 import { Button } from './ui/button';
 import { MetaPreview, GoogleAdsPreview, TikTokPreview, LinkedInPreview } from './PlatformPreviewsNative';
 import { platformColors, PlatformIcon, platformNames } from './PlatformIcons';
+import { AdContentLightbox } from './AdContentLightbox';
 
 interface GeneratedAd {
   headline: string;
@@ -34,6 +36,8 @@ interface AdsResultsShowcaseProps {
   ads: GeneratedAd[];
   businessName: string;
   hasPaid: boolean;
+  selectedPlatform?: 'meta' | 'google' | 'tiktok' | 'linkedin';
+  onPlatformChange?: (platform: 'meta' | 'google' | 'tiktok' | 'linkedin') => void;
   onViewGuide: (platform: 'meta' | 'google' | 'tiktok' | 'linkedin') => void;
   onDownloadPDF: (platform: 'meta' | 'google' | 'tiktok' | 'linkedin') => void;
   onPublish: (platform: 'meta' | 'google' | 'tiktok' | 'linkedin', url: string) => void;
@@ -44,13 +48,27 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
   ads,
   businessName,
   hasPaid,
+  selectedPlatform: externalSelectedPlatform,
+  onPlatformChange,
   onViewGuide,
   onDownloadPDF,
   onPublish,
   onCheckout,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedPlatform, setSelectedPlatform] = useState<'meta' | 'google' | 'tiktok' | 'linkedin'>('meta');
+  const [internalSelectedPlatform, setInternalSelectedPlatform] = useState<'meta' | 'google' | 'tiktok' | 'linkedin'>('meta');
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  
+  // Usar la plataforma externa si se proporciona, sino usar la interna
+  const selectedPlatform = externalSelectedPlatform || internalSelectedPlatform;
+  
+  // Sincronizar cuando cambia la plataforma externa
+  useEffect(() => {
+    if (externalSelectedPlatform) {
+      setInternalSelectedPlatform(externalSelectedPlatform);
+      setCurrentIndex(0);
+    }
+  }, [externalSelectedPlatform]);
 
   // Agrupar anuncios por plataforma
   const adsByPlatform = ads.reduce((acc, ad) => {
@@ -74,8 +92,11 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
   };
 
   const handlePlatformChange = (platform: 'meta' | 'google' | 'tiktok' | 'linkedin') => {
-    setSelectedPlatform(platform);
+    setInternalSelectedPlatform(platform);
     setCurrentIndex(0);
+    if (onPlatformChange) {
+      onPlatformChange(platform);
+    }
   };
 
   if (!currentAd) {
@@ -130,6 +151,15 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
             </motion.div>
           </AnimatePresence>
 
+          {/* Botón para abrir Lightbox */}
+          <button
+            onClick={() => setLightboxOpen(true)}
+            className="absolute top-4 right-4 z-20 p-3 rounded-full bg-white dark:bg-gray-800 shadow-xl text-gray-800 dark:text-white hover:scale-110 transition-transform hover:bg-emerald-500 hover:text-white"
+            title="Ver anuncio en tamaño completo"
+          >
+            <Maximize2 className="w-5 h-5" />
+          </button>
+
           {/* Controles de Navegación */}
           {currentAds.length > 1 && (
             <div className="absolute inset-y-0 -inset-x-4 flex items-center justify-between pointer-events-none z-20">
@@ -180,6 +210,7 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
             <Button
               onClick={() => onDownloadPDF(selectedPlatform)}
               className={`h-16 rounded-2xl bg-gradient-to-r ${colors.gradient} text-white font-bold text-lg gap-3 shadow-xl`}
+              title={`Descargar kit de ${platformNames[selectedPlatform]}`}
             >
               {!hasPaid ? <Lock className="w-5 h-5" /> : <Download className="w-5 h-5" />}
               Descargar Kit
@@ -206,8 +237,17 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
               </Button>
             </div>
           )}
+          )}
         </div>
-      </div>
-    </motion.div>
-  );
+      </motion.div>
+
+      {/* Lightbox para ver el contenido del anuncio */}
+      <AdContentLightbox
+        isOpen={lightboxOpen}
+        imageUrl={currentAd?.imageUrl}
+        headline={currentAd?.headline || ''}
+        description={currentAd?.description || ''}
+        onClose={() => setLightboxOpen(false)}
+      />
+    );
 };

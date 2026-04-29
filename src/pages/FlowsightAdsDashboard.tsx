@@ -1420,6 +1420,8 @@ const FlowsightAdsDashboard: React.FC = () => {
                 ads={generatedAds}
                 businessName={config.businessName}
                 hasPaid={hasPaid}
+                selectedPlatform={selectedPlatform}
+                onPlatformChange={(platform) => setSelectedPlatform(platform)}
                 onViewGuide={(platform) => {
                   setGuideLightboxPlatform(platform);
                   setIsGuideLightboxOpen(true);

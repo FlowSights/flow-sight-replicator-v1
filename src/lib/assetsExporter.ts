@@ -1,6 +1,6 @@
 /**
  * Exportador de Assets para Campañas
- * Genera un ZIP con imágenes optimizadas y archivos de importación
+ * Genera archivos específicos por plataforma
  */
 
 interface AssetExportData {
@@ -87,7 +87,7 @@ export const generateMetaAdsJSON = (data: AssetExportData): string => {
 };
 
 /**
- * Genera un archivo de instrucciones de importación
+ * Genera un archivo de instrucciones de importación específico por plataforma
  */
 export const generateImportInstructions = (platform: string): string => {
   const instructions: Record<string, string> = {
@@ -160,7 +160,7 @@ export const generateImportInstructions = (platform: string): string => {
 };
 
 /**
- * Genera un archivo de texto con todos los copys
+ * Genera un archivo de texto con todos los copys de la plataforma
  */
 export const generateAdCopyText = (data: AssetExportData): string => {
   let text = `
@@ -172,6 +172,7 @@ export const generateAdCopyText = (data: AssetExportData): string => {
 Generado: ${new Date().toLocaleDateString('es-ES')}
 Negocio: ${data.businessName}
 Sitio Web: ${data.websiteUrl}
+Plataforma: ${data.platform.charAt(0).toUpperCase() + data.platform.slice(1)}
 
 ================================================================================
   `;
@@ -214,42 +215,35 @@ Generado por FlowSights Ads - ${new Date().getFullYear()}
 };
 
 /**
- * Descarga todos los assets como un ZIP simulado (en navegadores modernos)
- * Nota: Para ZIP real, se recomienda usar una librería como JSZip
+ * Descarga los assets específicos de la plataforma seleccionada
+ * Cada plataforma recibe solo sus propios archivos
  */
 export const downloadAssetsPackage = async (data: AssetExportData) => {
   try {
-    // Generar archivos
-    const googleCSV = generateGoogleAdsCSV(data);
-    const metaJSON = generateMetaAdsJSON(data);
-    const adCopyText = generateAdCopyText(data);
+    let content = '';
+    let filename = '';
 
-    // Crear un archivo combinado
-    const combinedContent = `
+    // Generar contenido específico según la plataforma
+    if (data.platform === 'google') {
+      const googleCSV = generateGoogleAdsCSV(data);
+      const adCopyText = generateAdCopyText(data);
+      content = `
 ================================================================================
-                    FLOWSIGHTS ADS - ASSETS PACKAGE
+                    FLOWSIGHTS ADS - GOOGLE ADS PACKAGE
 ================================================================================
 
-CONTENIDO DEL PAQUETE:
-1. google-ads-import.csv - Para importar en Google Ads
-2. meta-ads-import.json - Para importar en Meta Ads
-3. ad-copy.txt - Todos los copys de anuncios
-4. INSTRUCCIONES.txt - Guía paso a paso
+NEGOCIO: ${data.businessName}
+PLATAFORMA: Google Ads
+FECHA: ${new Date().toLocaleDateString('es-ES')}
 
 ================================================================================
-ARCHIVO 1: GOOGLE ADS IMPORT (CSV)
+ARCHIVO: GOOGLE ADS IMPORT (CSV)
 ================================================================================
 
 ${googleCSV}
 
 ================================================================================
-ARCHIVO 2: META ADS IMPORT (JSON)
-================================================================================
-
-${metaJSON}
-
-================================================================================
-ARCHIVO 3: AD COPY (TEXTO)
+AD COPY (TEXTO)
 ================================================================================
 
 ${adCopyText}
@@ -257,14 +251,89 @@ ${adCopyText}
 ================================================================================
 Descargado desde FlowSights Ads - ${new Date().toLocaleDateString('es-ES')}
 ================================================================================
-    `;
+      `;
+      filename = `FlowSights-Google-Ads-${data.businessName}-${new Date().toISOString().split('T')[0]}.txt`;
+    } else if (data.platform === 'meta') {
+      const metaJSON = generateMetaAdsJSON(data);
+      const adCopyText = generateAdCopyText(data);
+      content = `
+================================================================================
+                    FLOWSIGHTS ADS - META ADS PACKAGE
+================================================================================
+
+NEGOCIO: ${data.businessName}
+PLATAFORMA: Meta (Facebook/Instagram)
+FECHA: ${new Date().toLocaleDateString('es-ES')}
+
+================================================================================
+ARCHIVO: META ADS IMPORT (JSON)
+================================================================================
+
+${metaJSON}
+
+================================================================================
+AD COPY (TEXTO)
+================================================================================
+
+${adCopyText}
+
+================================================================================
+Descargado desde FlowSights Ads - ${new Date().toLocaleDateString('es-ES')}
+================================================================================
+      `;
+      filename = `FlowSights-Meta-Ads-${data.businessName}-${new Date().toISOString().split('T')[0]}.txt`;
+    } else if (data.platform === 'tiktok') {
+      const adCopyText = generateAdCopyText(data);
+      content = `
+================================================================================
+                    FLOWSIGHTS ADS - TIKTOK ADS PACKAGE
+================================================================================
+
+NEGOCIO: ${data.businessName}
+PLATAFORMA: TikTok Ads
+FECHA: ${new Date().toLocaleDateString('es-ES')}
+
+================================================================================
+AD COPY (TEXTO)
+================================================================================
+
+${adCopyText}
+
+================================================================================
+Descargado desde FlowSights Ads - ${new Date().toLocaleDateString('es-ES')}
+================================================================================
+      `;
+      filename = `FlowSights-TikTok-Ads-${data.businessName}-${new Date().toISOString().split('T')[0]}.txt`;
+    } else if (data.platform === 'linkedin') {
+      const adCopyText = generateAdCopyText(data);
+      content = `
+================================================================================
+                    FLOWSIGHTS ADS - LINKEDIN ADS PACKAGE
+================================================================================
+
+NEGOCIO: ${data.businessName}
+PLATAFORMA: LinkedIn Ads
+FECHA: ${new Date().toLocaleDateString('es-ES')}
+
+================================================================================
+AD COPY (TEXTO)
+================================================================================
+
+${adCopyText}
+
+================================================================================
+Descargado desde FlowSights Ads - ${new Date().toLocaleDateString('es-ES')}
+================================================================================
+      `;
+      filename = `FlowSights-LinkedIn-Ads-${data.businessName}-${new Date().toISOString().split('T')[0]}.txt`;
+    }
 
     // Descargar como archivo de texto
-    const blob = new Blob([combinedContent], { type: 'text/plain' });
+    const blob = new Blob([content], { type: 'text/plain' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `FlowSights-Assets-${data.businessName}-${new Date().toISOString().split('T')[0]}.txt`;
+    a.download = filename;
     document.body.appendChild(a);
     a.click();
     window.URL.revokeObjectURL(url);

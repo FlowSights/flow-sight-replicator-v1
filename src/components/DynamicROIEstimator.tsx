@@ -94,31 +94,31 @@ export const DynamicROIEstimator: React.FC<DynamicROIEstimatorProps> = ({
       const profitWithFS = revenueWithFS * (marginPercentage / 100);
       const timeWithFS = 0; // FlowSights automatiza todo
 
-      // Diferencias
-      const additionalRevenue = revenueWithFS - revenueWithoutFS;
-      const additionalProfit = profitWithFS - profitWithoutFS;
+      // Diferencias - Asegurar valores positivos o neutros
+      const additionalRevenue = Math.max(0, revenueWithFS - revenueWithoutFS);
+      const additionalProfit = Math.max(0, profitWithFS - profitWithoutFS);
       const timeSavedValue = timeWithoutFS * HOURLY_VALUE_USD;
-      const totalBenefit = additionalProfit + timeSavedValue;
+      const totalBenefit = Math.max(0, additionalProfit + timeSavedValue);
 
       return {
         platform: metrics.platform,
         key,
         // Sin FlowSights
         clicksWithoutFS: Math.round(clicksWithoutFS),
-        conversionsWithoutFS: Math.round(conversionsWithFS),
-        revenueWithoutFS: Math.round(revenueWithoutFS),
-        profitWithoutFS: Math.round(profitWithoutFS),
+        conversionsWithoutFS: Math.round(conversionsWithoutFS),
+        revenueWithoutFS: Math.max(0, Math.round(revenueWithoutFS)),
+        profitWithoutFS: Math.max(0, Math.round(profitWithoutFS)),
         // Con FlowSights
         clicksWithFS: Math.round(clicksWithFS),
         conversionsWithFS: Math.round(conversionsWithFS),
-        revenueWithFS: Math.round(revenueWithFS),
-        profitWithFS: Math.round(profitWithFS),
+        revenueWithFS: Math.max(0, Math.round(revenueWithFS)),
+        profitWithFS: Math.max(0, Math.round(profitWithFS)),
         // Beneficios
         additionalRevenue: Math.round(additionalRevenue),
         additionalProfit: Math.round(additionalProfit),
         timeSavedValue: Math.round(timeSavedValue),
         totalBenefit: Math.round(totalBenefit),
-        roi: Math.round(((totalBenefit / 49) * 100)), // Precio del kit: $49
+        roi: Math.max(0, Math.round(((totalBenefit / 49) * 100))), // Precio del kit: $49
       };
     });
 
