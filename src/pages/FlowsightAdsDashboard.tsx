@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabaseClient';
 import { Button } from '@/components/ui/button';
@@ -133,6 +133,12 @@ const FlowsightAdsDashboard: React.FC = () => {
   });
 
   const [selectedPlatform, setSelectedPlatform] = useState<'google' | 'meta' | 'tiktok' | 'linkedin'>('meta');
+  const [syncKey, setSyncKey] = useState(0);
+
+  // Forzar sincronización cuando selectedPlatform cambia
+  useEffect(() => {
+    setSyncKey(prev => prev + 1);
+  }, [selectedPlatform]);
 
   const suggestions = [
     { label: "Membresía de Gimnasio", icon: "💪" },
@@ -1438,7 +1444,7 @@ const FlowsightAdsDashboard: React.FC = () => {
               {/* Premium Results Dashboard */}
               <AnimatePresence mode="wait">
                 <PremiumResultsDashboard
-                  key={selectedPlatform}
+                  key={`${selectedPlatform}-${syncKey}`}
                   campaignName={config.businessName}
                   businessName={config.businessName}
                   platform={selectedPlatform}
