@@ -32,12 +32,15 @@ import { useCountUp } from '@/hooks/useCountUp';
 import { useInactivityTimeout } from '@/hooks/useInactivityTimeout';
 import { PaymentModal } from '@/components/PaymentModal';
 import { useStripeCheckout } from '@/hooks/useStripeCheckout';
+import { usePaymentStatus } from '@/hooks/usePaymentStatus';
 import { generateAdsWithGeminiIntegration } from '@/lib/dashboardIntegration';
 import { downloadPremiumPDF } from '@/lib/premiumPDFExporter';
 import { downloadAssetsPackage } from '@/lib/assetsExporter';
 import { EditablePlatformPreview } from '@/components/EditablePlatformPreview';
 import { DynamicROIEstimator } from '@/components/DynamicROIEstimator';
 import { PremiumResultsDashboard } from '@/components/PremiumResultsDashboard';
+import { AdsResultsShowcase } from '@/components/AdsResultsShowcase';
+import { downloadPremiumPDFV2 } from '@/lib/premiumPDFExporterV2';
 import { useToast } from '@/hooks/use-toast';
 
 type HeroStat = { value: number; suffix: string; prefix?: string; label: string; decimals?: number };
@@ -97,7 +100,7 @@ const FlowsightAdsDashboard: React.FC = () => {
   const [showInactivityModal, setShowInactivityModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [selectedCampaignForPayment, setSelectedCampaignForPayment] = useState<string | null>(null);
-  const [hasPaid, setHasPaid] = useState(false);
+  const { hasPaid, isLoading: isPaymentLoading } = usePaymentStatus();
 
   const [activeGuidePlatform, setActiveGuidePlatform] = useState<string | null>(null);
   const [isGuideLightboxOpen, setIsGuideLightboxOpen] = useState(false);
@@ -155,19 +158,23 @@ const FlowsightAdsDashboard: React.FC = () => {
       }
 
       // Lógica de Master Account: Acceso total para el administrador
-      if (session.user.email === 'spineda2014.123@gmail.com') {
-        setHasPaid(true);
-        return;
-      }
-
-      // Verificar si hay un parámetro de éxito en la URL
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('payment') === 'success') {
-        setHasPaid(true);
-      }
+      // (El hook usePaymentStatus ya maneja la verificación de pagos)
     };
     checkUser();
   }, [navigate]);
+
+  // Efecto para mostrar notificación de pago exitoso
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('payment') === 'success' && hasPaid) {
+      toast({
+        title: '✅ ¡Pago Exitoso!',
+        description: 'Tu acceso premium ha sido activado. Ahora puedes descargar tus kits y publicar directamente.',
+      });
+      // Limpiar el parámetro de la URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, [hasPaid, toast]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -230,10 +237,12 @@ const FlowsightAdsDashboard: React.FC = () => {
         cta: ad.cta,
         reasoning: ad.reasoning || 'Optimizado para máxima conversión',
         score: ad.score,
+        imageUrl: ad.imageUrl,
       })),
+      userImage: config.userImage || undefined,
     };
 
-    downloadPremiumPDF(pdfData);
+    downloadPremiumPDFV2(pdfData);
     toast({
       title: '✅ PDF Descargado',
       description: 'Tu estrategia premium está lista',
@@ -1366,6 +1375,32 @@ const FlowsightAdsDashboard: React.FC = () => {
                   </Card>
                 ))}
               </div>
+
+              {/* Ads Results Showcase - Mockups con Botones de Acción */}
+              <AdsResultsShowcase
+                ads={generatedAds}
+                businessName={config.businessName}
+                hasPaid={hasPaid}
+                onViewGuide={(platform) => {
+                  setGuideLightboxPlatform(platform);
+                  setIsGuideLightboxOpen(true);
+                }}
+                onDownloadPDF={(platform) => {
+                  if (hasPaid) {
+                    handleExportPDF();
+                  } else {
+                    setShowPaymentModal(true);
+                  }
+                }}
+                onPublish={(platform, url) => {
+                  if (hasPaid) {
+                    window.open(url, '_blank');
+                  } else {
+                    setShowPaymentModal(true);
+                  }
+                }}
+                onCheckout={() => setShowPaymentModal(true)}
+              />
 
               {/* Premium Results Dashboard */}
               <PremiumResultsDashboard
