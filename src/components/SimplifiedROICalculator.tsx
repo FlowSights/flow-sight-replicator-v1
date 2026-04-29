@@ -111,7 +111,7 @@ export const SimplifiedROICalculator: React.FC<SimplifiedROICalculatorProps> = (
           >
             <Users className="mx-auto text-blue-500 mb-2" size={24} />
             <p className="text-2xl font-bold text-gray-900 dark:text-white">
-              {estimates.reach.toLocaleString()}
+              {estimates.reach.toLocaleString('es-ES')}
             </p>
             <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
               Personas verán tu anuncio
@@ -127,7 +127,7 @@ export const SimplifiedROICalculator: React.FC<SimplifiedROICalculatorProps> = (
           >
             <TrendingUp className="mx-auto text-purple-500 mb-2" size={24} />
             <p className="text-2xl font-bold text-gray-900 dark:text-white">
-              {estimates.clicks.toLocaleString()}
+              {estimates.clicks.toLocaleString('es-ES')}
             </p>
             <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
               Clics en tu anuncio
@@ -159,7 +159,7 @@ export const SimplifiedROICalculator: React.FC<SimplifiedROICalculatorProps> = (
           >
             <DollarSign className="mx-auto text-green-500 mb-2" size={24} />
             <p className="text-2xl font-bold text-green-600">
-              ${estimates.estimatedRevenue.toLocaleString()}
+              ${estimates.estimatedRevenue.toLocaleString('es-ES')}
             </p>
             <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
               Ingresos estimados

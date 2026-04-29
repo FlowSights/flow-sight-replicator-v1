@@ -135,7 +135,7 @@ export const ROIEstimator: React.FC<ROIEstimatorProps> = ({ budget, platform }) 
             </div>
             <div className="text-right">
               <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Ganancia extra</p>
-              <p className="text-2xl font-black text-emerald-500">+${calc.totalBenefit.toLocaleString()}</p>
+              <p className="text-2xl font-black text-emerald-500">+${calc.totalBenefit.toLocaleString('es-ES')}</p>
               <p className="text-[10px] text-gray-400">USD / mes estimado</p>
             </div>
           </div>
@@ -148,7 +148,7 @@ export const ROIEstimator: React.FC<ROIEstimatorProps> = ({ budget, platform }) 
               <div className="space-y-1.5">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-500 dark:text-gray-400">Clics</span>
-                  <span className="font-bold text-gray-700 dark:text-gray-300">{Math.round(budget / info.avgCPC).toLocaleString()}</span>
+                  <span className="font-bold text-gray-700 dark:text-gray-300">{Math.round(budget / info.avgCPC).toLocaleString('es-ES')}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-500 dark:text-gray-400">Conversiones</span>
@@ -156,7 +156,7 @@ export const ROIEstimator: React.FC<ROIEstimatorProps> = ({ budget, platform }) 
                 </div>
                 <div className="flex justify-between text-sm border-t border-gray-200 dark:border-white/10 pt-1.5 mt-1.5">
                   <span className="text-gray-500 dark:text-gray-400">Ingresos est.</span>
-                  <span className="font-black text-gray-800 dark:text-white">${calc.revenueWithout.toLocaleString()}</span>
+                  <span className="font-black text-gray-800 dark:text-white">${calc.revenueWithout.toLocaleString('es-ES')}</span>
                 </div>
               </div>
             </div>
@@ -171,20 +171,20 @@ export const ROIEstimator: React.FC<ROIEstimatorProps> = ({ budget, platform }) 
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-500 dark:text-gray-400">Clics</span>
                   <span className="font-bold text-emerald-700 dark:text-emerald-300">
-                    {calc.clicksWith.toLocaleString()}
+                    {calc.clicksWith.toLocaleString('es-ES')}
                     <span className="text-[10px] text-emerald-500 ml-1">+{calc.cpcReductionPct}%</span>
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-500 dark:text-gray-400">Conversiones</span>
                   <span className="font-bold text-emerald-700 dark:text-emerald-300">
-                    {calc.conversionsWith.toLocaleString()}
+                    {calc.conversionsWith.toLocaleString('es-ES')}
                     <span className="text-[10px] text-emerald-500 ml-1">+{calc.conversionBoostPct}%</span>
                   </span>
                 </div>
                 <div className="flex justify-between text-sm border-t border-emerald-500/20 pt-1.5 mt-1.5">
                   <span className="text-gray-500 dark:text-gray-400">Ingresos est.</span>
-                  <span className="font-black text-emerald-600 dark:text-emerald-400">${calc.revenueWith.toLocaleString()}</span>
+                  <span className="font-black text-emerald-600 dark:text-emerald-400">${calc.revenueWith.toLocaleString('es-ES')}</span>
                 </div>
               </div>
             </div>
@@ -197,7 +197,7 @@ export const ROIEstimator: React.FC<ROIEstimatorProps> = ({ budget, platform }) 
                 icon: TrendingUp,
                 color: 'text-emerald-500',
                 label: 'Ingresos adicionales',
-                value: `+$${calc.extraRevenue.toLocaleString()} USD`,
+                value: `+$${calc.extraRevenue.toLocaleString('es-ES')} USD`,
                 desc: `Gracias a ${calc.cpcReductionPct}% menos CPC y ${calc.conversionBoostPct}% más conversiones`,
               },
               {

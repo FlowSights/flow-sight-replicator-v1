@@ -486,7 +486,7 @@ const FlowsightAdsDashboard: React.FC = () => {
     y += 5;
 
     const metrics = [
-      { label: 'Alcance Estimado', value: `${(config.budget * 15).toLocaleString()} personas`, desc: 'Personas que veran tu anuncio cada mes' },
+      { label: 'Alcance Estimado', value: `${(config.budget * 15).toLocaleString('es-ES')} personas`, desc: 'Personas que veran tu anuncio cada mes' },
       { label: 'Clics Estimados', value: `${(config.budget * 0.8).toFixed(0)} clics`, desc: 'Visitas esperadas a tu pagina web' },
       { label: 'ROI Proyectado', value: '3.5x', desc: 'Retorno estimado sobre tu inversion' },
       { label: 'Costo por Clic', value: `$${(config.budget / (config.budget * 0.8)).toFixed(2)} USD`, desc: 'Lo que pagas por cada visita' },
@@ -1313,7 +1313,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                     <div className="grid grid-cols-3 gap-4">
                       <div className="text-center p-4 rounded-2xl bg-gray-50 dark:bg-white/5">
                         <p className="text-xs font-bold text-gray-400 uppercase mb-1">Alcance Est.</p>
-                        <p className="text-lg font-black text-gray-900 dark:text-white">{(config.budget * 15).toLocaleString()}</p>
+                        <p className="text-lg font-black text-gray-900 dark:text-white">{(config.budget * 15).toLocaleString('es-ES')}</p>
                       </div>
                       <div className="text-center p-4 rounded-2xl bg-gray-50 dark:bg-white/5">
                         <p className="text-xs font-bold text-gray-400 uppercase mb-1">Clicks Est.</p>
@@ -1474,13 +1474,21 @@ const FlowsightAdsDashboard: React.FC = () => {
                         imageUrl={ad.imageUrl}
                         businessName={ad.businessName}
                         websiteUrl={ad.websiteUrl}
+                        hasPaid={hasPaid}
+                        onDownloadKit={() => downloadPremiumPDFV2(config, [ad], ad.platform)}
+                        onDownloadGuide={() => {
+                          setGuideLightboxPlatform(ad.platform);
+                          setIsGuideLightboxOpen(true);
+                        }}
+                        onPublish={() => window.open(ad.platformUrl, '_blank')}
+                        onPaymentRequired={() => setShowPaymentModal(true)}
                         onUpdate={(updates) => {
                           const updatedAds = [...generatedAds];
-                        updatedAds[idx] = {
-                          ...updatedAds[idx],
-                          ...updates,
-                        };
-                        setGeneratedAds(updatedAds);
+                          updatedAds[idx] = {
+                            ...updatedAds[idx],
+                            ...updates,
+                          };
+                          setGeneratedAds(updatedAds);
                         }}
                       />
                     ))}

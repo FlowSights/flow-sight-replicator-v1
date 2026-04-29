@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Edit2, Check, X } from 'lucide-react';
+import { Edit2, Check, X, Download, FileText, Share2 } from 'lucide-react';
 import { MetaPreview, GoogleAdsPreview, TikTokPreview, LinkedInPreview } from './PlatformPreviewsNative';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -15,6 +15,11 @@ interface EditablePlatformPreviewProps {
   businessName?: string;
   websiteUrl?: string;
   onUpdate?: (updates: { headline: string; description: string; cta: string }) => void;
+  hasPaid?: boolean;
+  onDownloadKit?: () => void;
+  onDownloadGuide?: () => void;
+  onPublish?: () => void;
+  onPaymentRequired?: () => void;
 }
 
 export const EditablePlatformPreview: React.FC<EditablePlatformPreviewProps> = ({
@@ -26,6 +31,11 @@ export const EditablePlatformPreview: React.FC<EditablePlatformPreviewProps> = (
   businessName,
   websiteUrl,
   onUpdate,
+  hasPaid = false,
+  onDownloadKit,
+  onDownloadGuide,
+  onPublish,
+  onPaymentRequired,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [headline, setHeadline] = useState(initialHeadline);
@@ -184,6 +194,69 @@ export const EditablePlatformPreview: React.FC<EditablePlatformPreviewProps> = (
           imageUrl={imageUrl}
           businessName={businessName}
         />
+      )}
+
+      {/* Botones de descarga */}
+      {(onDownloadKit || onDownloadGuide || onPublish) && (
+        <div className="mt-4 flex flex-wrap gap-2">
+          {onDownloadKit && (
+            <Button
+              onClick={() => {
+                if (!hasPaid && onPaymentRequired) {
+                  onPaymentRequired();
+                } else {
+                  onDownloadKit();
+                }
+              }}
+              className={`text-sm gap-2 ${
+                !hasPaid
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-green-600 hover:bg-green-700'
+              } text-white`}
+            >
+              <Download className="w-3 h-3" />
+              Kit PDF
+            </Button>
+          )}
+          {onDownloadGuide && (
+            <Button
+              onClick={() => {
+                if (!hasPaid && onPaymentRequired) {
+                  onPaymentRequired();
+                } else {
+                  onDownloadGuide();
+                }
+              }}
+              className={`text-sm gap-2 ${
+                !hasPaid
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-blue-600 hover:bg-blue-700'
+              } text-white`}
+            >
+              <FileText className="w-3 h-3" />
+              Guía
+            </Button>
+          )}
+          {onPublish && (
+            <Button
+              onClick={() => {
+                if (!hasPaid && onPaymentRequired) {
+                  onPaymentRequired();
+                } else {
+                  onPublish();
+                }
+              }}
+              className={`text-sm gap-2 ${
+                !hasPaid
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-emerald-600 hover:bg-emerald-700'
+              } text-white`}
+            >
+              <Share2 className="w-3 h-3" />
+              Publicar
+            </Button>
+          )}
+        </div>
       )}
     </motion.div>
   );

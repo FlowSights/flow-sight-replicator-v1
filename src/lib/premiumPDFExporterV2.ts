@@ -222,8 +222,8 @@ export const downloadPremiumPDFV2 = (data: PremiumPDFData) => {
 
   // Tarjetas de métricas
   const metrics = [
-    { label: 'ALCANCE ESTIMADO', value: `${estimatedReach.toLocaleString()}`, unit: 'personas' },
-    { label: 'CLICS ESTIMADOS', value: `${estimatedClicks.toLocaleString()}`, unit: 'clics' },
+    { label: 'ALCANCE ESTIMADO', value: `${estimatedReach.toLocaleString('es-ES')}`, unit: 'personas' },
+    { label: 'CLICS ESTIMADOS', value: `${estimatedClicks.toLocaleString('es-ES')}`, unit: 'clics' },
     { label: 'ROI PROYECTADO', value: `${roi.toFixed(1)}x`, unit: 'retorno' },
     { label: 'COSTO POR CLIC', value: `$${cpc.toFixed(2)}`, unit: 'USD' },
   ];

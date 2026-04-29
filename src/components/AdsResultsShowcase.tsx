@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { Button } from './ui/button';
 import { MetaPreview, GoogleAdsPreview, TikTokPreview, LinkedInPreview } from './PlatformPreviewsNative';
+import { platformColors, PlatformIcon, platformNames } from './PlatformIcons';
 
 interface GeneratedAd {
   headline: string;
@@ -37,13 +38,6 @@ interface AdsResultsShowcaseProps {
   onPublish: (platform: 'meta' | 'google' | 'tiktok' | 'linkedin', url: string) => void;
   onCheckout: () => void;
 }
-
-const platformConfig: Record<string, { name: string; color: string; icon: string }> = {
-  meta: { name: 'Meta Ads', color: 'from-blue-600 to-blue-400', icon: '📱' },
-  google: { name: 'Google Ads', color: 'from-red-500 to-yellow-500', icon: '🔍' },
-  tiktok: { name: 'TikTok Ads', color: 'from-gray-900 to-black', icon: '🎵' },
-  linkedin: { name: 'LinkedIn Ads', color: 'from-blue-700 to-blue-500', icon: '💼' },
-};
 
 export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
   ads,
@@ -87,197 +81,132 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
     return null;
   }
 
-  const config = platformConfig[selectedPlatform];
+  const colors = platformColors[selectedPlatform];
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="space-y-8"
+      className={`space-y-8 p-8 rounded-[40px] transition-colors duration-500 ${colors.bg} border-2 ${colors.border}`}
     >
       {/* Selector de Plataformas */}
       <div className="flex flex-wrap gap-3">
-        {platforms.map((platform) => (
-          <button
-            key={platform}
-            onClick={() => handlePlatformChange(platform)}
-            className={`px-6 py-3 rounded-2xl font-bold text-sm transition-all ${
-              selectedPlatform === platform
-                ? `bg-gradient-to-r ${config.color} text-white shadow-lg shadow-emerald-500/30`
-                : 'bg-gray-100 dark:bg-white/5 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10'
-            }`}
-          >
-            {platformConfig[platform].icon} {platformConfig[platform].name}
-          </button>
-        ))}
+        {platforms.map((platform) => {
+          const pColors = platformColors[platform];
+          const isSelected = selectedPlatform === platform;
+          return (
+            <button
+              key={platform}
+              onClick={() => handlePlatformChange(platform)}
+              className={`px-6 py-3 rounded-2xl font-bold transition-all flex items-center gap-3 ${
+                isSelected
+                  ? `bg-gradient-to-r ${pColors.gradient} text-white shadow-lg scale-105`
+                  : 'bg-white dark:bg-white/5 text-gray-500 hover:bg-gray-100 dark:hover:bg-white/10'
+              }`}
+            >
+              <PlatformIcon platform={platform} size={20} className={isSelected ? 'text-white' : 'text-gray-400'} />
+              {platformNames[platform]}
+            </button>
+          );
+        })}
       </div>
 
-      {/* Mockup Principal */}
-      <motion.div
-        key={`${selectedPlatform}-${currentIndex}`}
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        className="relative"
-      >
-        <div className="flex justify-center">
-          {selectedPlatform === 'meta' && (
-            <MetaPreview
-              headline={currentAd.headline}
-              description={currentAd.description}
-              cta={currentAd.cta}
-              imageUrl={currentAd.imageUrl}
-              businessName={businessName}
-              websiteUrl={currentAd.websiteUrl}
-            />
-          )}
-          {selectedPlatform === 'google' && (
-            <GoogleAdsPreview
-              headline={currentAd.headline}
-              description={currentAd.description}
-              cta={currentAd.cta}
-              imageUrl={currentAd.imageUrl}
-              businessName={businessName}
-              websiteUrl={currentAd.websiteUrl}
-            />
-          )}
-          {selectedPlatform === 'tiktok' && (
-            <TikTokPreview
-              headline={currentAd.headline}
-              description={currentAd.description}
-              cta={currentAd.cta}
-              imageUrl={currentAd.imageUrl}
-              businessName={businessName}
-            />
-          )}
-          {selectedPlatform === 'linkedin' && (
-            <LinkedInPreview
-              headline={currentAd.headline}
-              description={currentAd.description}
-              cta={currentAd.cta}
-              imageUrl={currentAd.imageUrl}
-              businessName={businessName}
-            />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        {/* Mockup Visual */}
+        <div className="relative group">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`${selectedPlatform}-${currentIndex}`}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="relative z-10 flex justify-center"
+            >
+              {selectedPlatform === 'meta' && <MetaPreview {...currentAd} />}
+              {selectedPlatform === 'google' && <GoogleAdsPreview {...currentAd} />}
+              {selectedPlatform === 'tiktok' && <TikTokPreview {...currentAd} />}
+              {selectedPlatform === 'linkedin' && <LinkedInPreview {...currentAd} />}
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Controles de Navegación */}
+          {currentAds.length > 1 && (
+            <div className="absolute inset-y-0 -inset-x-4 flex items-center justify-between pointer-events-none z-20">
+              <button
+                onClick={handlePrev}
+                className="p-3 rounded-full bg-white dark:bg-gray-800 shadow-xl text-gray-800 dark:text-white pointer-events-auto hover:scale-110 transition-transform"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+              <button
+                onClick={handleNext}
+                className="p-3 rounded-full bg-white dark:bg-gray-800 shadow-xl text-gray-800 dark:text-white pointer-events-auto hover:scale-110 transition-transform"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+            </div>
           )}
         </div>
 
-        {/* Navegación de Anuncios */}
-        {currentAds.length > 1 && (
-          <div className="flex justify-between items-center mt-6">
-            <button
-              onClick={handlePrev}
-              className="p-2 rounded-full bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-700 dark:text-gray-300 transition-all"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
-              {currentIndex + 1} de {currentAds.length}
-            </span>
-            <button
-              onClick={handleNext}
-              className="p-2 rounded-full bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-700 dark:text-gray-300 transition-all"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
+        {/* Información y Acciones */}
+        <div className="space-y-8">
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className={`px-4 py-1.5 rounded-full bg-gradient-to-r ${colors.gradient} text-white text-xs font-black uppercase tracking-widest`}>
+                {currentAd.type}
+              </div>
+              <div className="flex items-center gap-1 text-yellow-500 font-bold">
+                <Sparkles className="w-4 h-4 fill-yellow-500" />
+                {currentAd.score}/100
+              </div>
+            </div>
+            <h3 className="text-4xl font-black text-gray-900 dark:text-white leading-tight">
+              Estrategia de <span className={colors.text}>{platformNames[selectedPlatform]}</span>
+            </h3>
+            <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+              {currentAd.reasoning || "Este anuncio ha sido optimizado por nuestra IA para maximizar el CTR y las conversiones en esta plataforma específica."}
+            </p>
           </div>
-        )}
-      </motion.div>
 
-      {/* Información del Anuncio */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="bg-white dark:bg-white/5 rounded-3xl p-6 border border-gray-100 dark:border-white/10"
-      >
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <span className={`px-3 py-1 rounded-full text-xs font-bold text-white bg-gradient-to-r ${
-              currentAd.type === 'Offer' ? 'from-emerald-500 to-teal-500' :
-              currentAd.type === 'Emotional' ? 'from-purple-500 to-pink-500' :
-              'from-red-500 to-orange-500'
-            }`}>
-              {currentAd.type === 'Offer' ? 'OFERTA' : currentAd.type === 'Emotional' ? 'EMOCIONAL' : 'URGENCIA'}
-            </span>
-            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
-              Puntuación: <span className="text-emerald-500 font-bold">{currentAd.score}/100</span>
-            </span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Button
+              onClick={() => onViewGuide(selectedPlatform)}
+              variant="outline"
+              className="h-16 rounded-2xl border-2 border-gray-200 dark:border-white/10 font-bold text-lg gap-3"
+            >
+              <BookOpen className="w-5 h-5" /> Guía Visual
+            </Button>
+            <Button
+              onClick={() => onDownloadPDF(selectedPlatform)}
+              className={`h-16 rounded-2xl bg-gradient-to-r ${colors.gradient} text-white font-bold text-lg gap-3 shadow-xl`}
+            >
+              {!hasPaid ? <Lock className="w-5 h-5" /> : <Download className="w-5 h-5" />}
+              Descargar Kit
+            </Button>
+            <Button
+              onClick={() => onPublish(selectedPlatform, currentAd.platformUrl)}
+              className="h-16 rounded-2xl bg-white dark:bg-white/5 border-2 border-gray-200 dark:border-white/10 text-gray-900 dark:text-white font-bold text-lg gap-3 sm:col-span-2"
+            >
+              <ExternalLink className="w-5 h-5" /> Publicar en {platformNames[selectedPlatform]}
+            </Button>
           </div>
+
+          {!hasPaid && (
+            <div className="p-6 rounded-3xl bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center text-white shrink-0">
+                <Zap className="w-6 h-6 fill-white" />
+              </div>
+              <div>
+                <p className="font-bold text-gray-900 dark:text-white">Desbloquea tu Campaign Kit</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Obtén acceso completo a todos los activos y guías por solo $49.99</p>
+              </div>
+              <Button onClick={onCheckout} className="ml-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl">
+                Pagar
+              </Button>
+            </div>
+          )}
         </div>
-        <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
-          {currentAd.reasoning || 'Optimizado para máxima conversión'}
-        </p>
-      </motion.div>
-
-      {/* Botones de Acción */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="grid grid-cols-1 md:grid-cols-3 gap-4"
-      >
-        {/* Botón Guía Visual */}
-        <Button
-          onClick={() => onViewGuide(selectedPlatform)}
-          variant="outline"
-          className="h-12 gap-2 rounded-2xl border-2 border-emerald-500/30 hover:border-emerald-500 hover:bg-emerald-500/5 text-gray-900 dark:text-white font-bold"
-        >
-          <Eye className="w-4 h-4" />
-          Guía Visual
-        </Button>
-
-        {/* Botón Publicar */}
-        <Button
-          onClick={() => {
-            if (hasPaid) {
-              onPublish(selectedPlatform, currentAd.platformUrl);
-            } else {
-              onCheckout();
-            }
-          }}
-          className="h-12 gap-2 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-lg shadow-emerald-500/30"
-        >
-          {!hasPaid && <Lock className="w-4 h-4" />}
-          <ExternalLink className="w-4 h-4" />
-          {hasPaid ? 'Publicar Ahora' : 'Publicar (Pago)'}
-        </Button>
-
-        {/* Botón Descargar PDF */}
-        <Button
-          onClick={() => {
-            if (hasPaid) {
-              onDownloadPDF(selectedPlatform);
-            } else {
-              onCheckout();
-            }
-          }}
-          variant="outline"
-          className="h-12 gap-2 rounded-2xl border-2 border-blue-500/30 hover:border-blue-500 hover:bg-blue-500/5 text-gray-900 dark:text-white font-bold"
-        >
-          {!hasPaid && <Lock className="w-4 h-4" />}
-          <FileText className="w-4 h-4" />
-          {hasPaid ? 'Descargar Kit' : 'Kit (Pago)'}
-        </Button>
-      </motion.div>
-
-      {/* Mensaje de Bloqueo */}
-      {!hasPaid && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 rounded-2xl p-4 flex items-start gap-3"
-        >
-          <Lock className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
-          <div>
-            <p className="font-bold text-amber-900 dark:text-amber-200 text-sm">
-              Acceso Premium Requerido
-            </p>
-            <p className="text-xs text-amber-800 dark:text-amber-300 mt-1">
-              Realiza el checkout para acceder a todas las funciones: publicar directamente, descargar kits premium y guías visuales.
-            </p>
-          </div>
-        </motion.div>
-      )}
+      </div>
     </motion.div>
   );
 };
