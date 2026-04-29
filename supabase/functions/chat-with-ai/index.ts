@@ -1,7 +1,19 @@
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+// Configurar CORS restrictivo - solo permitir el dominio de producción
+const ALLOWED_ORIGINS = [
+  "https://flowsights.it.com",
+  "https://www.flowsights.it.com",
+  "http://localhost:5173", // Para desarrollo local
+];
+
+const getCorsHeaders = (origin: string | null) => {
+  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  return {
+    "Access-Control-Allow-Origin": allowedOrigin,
+    "Access-Control-Allow-Headers":
+      "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Max-Age": "86400",
+  };
 };
 
 const SYSTEM_PROMPT = `Eres FlowBot, el asistente virtual de élite de FlowSights. Tu misión es ser un consultor inteligente, altamente informativo y persuasivo que ayuda a las empresas a entender el valor de sus datos.
@@ -51,6 +63,9 @@ interface ChatPayload {
 }
 
 Deno.serve(async (req) => {
+  const origin = req.headers.get("origin");
+  const corsHeaders = getCorsHeaders(origin);
+  
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
@@ -104,8 +119,9 @@ Deno.serve(async (req) => {
       }
       const errText = await resp.text();
       console.error("AI gateway error", resp.status, errText);
+      // No revelar detalles internos del error
       return new Response(
-        JSON.stringify({ error: "Error al procesar la solicitud" }),
+        JSON.stringify({ error: "No se pudo procesar la solicitud. Por favor, intenta de nuevo." }),
         { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
@@ -122,9 +138,11 @@ Deno.serve(async (req) => {
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Unknown error";
     console.error("chat-with-ai error:", msg);
-    return new Response(JSON.stringify({ error: msg }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    // No revelar detalles internos del error al cliente
+    return new Response(JSON.stringify({ error: "Error interno del servidor. Por favor, intenta de nuevo." }),
+      {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      },
+    );
   }
-});

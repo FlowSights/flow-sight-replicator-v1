@@ -21,6 +21,7 @@ import {
   Building2, Link2, Globe2, CreditCard
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
+import { Edit2 } from 'lucide-react';
 import { LocationInput } from '@/components/LocationInput';
 import { ROIEstimator } from '@/components/ROIEstimator';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -31,6 +32,13 @@ import { useCountUp } from '@/hooks/useCountUp';
 import { useInactivityTimeout } from '@/hooks/useInactivityTimeout';
 import { PaymentModal } from '@/components/PaymentModal';
 import { useStripeCheckout } from '@/hooks/useStripeCheckout';
+import { generateAdsWithGeminiIntegration } from '@/lib/dashboardIntegration';
+import { downloadPremiumPDF } from '@/lib/premiumPDFExporter';
+import { downloadAssetsPackage } from '@/lib/assetsExporter';
+import { EditablePlatformPreview } from '@/components/EditablePlatformPreview';
+import { DynamicROIEstimator } from '@/components/DynamicROIEstimator';
+import { PremiumResultsDashboard } from '@/components/PremiumResultsDashboard';
+import { useToast } from '@/hooks/use-toast';
 
 type HeroStat = { value: number; suffix: string; prefix?: string; label: string; decimals?: number };
 
@@ -58,6 +66,7 @@ interface GeneratedAd {
   platformUrl: string;
   businessName?: string;
   websiteUrl?: string;
+  reasoning?: string;
 }
 
 interface CampaignConfig {
@@ -76,6 +85,7 @@ interface CampaignConfig {
 const FlowsightAdsDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
+  const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -105,6 +115,8 @@ const FlowsightAdsDashboard: React.FC = () => {
     userImage: null,
   });
 
+  const [selectedPlatform, setSelectedPlatform] = useState<'google' | 'meta' | 'tiktok' | 'linkedin'>('meta');
+
   const suggestions = [
     { label: "Membresía de Gimnasio", icon: "💪" },
     { label: "Consultoría de Negocios", icon: "📈" },
@@ -116,8 +128,8 @@ const FlowsightAdsDashboard: React.FC = () => {
 
   const loadingMessages = [
     'Analizando tu modelo de negocio...',
-    'Generando copys persuasivos con IA...',
-    'Diseñando creativos visuales inteligentes...',
+    'Consultando IA para generar copys únicos...',
+    'Optimizando textos para máxima conversión...',
     'Estructurando tu Campaign Kit Premium...'
   ];
 
@@ -171,77 +183,88 @@ const FlowsightAdsDashboard: React.FC = () => {
   const handleGenerate = async () => {
     setIsLoading(true);
     setLoadingStep(0);
-    
-    for (let i = 0; i < loadingMessages.length; i++) {
-      setLoadingStep(i);
-      await new Promise(resolve => setTimeout(resolve, 1500));
+
+    try {
+      // Llamar a Gemini a través de la Edge Function
+      const generatedAds = await generateAdsWithGeminiIntegration(config, (step) => {
+        setLoadingStep(step);
+      });
+
+      setGeneratedAds(generatedAds);
+      setShowResults(true);
+      
+      // Mostrar métricas después de 500ms
+      setTimeout(() => setMetricsVisible(true), 500);
+
+      toast({
+        title: '✨ Anuncios Generados',
+        description: `Se generaron ${generatedAds.length} anuncios con IA. ¡Listos para tu estrategia!`,
+      });
+    } catch (error: any) {
+      console.error('Error generando anuncios:', error);
+      toast({
+        title: 'Error al generar anuncios',
+        description: error.message || 'Por favor, intenta de nuevo',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
     }
+  };
 
-    // La imagen es provista por el usuario (obligatoria desde el paso 4)
-    const finalImage = config.userImage || '';
-    const biz = config.businessName || 'FlowSights';
-    const websiteDomain = config.websiteUrl
-      ? config.websiteUrl.replace(/^https?:\/\/(www\.)?/, '').split('/')[0]
-      : 'tunegocio.com';
-    // Usar el link de Instagram o Facebook como URL de destino si está disponible
-    const socialUrl = config.instagramUrl || config.facebookUrl || '';
-    console.log('[FlowSightAds] Rendering with user image:', finalImage.startsWith('data:') ? 'base64 image' : finalImage);
+  const handleExportPDF = () => {
+    if (generatedAds.length === 0) return;
 
-    const ads: GeneratedAd[] = [
-      {
-        type: 'Offer',
-        headline: `¡${biz}: ${config.promote} con Descuento!`,
-        description: `La mejor solución en ${config.location} para ${config.idealCustomer}. ¡Consigue un descuento especial hoy mismo!`,
-        cta: 'Obtener Oferta',
-        imageUrl: finalImage,
-        platform: 'google',
-        score: 94,
-        platformUrl: `https://ads.google.com/aw/campaigns/new?keyword=${encodeURIComponent(config.promote)}`,
-        businessName: biz,
-        websiteUrl: config.websiteUrl || ''
-      },
-      {
-        type: 'Emotional',
-        headline: `${biz}: Diseñado para ${config.idealCustomer}`,
-        description: `En ${config.location} entendemos tus necesidades. ${config.promote} de ${biz} es la pieza que faltaba en tu vida.`,
-        cta: 'Saber Más',
-        imageUrl: finalImage,
-        platform: 'meta',
-        score: 89,
-        platformUrl: socialUrl || `https://adsmanager.facebook.com/adsmanager/manage/campaigns`,
-        businessName: biz,
-        websiteUrl: config.websiteUrl || ''
-      },
-      {
-        type: 'Urgency',
-        headline: `¡Última oportunidad en ${config.location}!`,
-        description: `${biz} para ${config.idealCustomer}. No dejes pasar la oportunidad de mejorar con ${config.promote}.`,
-        cta: 'Reservar Ahora',
-        imageUrl: finalImage,
-        platform: 'tiktok',
-        score: 97,
-        platformUrl: `https://ads.tiktok.com/i18n/dashboard`,
-        businessName: biz,
-        websiteUrl: config.websiteUrl || ''
-      },
-      {
-        type: 'Offer',
-        headline: `Impulsa tu éxito con ${biz}`,
-        description: `Soluciones profesionales para ${config.idealCustomer} en ${config.location}. ${biz}: líderes en ${config.promote}.`,
-        cta: 'Contactar',
-        imageUrl: finalImage,
-        platform: 'linkedin',
-        score: 92,
-        platformUrl: `https://www.linkedin.com/campaignmanager/accounts`,
-        businessName: biz,
-        websiteUrl: config.websiteUrl || ''
-      }
-    ];
+    const pdfData = {
+      businessName: config.businessName,
+      websiteUrl: config.websiteUrl,
+      promote: config.promote,
+      location: config.location,
+      idealCustomer: config.idealCustomer,
+      budget: config.budget,
+      platform: selectedPlatform,
+      ads: generatedAds.map((ad) => ({
+        type: ad.type,
+        headline: ad.headline,
+        description: ad.description,
+        cta: ad.cta,
+        reasoning: ad.reasoning || 'Optimizado para máxima conversión',
+        score: ad.score,
+      })),
+    };
 
-    setGeneratedAds(ads);
-    setShowResults(true);
-    setIsLoading(false);
-    setTimeout(() => setMetricsVisible(true), 500);
+    downloadPremiumPDF(pdfData);
+    toast({
+      title: '✅ PDF Descargado',
+      description: 'Tu estrategia premium está lista',
+    });
+  };
+
+  const handleDownloadAssets = () => {
+    if (generatedAds.length === 0) return;
+
+    const assetsData = {
+      businessName: config.businessName,
+      platform: selectedPlatform,
+      ads: generatedAds.map((ad) => ({
+        headline: ad.headline,
+        description: ad.description,
+        cta: ad.cta,
+        imageUrl: ad.imageUrl,
+        type: ad.type,
+      })),
+      websiteUrl: config.websiteUrl,
+    };
+
+    downloadAssetsPackage(assetsData);
+    toast({
+      title: '✅ Assets Descargados',
+      description: 'Archivos listos para importar en tu plataforma',
+    });
+  };
+
+  const handleViewDashboard = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const generatePDF = (selectedPlatform?: string) => {
@@ -1344,97 +1367,59 @@ const FlowsightAdsDashboard: React.FC = () => {
                 ))}
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {generatedAds.map((ad, index) => (
-                  <motion.div 
-                    key={index} 
-                    initial={{ opacity: 0, y: 20 }} 
-                    animate={{ opacity: 1, y: 0 }} 
-                    transition={{ delay: index * 0.1 }}
-                    className="group relative flex flex-col h-full"
-                  >
-                    <div className="absolute -inset-2 bg-gradient-to-b from-emerald-500/20 to-transparent rounded-[40px] opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl" />
-                    <div 
-                      className="relative transform group-hover:scale-[1.02] transition-all duration-500 cursor-pointer flex-1"
-                      onClick={() => setSelectedAdForLightbox(ad)}
-                    >
-                      <div className="absolute top-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                        <div className="bg-white/90 dark:bg-black/90 p-2 rounded-full shadow-xl">
-                          <Maximize2 className="w-5 h-5 text-emerald-500" />
-                        </div>
-                      </div>
-                      {ad.platform === 'google' && <GoogleAdsPreview {...ad} imageUrl={ad.imageUrl} businessName={ad.businessName} websiteUrl={ad.websiteUrl} />}
-                      {ad.platform === 'meta' && <MetaPreview {...ad} imageUrl={ad.imageUrl} businessName={ad.businessName} websiteUrl={ad.websiteUrl} />}
-                      {ad.platform === 'tiktok' && <TikTokPreview {...ad} imageUrl={ad.imageUrl} businessName={ad.businessName} />}
-                      {ad.platform === 'linkedin' && <LinkedInPreview {...ad} imageUrl={ad.imageUrl} businessName={ad.businessName} />}
-                    </div>
-                    <div className="mt-4 space-y-3 relative z-20">
-                      <Button 
-                        onClick={(e) => { 
-                          e.preventDefault(); 
-                          e.stopPropagation(); 
-                          if (hasPaid) {
-                            generatePDF(ad.platform);
-                          } else {
-                            setSelectedCampaignForPayment(ad.platform);
-                            setShowPaymentModal(true);
-                          }
-                        }}
-                        className="w-full bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-700 text-white font-bold gap-2 transition-all cursor-pointer py-4 rounded-2xl border-0"
-                      >
-                        <Download className="w-4 h-4" /> Kit {ad.platform.toUpperCase()}
-                      </Button>
-                      
-                      <div className="flex gap-2">
-                      <Button 
-                        variant="ghost"
-                        onClick={(e) => { 
-                          e.preventDefault(); 
-                          e.stopPropagation(); 
-                          if (hasPaid) {
-                            window.open(ad.platformUrl, '_blank');
-                          } else {
-                            setSelectedCampaignForPayment(ad.platform);
-                            setShowPaymentModal(true);
-                          }
-                        }}
-                        className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white dark:bg-transparent dark:hover:bg-emerald-500/20 dark:text-emerald-400 rounded-xl py-2 text-xs font-bold gap-1.5 cursor-pointer transition-all border-2 border-emerald-600 dark:border-emerald-500 hover:border-emerald-700 dark:hover:border-emerald-400"
-                      >
-                        <ExternalLink className="w-3 h-3" /> Publicar
-                      </Button>
-                      <Button 
-                        variant="ghost"
-                        onClick={(e) => { 
-                          e.preventDefault();
-                          e.stopPropagation();
-                          if (hasPaid) {
-                            setGuideLightboxPlatform(ad.platform);
-                            setIsGuideLightboxOpen(true);
-                          } else {
-                            setSelectedCampaignForPayment(ad.platform);
-                            setShowPaymentModal(true);
-                          }
-                        }}
-                        className="flex-1 bg-transparent hover:bg-blue-500/10 dark:hover:bg-blue-500/20 text-blue-700 dark:text-blue-400 rounded-xl py-2 text-xs font-bold gap-1.5 transition-all cursor-pointer border-2 border-blue-600 dark:border-blue-500 hover:border-blue-700 dark:hover:border-blue-400"
-                      >
-                        <BookOpen className="w-3 h-3" /> Guía Visual
-                      </Button>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+              {/* Premium Results Dashboard */}
+              <PremiumResultsDashboard
+                campaignName={config.businessName}
+                businessName={config.businessName}
+                platform={selectedPlatform}
+                generatedAds={generatedAds}
+                onExportPDF={handleExportPDF}
+                onViewDashboard={handleViewDashboard}
+                onDownloadAssets={handleDownloadAssets}
+              />
 
-              {/* ROI Estimator Section - After Ads */}
+              {/* Dynamic ROI Estimator */}
               <div className="mt-12 pt-8 border-t border-white/10">
                 <h2 className="text-3xl font-black text-gray-900 dark:text-white mb-2 flex items-center gap-3">
                   <TrendingUp className="w-8 h-8 text-emerald-500" />
-                  ¿Cuánto te aporta usar FlowSights Ads?
+                  Análisis de ROI Personalizado
                 </h2>
-                <p className="text-gray-600 dark:text-gray-400 mb-8 text-lg">Compara lo que obtendrías gestionando tus anuncios solo vs. con la ayuda de FlowSights Ads</p>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <p className="text-gray-600 dark:text-gray-400 mb-8 text-lg">Calcula tu retorno de inversión basado en tus métricas reales</p>
+                <DynamicROIEstimator
+                  budget={config.budget}
+                  businessName={config.businessName}
+                  location={config.location}
+                  idealCustomer={config.idealCustomer}
+                />
+              </div>
+
+              {/* Editable Platform Previews */}
+              <div className="mt-12 pt-8 border-t border-white/10">
+                <h2 className="text-3xl font-black text-gray-900 dark:text-white mb-2 flex items-center gap-3">
+                  <Edit2 className="w-8 h-8 text-blue-500" />
+                  Edita tus Anuncios en Vivo
+                </h2>
+                <p className="text-gray-600 dark:text-gray-400 mb-8 text-lg">Personaliza los copys directamente sobre las previsualizaciones</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {generatedAds.map((ad, idx) => (
-                    <ROIEstimator key={idx} budget={config.budget} platform={ad.platform} />
+                    <EditablePlatformPreview
+                      key={idx}
+                      platform={ad.platform}
+                      headline={ad.headline}
+                      description={ad.description}
+                      cta={ad.cta}
+                      imageUrl={ad.imageUrl}
+                      businessName={ad.businessName}
+                      websiteUrl={ad.websiteUrl}
+                      onUpdate={(updates) => {
+                        const updatedAds = [...generatedAds];
+                        updatedAds[idx] = {
+                          ...updatedAds[idx],
+                          ...updates,
+                        };
+                        setGeneratedAds(updatedAds);
+                      }}
+                    />
                   ))}
                 </div>
               </div>

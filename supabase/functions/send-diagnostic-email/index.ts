@@ -1,7 +1,19 @@
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+// Configurar CORS restrictivo - solo permitir el dominio de producción
+const ALLOWED_ORIGINS = [
+  "https://flowsights.it.com",
+  "https://www.flowsights.it.com",
+  "http://localhost:5173", // Para desarrollo local
+];
+
+const getCorsHeaders = (origin: string | null) => {
+  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  return {
+    "Access-Control-Allow-Origin": allowedOrigin,
+    "Access-Control-Allow-Headers":
+      "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Max-Age": "86400",
+  };
 };
 
 const GATEWAY_URL = "https://connector-gateway.lovable.dev/resend";
@@ -40,6 +52,9 @@ function escapeHtml(s: string) {
 }
 
 Deno.serve(async (req) => {
+  const origin = req.headers.get("origin");
+  const corsHeaders = getCorsHeaders(origin);
+  
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
@@ -143,8 +158,9 @@ Deno.serve(async (req) => {
     const data = await resp.json();
     if (!resp.ok) {
       console.error("Resend error", resp.status, data);
+      // No revelar detalles internos del error
       return new Response(
-        JSON.stringify({ error: "No se pudo enviar el correo", details: data }),
+        JSON.stringify({ error: "No se pudo enviar el correo. Por favor, intenta de nuevo." }),
         { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
@@ -156,7 +172,8 @@ Deno.serve(async (req) => {
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Unknown error";
     console.error("send-diagnostic-email error:", msg);
-    return new Response(JSON.stringify({ error: msg }), {
+    // No revelar detalles internos del error al cliente
+    return new Response(JSON.stringify({ error: "Error interno del servidor. Por favor, intenta de nuevo." }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
