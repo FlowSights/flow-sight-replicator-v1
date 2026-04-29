@@ -1,37 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, ShieldCheck, Zap, Rocket } from 'lucide-react';
 
 interface PremiumLoadingScreenProps {
   isVisible: boolean;
-  progress?: number;
+  progress: number;
 }
 
-export const PremiumLoadingScreen: React.FC<PremiumLoadingScreenProps> = ({ isVisible, progress = 0 }) => {
-  const [step, setStep] = useState(0);
-  const steps = [
-    { title: 'Analizando Mercado', subtitle: 'Identificando patrones de conversión', icon: Zap },
-    { title: 'Generando Estrategia', subtitle: 'Diseñando tu Campaign Kit Premium', icon: ShieldCheck },
-    { title: 'Optimizando Creativos', subtitle: 'Aplicando IA de alto rendimiento', icon: Sparkles },
-    { title: 'Finalizando Dossier', subtitle: 'Preparando tu reporte de 15 páginas', icon: Rocket },
+export const PremiumLoadingScreen: React.FC<PremiumLoadingScreenProps> = ({ isVisible, progress }) => {
+  const [messageIndex, setMessageIndex] = useState(0);
+  
+  const messages = [
+    "Analizando tu modelo de negocio",
+    "Generando ganchos psicológicos",
+    "Optimizando para máxima conversión",
+    "Estructurando tu Campaign Kit Premium",
+    "Finalizando tu estrategia maestra"
   ];
 
   useEffect(() => {
     if (isVisible) {
-      // Sincronizar el paso visual con el progreso real si existe, o usar un intervalo
-      if (progress > 0) {
-        const calculatedStep = Math.min(Math.floor((progress / 100) * steps.length), steps.length - 1);
-        setStep(calculatedStep);
-      } else {
-        const interval = setInterval(() => {
-          setStep((prev) => (prev < steps.length - 1 ? prev + 1 : prev));
-        }, 2500);
-        return () => clearInterval(interval);
-      }
-    } else {
-      setStep(0);
+      const interval = setInterval(() => {
+        setMessageIndex((prev) => (prev + 1) % messages.length);
+      }, 2500);
+      return () => clearInterval(interval);
     }
-  }, [isVisible, progress]);
+  }, [isVisible]);
 
   return (
     <AnimatePresence>
@@ -40,98 +34,99 @@ export const PremiumLoadingScreen: React.FC<PremiumLoadingScreenProps> = ({ isVi
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black p-6 text-center overflow-hidden"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-white dark:bg-black overflow-hidden"
         >
           {/* Immersive Background Elements */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <motion.div 
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            <motion.div
               animate={{ 
                 scale: [1, 1.2, 1],
-                opacity: [0.3, 0.5, 0.3],
-                rotate: [0, 90, 0]
+                rotate: [0, 90, 0],
+                opacity: [0.3, 0.5, 0.3]
               }}
-              transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-              className="absolute -top-1/4 -left-1/4 w-full h-full bg-emerald-500/10 rounded-full blur-[120px]" 
+              transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -top-[20%] -right-[10%] w-[60%] h-[60%] rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 blur-[120px]"
             />
-            <motion.div 
+            <motion.div
               animate={{ 
-                scale: [1.2, 1, 1.2],
-                opacity: [0.2, 0.4, 0.2],
-                rotate: [0, -90, 0]
+                scale: [1, 1.3, 1],
+                rotate: [0, -90, 0],
+                opacity: [0.2, 0.4, 0.2]
               }}
-              transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-              className="absolute -bottom-1/4 -right-1/4 w-full h-full bg-blue-500/10 rounded-full blur-[120px]" 
+              transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -bottom-[20%] -left-[10%] w-[60%] h-[60%] rounded-full bg-blue-500/10 dark:bg-blue-500/20 blur-[120px]"
             />
           </div>
 
-          <div className="relative z-10 max-w-2xl w-full">
-            {/* Animated Icon Container */}
-            <motion.div
-              key={step}
-              initial={{ scale: 0.8, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              transition={{ type: "spring", damping: 15 }}
-              className="mx-auto mb-12 flex h-28 w-28 items-center justify-center rounded-[2.5rem] bg-white/5 border border-white/10 backdrop-blur-3xl shadow-[0_0_50px_-12px_rgba(16,185,129,0.3)]"
-            >
-              {React.createElement(steps[step].icon, { className: "h-12 w-12 text-emerald-400" })}
-            </motion.div>
+          <div className="relative z-10 w-full max-w-xl px-8 text-center space-y-12">
+            {/* Premium Icon Animation */}
+            <div className="flex justify-center">
+              <motion.div
+                animate={{ 
+                  scale: [1, 1.1, 1],
+                  rotate: [0, 5, -5, 0]
+                }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="relative"
+              >
+                <div className="absolute inset-0 bg-emerald-500/20 blur-2xl rounded-full" />
+                <div className="relative h-24 w-24 rounded-3xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 shadow-2xl flex items-center justify-center backdrop-blur-xl">
+                  <Sparkles className="w-12 h-12 text-emerald-500" />
+                </div>
+              </motion.div>
+            </div>
 
             {/* Text Content */}
-            <div className="space-y-6 mb-16">
+            <div className="space-y-4">
               <motion.h2 
-                key={`title-${step}`}
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                className="text-5xl md:text-6xl font-black text-white tracking-tight"
+                key={messageIndex}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="text-3xl md:text-4xl font-black text-black dark:text-white tracking-tight"
               >
-                {steps[step].title}
+                {messages[messageIndex]}
               </motion.h2>
-              <motion.p 
-                key={`subtitle-${step}`}
-                initial={{ y: 10, opacity: 0 }}
-                animate={{ y: 0, opacity: 0.6 }}
-                className="text-xl text-gray-400 font-medium"
-              >
-                {steps[step].subtitle}
-              </motion.p>
+              <p className="text-gray-500 dark:text-gray-400 font-medium text-lg">
+                Nuestra IA está diseñando una estrategia de alto nivel para tu negocio
+              </p>
             </div>
 
             {/* Premium Progress Bar */}
-            <div className="mx-auto max-w-md">
-              <div className="relative h-2 w-full overflow-hidden rounded-full bg-white/5 border border-white/5 backdrop-blur-sm">
+            <div className="space-y-4">
+              <div className="h-1.5 w-full bg-black/5 dark:bg-white/5 rounded-full overflow-hidden border border-black/5 dark:border-white/10">
                 <motion.div
-                  initial={{ width: "0%" }}
-                  animate={{ width: progress > 0 ? `${progress}%` : `${((step + 1) / steps.length) * 100}%` }}
-                  transition={{ duration: 1, ease: "easeInOut" }}
-                  className="h-full bg-gradient-to-r from-emerald-500 via-emerald-400 to-blue-500 shadow-[0_0_15px_rgba(16,185,129,0.5)]"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${progress}%` }}
+                  className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 shadow-[0_0_20px_rgba(16,185,129,0.5)]"
                 />
               </div>
-
-              {/* Step Indicators */}
-              <div className="mt-10 flex justify-center gap-4">
-                {steps.map((_, i) => (
-                  <motion.div
-                    key={i}
-                    animate={{ 
-                      scale: i === step ? 1.5 : 1,
-                      opacity: i === step ? 1 : 0.2,
-                      backgroundColor: i === step ? '#10b981' : '#ffffff'
-                    }}
-                    transition={{ duration: 0.5 }}
-                    className="h-1.5 w-1.5 rounded-full"
-                  />
-                ))}
+              <div className="flex justify-between items-center text-xs font-black uppercase tracking-[0.2em] text-gray-400">
+                <span>Optimizando</span>
+                <span className="text-emerald-500">{Math.round(progress)}%</span>
               </div>
             </div>
 
-            <motion.p 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1 }}
-              className="mt-20 text-xs font-black text-white/20 uppercase tracking-[0.6em]"
-            >
-              FlowSight Ads Premium AI Experience
-            </motion.p>
+            {/* Status Badges */}
+            <div className="flex flex-wrap justify-center gap-4 pt-4">
+              {[
+                { icon: ShieldCheck, label: "Seguro" },
+                { icon: Zap, label: "IA Optimizada" },
+                { icon: Rocket, label: "Listo para Escalar" }
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10">
+                  <item.icon className="w-4 h-4 text-emerald-500" />
+                  <span className="text-[10px] font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest">{item.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Bottom Branding */}
+          <div className="absolute bottom-12 left-0 right-0 text-center">
+            <p className="text-[10px] font-black text-black/20 dark:text-white/20 uppercase tracking-[0.5em]">
+              FlowSight Strategic AI
+            </p>
           </div>
         </motion.div>
       )}

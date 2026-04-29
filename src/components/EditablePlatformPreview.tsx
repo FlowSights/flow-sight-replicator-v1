@@ -215,7 +215,7 @@ export const EditablePlatformPreview: React.FC<EditablePlatformPreviewProps> = (
               } text-white`}
             >
               <Download className="w-3 h-3" />
-              Kit PDF
+              Campaign Kit
             </Button>
           )}
           {onDownloadGuide && (
@@ -234,7 +234,7 @@ export const EditablePlatformPreview: React.FC<EditablePlatformPreviewProps> = (
               } text-white`}
             >
               <FileText className="w-3 h-3" />
-              Guía
+              Guía de Lanzamiento
             </Button>
           )}
           {onPublish && (

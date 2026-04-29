@@ -938,7 +938,12 @@ const FlowsightAdsDashboard: React.FC = () => {
   };
 
   if (isLoading) {
-    return <AppleStyleLoadingScreen isVisible={true} currentStep={loadingStep} totalSteps={4} />;
+    return (
+      <PremiumLoadingScreen 
+        isVisible={true} 
+        progress={(loadingStep / 4) * 100} 
+      />
+    );
   }
 
   return (
@@ -1466,7 +1471,6 @@ const FlowsightAdsDashboard: React.FC = () => {
                   businessName={config.businessName}
                   platform={selectedPlatform}
                   generatedAds={generatedAds}
-                  onExportPDF={handleExportPDF}
                   onDownloadCampaignKit={() => {
                     if (hasPaid) {
                       downloadPremiumCampaignKit({
@@ -1477,15 +1481,30 @@ const FlowsightAdsDashboard: React.FC = () => {
                         ads: generatedAds.filter(a => a.platform === selectedPlatform),
                       });
                       toast({
-                        title: "✅ Campaign Kit Premium Descargado",
+                        title: "✅ Campaign Kit Descargado",
                         description: `Estrategia completa para ${selectedPlatform}`,
                       });
                     } else {
                       setShowPaymentModal(true);
                     }
                   }}
-                  onViewDashboard={handleViewDashboard}
-                  onDownloadAssets={handleDownloadAssets}
+                  onViewDashboard={() => {
+                    const el = document.getElementById('client-dashboard');
+                    el?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  onDownloadAssets={() => {
+                    if (hasPaid) {
+                      downloadPremiumCampaignKit({
+                        businessName: config.businessName,
+                        businessDescription: config.promote,
+                        targetAudience: config.idealCustomer,
+                        websiteUrl: config.websiteUrl,
+                        ads: generatedAds.filter(a => a.platform === selectedPlatform),
+                      });
+                    } else {
+                      setShowPaymentModal(true);
+                    }
+                  }}
                 />
               </AnimatePresence>
 
@@ -1495,7 +1514,7 @@ const FlowsightAdsDashboard: React.FC = () => {
               </div>
 
               {/* Client Dashboard - Premium Delivery Center */}
-              <div id="client-dashboard" className="mt-12 pt-8 border-t border-white/10">
+              <div id="client-dashboard" className="mt-12 pt-8 border-t border-black/5 dark:border-white/10">
                 <ClientDashboard
                   businessName={config.businessName}
                   generatedAds={generatedAds}
@@ -1513,19 +1532,22 @@ const FlowsightAdsDashboard: React.FC = () => {
                         ads: generatedAds,
                       });
                       toast({
-                        title: '✅ Campaign Kit Premium Descargado',
-                        description: 'Tu estrategia de 15 páginas está lista',
+                        title: '✅ Campaign Kit Descargado',
+                        description: 'Tu dossier estratégico completo está listo',
                       });
                     } else {
                       setShowPaymentModal(true);
                     }
                   }}
-                  onDownloadGuide={() => setIsGuideLightboxOpen(true)}
+                  onDownloadGuide={() => {
+                    setGuideLightboxPlatform(selectedPlatform);
+                    setIsGuideLightboxOpen(true);
+                  }}
                 />
               </div>
 
-              {/* Master Call-to-Action */}
-              <div className="mt-12 pt-8 border-t border-white/10">
+              {/* Ready to Launch - Premium CTA Section */}
+              <div className="mt-20 pt-8 border-t border-black/5 dark:border-white/10">
                 <PremiumReadyToLaunch
                   businessName={config.businessName}
                   hasPaid={hasPaid}
@@ -1536,11 +1558,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                         businessDescription: config.promote,
                         targetAudience: config.idealCustomer,
                         websiteUrl: config.websiteUrl,
-                        ads: generatedAds,
-                      });
-                      toast({
-                        title: '✅ Campaign Kit Premium Descargado',
-                        description: 'Tu estrategia de 15 páginas está lista',
+                        ads: generatedAds.filter(a => a.platform === selectedPlatform),
                       });
                     } else {
                       setShowPaymentModal(true);
@@ -1548,19 +1566,16 @@ const FlowsightAdsDashboard: React.FC = () => {
                   }}
                   onDownloadAll={() => {
                     if (hasPaid) {
-                      downloadMasterPackage({
+                      downloadPremiumCampaignKit({
                         businessName: config.businessName,
+                        businessDescription: config.promote,
+                        targetAudience: config.idealCustomer,
                         websiteUrl: config.websiteUrl,
-                        ads: {
-                          google: generatedAds.filter(a => a.platform === 'google'),
-                          meta: generatedAds.filter(a => a.platform === 'meta'),
-                          tiktok: generatedAds.filter(a => a.platform === 'tiktok'),
-                          linkedin: generatedAds.filter(a => a.platform === 'linkedin'),
-                        },
+                        ads: generatedAds,
                       });
                       toast({
                         title: '✅ Paquete Maestro Descargado',
-                        description: 'Todos tus kits están listos',
+                        description: 'Todos tus Campaign Kits están listos',
                       });
                     } else {
                       setShowPaymentModal(true);
@@ -1570,10 +1585,10 @@ const FlowsightAdsDashboard: React.FC = () => {
               </div>
 
               {/* Editable Platform Previews - Premium Gallery */}
-              <div className="mt-12 pt-8 border-t border-white/10">
+              <div className="mt-12 pt-8 border-t border-black/5 dark:border-white/10">
                 <div className="space-y-2 mb-8">
-                  <h2 className="text-4xl font-black text-gray-900 dark:text-white tracking-tight">Personaliza tus <span className="text-emerald-500">Anuncios</span></h2>
-                  <p className="text-gray-600 dark:text-gray-400 text-lg">Ajusta los textos y descarga cada Campaing Kit personalizado para tu plataforma</p>
+                  <h2 className="text-4xl font-black text-black dark:text-white tracking-tight">Perfecciona tu Mensaje</h2>
+                  <p className="text-gray-500 dark:text-gray-400 text-lg">Ajusta los detalles de tus anuncios y descarga el Campaign Kit estratégico para cada plataforma.</p>
                 </div>
                 <div className="space-y-6">
                   {generatedAds.map((ad, idx) => (
@@ -1588,10 +1603,16 @@ const FlowsightAdsDashboard: React.FC = () => {
                         websiteUrl={ad.websiteUrl}
                         hasPaid={hasPaid}
                         onDownloadKit={() => {
-                          downloadPremiumPDFV2(config, [ad], ad.platform);
+                          downloadPremiumCampaignKit({
+                            businessName: config.businessName,
+                            businessDescription: config.promote,
+                            targetAudience: config.idealCustomer,
+                            websiteUrl: config.websiteUrl,
+                            ads: [ad],
+                          });
                           toast({
-                            title: '✅ Campaing Kit Descargado',
-                            description: `Kit personalizado para ${ad.platform} listo`,
+                            title: '✅ Campaign Kit Descargado',
+                            description: `Material estratégico para ${ad.platform} listo`,
                           });
                         }}
                         onDownloadGuide={() => {

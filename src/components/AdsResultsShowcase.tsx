@@ -59,10 +59,8 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
   const [internalSelectedPlatform, setInternalSelectedPlatform] = useState<'meta' | 'google' | 'tiktok' | 'linkedin'>('meta');
   const [lightboxOpen, setLightboxOpen] = useState(false);
   
-  // Usar la plataforma externa si se proporciona, sino usar la interna
   const selectedPlatform = externalSelectedPlatform || internalSelectedPlatform;
   
-  // Sincronizar cuando cambia la plataforma externa
   useEffect(() => {
     if (externalSelectedPlatform) {
       setInternalSelectedPlatform(externalSelectedPlatform);
@@ -70,7 +68,6 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
     }
   }, [externalSelectedPlatform]);
 
-  // Agrupar anuncios por plataforma
   const adsByPlatform = ads.reduce((acc, ad) => {
     if (!acc[ad.platform]) {
       acc[ad.platform] = [];
@@ -110,7 +107,7 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className={`space-y-8 p-8 rounded-[40px] transition-colors duration-500 ${colors.bg} border-2 ${colors.border}`}
+        className={`space-y-8 p-8 md:p-12 rounded-[3rem] transition-colors duration-500 bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 shadow-2xl shadow-black/5 backdrop-blur-xl`}
       >
         {/* Selector de Plataformas */}
         <div className="flex flex-wrap gap-3">
@@ -123,11 +120,11 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
                 onClick={() => handlePlatformChange(platform)}
                 className={`px-6 py-3 rounded-2xl font-bold transition-all flex items-center gap-3 ${
                   isSelected
-                    ? `bg-gradient-to-r ${pColors.gradient} text-white shadow-lg scale-105`
-                    : 'bg-white dark:bg-white/5 text-gray-500 hover:bg-gray-100 dark:hover:bg-white/10'
+                    ? `bg-black dark:bg-white text-white dark:text-black shadow-xl scale-105`
+                    : 'bg-black/5 dark:bg-white/5 text-gray-500 hover:bg-black/10 dark:hover:bg-white/10'
                 }`}
               >
-                <PlatformIcon platform={platform} size={20} className={isSelected ? 'text-white' : 'text-gray-400'} />
+                <PlatformIcon platform={platform} size={20} className={isSelected ? 'text-white dark:text-black' : 'text-gray-400'} />
                 {platformNames[platform]}
               </button>
             );
@@ -152,27 +149,25 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
               </motion.div>
             </AnimatePresence>
 
-            {/* Botón para abrir Lightbox */}
             <button
               onClick={() => setLightboxOpen(true)}
-              className="absolute top-4 right-4 z-20 p-3 rounded-full bg-white dark:bg-gray-800 shadow-xl text-gray-800 dark:text-white hover:scale-110 transition-transform hover:bg-emerald-500 hover:text-white"
-              title="Ver anuncio en tamaño completo"
+              className="absolute top-4 right-4 z-20 p-4 rounded-2xl bg-white dark:bg-gray-800 shadow-2xl text-gray-800 dark:text-white hover:scale-110 transition-all hover:bg-emerald-500 hover:text-white border border-black/5 dark:border-white/10"
+              title="Ver en pantalla completa"
             >
               <Maximize2 className="w-5 h-5" />
             </button>
 
-            {/* Controles de Navegación */}
             {currentAds.length > 1 && (
               <div className="absolute inset-y-0 -inset-x-4 flex items-center justify-between pointer-events-none z-20">
                 <button
                   onClick={handlePrev}
-                  className="p-3 rounded-full bg-white dark:bg-gray-800 shadow-xl text-gray-800 dark:text-white pointer-events-auto hover:scale-110 transition-transform"
+                  className="p-4 rounded-2xl bg-white dark:bg-gray-800 shadow-2xl text-gray-800 dark:text-white pointer-events-auto hover:scale-110 transition-all border border-black/5 dark:border-white/10"
                 >
                   <ChevronLeft className="w-6 h-6" />
                 </button>
                 <button
                   onClick={handleNext}
-                  className="p-3 rounded-full bg-white dark:bg-gray-800 shadow-xl text-gray-800 dark:text-white pointer-events-auto hover:scale-110 transition-transform"
+                  className="p-4 rounded-2xl bg-white dark:bg-gray-800 shadow-2xl text-gray-800 dark:text-white pointer-events-auto hover:scale-110 transition-all border border-black/5 dark:border-white/10"
                 >
                   <ChevronRight className="w-6 h-6" />
                 </button>
@@ -182,21 +177,21 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
 
           {/* Información y Acciones */}
           <div className="space-y-8">
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div className="flex items-center gap-3">
-                <div className={`px-4 py-1.5 rounded-full bg-gradient-to-r ${colors.gradient} text-white text-xs font-black uppercase tracking-widest`}>
-                  {currentAd.type}
+                <div className={`px-4 py-2 rounded-full bg-black/5 dark:bg-white/10 text-gray-600 dark:text-gray-300 text-[10px] font-black uppercase tracking-[0.2em]`}>
+                  Estrategia de {currentAd.type}
                 </div>
-                <div className="flex items-center gap-1 text-yellow-500 font-bold">
-                  <Sparkles className="w-4 h-4 fill-yellow-500" />
+                <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-black text-sm">
+                  <Sparkles className="w-4 h-4" />
                   {currentAd.score}/100
                 </div>
               </div>
-              <h3 className="text-4xl font-black text-gray-900 dark:text-white leading-tight">
-                Estrategia de <span className={colors.text}>{platformNames[selectedPlatform]}</span>
+              <h3 className="text-4xl md:text-5xl font-black text-black dark:text-white leading-tight tracking-tight">
+                Diseñado para <span className={colors.text}>{platformNames[selectedPlatform]}</span>
               </h3>
-              <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
-                {currentAd.reasoning || "Este anuncio ha sido optimizado por nuestra IA para maximizar el CTR y las conversiones en esta plataforma específica."}
+              <p className="text-lg text-gray-500 dark:text-gray-400 font-medium leading-relaxed">
+                {currentAd.reasoning || "Este anuncio ha sido optimizado por nuestra tecnología para maximizar el impacto y las conversiones en esta plataforma específica."}
               </p>
             </div>
 
@@ -204,37 +199,37 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
               <Button
                 onClick={() => onViewGuide(selectedPlatform)}
                 variant="outline"
-                className="h-16 rounded-2xl border-2 border-gray-200 dark:border-white/10 font-bold text-lg gap-3"
+                className="h-20 rounded-[1.5rem] border-black/10 dark:border-white/10 font-black text-lg gap-3 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-all"
               >
-                <BookOpen className="w-5 h-5" /> Guía Visual
+                <BookOpen className="w-5 h-5" /> Guía de Uso
               </Button>
               <Button
                 onClick={() => onDownloadPDF(selectedPlatform)}
-                className={`h-16 rounded-2xl bg-gradient-to-r ${colors.gradient} text-white font-bold text-lg gap-3 shadow-xl`}
-                title={`Descargar kit de ${platformNames[selectedPlatform]}`}
+                className={`h-20 rounded-[1.5rem] bg-black dark:bg-white text-white dark:text-black font-black text-lg gap-3 shadow-2xl transition-all hover:scale-105`}
               >
                 {!hasPaid ? <Lock className="w-5 h-5" /> : <Download className="w-5 h-5" />}
-                Descargar Kit
+                Campaign Kit
               </Button>
               <Button
                 onClick={() => onPublish(selectedPlatform, currentAd.platformUrl)}
-                className="h-16 rounded-2xl bg-white dark:bg-white/5 border-2 border-gray-200 dark:border-white/10 text-gray-900 dark:text-white font-bold text-lg gap-3 sm:col-span-2"
+                variant="outline"
+                className="h-20 rounded-[1.5rem] border-black/10 dark:border-white/10 text-black dark:text-white font-black text-lg gap-3 sm:col-span-2 bg-transparent hover:bg-black/5 dark:hover:bg-white/5 transition-all"
               >
-                <ExternalLink className="w-5 h-5" /> Publicar en {platformNames[selectedPlatform]}
+                <ExternalLink className="w-5 h-5" /> Publicar Anuncio
               </Button>
             </div>
 
             {!hasPaid && (
-              <div className="p-6 rounded-3xl bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center text-white shrink-0">
-                  <Zap className="w-6 h-6 fill-white" />
+              <div className="p-8 rounded-[2rem] bg-emerald-500/10 border border-emerald-500/20 flex flex-col sm:flex-row items-center gap-6">
+                <div className="w-16 h-16 rounded-2xl bg-emerald-500 flex items-center justify-center text-white shrink-0 shadow-lg shadow-emerald-500/20">
+                  <Zap className="w-8 h-8 fill-white" />
                 </div>
-                <div>
-                  <p className="font-bold text-gray-900 dark:text-white">Desbloquea tu Campaign Kit</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Obtén acceso completo a todos los activos y guías por solo $49.99</p>
+                <div className="text-center sm:text-left">
+                  <p className="font-black text-xl text-black dark:text-white tracking-tight">Obtén tu AI Kit Completo</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">Desbloquea todos los activos y guías estratégicas hoy.</p>
                 </div>
-                <Button onClick={onCheckout} className="ml-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl">
-                  Pagar
+                <Button onClick={onCheckout} className="w-full sm:w-auto sm:ml-auto bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-2xl h-14 px-8 shadow-lg shadow-emerald-500/20">
+                  Desbloquear
                 </Button>
               </div>
             )}
@@ -242,7 +237,6 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
         </div>
       </motion.div>
 
-      {/* Lightbox para ver el contenido del anuncio */}
       <AdContentLightbox
         isOpen={lightboxOpen}
         imageUrl={currentAd?.imageUrl}
