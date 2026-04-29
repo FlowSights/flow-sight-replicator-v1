@@ -1309,7 +1309,7 @@ const FlowsightAdsDashboard: React.FC = () => {
               <div className="flex flex-col md:flex-row justify-between items-end gap-6">
                 <div className="space-y-2">
                   <h2 className="text-4xl font-black text-gray-900 dark:text-white tracking-tight">Tus anuncios están <span className="text-emerald-500">listos</span></h2>
-                  <p className="text-gray-500 dark:text-gray-400">Haz clic en cualquier anuncio para verlo en pantalla completa y descargar su kit.</p>
+                  <p className="text-gray-500 dark:text-gray-400">Selecciona una plataforma para ver y personalizar tus anuncios.</p>
                 </div>
                 <div className="flex gap-3">
                   {!hasPaid && (
@@ -1324,6 +1324,34 @@ const FlowsightAdsDashboard: React.FC = () => {
                     <RefreshCw className="w-4 h-4 mr-2" /> Nueva Campaña
                   </Button>
                 </div>
+              </div>
+
+              {/* Selector de Plataformas */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {(['meta', 'google', 'tiktok', 'linkedin'] as const).map((platform) => {
+                  const platformLabels = { meta: 'Meta', google: 'Google', tiktok: 'TikTok', linkedin: 'LinkedIn' };
+                  const platformColors = {
+                    meta: 'from-blue-500 to-blue-600',
+                    google: 'from-red-500 via-yellow-500 to-blue-500',
+                    tiktok: 'from-black to-pink-500',
+                    linkedin: 'from-blue-600 to-blue-700',
+                  };
+                  return (
+                    <motion.button
+                      key={platform}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => setSelectedPlatform(platform)}
+                      className={`p-4 rounded-2xl font-bold uppercase tracking-widest text-sm transition-all border-2 ${
+                        selectedPlatform === platform
+                          ? `bg-gradient-to-r ${platformColors[platform]} text-white border-transparent shadow-lg`
+                          : 'border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:border-gray-300'
+                      }`}
+                    >
+                      {platformLabels[platform]}
+                    </motion.button>
+                  );
+                })}
               </div>
 
               {/* Métricas Wow */}
