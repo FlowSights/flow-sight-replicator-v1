@@ -22,6 +22,7 @@ interface PremiumResultsDashboardProps {
   onExportPDF?: () => void;
   onViewDashboard?: () => void;
   onDownloadAssets?: () => void;
+  onDownloadCampaignKit?: () => void;
 }
 
 export const PremiumResultsDashboard: React.FC<PremiumResultsDashboardProps> = ({
@@ -32,6 +33,7 @@ export const PremiumResultsDashboard: React.FC<PremiumResultsDashboardProps> = (
   onExportPDF,
   onViewDashboard,
   onDownloadAssets,
+  onDownloadCampaignKit,
 }) => {
   const [activeTab, setActiveTab] = useState('overview');
 
@@ -74,7 +76,7 @@ export const PremiumResultsDashboard: React.FC<PremiumResultsDashboardProps> = (
       title: 'Campaing Kit Premium',
       description: 'Informe profesional de 15+ páginas con análisis, copys y guías paso a paso',
       action: 'Descargar Kit',
-      onClick: onExportPDF,
+      onClick: onDownloadCampaignKit || onExportPDF,
       color: 'emerald',
     },
     {

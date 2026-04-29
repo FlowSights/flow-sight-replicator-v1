@@ -1467,6 +1467,23 @@ const FlowsightAdsDashboard: React.FC = () => {
                   platform={selectedPlatform}
                   generatedAds={generatedAds}
                   onExportPDF={handleExportPDF}
+                  onDownloadCampaignKit={() => {
+                    if (hasPaid) {
+                      downloadPremiumCampaignKit({
+                        businessName: config.businessName,
+                        businessDescription: config.promote,
+                        targetAudience: config.idealCustomer,
+                        websiteUrl: config.websiteUrl,
+                        ads: generatedAds.filter(a => a.platform === selectedPlatform),
+                      });
+                      toast({
+                        title: "✅ Campaign Kit Premium Descargado",
+                        description: `Estrategia completa para ${selectedPlatform}`,
+                      });
+                    } else {
+                      setShowPaymentModal(true);
+                    }
+                  }}
                   onViewDashboard={handleViewDashboard}
                   onDownloadAssets={handleDownloadAssets}
                 />
