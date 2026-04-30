@@ -222,14 +222,14 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
                 ))}
               </div>
 
-              {/* Selector de Plataformas y Preview - Diseño Mejorado */}
+              {/* Selector de Plataformas y Preview - Diseño "WOW" */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="rounded-[3rem] border border-black/5 dark:border-white/10 bg-white dark:bg-white/5 p-8 md:p-12 shadow-2xl shadow-black/5 backdrop-blur-xl space-y-8"
+                className="rounded-[3rem] border-2 border-blue-500/30 dark:border-blue-400/30 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 p-8 md:p-12 shadow-2xl shadow-blue-500/20 backdrop-blur-xl space-y-8"
               >
-                {/* Selector de Plataformas */}
+                {/* Selector de Plataformas - Logos Grandes */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
                   {platformOrder.map((platform) => {
                     const isSelected = selectedPlatform === platform;
@@ -241,14 +241,16 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
                         whileHover={{ scale: hasAds ? 1.05 : 1 }}
                         onClick={() => handlePlatformChange(platform)}
                         disabled={!hasAds}
-                        className={`px-4 py-4 rounded-2xl font-bold transition-all flex items-center justify-center gap-3 border ${
+                        className={`px-6 py-6 rounded-[1.5rem] font-bold transition-all flex flex-col items-center justify-center gap-3 border-2 ${
                           isSelected
-                            ? `bg-blue-600 border-blue-600 text-white shadow-xl shadow-blue-500/20 scale-[1.02]`
-                            : 'bg-white dark:bg-white/5 border-black/5 dark:border-white/10 text-gray-500 hover:bg-black/5 dark:hover:bg-white/10'
+                            ? `bg-blue-600 border-blue-500 text-white shadow-xl shadow-blue-500/40`
+                            : 'bg-slate-800 dark:bg-slate-700/50 border-slate-700 dark:border-slate-600 text-gray-400 hover:bg-slate-700 dark:hover:bg-slate-600'
                         } ${!hasAds ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
-                        <PlatformIcon platform={platform} size={18} className={isSelected ? 'text-white' : 'text-gray-400'} />
-                        <span className="text-sm truncate">{platformNames[platform].split(' ')[0]}</span>
+                        <div className={`${isSelected ? 'text-white' : 'text-gray-400'}`}>
+                          <PlatformIcon platform={platform} size={32} className="w-8 h-8" />
+                        </div>
+                        <span className="text-xs font-bold truncate">{platformNames[platform].split(' ')[0]}</span>
                       </motion.button>
                     );
                   })}
@@ -305,42 +307,44 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
                     <div className="space-y-8">
                       <div className="space-y-6">
                         <div className="flex items-center gap-3">
-                          <div className={`px-4 py-2 rounded-full bg-black/5 dark:bg-white/10 text-gray-700 dark:text-gray-300 text-[10px] font-black uppercase tracking-[0.2em]`}>
-                            Estrategia de {currentAd.type || 'Conversión'}
+                          <div className={`px-4 py-2 rounded-full bg-blue-500/20 border border-blue-500/40 text-blue-300 text-[10px] font-black uppercase tracking-[0.2em]`}>
+                            OFFER
                           </div>
-                          <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-black text-sm">
+                          <div className="flex items-center gap-1.5 text-emerald-400 font-black text-sm">
                             <Sparkles className="w-4 h-4" />
                             {currentAd.score}/100
                           </div>
                         </div>
-                        <h3 className="text-4xl md:text-5xl font-black text-black dark:text-white leading-tight tracking-tight">
-                          Diseñado para <span className={colors.text}>{platformNames[selectedPlatform]}</span>
+                        <h3 className="text-4xl md:text-5xl font-black text-white leading-tight tracking-tight">
+                          Estrategia de <span className="text-blue-400">{platformNames[selectedPlatform]}</span>
                         </h3>
-                        <p className="text-lg text-gray-600 dark:text-gray-400 font-medium leading-relaxed">
-                          {currentAd.reasoning || "Este anuncio ha sido optimizado por nuestra tecnología para maximizar el impacto y las conversiones en esta plataforma específica."}
+                        <p className="text-lg text-gray-300 font-medium leading-relaxed">
+                          {currentAd.reasoning || "Tono formal y profesional diseñado específicamente para dueños de negocio y emprendedores que buscan networking de alto nivel."}
                         </p>
                       </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <Button
+                            onClick={onDownloadGuide}
+                            variant="outline"
+                            className="h-16 rounded-[1.5rem] border-slate-600 dark:border-slate-500 font-bold text-base gap-3 bg-slate-800 dark:bg-slate-700 text-white hover:bg-slate-700 dark:hover:bg-slate-600 transition-all"
+                          >
+                            <BookOpen className="w-5 h-5" /> Guía Visual
+                          </Button>
+                          <Button
+                            onClick={onDownloadKit}
+                            className={`h-16 rounded-[1.5rem] bg-blue-600 hover:bg-blue-700 text-white font-bold text-base gap-3 shadow-xl shadow-blue-500/30 transition-all`}
+                          >
+                            {!hasPaid ? <Lock className="w-5 h-5" /> : <Download className="w-5 h-5" />}
+                            Descargar Kit
+                          </Button>
+                        </div>
                         <Button
-                          onClick={onDownloadGuide}
                           variant="outline"
-                          className="h-20 rounded-[1.5rem] border-black/10 dark:border-white/10 font-black text-lg gap-3 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-all"
+                          className="w-full h-16 rounded-[1.5rem] border-slate-600 dark:border-slate-500 text-white font-bold text-base gap-3 bg-slate-800 dark:bg-slate-700 hover:bg-slate-700 dark:hover:bg-slate-600 transition-all"
                         >
-                          <BookOpen className="w-5 h-5" /> Guía de Uso
-                        </Button>
-                        <Button
-                          onClick={onDownloadKit}
-                          className={`h-20 rounded-[1.5rem] bg-black dark:bg-white text-white dark:text-black font-black text-lg gap-3 shadow-2xl transition-all hover:scale-105`}
-                        >
-                          {!hasPaid ? <Lock className="w-5 h-5" /> : <Download className="w-5 h-5" />}
-                          Campaign Kit
-                        </Button>
-                        <Button
-                          variant="outline"
-                          className="h-20 rounded-[1.5rem] border-black/10 dark:border-white/10 text-black dark:text-white font-black text-lg gap-3 sm:col-span-2 bg-transparent hover:bg-black/5 dark:hover:bg-white/5 transition-all"
-                        >
-                          <ExternalLink className="w-5 h-5" /> Publicar Anuncio
+                          <ExternalLink className="w-5 h-5" /> Publicar en {platformNames[selectedPlatform].split(' ')[0]}
                         </Button>
                       </div>
 
