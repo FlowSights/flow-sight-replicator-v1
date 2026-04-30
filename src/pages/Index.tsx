@@ -808,7 +808,7 @@ const Index = () => {
 
           <div className="max-w-3xl mx-auto">
             <Accordion type="single" collapsible className="space-y-3">
-              <AccordionItem value="item-1" className="border border-border/50 rounded-lg px-6 py-4 data-[state=open]:bg-card/50">
+              <AccordionItem value="item-1" className="border border-gray-100 dark:border-white/5 rounded-2xl px-8 py-2 mb-4 data-[state=open]:bg-gray-50 dark:data-[state=open]:bg-white/[0.03] data-[state=open]:border-primary/30 transition-all duration-300">
                 <AccordionTrigger className="hover:no-underline text-lg font-semibold">
                   ¿Cuánto tiempo tarda el diagnóstico gratuito?
                 </AccordionTrigger>
@@ -817,7 +817,7 @@ const Index = () => {
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="item-2" className="border border-border/50 rounded-lg px-6 py-4 data-[state=open]:bg-card/50">
+              <AccordionItem value="item-2" className="border border-gray-100 dark:border-white/5 rounded-2xl px-8 py-2 mb-4 data-[state=open]:bg-gray-50 dark:data-[state=open]:bg-white/[0.03] data-[state=open]:border-primary/30 transition-all duration-300">
                 <AccordionTrigger className="hover:no-underline text-lg font-semibold">
                   ¿Qué información necesitan para empezar?
                 </AccordionTrigger>
@@ -826,7 +826,7 @@ const Index = () => {
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="item-3" className="border border-border/50 rounded-lg px-6 py-4 data-[state=open]:bg-card/50">
+              <AccordionItem value="item-3" className="border border-gray-100 dark:border-white/5 rounded-2xl px-8 py-2 mb-4 data-[state=open]:bg-gray-50 dark:data-[state=open]:bg-white/[0.03] data-[state=open]:border-primary/30 transition-all duration-300">
                 <AccordionTrigger className="hover:no-underline text-lg font-semibold">
                   ¿En qué se diferencia FlowSights de un software de BI?
                 </AccordionTrigger>
@@ -835,7 +835,7 @@ const Index = () => {
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="item-4" className="border border-border/50 rounded-lg px-6 py-4 data-[state=open]:bg-card/50">
+              <AccordionItem value="item-4" className="border border-gray-100 dark:border-white/5 rounded-2xl px-8 py-2 mb-4 data-[state=open]:bg-gray-50 dark:data-[state=open]:bg-white/[0.03] data-[state=open]:border-primary/30 transition-all duration-300">
                 <AccordionTrigger className="hover:no-underline text-lg font-semibold">
                   ¿Necesito personal técnico para usar FlowSights?
                 </AccordionTrigger>
@@ -844,7 +844,7 @@ const Index = () => {
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="item-5" className="border border-border/50 rounded-lg px-6 py-4 data-[state=open]:bg-card/50">
+              <AccordionItem value="item-5" className="border border-gray-100 dark:border-white/5 rounded-2xl px-8 py-2 mb-4 data-[state=open]:bg-gray-50 dark:data-[state=open]:bg-white/[0.03] data-[state=open]:border-primary/30 transition-all duration-300">
                 <AccordionTrigger className="hover:no-underline text-lg font-semibold">
                   ¿Cuánto cuesta?
                 </AccordionTrigger>
@@ -853,7 +853,7 @@ const Index = () => {
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="item-6" className="border border-border/50 rounded-lg px-6 py-4 data-[state=open]:bg-card/50">
+              <AccordionItem value="item-6" className="border border-gray-100 dark:border-white/5 rounded-2xl px-8 py-2 mb-4 data-[state=open]:bg-gray-50 dark:data-[state=open]:bg-white/[0.03] data-[state=open]:border-primary/30 transition-all duration-300">
                 <AccordionTrigger className="hover:no-underline text-lg font-semibold">
                   ¿Y si no veo resultados?
                 </AccordionTrigger>
@@ -880,14 +880,20 @@ const Index = () => {
       <InstagramFeed />
 
       {/* CONTACT */}
-      <section id="contacto" className="py-24 bg-card/30 border-t border-border/50">
+      <section id="contacto" className="py-32 bg-gray-50/50 dark:bg-white/[0.02] border-t border-gray-100 dark:border-white/5 relative overflow-hidden">
         <div className="container grid lg:grid-cols-2 gap-12">
-          <div>
-            <span className="text-sm font-semibold text-primary uppercase tracking-wider">Empieza hoy</span>
-            <h2 className="font-display text-4xl md:text-5xl font-bold mt-3">
-              Descubre lo que tus datos están <span className="text-gradient">diciendo</span>
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+          >
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-widest mb-6">
+              🚀 Empieza hoy
+            </span>
+            <h2 className="font-display text-5xl md:text-6xl font-black tracking-tight text-gray-900 dark:text-white leading-tight">
+              Descubre lo que tus datos están <span className="text-primary">diciendo</span>
             </h2>
-            <p className="text-muted-foreground mt-4 text-lg">
+            <p className="text-gray-600 dark:text-gray-400 mt-6 text-xl leading-relaxed">
               Solicita tu diagnóstico gratuito. En menos de 48 horas te mostramos dónde se está fugando dinero en tu operación y cómo recuperarlo.
             </p>
 
@@ -918,7 +924,7 @@ const Index = () => {
               </div>
               
               <div className="flex flex-col gap-3">
-                <Button asChild variant="hero" size="lg" className="w-fit">
+                <Button asChild variant="hero" size="lg" className="w-fit h-14 px-8 text-lg shadow-xl shadow-emerald-500/20 active:scale-[0.98] transition-all">
                   <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                     <MessageCircle className="w-5 h-5" />
                     Contactar por WhatsApp
@@ -933,9 +939,9 @@ const Index = () => {
                 </Button>
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          <PremiumCard className="p-8 glass-card shadow-elevated">
+          <PremiumCard className="p-10 glass-card border-gray-100 dark:border-white/5 shadow-2xl relative overflow-hidden group">
             {submitted ? (
               <div className="flex flex-col items-center justify-center text-center py-8 animate-fade-in">
                 <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-6 ring-4 ring-primary/20">
@@ -965,19 +971,19 @@ const Index = () => {
                 <form onSubmit={handleSubmit} className="mt-6 space-y-4">
                   <div>
                     <Label htmlFor="name">Nombre completo *</Label>
-                    <Input id="name" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="mt-1.5" placeholder="Tu nombre" />
+                    <Input id="name" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="mt-2 bg-gray-50 dark:bg-white/[0.03] border-gray-100 dark:border-white/5 focus:border-primary/50 transition-all duration-300" placeholder="Tu nombre" />
                   </div>
                   <div>
                     <Label htmlFor="email">Correo electrónico *</Label>
-                    <Input id="email" type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="mt-1.5" placeholder="tu@empresa.com" />
+                    <Input id="email" type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="mt-2 bg-gray-50 dark:bg-white/[0.03] border-gray-100 dark:border-white/5 focus:border-primary/50 transition-all duration-300" placeholder="tu@empresa.com" />
                   </div>
                   <div>
                     <Label htmlFor="company">Empresa *</Label>
-                    <Input id="company" required value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} className="mt-1.5" placeholder="Nombre de tu empresa" />
+                    <Input id="company" required value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} className="mt-2 bg-gray-50 dark:bg-white/[0.03] border-gray-100 dark:border-white/5 focus:border-primary/50 transition-all duration-300" placeholder="Nombre de tu empresa" />
                   </div>
                   <div>
                     <Label htmlFor="message">¿Qué te gustaría mejorar?</Label>
-                    <Textarea id="message" rows={4} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className="mt-1.5" placeholder="Ej: Quiero entender por qué mis reportes no cuadran y reducir mermas de inventario." />
+                    <Textarea id="message" rows={4} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className="mt-2 bg-gray-50 dark:bg-white/[0.03] border-gray-100 dark:border-white/5 focus:border-primary/50 transition-all duration-300" placeholder="Ej: Quiero entender por qué mis reportes no cuadran y reducir mermas de inventario." />
                   </div>
                   <Button type="submit" variant="hero" size="lg" className="w-full" disabled={submitting}>
                     {submitting ? "Enviando..." : <>Quiero mi diagnóstico gratis <ArrowRight className="ml-1" /></>}

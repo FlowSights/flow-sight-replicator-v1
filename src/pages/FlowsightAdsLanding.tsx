@@ -68,7 +68,7 @@ const FlowsightAdsLanding: React.FC = () => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
-        options: { redirectTo: window.location.origin + '/flowsight-ads/dashboard' },
+        options: { redirectTo: window.location.origin + '/auth/callback' },
       });
       if (error) throw error;
     } catch (error: any) {
@@ -81,7 +81,7 @@ const FlowsightAdsLanding: React.FC = () => {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'facebook',
-        options: { redirectTo: window.location.origin + '/flowsight-ads/dashboard' },
+        options: { redirectTo: window.location.origin + '/auth/callback' },
       });
       if (error) throw error;
     } catch (error: any) {
@@ -128,7 +128,7 @@ const FlowsightAdsLanding: React.FC = () => {
             full_name: registerData.fullName.trim(),
             phone: registerData.phone.trim(),
           },
-          emailRedirectTo: `${window.location.origin}/flowsight-ads/dashboard`,
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       });
       if (error) throw error;

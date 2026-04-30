@@ -7,103 +7,117 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { blogPosts } from "@/data/blog";
 import { useAuth } from "@/contexts/AuthContext";
 import SEO from "@/components/SEO";
-
-const accents = [
-  "hover:border-[hsl(var(--accent-violet)/0.6)] hover:shadow-[0_10px_40px_-10px_hsl(var(--accent-violet)/0.4)]",
-  "hover:border-[hsl(var(--accent-amber)/0.6)] hover:shadow-[0_10px_40px_-10px_hsl(var(--accent-amber)/0.4)]",
-  "hover:border-[hsl(var(--accent-sky)/0.6)] hover:shadow-[0_10px_40px_-10px_hsl(var(--accent-sky)/0.4)]",
-];
+import { motion } from "framer-motion";
+import { PremiumCard } from "@/components/PremiumCard";
 
 const Blog = () => {
   const { user, signOut } = useAuth();
+  
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white dark:bg-[#050505] transition-colors">
       <SEO 
         title="Blog de Inteligencia Operativa" 
         description="Artículos prácticos sobre cómo usar tus datos para vender más y gastar menos. Consejos sobre Excel, Dashboards e IA para PyMEs."
         url="/blog"
       />
-      <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-xl bg-background/70 border-b border-border/50">
+      
+      <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-2xl bg-white/80 dark:bg-black/60 border-b border-gray-100 dark:border-white/5">
         <nav className="container flex items-center justify-between h-20">
           <Link 
             to="/" 
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="flex items-center gap-2.5 font-display font-bold text-xl md:text-2xl hover:opacity-90 transition-opacity"
           >
-            <img src={logo} alt="FlowSights logo" width={48} height={48} className="w-12 h-12 object-contain" />
-            <span>FlowSights</span>
+            <img src={logo} alt="FlowSights logo" width={40} height={40} className="w-10 h-10 object-contain" />
+            <span className="text-gray-900 dark:text-white">FlowSights</span>
           </Link>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <ThemeToggle />
             {user ? (
-              <Button variant="ghost" size="sm" onClick={() => signOut()}>
-                <LogOut className="w-4 h-4 mr-1" /> Salir
+              <Button variant="ghost" size="sm" onClick={() => signOut()} className="text-gray-600 dark:text-gray-400">
+                <LogOut className="w-4 h-4 mr-2" /> Salir
               </Button>
             ) : (
-              <Button variant="ghost" size="sm" asChild>
-                <Link to="/auth?redirect=/blog"><LogIn className="w-4 h-4 mr-1" /> Entrar</Link>
+              <Button variant="ghost" size="sm" asChild className="text-gray-600 dark:text-gray-400">
+                <Link to="/auth?redirect=/blog"><LogIn className="w-4 h-4 mr-2" /> Entrar</Link>
               </Button>
             )}
-            <Button variant="ghost" size="sm" asChild>
-              <Link to="/"><ArrowLeft className="w-4 h-4 mr-1" /> Volver</Link>
+            <Button variant="hero" size="sm" asChild>
+              <Link to="/"><ArrowLeft className="w-4 h-4 mr-2" /> Volver</Link>
             </Button>
           </div>
         </nav>
       </header>
 
-      <section className="pt-32 pb-16">
-        <div className="container max-w-5xl">
-          <span className="text-sm font-semibold text-primary uppercase tracking-wider">Blog FlowSights</span>
-          <h1 className="font-display text-4xl md:text-6xl font-bold mt-3">
-            Ideas para operar con <span className="text-gradient">datos confiables</span>
-          </h1>
-          <p className="text-muted-foreground mt-4 text-lg max-w-2xl">
-            Artículos cortos y prácticos sobre operaciones, calidad de datos y decisiones inteligentes para empresas en crecimiento.
-          </p>
-          <p className="text-xs text-muted-foreground mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">
-            <Sparkles className="w-3 h-3 text-primary" />
-            Todos nuestros artículos son de acceso libre y gratuito
-          </p>
-        </div>
-      </section>
+      <main className="pt-32 pb-24">
+        <section className="container max-w-5xl mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-widest mb-6">
+              <Sparkles className="w-3 h-3" /> Blog FlowSights
+            </span>
+            <h1 className="font-display text-5xl md:text-7xl font-black tracking-tight text-gray-900 dark:text-white leading-[1.1]">
+              Ideas para operar con <br />
+              <span className="text-emerald-500">datos confiables</span>
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-6 text-xl max-w-2xl leading-relaxed">
+              Artículos cortos y prácticos sobre operaciones, calidad de datos y decisiones inteligentes para empresas en crecimiento.
+            </p>
+          </motion.div>
+        </section>
 
-      <section className="pb-24">
-        <div className="container max-w-5xl grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {blogPosts.map((post, i) => {
-            return (
-              <Link key={post.slug} to={`/blog/${post.slug}`} className="group">
-                <Card className={`overflow-hidden h-full glass-card transition-all duration-300 hover:-translate-y-1 ${accents[i % accents.length]}`}>
-                  <div className="relative aspect-video overflow-hidden bg-muted">
-                    <img
-                      src={post.image}
-                      alt={post.title}
-                      width={1280}
-                      height={720}
-                      loading="lazy"
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <span className="absolute top-3 left-3 text-[11px] font-bold px-2 py-1 rounded-full bg-lime text-background shadow-lg">GRATIS</span>
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
-                      <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">{post.category}</span>
-                      <span className="inline-flex items-center gap-1"><Clock className="w-3 h-3" />{post.readingTime}</span>
+        <section className="container max-w-5xl">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {blogPosts.map((post, i) => (
+              <motion.div
+                key={post.slug}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+              >
+                <Link to={`/blog/${post.slug}`} className="group block h-full">
+                  <PremiumCard className="overflow-hidden h-full glass-card border-gray-100 dark:border-white/5 hover:border-emerald-500/50 transition-all duration-500 flex flex-col">
+                    <div className="relative aspect-[16/10] overflow-hidden bg-gray-100 dark:bg-white/5">
+                      <img
+                        src={post.image}
+                        alt={post.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <span className="absolute top-4 left-4 text-[10px] font-black px-2.5 py-1 rounded-lg bg-emerald-500 text-white shadow-xl tracking-widest uppercase">GRATIS</span>
                     </div>
-                    <h2 className="font-display text-xl font-bold leading-snug group-hover:text-primary transition-colors">{post.title}</h2>
-                    <p className="text-sm text-muted-foreground mt-3 leading-relaxed">{post.excerpt}</p>
-                    <div className="mt-6 flex items-center justify-between text-xs text-muted-foreground">
-                      <span className="inline-flex items-center gap-1"><Calendar className="w-3 h-3" />{post.date}</span>
-                      <span className="inline-flex items-center gap-1 text-primary font-medium">
-                        Leer <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
-                      </span>
+                    <div className="p-6 flex-1 flex flex-col">
+                      <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-gray-400 mb-4">
+                        <span className="text-emerald-500">{post.category}</span>
+                        <span className="w-1 h-1 rounded-full bg-gray-300 dark:bg-white/20" />
+                        <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{post.readingTime}</span>
+                      </div>
+                      <h2 className="font-display text-2xl font-bold text-gray-900 dark:text-white leading-tight group-hover:text-emerald-500 transition-colors duration-300">{post.title}</h2>
+                      <p className="text-gray-600 dark:text-gray-400 mt-4 text-sm leading-relaxed line-clamp-3 flex-1">{post.excerpt}</p>
+                      <div className="mt-8 pt-6 border-t border-gray-100 dark:border-white/5 flex items-center justify-between text-[11px] font-bold text-gray-400">
+                        <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" />{post.date}</span>
+                        <span className="flex items-center gap-1 text-emerald-500 group-hover:gap-2 transition-all duration-300">
+                          LEER MÁS <ArrowRight className="w-3.5 h-3.5" />
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </Card>
-              </Link>
-            );
-          })}
+                  </PremiumCard>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+      </main>
+
+      <footer className="border-t border-gray-100 dark:border-white/5 py-12 bg-gray-50/50 dark:bg-white/[0.02]">
+        <div className="container text-center">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            © 2026 FlowSights. Inteligencia Operativa para PyMEs.
+          </p>
         </div>
-      </section>
+      </footer>
     </div>
   );
 };
