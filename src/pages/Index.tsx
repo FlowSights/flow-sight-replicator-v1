@@ -316,7 +316,7 @@ const Index = () => {
                     visible: { opacity: 1, y: 0 }
                   }}
                 >
-                  <Card className={`p-6 glass-card h-full transition-all hover:-translate-y-1 group ${c.border}`}>
+                  <PremiumCard className={`p-6 glass-card h-full transition-all hover:-translate-y-1 group ${c.border}`}>
                     <div className={`w-10 h-10 rounded-lg ${c.bg} ${c.text} grid place-items-center mb-4 transition-colors`}>
                       <Zap className="w-5 h-5" />
                     </div>
@@ -328,7 +328,7 @@ const Index = () => {
             })}
           </motion.div>
 
-          <Card className="mt-10 p-8 md:p-10 glass-card border-primary/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 bg-gradient-to-br from-primary/10 to-accent/5">
+          <PremiumCard className="mt-10 p-8 md:p-10 glass-card border-primary/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 bg-gradient-to-br from-primary/10 to-accent/5">
             <div>
               <h3 className="font-display text-2xl font-bold">¿Cuánto te están costando tus datos sucios?</h3>
               <p className="text-muted-foreground mt-2">Te mostramos en 48 horas y sin costo dónde se está fugando dinero en tu operación.</p>
@@ -376,7 +376,7 @@ const Index = () => {
                     visible: { opacity: 1, scale: 1, y: 0 }
                   }}
                 >
-                  <Card className={`p-6 glass-card h-full relative overflow-hidden group transition-all ${c.border}`}>
+                  <PremiumCard className={`p-6 glass-card h-full relative overflow-hidden group transition-all ${c.border}`}>
                     <div className={`text-xs font-semibold tracking-widest mb-3 ${c.text}`}>PASO {s.n}</div>
                     <div className={`font-display text-7xl font-bold absolute -right-2 -top-2 transition-colors opacity-10 group-hover:opacity-25 ${c.text}`}>
                       {i + 1}
@@ -493,7 +493,7 @@ const Index = () => {
                     visible: { opacity: 1, scale: 1 }
                   }}
                 >
-                  <Card className={`p-7 glass-card h-full transition-all ${c.border}`}>
+                  <PremiumCard className={`p-7 glass-card h-full transition-all ${c.border}`}>
                     <div className="flex items-start justify-between mb-4">
                       <AnimatedStat
                         stat={{ ...stat, label: "" }}
@@ -557,7 +557,7 @@ const Index = () => {
                     visible: { opacity: 1, y: 0 }
                   }}
                 >
-                  <Card className={`p-6 glass-card h-full hover:-translate-y-1 transition-all ${c.border}`}>
+                  <PremiumCard className={`p-6 glass-card h-full hover:-translate-y-1 transition-all ${c.border}`}>
                     <div className={`w-11 h-11 rounded-xl ${c.bg} ${c.text} grid place-items-center mb-4`}>
                       <Icon className="w-5 h-5" />
                     </div>
@@ -578,7 +578,7 @@ const Index = () => {
                 visible: { opacity: 1, scale: 1 }
               }}
             >
-              <Card className="p-6 glass-card h-full border-dashed border-primary/40 flex flex-col justify-center items-start bg-primary/5">
+              <PremiumCard className="p-6 glass-card h-full border-dashed border-primary/40 flex flex-col justify-center items-start bg-primary/5">
                 <div className="w-11 h-11 rounded-xl bg-primary/20 text-primary grid place-items-center mb-4">
                   <Plus className="w-5 h-5" />
                 </div>
@@ -627,7 +627,7 @@ const Index = () => {
                   visible: { opacity: 1, scale: 1 }
                 }}
               >
-                <Card className="p-7 glass-card h-full hover:border-primary/60 hover:-translate-y-1 hover:shadow-glow transition-all flex flex-col group">
+                <PremiumCard className="p-7 glass-card h-full hover:border-primary/60 hover:-translate-y-1 hover:shadow-glow transition-all flex flex-col group">
                   <div className="text-primary text-4xl font-display leading-none mb-3">"</div>
                   <p className="text-foreground/90 leading-relaxed flex-1">{t.quote}</p>
                   <div className="flex items-center gap-3 mt-6 pt-6 border-t border-border/60">
@@ -681,7 +681,7 @@ const Index = () => {
                   visible: { opacity: 1, y: 0 }
                 }}
               >
-                <Card className="p-7 glass-card h-full text-center hover:border-primary/60 hover:-translate-y-1 hover:shadow-glow transition-all group relative overflow-hidden">
+                <PremiumCard className="p-7 glass-card h-full text-center hover:border-primary/60 hover:-translate-y-1 hover:shadow-glow transition-all group relative overflow-hidden">
                   {m.linkedin && (
                     <a 
                       href={m.linkedin} 
@@ -722,7 +722,7 @@ const Index = () => {
             ))}
           </motion.div>
 
-          <Card className="p-10 glass-card text-center max-w-3xl mx-auto bg-gradient-to-br from-primary/10 to-accent/5 border-primary/20">
+          <PremiumCard className="p-10 glass-card text-center max-w-3xl mx-auto bg-gradient-to-br from-primary/10 to-accent/5 border-primary/20">
             <h3 className="font-display text-2xl font-bold mb-3">Nuestra Misión</h3>
             <p className="text-muted-foreground leading-relaxed">
               Que cada PyME pueda decidir con la misma claridad que una gran empresa. Convertimos datos dispersos en información simple y útil para que vendas más, gastes menos y mantengas el control de tu operación.
@@ -768,7 +768,7 @@ const Index = () => {
                   }}
                 >
                   <Link to={`/blog/${post.slug}`} className="group block h-full">
-                    <Card className={`p-6 h-full glass-card border border-border/60 transition-all duration-300 hover:-translate-y-1 hover:shadow-glow ${a.border}`}>
+                    <PremiumCard className={`p-6 h-full glass-card border border-border/60 transition-all duration-300 hover:-translate-y-1 hover:shadow-glow ${a.border}`}>
                       <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
                         <span className={`px-2 py-0.5 rounded-full ${a.bg} ${a.text} font-medium`}>{post.category}</span>
                         <span>{post.readingTime}</span>
@@ -935,7 +935,7 @@ const Index = () => {
             </div>
           </div>
 
-          <Card className="p-8 glass-card shadow-elevated">
+          <PremiumCard className="p-8 glass-card shadow-elevated">
             {submitted ? (
               <div className="flex flex-col items-center justify-center text-center py-8 animate-fade-in">
                 <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-6 ring-4 ring-primary/20">
