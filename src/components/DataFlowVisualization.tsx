@@ -67,10 +67,10 @@ export const DataFlowVisualization = () => {
         <motion.div
           animate={{
             scale: [1, 1.05, 1],
-            opacity: [0.7, 0.9, 0.7],
+            opacity: [0.85, 0.95, 0.85],
           }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute inset-1/4 rounded-full bg-gradient-to-br from-emerald-400/40 via-emerald-600/30 to-emerald-900/40 backdrop-blur-sm z-20 border border-emerald-500/20"
+          className="absolute inset-1/4 rounded-full bg-gradient-to-br from-emerald-400/60 via-emerald-600/50 to-emerald-900/60 backdrop-blur-sm z-20 border border-emerald-500/30"
         >
           {/* Brillo interno suave */}
           <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.2),transparent)]" />
