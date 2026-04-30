@@ -99,16 +99,16 @@ const Index = () => {
   const scrolled = useScrolled(80);
 
   const navLinks = [
-    { label: "Diagnóstico gratuito", href: "/diagnostico" },
+    { label: "Flowsight Ads", href: "/flowsight-ads" },
     { label: "Cómo funciona", href: "#proceso" },
     { label: "Showcase", href: "#showcase" },
     { label: "Servicios", href: "#servicios" },
     { label: "Industrias", href: "#industrias" },
     { label: "Quiénes somos", href: "#equipo" },
     { label: "FAQ", href: "#faq" },
-    { label: "Flowsight Ads", href: "/flowsight-ads" },
     { label: "Blog", href: "/blog" },
     { label: "Contacto", href: "#contacto" },
+    { label: "Diagnóstico gratuito", href: "/diagnostico" },
   ];
 
   const blogPreview = [

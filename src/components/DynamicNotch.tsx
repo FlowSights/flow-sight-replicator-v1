@@ -52,20 +52,15 @@ export const DynamicNotch = ({ navLinks, logo }: DynamicNotchProps) => {
         initial={{ y: 0 }}
         animate={{
           y: 0,
-          width: isCollapsed ? "min(90%, 600px)" : "100%",
-          left: isCollapsed ? "50%" : "0",
-          x: isCollapsed ? "-50%" : "0",
+          width: isCollapsed ? "min(95%, 800px)" : "100%",
         }}
         transition={{ 
-          duration: 0.8, 
-          ease: [0.16, 1, 0.3, 1], // Curva tipo Apple (expo out)
+          duration: 1.2, // Más lenta y elegante
+          ease: [0.22, 1, 0.36, 1], // Curva Quint Out más suave
         }}
-        className={`fixed top-4 z-40 transition-all duration-300 ${
+        className={`fixed top-4 left-0 right-0 mx-auto z-40 transition-all duration-500 ${
           isCollapsed ? "rounded-full" : "rounded-none"
         }`}
-        style={{
-          right: isCollapsed ? "auto" : "0",
-        }}
       >
         <div
           className={`relative transition-all duration-300 ${
@@ -98,15 +93,15 @@ export const DynamicNotch = ({ navLinks, logo }: DynamicNotchProps) => {
 
             {/* DESKTOP NAV - Visible también en modo colapsado pero más compacto */}
             <div className="hidden lg:flex items-center gap-1">
-              {navLinks.slice(0, isCollapsed ? 3 : navLinks.length).map((link) => (
+              {navLinks.slice(0, isCollapsed ? 4 : navLinks.length).map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
-                  className={`px-3 py-2 text-sm font-medium text-foreground/70 hover:text-foreground transition-all duration-300 rounded-lg hover:bg-white/5 ${
-                    isCollapsed ? "text-xs" : ""
+                  className={`px-3 py-2 text-sm font-medium text-foreground/70 hover:text-foreground transition-all duration-500 rounded-lg hover:bg-white/5 ${
+                    isCollapsed ? "text-[11px] px-2" : ""
                   }`}
                 >
-                  {link.label}
+                  {link === navLinks[0] ? `🚀 ${link.label}` : link.label}
                 </a>
               ))}
             </div>
