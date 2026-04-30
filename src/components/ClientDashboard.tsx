@@ -52,6 +52,54 @@ interface ClientDashboardProps {
   onDownloadGuide: () => void;
 }
 
+// Estilos dinámicos por plataforma
+const platformThemes = {
+  meta: {
+    borderColor: 'border-blue-500/40',
+    bgGradient: 'from-slate-900 via-blue-900/30 to-slate-900',
+    shadowColor: 'shadow-blue-500/20',
+    buttonBg: 'bg-blue-600 hover:bg-blue-700',
+    buttonShadow: 'shadow-blue-500/30',
+    badgeBg: 'bg-blue-500/20 border-blue-500/40 text-blue-300',
+    textAccent: 'text-blue-400',
+    selectorBg: 'bg-slate-800 dark:bg-slate-700/50 border-slate-700 dark:border-slate-600',
+    selectorActiveBg: 'bg-blue-600 border-blue-500 shadow-blue-500/40',
+  },
+  google: {
+    borderColor: 'border-orange-500/40',
+    bgGradient: 'from-slate-900 via-orange-900/30 to-slate-900',
+    shadowColor: 'shadow-orange-500/20',
+    buttonBg: 'bg-gradient-to-r from-orange-500 to-blue-600 hover:from-orange-600 hover:to-blue-700',
+    buttonShadow: 'shadow-orange-500/30',
+    badgeBg: 'bg-orange-500/20 border-orange-500/40 text-orange-300',
+    textAccent: 'text-orange-400',
+    selectorBg: 'bg-slate-800 dark:bg-slate-700/50 border-slate-700 dark:border-slate-600',
+    selectorActiveBg: 'bg-gradient-to-r from-orange-500 to-blue-600 border-orange-500 shadow-orange-500/40',
+  },
+  tiktok: {
+    borderColor: 'border-pink-500/40',
+    bgGradient: 'from-slate-900 via-pink-900/20 to-slate-900',
+    shadowColor: 'shadow-pink-500/20',
+    buttonBg: 'bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700',
+    buttonShadow: 'shadow-pink-500/30',
+    badgeBg: 'bg-pink-500/20 border-pink-500/40 text-pink-300',
+    textAccent: 'text-pink-400',
+    selectorBg: 'bg-slate-800 dark:bg-slate-700/50 border-slate-700 dark:border-slate-600',
+    selectorActiveBg: 'bg-gradient-to-r from-pink-500 to-purple-600 border-pink-500 shadow-pink-500/40',
+  },
+  linkedin: {
+    borderColor: 'border-indigo-500/40',
+    bgGradient: 'from-slate-900 via-indigo-900/30 to-slate-900',
+    shadowColor: 'shadow-indigo-500/20',
+    buttonBg: 'bg-indigo-600 hover:bg-indigo-700',
+    buttonShadow: 'shadow-indigo-500/30',
+    badgeBg: 'bg-indigo-500/20 border-indigo-500/40 text-indigo-300',
+    textAccent: 'text-indigo-400',
+    selectorBg: 'bg-slate-800 dark:bg-slate-700/50 border-slate-700 dark:border-slate-600',
+    selectorActiveBg: 'bg-indigo-600 border-indigo-500 shadow-indigo-500/40',
+  },
+};
+
 export const ClientDashboard: React.FC<ClientDashboardProps> = ({
   businessName,
   generatedAds,
@@ -94,6 +142,7 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
   const platforms = platformOrder.filter(p => adsByPlatform[p]) as Array<'meta' | 'google' | 'tiktok' | 'linkedin'>;
   const currentAds = adsByPlatform[selectedPlatform] || [];
   const currentAd = currentAds[currentIndex] || currentAds[0];
+  const theme = platformThemes[selectedPlatform];
 
   const handleNext = () => {
     setCurrentIndex((prev) => (prev + 1) % currentAds.length);
@@ -222,18 +271,20 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
                 ))}
               </div>
 
-              {/* Selector de Plataformas y Preview - Diseño "WOW" */}
+              {/* Selector de Plataformas y Preview - Diseño Dinámico por Plataforma */}
               <motion.div
+                key={selectedPlatform}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="rounded-[3rem] border-2 border-blue-500/30 dark:border-blue-400/30 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 p-8 md:p-12 shadow-2xl shadow-blue-500/20 backdrop-blur-xl space-y-8"
+                transition={{ duration: 0.3 }}
+                className={`rounded-[3rem] border-2 ${theme.borderColor} bg-gradient-to-br ${theme.bgGradient} p-8 md:p-12 shadow-2xl ${theme.shadowColor} backdrop-blur-xl space-y-8`}
               >
                 {/* Selector de Plataformas - Logos Grandes */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
                   {platformOrder.map((platform) => {
                     const isSelected = selectedPlatform === platform;
                     const hasAds = !!adsByPlatform[platform];
+                    const platformTheme = platformThemes[platform];
                     
                     return (
                       <motion.button
@@ -243,8 +294,8 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
                         disabled={!hasAds}
                         className={`px-6 py-6 rounded-[1.5rem] font-bold transition-all flex flex-col items-center justify-center gap-3 border-2 ${
                           isSelected
-                            ? `bg-blue-600 border-blue-500 text-white shadow-xl shadow-blue-500/40`
-                            : 'bg-slate-800 dark:bg-slate-700/50 border-slate-700 dark:border-slate-600 text-gray-400 hover:bg-slate-700 dark:hover:bg-slate-600'
+                            ? platformTheme.selectorActiveBg
+                            : platformTheme.selectorBg
                         } ${!hasAds ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
                         <div className={`${isSelected ? 'text-white' : 'text-gray-400'}`}>
@@ -307,7 +358,7 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
                     <div className="space-y-8">
                       <div className="space-y-6">
                         <div className="flex items-center gap-3">
-                          <div className={`px-4 py-2 rounded-full bg-blue-500/20 border border-blue-500/40 text-blue-300 text-[10px] font-black uppercase tracking-[0.2em]`}>
+                          <div className={`px-4 py-2 rounded-full ${theme.badgeBg} text-[10px] font-black uppercase tracking-[0.2em]`}>
                             OFFER
                           </div>
                           <div className="flex items-center gap-1.5 text-emerald-400 font-black text-sm">
@@ -316,7 +367,7 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
                           </div>
                         </div>
                         <h3 className="text-4xl md:text-5xl font-black text-white leading-tight tracking-tight">
-                          Estrategia de <span className="text-blue-400">{platformNames[selectedPlatform]}</span>
+                          Estrategia de <span className={theme.textAccent}>{platformNames[selectedPlatform]}</span>
                         </h3>
                         <p className="text-lg text-gray-300 font-medium leading-relaxed">
                           {currentAd.reasoning || "Tono formal y profesional diseñado específicamente para dueños de negocio y emprendedores que buscan networking de alto nivel."}
@@ -334,7 +385,7 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
                           </Button>
                           <Button
                             onClick={onDownloadKit}
-                            className={`h-16 rounded-[1.5rem] bg-blue-600 hover:bg-blue-700 text-white font-bold text-base gap-3 shadow-xl shadow-blue-500/30 transition-all`}
+                            className={`h-16 rounded-[1.5rem] ${theme.buttonBg} text-white font-bold text-base gap-3 shadow-xl ${theme.buttonShadow} transition-all`}
                           >
                             {!hasPaid ? <Lock className="w-5 h-5" /> : <Download className="w-5 h-5" />}
                             Descargar Kit
