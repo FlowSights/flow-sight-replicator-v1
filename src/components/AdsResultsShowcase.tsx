@@ -76,7 +76,8 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
     return acc;
   }, {} as Record<string, GeneratedAd[]>);
 
-  const platforms = Object.keys(adsByPlatform) as Array<'meta' | 'google' | 'tiktok' | 'linkedin'>;
+  const platformOrder: Array<'meta' | 'google' | 'tiktok' | 'linkedin'> = ['meta', 'google', 'tiktok', 'linkedin'];
+  const platforms = platformOrder.filter(p => adsByPlatform[p]) as Array<'meta' | 'google' | 'tiktok' | 'linkedin'>;
   const currentAds = adsByPlatform[selectedPlatform] || [];
   const currentAd = currentAds[currentIndex] || currentAds[0];
 
@@ -179,7 +180,7 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
           <div className="space-y-8">
             <div className="space-y-6">
               <div className="flex items-center gap-3">
-                <div className={`px-4 py-2 rounded-full bg-black/5 dark:bg-white/10 text-gray-600 dark:text-gray-300 text-[10px] font-black uppercase tracking-[0.2em]`}>
+                <div className={`px-4 py-2 rounded-full bg-black/5 dark:bg-white/10 text-gray-700 dark:text-gray-300 text-[10px] font-black uppercase tracking-[0.2em]`}>
                   Estrategia de {currentAd.type}
                 </div>
                 <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-black text-sm">
@@ -190,7 +191,7 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
               <h3 className="text-4xl md:text-5xl font-black text-black dark:text-white leading-tight tracking-tight">
                 Diseñado para <span className={colors.text}>{platformNames[selectedPlatform]}</span>
               </h3>
-              <p className="text-lg text-gray-500 dark:text-gray-400 font-medium leading-relaxed">
+              <p className="text-lg text-gray-600 dark:text-gray-400 font-medium leading-relaxed">
                 {currentAd.reasoning || "Este anuncio ha sido optimizado por nuestra tecnología para maximizar el impacto y las conversiones en esta plataforma específica."}
               </p>
             </div>

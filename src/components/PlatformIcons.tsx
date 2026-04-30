@@ -21,14 +21,10 @@ export const PlatformIcon: React.FC<PlatformIconProps> = ({ platform, size = 24,
         width={size} 
         height={size} 
         viewBox="0 0 24 24" 
-        fill="none" 
-        stroke="currentColor" 
-        strokeWidth="2" 
-        strokeLinecap="round" 
-        strokeLinejoin="round" 
+        fill="currentColor" 
         className={className}
       >
-        <path d="M9 12a4 4 0 1 0 4 4V2a5 5 0 0 0 5 5" />
+        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.08 1.61 2.88 2.88 0 0 1 4.07-4.49v-3.45a6.47 6.47 0 0 0-5.79 9.86 6.48 6.48 0 0 0 10.86-5.75v-3.45a8.16 8.16 0 0 0 5.78 2.17z" />
       </svg>
     );
   }

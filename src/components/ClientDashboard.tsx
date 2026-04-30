@@ -78,10 +78,10 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-500" />
-              <span className="text-xs font-black text-emerald-600 dark:text-emerald-500 uppercase tracking-[0.3em]">Campaña Optimizada</span>
+              <span className="text-xs font-black text-emerald-700 dark:text-emerald-500 uppercase tracking-[0.3em]">Campaña Optimizada</span>
             </div>
             <h1 className="text-5xl font-black text-black dark:text-white tracking-tight">{businessName}</h1>
-            <p className="text-xl text-gray-500 dark:text-gray-400 font-medium">Tu Campaign Kit está listo para generar resultados</p>
+            <p className="text-xl text-gray-600 dark:text-gray-400 font-medium">Tu Campaign Kit está listo para generar resultados</p>
             
             <div className="flex flex-wrap gap-4 pt-4">
               {[
@@ -92,7 +92,7 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10">
                   <item.icon className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                  <span className="text-sm font-bold text-gray-600 dark:text-gray-300">{item.label}</span>
+                  <span className="text-sm font-bold text-gray-700 dark:text-gray-300">{item.label}</span>
                 </div>
               ))}
             </div>
@@ -100,7 +100,7 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
           
           <div className="flex flex-col items-end gap-4">
             <div className="p-6 rounded-[2rem] bg-emerald-500/10 border border-emerald-500/20 text-center min-w-[180px]">
-              <p className="text-xs font-black text-emerald-600 dark:text-emerald-500 uppercase tracking-widest mb-1">Calidad Global</p>
+              <p className="text-xs font-black text-emerald-700 dark:text-emerald-500 uppercase tracking-widest mb-1">Calidad Global</p>
               <p className="text-5xl font-black text-black dark:text-white">{avgScore}<span className="text-2xl text-emerald-600/50 dark:text-emerald-500/50">/100</span></p>
             </div>
           </div>
@@ -121,7 +121,7 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
               className={`px-8 py-3.5 rounded-xl font-bold flex items-center gap-3 transition-all duration-300 ${
                 activeTab === id
                   ? 'bg-black dark:bg-white text-white dark:text-black shadow-xl'
-                  : 'text-gray-500 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
+                  : 'text-gray-600 hover:text-black dark:hover:text-white hover:bg-black/10 dark:hover:bg-white/5'
               }`}
             >
               <Icon size={20} />
@@ -152,7 +152,7 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
               ].map((stat, i) => (
                 <div key={i} className="group relative overflow-hidden rounded-3xl border border-black/5 dark:border-white/10 bg-white dark:bg-white/5 p-8 shadow-xl shadow-black/5 transition-all hover:border-emerald-500/30">
                   <div className={`absolute -right-10 -top-10 h-32 w-32 rounded-full bg-emerald-500/5 blur-2xl transition-all group-hover:bg-emerald-500/10`} />
-                  <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-2">{stat.label}</p>
+                  <p className="text-xs font-black text-gray-600 dark:text-gray-400 uppercase tracking-widest mb-2">{stat.label}</p>
                   <p className="text-4xl font-black text-black dark:text-white">{stat.value}</p>
                   <div className="mt-4 flex items-center gap-2 text-emerald-600 dark:text-emerald-400 text-xs font-bold">
                     <CheckCircle2 className="w-3 h-3" />
@@ -181,7 +181,7 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
                       <span className="text-6xl font-black text-black/5 dark:text-white/5 absolute -top-8 -left-4 transition-all group-hover:text-emerald-500/10">{item.step}</span>
                       <div className="relative z-10 space-y-3">
                         <h4 className="text-lg font-bold text-black dark:text-white tracking-tight">{item.title}</h4>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed font-medium">{item.desc}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed font-medium">{item.desc}</p>
                       </div>
                     </div>
                   ))}
@@ -230,7 +230,7 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
                         <asset.icon className={`w-8 h-8 ${asset.primary ? 'text-white dark:text-black' : 'text-emerald-600 dark:text-emerald-400'}`} />
                       </div>
                       <h3 className={`text-3xl font-black mb-4 tracking-tight ${asset.primary ? 'text-white dark:text-black' : 'text-black dark:text-white'}`}>{asset.title}</h3>
-                      <p className={`text-lg font-medium leading-relaxed mb-10 ${asset.primary ? 'text-white/60 dark:text-black/60' : 'text-gray-500 dark:text-gray-400'}`}>
+                      <p className={`text-lg font-medium leading-relaxed mb-10 ${asset.primary ? 'text-white/60 dark:text-black/60' : 'text-gray-600 dark:text-gray-400'}`}>
                         {asset.desc}
                       </p>
                     </div>
@@ -259,12 +259,12 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
                 </div>
                 <div className="space-y-4">
                   <h3 className="text-3xl font-black text-black dark:text-white tracking-tight">Análisis en Tiempo Real</h3>
-                  <p className="text-xl text-gray-500 dark:text-gray-400 font-medium leading-relaxed">
+                  <p className="text-xl text-gray-600 dark:text-gray-400 font-medium leading-relaxed">
                     Una vez que tus anuncios estén activos, sincronizaremos tus métricas de rendimiento aquí mismo.
                   </p>
                 </div>
                 <div className="pt-6">
-                  <div className="inline-flex items-center gap-3 px-6 py-3 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 text-gray-500 dark:text-gray-400 text-sm font-bold">
+                  <div className="inline-flex items-center gap-3 px-6 py-3 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 text-gray-600 dark:text-gray-400 text-sm font-bold">
                     <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                     Sincronización API Disponible Próximamente
                   </div>

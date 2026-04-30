@@ -1032,12 +1032,12 @@ const FlowsightAdsDashboard: React.FC = () => {
           <div className="flex items-center gap-3">
             <button 
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="p-2 rounded-full bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 text-gray-700 dark:text-gray-300 transition-all" 
+              className="p-2 rounded-full bg-gray-300 dark:bg-white/10 hover:bg-gray-400 dark:hover:bg-white/20 text-gray-700 dark:text-gray-300 transition-all" 
               title="Cambiar tema"
             >
               {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
-            <button onClick={handleLogout} className="group flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-500 transition-all font-medium" title="Cerrar sesion">
+            <button onClick={handleLogout} className="group flex items-center gap-2 text-gray-700 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-500 transition-all font-medium" title="Cerrar sesion">
               <LogOut className="w-5 h-5" />
               <span className="hidden sm:inline">Cerrar</span>
             </button>
