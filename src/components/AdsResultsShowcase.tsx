@@ -44,54 +44,6 @@ interface AdsResultsShowcaseProps {
   onCheckout: () => void;
 }
 
-// Estilos dinámicos por plataforma
-const platformThemes = {
-  meta: {
-    borderColor: 'border-blue-500/40',
-    bgGradient: 'from-slate-900 via-blue-900/30 to-slate-900',
-    shadowColor: 'shadow-blue-500/20',
-    buttonBg: 'bg-blue-600 hover:bg-blue-700',
-    buttonShadow: 'shadow-blue-500/30',
-    badgeBg: 'bg-blue-500/20 border-blue-500/40 text-blue-300',
-    textAccent: 'text-blue-400',
-    selectorBg: 'bg-slate-800 dark:bg-slate-700/50 border-slate-700 dark:border-slate-600',
-    selectorActiveBg: 'bg-blue-600 border-blue-500 shadow-blue-500/40',
-  },
-  google: {
-    borderColor: 'border-orange-500/40',
-    bgGradient: 'from-slate-900 via-orange-900/30 to-slate-900',
-    shadowColor: 'shadow-orange-500/20',
-    buttonBg: 'bg-gradient-to-r from-orange-500 to-blue-600 hover:from-orange-600 hover:to-blue-700',
-    buttonShadow: 'shadow-orange-500/30',
-    badgeBg: 'bg-orange-500/20 border-orange-500/40 text-orange-300',
-    textAccent: 'text-orange-400',
-    selectorBg: 'bg-slate-800 dark:bg-slate-700/50 border-slate-700 dark:border-slate-600',
-    selectorActiveBg: 'bg-gradient-to-r from-orange-500 to-blue-600 border-orange-500 shadow-orange-500/40',
-  },
-  tiktok: {
-    borderColor: 'border-pink-500/40',
-    bgGradient: 'from-slate-900 via-pink-900/20 to-slate-900',
-    shadowColor: 'shadow-pink-500/20',
-    buttonBg: 'bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700',
-    buttonShadow: 'shadow-pink-500/30',
-    badgeBg: 'bg-pink-500/20 border-pink-500/40 text-pink-300',
-    textAccent: 'text-pink-400',
-    selectorBg: 'bg-slate-800 dark:bg-slate-700/50 border-slate-700 dark:border-slate-600',
-    selectorActiveBg: 'bg-gradient-to-r from-pink-500 to-purple-600 border-pink-500 shadow-pink-500/40',
-  },
-  linkedin: {
-    borderColor: 'border-indigo-500/40',
-    bgGradient: 'from-slate-900 via-indigo-900/30 to-slate-900',
-    shadowColor: 'shadow-indigo-500/20',
-    buttonBg: 'bg-indigo-600 hover:bg-indigo-700',
-    buttonShadow: 'shadow-indigo-500/30',
-    badgeBg: 'bg-indigo-500/20 border-indigo-500/40 text-indigo-300',
-    textAccent: 'text-indigo-400',
-    selectorBg: 'bg-slate-800 dark:bg-slate-700/50 border-slate-700 dark:border-slate-600',
-    selectorActiveBg: 'bg-indigo-600 border-indigo-500 shadow-indigo-500/40',
-  },
-};
-
 export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
   ads,
   businessName,
@@ -128,7 +80,6 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
   const platforms = platformOrder.filter(p => adsByPlatform[p]) as Array<'meta' | 'google' | 'tiktok' | 'linkedin'>;
   const currentAds = adsByPlatform[selectedPlatform] || [];
   const currentAd = currentAds[currentIndex] || currentAds[0];
-  const theme = platformThemes[selectedPlatform];
 
   const handleNext = () => {
     setCurrentIndex((prev) => (prev + 1) % currentAds.length);
@@ -155,36 +106,30 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
   return (
     <>
       <motion.div
-        key={selectedPlatform}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        className={`space-y-8 p-8 md:p-12 rounded-[3rem] border-2 ${theme.borderColor} bg-gradient-to-br ${theme.bgGradient} shadow-2xl ${theme.shadowColor} backdrop-blur-xl`}
+        className={`space-y-8 p-8 md:p-12 rounded-[3rem] transition-colors duration-500 bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 shadow-2xl shadow-black/5 backdrop-blur-xl`}
       >
         {/* Selector de Plataformas - Optimización de alineación y orden */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
           {platformOrder.map((platform) => {
             const isSelected = selectedPlatform === platform;
             const hasAds = !!adsByPlatform[platform];
-            const platformTheme = platformThemes[platform];
             
             return (
-              <motion.button
+              <button
                 key={platform}
-                whileHover={{ scale: hasAds ? 1.05 : 1 }}
                 onClick={() => handlePlatformChange(platform)}
                 disabled={!hasAds}
-                className={`px-6 py-6 rounded-[1.5rem] font-bold transition-all flex flex-col items-center justify-center gap-3 border-2 ${
+                className={`px-4 py-4 rounded-2xl font-bold transition-all flex items-center justify-center gap-3 border ${
                   isSelected
-                    ? platformTheme.selectorActiveBg
-                    : platformTheme.selectorBg
+                    ? `bg-blue-600 border-blue-600 text-white shadow-xl shadow-blue-500/20 scale-[1.02]`
+                    : 'bg-white dark:bg-white/5 border-black/5 dark:border-white/10 text-gray-500 hover:bg-black/5 dark:hover:bg-white/10'
                 } ${!hasAds ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                <div className={`${isSelected ? 'text-white' : 'text-gray-400'}`}>
-                  <PlatformIcon platform={platform} size={32} className="w-8 h-8" />
-                </div>
-                <span className="text-xs font-bold truncate">{platformNames[platform].split(' ')[0]}</span>
-              </motion.button>
+                <PlatformIcon platform={platform} size={18} className={isSelected ? 'text-white' : 'text-gray-400'} />
+                <span className="text-sm truncate">{platformNames[platform].split(' ')[0]}</span>
+              </button>
             );
           })}
         </div>
@@ -217,20 +162,18 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
 
             {currentAds.length > 1 && (
               <div className="absolute inset-y-0 -inset-x-4 flex items-center justify-between pointer-events-none z-20">
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
+                <button
                   onClick={handlePrev}
                   className="p-4 rounded-2xl bg-white dark:bg-gray-800 shadow-2xl text-gray-800 dark:text-white pointer-events-auto hover:scale-110 transition-all border border-black/5 dark:border-white/10"
                 >
                   <ChevronLeft className="w-6 h-6" />
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
+                </button>
+                <button
                   onClick={handleNext}
                   className="p-4 rounded-2xl bg-white dark:bg-gray-800 shadow-2xl text-gray-800 dark:text-white pointer-events-auto hover:scale-110 transition-all border border-black/5 dark:border-white/10"
                 >
                   <ChevronRight className="w-6 h-6" />
-                </motion.button>
+                </button>
               </div>
             )}
           </div>
@@ -239,18 +182,18 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
           <div className="space-y-8">
             <div className="space-y-6">
               <div className="flex items-center gap-3">
-                <div className={`px-4 py-2 rounded-full ${theme.badgeBg} text-[10px] font-black uppercase tracking-[0.2em]`}>
+                <div className={`px-4 py-2 rounded-full bg-black/5 dark:bg-white/10 text-gray-700 dark:text-gray-300 text-[10px] font-black uppercase tracking-[0.2em]`}>
                   Estrategia de {currentAd.type}
                 </div>
-                <div className="flex items-center gap-1.5 text-emerald-400 font-black text-sm">
+                <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-black text-sm">
                   <Sparkles className="w-4 h-4" />
                   {currentAd.score}/100
                 </div>
               </div>
-              <h3 className="text-4xl md:text-5xl font-black text-white leading-tight tracking-tight">
-                Diseñado para <span className={theme.textAccent}>{platformNames[selectedPlatform]}</span>
+              <h3 className="text-4xl md:text-5xl font-black text-black dark:text-white leading-tight tracking-tight">
+                Diseñado para <span className={colors.text}>{platformNames[selectedPlatform]}</span>
               </h3>
-              <p className="text-lg text-gray-300 font-medium leading-relaxed">
+              <p className="text-lg text-gray-600 dark:text-gray-400 font-medium leading-relaxed">
                 {currentAd.reasoning || "Este anuncio ha sido optimizado por nuestra tecnología para maximizar el impacto y las conversiones en esta plataforma específica."}
               </p>
             </div>
@@ -259,13 +202,13 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
               <Button
                 onClick={() => onViewGuide(selectedPlatform)}
                 variant="outline"
-                className="h-20 rounded-[1.5rem] border-slate-600 dark:border-slate-500 font-black text-lg gap-3 bg-slate-800 dark:bg-slate-700 text-white hover:bg-slate-700 dark:hover:bg-slate-600 transition-all"
+                className="h-20 rounded-[1.5rem] border-black/10 dark:border-white/10 font-black text-lg gap-3 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-all"
               >
                 <BookOpen className="w-5 h-5" /> Guía de Uso
               </Button>
               <Button
                 onClick={() => onDownloadPDF(selectedPlatform)}
-                className={`h-20 rounded-[1.5rem] ${theme.buttonBg} text-white font-black text-lg gap-3 shadow-2xl ${theme.buttonShadow} transition-all`}
+                className={`h-20 rounded-[1.5rem] bg-black dark:bg-white text-white dark:text-black font-black text-lg gap-3 shadow-2xl transition-all hover:scale-105`}
               >
                 {!hasPaid ? <Lock className="w-5 h-5" /> : <Download className="w-5 h-5" />}
                 Campaign Kit
@@ -273,7 +216,7 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
               <Button
                 onClick={() => onPublish(selectedPlatform, currentAd.platformUrl)}
                 variant="outline"
-                className="h-20 rounded-[1.5rem] border-slate-600 dark:border-slate-500 text-white font-black text-lg gap-3 sm:col-span-2 bg-slate-800 dark:bg-slate-700 hover:bg-slate-700 dark:hover:bg-slate-600 transition-all"
+                className="h-20 rounded-[1.5rem] border-black/10 dark:border-white/10 text-black dark:text-white font-black text-lg gap-3 sm:col-span-2 bg-transparent hover:bg-black/5 dark:hover:bg-white/5 transition-all"
               >
                 <ExternalLink className="w-5 h-5" /> Publicar Anuncio
               </Button>
