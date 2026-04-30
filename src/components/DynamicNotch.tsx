@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Menu, Sparkles, LayoutDashboard, BookOpen, MessageSquare } from "lucide-react";
+import { X, Menu, Sparkles, BookOpen, MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -16,16 +16,15 @@ interface DynamicNotchProps {
 
 export const DynamicNotch = ({ navLinks, logo }: DynamicNotchProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      setScrolled(scrollY > 50);
-      setIsCollapsed(scrollY > 200);
+      // Umbral más alto para evitar cambios constantes en móviles
+      setIsCollapsed(scrollY > 120);
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -47,30 +46,32 @@ export const DynamicNotch = ({ navLinks, logo }: DynamicNotchProps) => {
 
   return (
     <>
-      {/* NOTCH DINÁMICO - MORPHIC GLASS */}
+      {/* NOTCH DINÁMICO - OPTIMIZADO PARA EVITAR FLICKERING */}
       <motion.nav
-        initial={{ y: 0 }}
+        initial={false}
         animate={{
-          y: 0,
           width: isCollapsed ? "min(95%, 800px)" : "100%",
+          // Eliminamos la animación de 'y' que suele causar saltos en móviles
         }}
         transition={{ 
-          duration: 1.2,
-          ease: [0.22, 1, 0.36, 1],
+          duration: 0.6, // Más rápido para evitar sensación de lag
+          ease: [0.16, 1, 0.3, 1],
         }}
-        className={`fixed top-4 left-0 right-0 mx-auto z-40 transition-all duration-500 ${
+        style={{ willChange: "width, transform" }}
+        className={`fixed top-4 left-0 right-0 mx-auto z-40 ${
           isCollapsed ? "rounded-full" : "rounded-none"
         }`}
       >
         <div
-          className={`relative transition-all duration-300 ${
+          className={`relative transition-all duration-500 ease-out ${
             isCollapsed
-              ? "px-4 py-2 rounded-full bg-background/40 backdrop-blur-2xl border border-white/10 shadow-2xl shadow-black/20"
-              : "px-6 md:px-8 py-4 md:py-5 w-full bg-background/30 backdrop-blur-xl border-b border-white/5"
+              ? "px-4 py-2 rounded-full bg-background/60 backdrop-blur-2xl border border-white/10 shadow-2xl shadow-black/20"
+              : "px-6 md:px-8 py-4 md:py-5 w-full bg-background/40 backdrop-blur-xl border-b border-white/5"
           }`}
+          style={{ backfaceVisibility: "hidden", transform: "translateZ(0)" }}
         >
           <div className="flex items-center justify-between gap-4">
-            {/* LOGO - Visible siempre */}
+            {/* LOGO */}
             <Link
               to="/"
               onClick={() => {
@@ -91,13 +92,13 @@ export const DynamicNotch = ({ navLinks, logo }: DynamicNotchProps) => {
               </span>
             </Link>
 
-            {/* DESKTOP NAV - Visible también en modo colapsado pero más compacto */}
+            {/* DESKTOP NAV */}
             <div className="hidden lg:flex items-center gap-1">
               {navLinks.slice(0, isCollapsed ? 4 : navLinks.length).map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
-                  className={`px-3 py-2 text-sm font-medium text-foreground/70 hover:text-foreground transition-all duration-500 rounded-lg hover:bg-white/5 ${
+                  className={`px-3 py-2 text-sm font-medium text-foreground/70 hover:text-foreground transition-all duration-300 rounded-lg hover:bg-white/5 ${
                     isCollapsed ? "text-[11px] px-2" : ""
                   }`}
                 >
@@ -111,25 +112,25 @@ export const DynamicNotch = ({ navLinks, logo }: DynamicNotchProps) => {
               ))}
             </div>
 
-            {/* MOBILE QUICK ACTIONS (The "Notch" content for mobile) */}
-            <div className="flex lg:hidden items-center gap-1 flex-1 justify-end">
+            {/* MOBILE QUICK ACTIONS - OPTIMIZADAS */}
+            <div className="flex lg:hidden items-center gap-1.5 flex-1 justify-end">
               <Link 
                 to="/flowsight-ads" 
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[11px] font-bold uppercase tracking-tight"
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold uppercase tracking-tight whitespace-nowrap"
               >
                 <Sparkles className="w-3 h-3" />
                 <span>Ads</span>
               </Link>
               <Link 
                 to="/blog" 
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-foreground/70 text-[11px] font-bold uppercase tracking-tight"
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-foreground/70 text-[10px] font-bold uppercase tracking-tight whitespace-nowrap"
               >
                 <BookOpen className="w-3 h-3" />
                 <span>Blog</span>
               </Link>
               <a 
                 href="#contacto" 
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-foreground/70 text-[11px] font-bold uppercase tracking-tight"
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-foreground/70 text-[10px] font-bold uppercase tracking-tight whitespace-nowrap"
               >
                 <MessageSquare className="w-3 h-3" />
                 <span>Chat</span>
@@ -139,12 +140,9 @@ export const DynamicNotch = ({ navLinks, logo }: DynamicNotchProps) => {
             {/* CONTROLES DERECHA */}
             <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
               <ThemeToggle />
-              {/* MOBILE MENU BUTTON */}
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={`p-2 rounded-lg hover:bg-white/10 transition-all duration-300 ${
-                  isCollapsed ? "lg:hidden" : ""
-                }`}
+                className="p-2 rounded-lg hover:bg-white/10 transition-all duration-300"
                 aria-label="Toggle menu"
               >
                 {isOpen ? (
@@ -158,146 +156,59 @@ export const DynamicNotch = ({ navLinks, logo }: DynamicNotchProps) => {
         </div>
       </motion.nav>
 
-      {/* MENÚ DESPLEGABLE FULL-WIDTH (NOTCH) */}
+      {/* MENÚ DESPLEGABLE */}
       <AnimatePresence>
-        {isOpen && !isCollapsed && (
+        {isOpen && (
           <>
-            {/* BACKDROP CON BLUR */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-background/40 backdrop-blur-sm z-30"
+              className="fixed inset-0 bg-background/60 backdrop-blur-md z-30"
             />
 
-            {/* MENÚ DESPLEGABLE PREMIUM */}
             <motion.div
-              initial={{ y: -100, opacity: 0 }}
+              initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -100, opacity: 0 }}
+              exit={{ y: -20, opacity: 0 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="fixed top-20 md:top-24 left-0 right-0 z-30 bg-background/95 backdrop-blur-3xl border-b border-white/10"
+              className={`fixed left-0 right-0 z-30 bg-background/95 backdrop-blur-3xl border-b border-white/10 ${
+                isCollapsed ? "top-20 mx-auto w-[95%] rounded-3xl border shadow-2xl" : "top-0 pt-24"
+              }`}
             >
-              <div className="container py-8 md:py-12">
-                {/* GRID DE ENLACES - Responsivo */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+              <div className="container py-8 max-h-[80vh] overflow-y-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {navLinks.map((link, index) => (
                     <motion.a
                       key={link.label}
                       href={link.href}
                       onClick={handleNavClick}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.05, duration: 0.2 }}
-                      className="group p-4 md:p-6 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/10 backdrop-blur-sm"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.03 }}
+                      className="group p-4 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 transition-all"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-semibold text-foreground group-hover:text-emerald-500 transition-colors">
+                        <span className="font-medium text-foreground group-hover:text-emerald-500 transition-colors">
                           {link.label}
                         </span>
-                        <svg
-                          className="w-5 h-5 text-emerald-500/0 group-hover:text-emerald-500 transition-all duration-300 transform group-hover:translate-x-1"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
+                        <ArrowRight className="w-4 h-4 text-emerald-500 opacity-0 group-hover:opacity-100 transition-all transform group-hover:translate-x-1" />
                       </div>
                     </motion.a>
                   ))}
                 </div>
 
-                {/* DIVIDER */}
-                <div className="my-8 md:my-10 border-t border-white/10" />
+                <div className="my-6 border-t border-white/10" />
 
-                {/* CALL-TO-ACTION EN MENÚ */}
-                <div className="flex flex-col sm:flex-row gap-3">
+                <div className="flex flex-col gap-3">
                   <a
                     href="#contacto"
                     onClick={handleNavClick}
-                    className="flex-1 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 text-white font-semibold text-center hover:shadow-lg hover:shadow-emerald-500/30 transition-all duration-300 hover:scale-105"
+                    className="w-full px-6 py-4 rounded-xl bg-emerald-500 text-white font-bold text-center shadow-lg shadow-emerald-500/20"
                   >
                     Solicitar diagnóstico
-                  </a>
-                  <a
-                    href="https://wa.me/message/FVHDA5OZHN66P1"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={handleNavClick}
-                    className="flex-1 px-6 py-3 rounded-xl border border-emerald-500/50 text-emerald-500 font-semibold text-center hover:bg-emerald-500/10 transition-all duration-300"
-                  >
-                    WhatsApp
-                  </a>
-                </div>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
-
-      {/* MENÚ COLAPSADO (PÍLDORA) */}
-      <AnimatePresence>
-        {isOpen && isCollapsed && (
-          <>
-            {/* BACKDROP */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-background/40 backdrop-blur-sm z-30"
-            />
-
-            {/* MENÚ COLAPSADO */}
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0, y: -20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.8, opacity: 0, y: -20 }}
-              transition={{ duration: 0.2 }}
-              className="fixed top-20 left-1/2 -translate-x-1/2 z-30 w-[90%] max-w-md bg-background/95 backdrop-blur-3xl border border-white/10 rounded-3xl shadow-2xl shadow-black/30"
-            >
-              <div className="p-6 md:p-8">
-                {/* GRID DE ENLACES */}
-                <div className="grid grid-cols-2 gap-3 mb-6">
-                  {navLinks.map((link, index) => (
-                    <motion.a
-                      key={link.label}
-                      href={link.href}
-                      onClick={handleNavClick}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                      className="p-3 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 text-sm font-medium text-foreground hover:text-emerald-500 transition-all duration-300 text-center"
-                    >
-                      {link.label}
-                    </motion.a>
-                  ))}
-                </div>
-
-                {/* DIVIDER */}
-                <div className="mb-6 border-t border-white/10" />
-
-                {/* CALL-TO-ACTION */}
-                <div className="flex flex-col gap-2">
-                  <a
-                    href="#contacto"
-                    onClick={handleNavClick}
-                    className="px-4 py-2.5 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-500 text-white font-semibold text-center text-sm hover:shadow-lg hover:shadow-emerald-500/30 transition-all"
-                  >
-                    Diagnóstico
-                  </a>
-                  <a
-                    href="https://wa.me/message/FVHDA5OZHN66P1"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={handleNavClick}
-                    className="px-4 py-2.5 rounded-lg border border-emerald-500/50 text-emerald-500 font-semibold text-center text-sm hover:bg-emerald-500/10 transition-all"
-                  >
-                    WhatsApp
                   </a>
                 </div>
               </div>
@@ -308,3 +219,9 @@ export const DynamicNotch = ({ navLinks, logo }: DynamicNotchProps) => {
     </>
   );
 };
+
+const ArrowRight = ({ className }: { className?: string }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+  </svg>
+);
