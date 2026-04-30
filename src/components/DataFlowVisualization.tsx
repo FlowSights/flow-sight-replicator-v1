@@ -67,10 +67,9 @@ export const DataFlowVisualization = () => {
         <motion.div
           animate={{
             scale: [1, 1.05, 1],
-            opacity: [0.85, 0.95, 0.85],
           }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute inset-1/4 rounded-full bg-gradient-to-br from-emerald-400/60 via-emerald-600/50 to-emerald-900/60 backdrop-blur-sm z-20 border border-emerald-500/30"
+          className="absolute inset-1/4 rounded-full bg-gradient-to-br from-emerald-400 via-emerald-600 to-emerald-900 z-20 border-2 border-emerald-400/50 shadow-[0_0_50px_rgba(16,185,129,0.4)]"
         >
           {/* Brillo interno suave */}
           <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.2),transparent)]" />
@@ -79,19 +78,19 @@ export const DataFlowVisualization = () => {
           <div className="absolute -inset-10 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
         </motion.div>
 
-        {/* ANILLOS ORBITALES 3D - MÁS FINOS */}
-        {[0, 60, 120].map((rotation, i) => (
+        {/* ANILLOS ORBITALES 3D - REFORZADOS */}
+        {[0, 45, 90, 135].map((rotation, i) => (
           <motion.div
             key={i}
             animate={{ rotateZ: 360 }}
-            transition={{ duration: 20 + i * 8, repeat: Infinity, ease: "linear" }}
-            style={{ rotateX: rotation, rotateY: rotation / 3 }}
-            className="absolute inset-0 rounded-full border border-emerald-500/10 preserve-3d"
+            transition={{ duration: 15 + i * 5, repeat: Infinity, ease: "linear" }}
+            style={{ rotateX: rotation, rotateY: rotation / 2 }}
+            className="absolute inset-0 rounded-full border-2 border-emerald-500/30 preserve-3d"
           >
             <motion.div 
-              animate={{ scale: [0.9, 1.1, 0.9], opacity: [0.3, 0.6, 0.3] }}
-              transition={{ duration: 4, repeat: Infinity, delay: i }}
-              className="absolute top-0 left-1/2 w-2 h-2 bg-emerald-400/60 rounded-full blur-[1px]" 
+              animate={{ scale: [0.8, 1.2, 0.8] }}
+              transition={{ duration: 3, repeat: Infinity, delay: i }}
+              className="absolute top-0 left-1/2 w-3 h-3 bg-emerald-400 rounded-full shadow-[0_0_15px_rgba(52,211,153,0.8)]" 
             />
           </motion.div>
         ))}
