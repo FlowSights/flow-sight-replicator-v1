@@ -113,11 +113,12 @@ export const PremiumHero = ({ onContactClick }: PremiumHeroProps) => {
             </motion.div>
           </div>
 
-          {/* ELEMENTO 3D DERECHO */}
+          {/* ELEMENTO 3D DERECHO - LIBERADO Y AMPLIADO */}
           <motion.div
             variants={itemVariants}
-            className="relative h-96 md:h-[500px] flex items-center justify-center"
+            className="relative h-[500px] md:h-[700px] flex items-center justify-center lg:-mr-20 xl:-mr-40"
           >
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-500/5 to-transparent blur-3xl opacity-30 pointer-events-none" />
             <DataFlowVisualization />
           </motion.div>
         </motion.div>
