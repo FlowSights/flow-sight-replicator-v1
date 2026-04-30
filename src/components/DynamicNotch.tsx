@@ -52,11 +52,14 @@ export const DynamicNotch = ({ navLinks, logo }: DynamicNotchProps) => {
         initial={{ y: 0 }}
         animate={{
           y: 0,
-          width: isCollapsed ? "auto" : "100%",
+          width: isCollapsed ? "min(90%, 600px)" : "100%",
           left: isCollapsed ? "50%" : "0",
           x: isCollapsed ? "-50%" : "0",
         }}
-        transition={{ duration: 0.4, ease: "easeInOut" }}
+        transition={{ 
+          duration: 0.8, 
+          ease: [0.16, 1, 0.3, 1], // Curva tipo Apple (expo out)
+        }}
         className={`fixed top-4 z-40 transition-all duration-300 ${
           isCollapsed ? "rounded-full" : "rounded-none"
         }`}
@@ -75,38 +78,38 @@ export const DynamicNotch = ({ navLinks, logo }: DynamicNotchProps) => {
             {/* LOGO - Visible siempre */}
             <Link
               to="/"
-              className="flex items-center gap-2 font-display font-bold text-foreground text-lg md:text-xl hover:opacity-80 transition-opacity flex-shrink-0"
+              onClick={() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setIsOpen(false);
+              }}
+              className="flex items-center gap-2 font-display font-bold text-foreground text-lg md:text-xl hover:opacity-80 transition-opacity flex-shrink-0 z-50"
             >
               <img
                 src={logo}
                 alt="FlowSights"
-                className={`object-contain transition-all duration-300 ${
-                  isCollapsed ? "w-6 h-6" : "w-8 h-8 md:w-10 md:h-10"
+                className={`object-contain transition-all duration-500 ${
+                  isCollapsed ? "w-7 h-7" : "w-8 h-8 md:w-10 md:h-10"
                 }`}
               />
-              {!isCollapsed && <span className="hidden sm:inline">FlowSights</span>}
+              <span className={`transition-all duration-500 ${isCollapsed ? "opacity-0 w-0 overflow-hidden" : "opacity-100"}`}>
+                FlowSights
+              </span>
             </Link>
 
-            {/* DESKTOP NAV - Solo visible cuando no está colapsado */}
-            {!isCollapsed && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="hidden lg:flex items-center gap-1"
-              >
-                {navLinks.map((link) => (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    className="px-3 py-2 text-sm font-medium text-foreground/70 hover:text-foreground transition-colors rounded-lg hover:bg-white/5"
-                  >
-                    {link.label}
-                  </a>
-                ))}
-              </motion.div>
-            )}
+            {/* DESKTOP NAV - Visible también en modo colapsado pero más compacto */}
+            <div className="hidden lg:flex items-center gap-1">
+              {navLinks.slice(0, isCollapsed ? 3 : navLinks.length).map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className={`px-3 py-2 text-sm font-medium text-foreground/70 hover:text-foreground transition-all duration-300 rounded-lg hover:bg-white/5 ${
+                    isCollapsed ? "text-xs" : ""
+                  }`}
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
 
             {/* CONTROLES DERECHA */}
             <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
