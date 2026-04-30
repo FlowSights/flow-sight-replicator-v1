@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Menu, Sparkles } from "lucide-react";
+import { X, Menu, Sparkles, LayoutDashboard, BookOpen, MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -55,8 +55,8 @@ export const DynamicNotch = ({ navLinks, logo }: DynamicNotchProps) => {
           width: isCollapsed ? "min(95%, 800px)" : "100%",
         }}
         transition={{ 
-          duration: 1.2, // Más lenta y elegante
-          ease: [0.22, 1, 0.36, 1], // Curva Quint Out más suave
+          duration: 1.2,
+          ease: [0.22, 1, 0.36, 1],
         }}
         className={`fixed top-4 left-0 right-0 mx-auto z-40 transition-all duration-500 ${
           isCollapsed ? "rounded-full" : "rounded-none"
@@ -109,6 +109,31 @@ export const DynamicNotch = ({ navLinks, logo }: DynamicNotchProps) => {
                   </div>
                 </a>
               ))}
+            </div>
+
+            {/* MOBILE QUICK ACTIONS (The "Notch" content for mobile) */}
+            <div className="flex lg:hidden items-center gap-1 flex-1 justify-end">
+              <Link 
+                to="/flowsight-ads" 
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[11px] font-bold uppercase tracking-tight"
+              >
+                <Sparkles className="w-3 h-3" />
+                <span>Ads</span>
+              </Link>
+              <Link 
+                to="/blog" 
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-foreground/70 text-[11px] font-bold uppercase tracking-tight"
+              >
+                <BookOpen className="w-3 h-3" />
+                <span>Blog</span>
+              </Link>
+              <a 
+                href="#contacto" 
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-foreground/70 text-[11px] font-bold uppercase tracking-tight"
+              >
+                <MessageSquare className="w-3 h-3" />
+                <span>Chat</span>
+              </a>
             </div>
 
             {/* CONTROLES DERECHA */}
