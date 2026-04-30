@@ -16,11 +16,27 @@ export const PremiumCard = ({
   index = 0,
   glassEffect = "medium",
 }: PremiumCardProps) => {
+  // Definición de estilos Morphic Glass Premium
+  // Eliminamos los grises y usamos blancos/negros puros con alta transparencia y desenfoque
   const glassEffectClasses = {
-    // Optimizamos las clases para móviles: menos blur y fondos ligeramente más opacos para evitar flickering
-    light: "backdrop-blur-sm md:backdrop-blur-md bg-white/10 dark:bg-white/5 border border-white/20 dark:border-white/10 shadow-sm",
-    medium: "backdrop-blur-md md:backdrop-blur-xl bg-white/15 dark:bg-white/8 border border-white/25 dark:border-white/15 shadow-lg shadow-black/10 dark:shadow-black/30",
-    strong: "backdrop-blur-lg md:backdrop-blur-2xl bg-white/20 dark:bg-white/12 border border-white/30 dark:border-white/20 shadow-2xl shadow-black/20 dark:shadow-black/40",
+    light: `
+      backdrop-blur-md 
+      bg-white/40 dark:bg-black/20 
+      border border-white/40 dark:border-white/10 
+      shadow-[0_4px_12px_rgba(0,0,0,0.03)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.2)]
+    `,
+    medium: `
+      backdrop-blur-xl 
+      bg-white/60 dark:bg-black/40 
+      border border-white/50 dark:border-white/15 
+      shadow-[0_8px_32px_rgba(0,0,0,0.05)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.4)]
+    `,
+    strong: `
+      backdrop-blur-2xl 
+      bg-white/80 dark:bg-black/60 
+      border border-white/60 dark:border-white/20 
+      shadow-[0_12px_48px_rgba(0,0,0,0.08)] dark:shadow-[0_12px_48px_rgba(0,0,0,0.6)]
+    `,
   };
 
   return (
@@ -28,17 +44,16 @@ export const PremiumCard = ({
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ 
-        delay: index * 0.05, // Reducimos el delay para que sea más fluido
-        duration: 0.4, 
-        ease: "easeOut" 
+        delay: index * 0.05, 
+        duration: 0.5, 
+        ease: [0.21, 0.47, 0.32, 0.98] 
       }}
       viewport={{ once: true, margin: "-50px" }}
-      // Desactivamos el hover animado en móviles para evitar problemas de rendimiento
       whileHover={
-        hoverEffect && window.innerWidth > 768
+        hoverEffect && typeof window !== 'undefined' && window.innerWidth > 768
           ? {
-              y: -12,
-              boxShadow: "0 30px 80px -20px rgba(16, 185, 129, 0.25)",
+              y: -8,
+              transition: { duration: 0.3, ease: "easeOut" }
             }
           : undefined
       }
@@ -46,25 +61,29 @@ export const PremiumCard = ({
         willChange: "transform, opacity",
         backfaceVisibility: "hidden",
         transform: "translateZ(0)",
-        WebkitFontSmoothing: "antialiased"
       }}
       className={`
-        relative rounded-2xl transition-all duration-300 group
+        relative rounded-3xl transition-all duration-500 group overflow-hidden
         ${glassEffectClasses[glassEffect]}
         ${hoverEffect ? "cursor-pointer" : ""}
         ${className}
       `}
     >
-      {/* EFECTO DE BORDE GRADIENTE AL HOVER - Solo visible en desktop */}
+      {/* REFLEJO DE LUZ SUPERIOR (Efecto Cristal) */}
+      <div className="absolute inset-0 bg-gradient-to-br from-white/20 dark:from-white/5 to-transparent pointer-events-none" />
+      
+      {/* EFECTO DE RESPLANDOR AL HOVER - Solo en Desktop */}
       {hoverEffect && (
-        <div className="hidden md:block">
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-          <div className="absolute -inset-px rounded-2xl bg-gradient-to-br from-emerald-500/20 via-transparent to-transparent opacity-0 group-hover:opacity-50 blur-xl transition-opacity duration-300 pointer-events-none" />
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+          <div className="absolute -inset-[100%] bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.1),transparent_70%)]" />
         </div>
       )}
 
       {/* CONTENIDO */}
-      <div className="relative z-10">{children}</div>
+      <div className="relative z-10 h-full">{children}</div>
+      
+      {/* BORDE INTERNO SUTIL (Inner Glow) */}
+      <div className="absolute inset-0 rounded-3xl border border-white/20 dark:border-white/5 pointer-events-none" />
     </motion.div>
   );
 };
