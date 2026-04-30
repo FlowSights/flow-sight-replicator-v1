@@ -967,8 +967,8 @@ const FlowsightAdsDashboard: React.FC = () => {
               className="w-full max-w-4xl max-h-[90vh] overflow-y-auto custom-scrollbar"
               onClick={(e) => e.stopPropagation()}
             >
-              {selectedAdForLightbox.platform === 'google' && <GoogleAdsPreview {...selectedAdForLightbox} imageUrl={selectedAdForLightbox.imageUrl} businessName={selectedAdForLightbox.businessName} websiteUrl={selectedAdForLightbox.websiteUrl} />}
               {selectedAdForLightbox.platform === 'meta' && <MetaPreview {...selectedAdForLightbox} imageUrl={selectedAdForLightbox.imageUrl} businessName={selectedAdForLightbox.businessName} websiteUrl={selectedAdForLightbox.websiteUrl} />}
+              {selectedAdForLightbox.platform === 'google' && <GoogleAdsPreview {...selectedAdForLightbox} imageUrl={selectedAdForLightbox.imageUrl} businessName={selectedAdForLightbox.businessName} websiteUrl={selectedAdForLightbox.websiteUrl} />}
               {selectedAdForLightbox.platform === 'tiktok' && <TikTokPreview {...selectedAdForLightbox} imageUrl={selectedAdForLightbox.imageUrl} businessName={selectedAdForLightbox.businessName} />}
               {selectedAdForLightbox.platform === 'linkedin' && <LinkedInPreview {...selectedAdForLightbox} imageUrl={selectedAdForLightbox.imageUrl} businessName={selectedAdForLightbox.businessName} />}
               

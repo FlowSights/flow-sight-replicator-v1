@@ -39,10 +39,10 @@ export const PremiumReadyToLaunch: React.FC<PremiumReadyToLaunchProps> = ({
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="relative w-full overflow-hidden rounded-[2.5rem] border border-black/5 dark:border-white/10 bg-white dark:bg-black shadow-2xl shadow-black/5"
+      className="relative w-full overflow-hidden rounded-[2.5rem] border border-black/5 dark:border-white/10 bg-white dark:bg-[#050505] shadow-2xl shadow-black/5"
     >
       {/* Immersive Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-gray-950 dark:via-gray-900 dark:to-black" />
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-neutral-950 dark:via-neutral-900 dark:to-[#050505]" />
 
       {/* Animated Orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -75,7 +75,7 @@ export const PremiumReadyToLaunch: React.FC<PremiumReadyToLaunchProps> = ({
           <h2 className="text-5xl md:text-7xl font-black text-black dark:text-white leading-tight tracking-tight">
             Tu Estrategia Premium
             <br />
-            <span className="bg-gradient-to-r from-emerald-600 to-cyan-600 dark:from-emerald-400 dark:to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-emerald-600 to-emerald-400 dark:from-emerald-400 dark:to-emerald-200 bg-clip-text text-transparent">
               está Lista
             </span>
           </h2>
@@ -116,7 +116,7 @@ export const PremiumReadyToLaunch: React.FC<PremiumReadyToLaunchProps> = ({
             <Button
               onClick={handleDownloadAll}
               disabled={isDownloading}
-              className="h-20 px-10 rounded-[2rem] bg-black dark:bg-white text-white dark:text-black hover:bg-gray-900 dark:hover:bg-emerald-50 font-black text-xl gap-3 shadow-2xl transition-all hover:scale-105 disabled:opacity-50"
+              className="h-20 px-10 rounded-[2rem] bg-emerald-600 dark:bg-emerald-500 text-white font-black text-xl gap-3 shadow-2xl transition-all hover:scale-105 disabled:opacity-50 hover:bg-emerald-700 dark:hover:bg-emerald-400"
             >
               {isDownloading ? (
                 <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity }}>

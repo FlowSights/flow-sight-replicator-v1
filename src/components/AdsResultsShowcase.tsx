@@ -110,23 +110,25 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
         animate={{ opacity: 1, y: 0 }}
         className={`space-y-8 p-8 md:p-12 rounded-[3rem] transition-colors duration-500 bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 shadow-2xl shadow-black/5 backdrop-blur-xl`}
       >
-        {/* Selector de Plataformas */}
-        <div className="flex flex-wrap gap-3">
-          {platforms.map((platform) => {
-            const pColors = platformColors[platform];
+        {/* Selector de Plataformas - Optimización de alineación y orden */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
+          {platformOrder.map((platform) => {
             const isSelected = selectedPlatform === platform;
+            const hasAds = !!adsByPlatform[platform];
+            
             return (
               <button
                 key={platform}
                 onClick={() => handlePlatformChange(platform)}
-                className={`px-6 py-3 rounded-2xl font-bold transition-all flex items-center gap-3 ${
+                disabled={!hasAds}
+                className={`px-4 py-4 rounded-2xl font-bold transition-all flex items-center justify-center gap-3 border ${
                   isSelected
-                    ? `bg-black dark:bg-white text-white dark:text-black shadow-xl scale-105`
-                    : 'bg-black/5 dark:bg-white/5 text-gray-500 hover:bg-black/10 dark:hover:bg-white/10'
-                }`}
+                    ? `bg-blue-600 border-blue-600 text-white shadow-xl shadow-blue-500/20 scale-[1.02]`
+                    : 'bg-white dark:bg-white/5 border-black/5 dark:border-white/10 text-gray-500 hover:bg-black/5 dark:hover:bg-white/10'
+                } ${!hasAds ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                <PlatformIcon platform={platform} size={20} className={isSelected ? 'text-white dark:text-black' : 'text-gray-400'} />
-                {platformNames[platform]}
+                <PlatformIcon platform={platform} size={18} className={isSelected ? 'text-white' : 'text-gray-400'} />
+                <span className="text-sm truncate">{platformNames[platform].split(' ')[0]}</span>
               </button>
             );
           })}

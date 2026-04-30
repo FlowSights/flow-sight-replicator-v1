@@ -219,22 +219,22 @@ export const ClientDashboard: React.FC<ClientDashboardProps> = ({
                   key={i} 
                   className={`group relative overflow-hidden rounded-[2.5rem] border p-10 shadow-2xl transition-all duration-500 cursor-pointer ${
                     asset.primary 
-                      ? 'bg-black dark:bg-white border-black dark:border-white' 
+                      ? 'bg-emerald-600 dark:bg-emerald-500 border-emerald-600 dark:border-emerald-500' 
                       : 'bg-white dark:bg-white/5 border-black/5 dark:border-white/10 hover:border-emerald-500/30'
                   }`}
                   onClick={asset.action}
                 >
                   <div className="flex flex-col h-full justify-between">
                     <div>
-                      <div className={`mb-8 inline-flex p-4 rounded-3xl ${asset.primary ? 'bg-white/10 dark:bg-black/10' : 'bg-black/5 dark:bg-white/10'}`}>
-                        <asset.icon className={`w-8 h-8 ${asset.primary ? 'text-white dark:text-black' : 'text-emerald-600 dark:text-emerald-400'}`} />
+                      <div className={`mb-8 inline-flex p-4 rounded-3xl ${asset.primary ? 'bg-white/20' : 'bg-black/5 dark:bg-white/10'}`}>
+                        <asset.icon className={`w-8 h-8 ${asset.primary ? 'text-white' : 'text-emerald-600 dark:text-emerald-400'}`} />
                       </div>
-                      <h3 className={`text-3xl font-black mb-4 tracking-tight ${asset.primary ? 'text-white dark:text-black' : 'text-black dark:text-white'}`}>{asset.title}</h3>
-                      <p className={`text-lg font-medium leading-relaxed mb-10 ${asset.primary ? 'text-white/60 dark:text-black/60' : 'text-gray-600 dark:text-gray-400'}`}>
+                      <h3 className={`text-3xl font-black mb-4 tracking-tight ${asset.primary ? 'text-white' : 'text-black dark:text-white'}`}>{asset.title}</h3>
+                      <p className={`text-lg font-medium leading-relaxed mb-10 ${asset.primary ? 'text-white/90' : 'text-gray-600 dark:text-gray-400'}`}>
                         {asset.desc}
                       </p>
                     </div>
-                    <div className={`flex items-center gap-3 font-bold ${asset.primary ? 'text-white dark:text-black' : 'text-emerald-600 dark:text-emerald-400'}`}>
+                    <div className={`flex items-center gap-3 font-bold ${asset.primary ? 'text-white' : 'text-emerald-600 dark:text-emerald-400'}`}>
                       <span>Descargar Ahora</span>
                       <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-2" />
                     </div>

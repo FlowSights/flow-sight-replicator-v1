@@ -1,7 +1,5 @@
 import React from 'react';
 import { 
-  Facebook, 
-  Linkedin, 
   Search
 } from 'lucide-react';
 
@@ -12,9 +10,23 @@ interface PlatformIconProps {
 }
 
 export const PlatformIcon: React.FC<PlatformIconProps> = ({ platform, size = 24, className = '' }) => {
-  if (platform === 'meta') return <Facebook size={size} className={className} />;
+  if (platform === 'meta') {
+    return (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+      </svg>
+    );
+  }
   if (platform === 'google') return <Search size={size} className={className} />;
-  if (platform === 'linkedin') return <Linkedin size={size} className={className} />;
+  if (platform === 'linkedin') {
+    return (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+        <rect x="2" y="9" width="4" height="12"/>
+        <circle cx="4" cy="4" r="2"/>
+      </svg>
+    );
+  }
   if (platform === 'tiktok') {
     return (
       <svg 
@@ -24,7 +36,7 @@ export const PlatformIcon: React.FC<PlatformIconProps> = ({ platform, size = 24,
         fill="currentColor" 
         className={className}
       >
-        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.08 1.61 2.88 2.88 0 0 1 4.07-4.49v-3.45a6.47 6.47 0 0 0-5.79 9.86 6.48 6.48 0 0 0 10.86-5.75v-3.45a8.16 8.16 0 0 0 5.78 2.17z" />
+        <path d="M12.525.02c1.31-.032 2.612-.019 3.91-.019.03 1.53.523 3.059 1.442 4.305.924 1.256 2.223 2.185 3.7 2.656v3.867c-1.522-.034-3.003-.565-4.245-1.53a8.813 8.813 0 0 1-1.312-1.313V17.51c.017 3.6-2.978 6.511-6.583 6.49-3.597-.02-6.486-2.94-6.446-6.537.04-3.59 3.001-6.487 6.587-6.447.254.002.508.02.76.052v3.886c-.248-.053-.5-.076-.754-.076-1.432-.026-2.627 1.113-2.653 2.545-.026 1.433 1.114 2.627 2.546 2.653 1.433.026 2.627-1.113 2.653-2.545.002-.075.002-.15 0-.225V.02z" />
       </svg>
     );
   }
