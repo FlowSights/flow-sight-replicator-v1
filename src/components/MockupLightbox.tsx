@@ -42,10 +42,10 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
   const [paymentAction, setPaymentAction] = useState<'download' | 'publish' | 'guide'>('download');
   const [isZoomed, setIsZoomed] = useState(false);
 
-  const currentAd = ads[currentIndex];
+  const currentAd = ads?.[currentIndex];
   const colors = platformColors[platform];
 
-  if (!currentAd) return null;
+  if (!currentAd || !colors) return null;
 
   const handleActionClick = (action: 'download' | 'publish' | 'guide') => {
     if (!hasPaid) {

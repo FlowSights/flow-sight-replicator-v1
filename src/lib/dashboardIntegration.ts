@@ -146,19 +146,25 @@ export const generateAdsWithGeminiIntegration = async (
       linkedin: `https://www.linkedin.com/campaignmanager/accounts`,
     };
 
-    const generatedAds: GeneratedAd[] = geminiAds.map((ad) => ({
-      headline: ad.headline,
-      description: ad.description,
-      cta: ad.cta,
-      imageUrl: config.userImage || 'https://picsum.photos/seed/business/1200/630',
-      platform: ad.platform,
-      type: ad.type,
-      score: ad.score,
-      platformUrl: platformUrls[ad.platform],
-      businessName: config.businessName,
-      websiteUrl: config.websiteUrl,
-      reasoning: ad.reasoning,
-    }));
+    // Validar que platform sea uno de los valores permitidos
+    const validPlatforms = ['google', 'meta', 'tiktok', 'linkedin'];
+    
+    const generatedAds: GeneratedAd[] = geminiAds.map((ad) => {
+      const platform = validPlatforms.includes(ad.platform) ? ad.platform : 'meta';
+      return {
+        headline: ad.headline,
+        description: ad.description,
+        cta: ad.cta,
+        imageUrl: config.userImage || 'https://picsum.photos/seed/business/1200/630',
+        platform: platform as 'google' | 'meta' | 'tiktok' | 'linkedin',
+        type: ad.type,
+        score: ad.score,
+        platformUrl: platformUrls[platform],
+        businessName: config.businessName,
+        websiteUrl: config.websiteUrl,
+        reasoning: ad.reasoning,
+      };
+    });
 
     // Paso 4: Finalizar
     onStepUpdate?.(3);

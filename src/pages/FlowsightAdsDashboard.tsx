@@ -548,8 +548,12 @@ const FlowsightAdsDashboard: React.FC = () => {
         <MockupLightbox 
           isOpen={mockupLightboxOpen} 
           onClose={() => setMockupLightboxOpen(false)}
-          ad={generatedAds[currentMockupAdIndex]}
+          ads={generatedAds}
+          currentIndex={currentMockupAdIndex}
           platform={generatedAds[currentMockupAdIndex]?.platform || selectedPlatform}
+          businessName={config.businessName}
+          hasPaid={hasPaid}
+          onPaymentRequired={() => setShowPaymentModal(true)}
           onPrevious={() => setCurrentMockupAdIndex(prev => (prev === 0 ? generatedAds.length - 1 : prev - 1))}
           onNext={() => setCurrentMockupAdIndex(prev => (prev === generatedAds.length - 1 ? 0 : prev + 1))}
         />

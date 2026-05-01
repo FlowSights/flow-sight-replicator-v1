@@ -352,6 +352,12 @@ export const VisualGuideLightbox: React.FC<VisualGuideLightboxProps> = ({
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const guide = platformGuides[platform];
+  
+  // Validacion defensiva: si la plataforma no existe o no tiene steps, no renderizar
+  if (!guide || !guide.steps || guide.steps.length === 0) {
+    return null;
+  }
+  
   const step = guide.steps[currentStep];
 
   const handleNext = () => {

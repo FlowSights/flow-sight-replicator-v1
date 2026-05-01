@@ -19,8 +19,14 @@ export function middleware(request: NextRequest) {
 
   if (vercelEnv === 'development') {
     // Allow Vercel Live in development
-    csp = csp.replace(/script-src/, `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.supabase.co https://*.googleapis.com https://www.instagram.com https://platform.instagram.com https://js.stripe.com https://vercel.live;`);
-    csp = csp.replace(/connect-src/, `connect-src 'self' https://*.supabase.co https://*.googleapis.com https://www.instagram.com https://api.stripe.com https://*.stripe.com https://vercel.live;`);
+    csp = csp.replace(
+      /script-src[^;]+;/,
+      `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.supabase.co https://*.googleapis.com https://www.instagram.com https://platform.instagram.com https://js.stripe.com https://vercel.live;`
+    );
+    csp = csp.replace(
+      /connect-src[^;]+;/,
+      `connect-src 'self' https://*.supabase.co https://*.googleapis.com https://www.instagram.com https://api.stripe.com https://*.stripe.com https://vercel.live;`
+    );
   }
 
   const requestHeaders = new Headers(request.headers);
