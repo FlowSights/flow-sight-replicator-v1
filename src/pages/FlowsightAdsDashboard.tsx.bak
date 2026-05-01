@@ -17,7 +17,7 @@ import {
   Upload as UploadIcon, X as XIcon, Sparkles as SparklesIcon,
   RefreshCw, Search, Activity, Eye, MousePointer, Camera,
   Moon, Sun, Building2, Link2, Globe2, CreditCard,
-  FileDown, ZoomIn, Edit2, BookOpen, Share2, Lock, Unlock
+  FileDown, ZoomIn, Edit2, BookOpen, Share2
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useTheme } from 'next-themes';
@@ -61,8 +61,6 @@ interface CampaignConfig {
   userImage: string | null;
 }
 
-type ImageMode = 'upload' | 'placeholder' | 'copyonly';
-
 const FlowsightAdsDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
@@ -73,7 +71,6 @@ const FlowsightAdsDashboard: React.FC = () => {
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [generatedAds, setGeneratedAds] = useState<GeneratedAd[]>([]);
   const [showResults, setShowResults] = useState(false);
-  const [showPreview, setShowPreview] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [isGuideLightboxOpen, setIsGuideLightboxOpen] = useState(false);
   const [mockupLightboxOpen, setMockupLightboxOpen] = useState(false);
@@ -100,7 +97,6 @@ const FlowsightAdsDashboard: React.FC = () => {
   const [selectedAgeRange, setSelectedAgeRange] = useState<string | null>(null);
   const [selectedGeographicReach, setSelectedGeographicReach] = useState<string | null>(null);
   const [additionalCustomerInfo, setAdditionalCustomerInfo] = useState('');
-  const [imageMode, setImageMode] = useState<ImageMode>('upload');
 
   const businessTypes = [
     { icon: '🛍️', label: 'Ecommerce / Tienda online' },
@@ -141,15 +137,6 @@ const FlowsightAdsDashboard: React.FC = () => {
   useEffect(() => {
     updateIdealCustomer();
   }, [selectedBusinessType, selectedAgeRange, selectedGeographicReach, additionalCustomerInfo, updateIdealCustomer]);
-
-  const handleImageModeSelect = (mode: ImageMode) => {
-    setImageMode(mode);
-    if (mode === 'placeholder') {
-      setConfig(prev => ({ ...prev, userImage: null }));
-    } else if (mode === 'copyonly') {
-      setConfig(prev => ({ ...prev, userImage: null }));
-    }
-  };
 
   const fetchSiteMetadata = useCallback(async (url: string) => {
     if (!url || !url.startsWith('http')) return;
@@ -212,30 +199,9 @@ const FlowsightAdsDashboard: React.FC = () => {
       clearInterval(progressInterval);
       setLoadingProgress(100);
       
-      setTimeout(async () => {
+      setTimeout(() => {
         setGeneratedAds(ads);
-        
-        try {
-          const { data: { session } } = await supabase.auth.getSession();
-          if (session?.user?.id) {
-            await supabase
-              .from('campaign_generations')
-              .upsert({
-                user_id: session.user.id,
-                business_name: config.businessName,
-                generated_at: new Date().toISOString(),
-                follow_up_sent: false,
-              }, { onConflict: 'user_id' });
-          }
-        } catch {
-          // silencioso
-        }
-        
-        if (hasPaid) {
-          setShowResults(true);
-        } else {
-          setShowPreview(true);
-        }
+        setShowResults(true);
         setIsLoading(false);
         toast({ title: '✨ Estrategia Maestra Lista' });
       }, 500);
@@ -244,16 +210,6 @@ const FlowsightAdsDashboard: React.FC = () => {
       toast({ title: 'Error al generar anuncios', variant: 'destructive' });
     }
   };
-
-  // NOTA: Crear tabla en Supabase:
-  // CREATE TABLE campaign_generations (
-  //   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  //   user_id UUID REFERENCES auth.users(id),
-  //   business_name TEXT,
-  //   generated_at TIMESTAMPTZ DEFAULT NOW(),
-  //   follow_up_sent BOOLEAN DEFAULT FALSE,
-  //   UNIQUE(user_id)
-  // );
 
   const handleDownloadMasterKit = () => {
     if (hasPaid) {
@@ -269,89 +225,11 @@ const FlowsightAdsDashboard: React.FC = () => {
     }
   };
 
-  const handlePreviewPayment = () => {
-    setShowPaymentModal(true);
-  };
-
-  const handlePreviewBasicView = () => {
-    setShowPreview(false);
-    setShowResults(true);
-  };
-
-  const calculateEstimatedScore = useCallback(() => {
-    let score = 40;
-    if (config.businessName.length > 3) score += 10;
-    if (config.websiteUrl.length > 5) score += 10;
-    if (config.promote.length > 20) score += 15;
-    if (config.location.length > 3) score += 10;
-    if (config.idealCustomer.length > 10) score += 10;
-    if (config.budget >= 50) score += 5;
-    if (config.userImage || imageMode !== 'upload') score += 10;
-    return Math.min(score, 100);
-  }, [config.businessName, config.websiteUrl, config.promote, config.location, config.idealCustomer, config.budget, config.userImage, imageMode]);
-
-  const estimatedScore = calculateEstimatedScore();
-
-  const getScoreMessage = () => {
-    if (estimatedScore < 60) return 'Completa más campos para mejorar tus resultados';
-    if (estimatedScore < 80) return 'Buena base. Una imagen aumentaría el score';
-    return 'Excelente. Tu campaña está lista para generar';
-  };
-
-  const getScoreColor = () => {
-    if (estimatedScore < 60) return 'bg-red-500';
-    if (estimatedScore < 80) return 'bg-yellow-500';
-    return 'bg-emerald-500';
-  };
-
-  const loadingMessages = [
-    { at: 0,  message: 'Analizando tu negocio y audiencia...' },
-    { at: 20, message: 'Investigando las mejores estrategias para tu industria...' },
-    { at: 40, message: 'Generando copy de alto impacto con IA...' },
-    { at: 60, message: 'Optimizando para cada plataforma...' },
-    { at: 75, message: 'Construyendo tus mockups y kits...' },
-    { at: 90, message: 'Revisando el score de cada campaña...' },
-    { at: 98, message: '¡Casi listo! Preparando tu estrategia...' },
-  ];
-
-  const educationalFacts = [
-    'Los anuncios con copy específico por plataforma convierten 3x más',
-    'El 70% del éxito de un ad depende del copy, no del visual',
-    'Un ROAS de 3x significa que por cada $1 invertido, ganas $3',
-    'Los anuncios en Meta funcionan mejor los martes y miércoles 9-11am',
-    'El CTA más efectivo en Google Ads es "Obtén tu [resultado específico]"',
-  ];
-
-  const getCurrentLoadingMessage = () => {
-    for (let i = loadingMessages.length - 1; i >= 0; i--) {
-      if (loadingProgress >= loadingMessages[i].at) {
-        return loadingMessages[i].message;
-      }
-    }
-    return loadingMessages[0].message;
-  };
-
-  const [currentEducationalFactIndex, setCurrentEducationalFactIndex] = useState(0);
-
-  useEffect(() => {
-    if (isLoading) {
-      const interval = setInterval(() => {
-        setCurrentEducationalFactIndex(prev => (prev + 1) % educationalFacts.length);
-      }, 3000);
-      return () => clearInterval(interval);
-    }
-  }, [isLoading, educationalFacts.length]);
-
   const currentTheme = platformThemes[selectedPlatform];
 
   return (
     <div className="min-h-screen bg-[#050505] text-white selection:bg-emerald-500/30 font-sans overflow-x-hidden">
-      <PremiumLoadingScreen 
-        isVisible={isLoading} 
-        progress={loadingProgress}
-        currentMessage={getCurrentLoadingMessage()}
-        educationalFact={educationalFacts[currentEducationalFactIndex]}
-      />
+      <PremiumLoadingScreen isVisible={isLoading} progress={loadingProgress} />
       
       <header className="sticky top-0 z-40 backdrop-blur-2xl bg-black/60 border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
@@ -369,65 +247,7 @@ const FlowsightAdsDashboard: React.FC = () => {
 
       <main className="max-w-7xl mx-auto px-6 py-12">
         <AnimatePresence mode="wait">
-          {showPreview && !hasPaid ? (
-            <motion.div key="preview" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="max-w-3xl mx-auto">
-              <div className="text-center mb-12">
-                <motion.h2 initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-5xl font-black mb-4 tracking-tight">Tu campaña está lista <span className="text-emerald-500">🎯</span></motion.h2>
-                <p className="text-gray-400 text-lg font-medium">Hemos generado 4 estrategias optimizadas para tu negocio</p>
-              </div>
-
-              <div className="space-y-8">
-                <div className="relative rounded-[48px] p-1" style={{ background: 'linear-gradient(135deg, rgba(16,185,129,0.3), transparent, rgba(16,185,129,0.3))', boxShadow: '0 0 80px -20px rgba(16,185,129,0.5)' }}>
-                  <div className="bg-[#0A0A0A] rounded-[46px] p-8 lg:p-14 relative overflow-hidden">
-                    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                      <div className="absolute -top-40 -right-40 w-[600px] h-[600px] blur-[150px] rounded-full opacity-20" style={{ background: 'rgb(16, 185, 129)' }} />
-                    </div>
-                    
-                    <div className="relative z-10">
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-                        {(['google', 'meta', 'tiktok', 'linkedin'] as const).map((platform) => (
-                          <div key={platform} className="relative">
-                            <div className="filter blur-md pointer-events-none select-none opacity-60 p-6 rounded-[24px] bg-white/5 border border-white/10 h-32 flex items-center justify-center">
-                              <PlatformIcon platform={platform} size={24} />
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 pointer-events-none">
-                        <div className="p-4 bg-black/80 backdrop-blur-xl rounded-2xl border border-white/10">
-                          <Lock className="w-8 h-8 text-emerald-500" />
-                        </div>
-                        <p className="font-black text-white text-lg">Desbloquea tu estrategia</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <motion.button
-                    whileHover={{ y: -3, scale: 1.02 }}
-                    whileTap={{ scale: 0.97 }}
-                    onClick={handlePreviewPayment}
-                    className="py-7 px-8 rounded-[24px] font-black uppercase tracking-[0.15em] text-[10px] flex items-center justify-center gap-3 text-white transition-all duration-300 backdrop-blur-xl border border-emerald-500/50 bg-gradient-to-br from-emerald-500/20 to-emerald-500/10 hover:from-emerald-500/30 hover:to-emerald-500/20 group relative overflow-hidden"
-                    style={{ boxShadow: '0 20px 50px -15px rgba(16,185,129,0.5)' }}
-                  >
-                    <Unlock className="w-4 h-4 relative z-10" /> Ver mi campaña — $97
-                  </motion.button>
-
-                  <motion.button
-                    whileHover={{ y: -3, scale: 1.02 }}
-                    whileTap={{ scale: 0.97 }}
-                    onClick={handlePreviewBasicView}
-                    className="py-7 px-8 rounded-[24px] font-black uppercase tracking-[0.15em] text-[10px] flex items-center justify-center gap-3 text-gray-300 transition-all duration-300 backdrop-blur-xl border border-white/10 bg-white/5 hover:bg-white/10 group relative overflow-hidden"
-                  >
-                    <Eye className="w-4 h-4 relative z-10" /> Solo ver el copy básico
-                  </motion.button>
-                </div>
-              </div>
-            </motion.div>
-
-          ) : !showResults ? (
+          {!showResults ? (
             <motion.div key="form" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="max-w-3xl mx-auto">
               <div className="text-center mb-12">
                 <h2 className="text-4xl md:text-5xl font-black mb-4 tracking-tight">Crea tu campaña <span className="text-emerald-500">maestra</span></h2>
@@ -496,90 +316,13 @@ const FlowsightAdsDashboard: React.FC = () => {
                         <label className="text-xs font-black uppercase tracking-widest text-emerald-500">Ubicación Objetivo</label>
                         <LocationInput value={config.location} onChange={(val) => setConfig({ ...config, location: val })} />
                       </div>
-
-                      <div className="space-y-4">
-                        <label className="text-xs font-black uppercase tracking-widest text-emerald-500">¿Qué tipo de negocio eres?</label>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                          {businessTypes.map((type) => (
-                            <motion.button
-                              key={type.label}
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
-                              onClick={() => setSelectedBusinessType(type.label)}
-                              className={`px-4 py-3 rounded-full border-2 transition-all font-bold text-sm flex items-center justify-center gap-2 ${
-                                selectedBusinessType === type.label
-                                  ? 'bg-emerald-500 text-white border-emerald-500'
-                                  : 'bg-white/5 text-gray-300 border-white/10 hover:border-emerald-500/50'
-                              }`}
-                            >
-                              <span>{type.icon}</span>
-                              <span className="hidden sm:inline text-xs">{type.label.split(' /')[0]}</span>
-                            </motion.button>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="space-y-4">
-                        <label className="text-xs font-black uppercase tracking-widest text-emerald-500">Rango de edad del cliente ideal</label>
-                        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                          {ageRanges.map((age) => (
-                            <motion.button
-                              key={age}
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
-                              onClick={() => setSelectedAgeRange(age)}
-                              className={`px-4 py-3 rounded-full border-2 transition-all font-bold text-sm ${
-                                selectedAgeRange === age
-                                  ? 'bg-emerald-500 text-white border-emerald-500'
-                                  : 'bg-white/5 text-gray-300 border-white/10 hover:border-emerald-500/50'
-                              }`}
-                            >
-                              {age}
-                            </motion.button>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="space-y-4">
-                        <label className="text-xs font-black uppercase tracking-widest text-emerald-500">Cobertura geográfica</label>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                          {geographicReaches.map((reach) => (
-                            <motion.button
-                              key={reach}
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
-                              onClick={() => setSelectedGeographicReach(reach)}
-                              className={`px-4 py-3 rounded-full border-2 transition-all font-bold text-sm ${
-                                selectedGeographicReach === reach
-                                  ? 'bg-emerald-500 text-white border-emerald-500'
-                                  : 'bg-white/5 text-gray-300 border-white/10 hover:border-emerald-500/50'
-                              }`}
-                            >
-                              {reach}
-                            </motion.button>
-                          ))}
-                        </div>
-                      </div>
-
                       <div className="space-y-2">
-                        <label className="text-xs font-black uppercase tracking-widest text-emerald-500">¿Algo más sobre tu cliente? (opcional)</label>
-                        <Input 
-                          placeholder="Ej: Amantes del café, emprendedores que trabajan desde casa..." 
-                          className="py-7 bg-white/5 border-white/10 rounded-2xl text-lg font-bold" 
-                          value={additionalCustomerInfo} 
-                          onChange={(e) => setAdditionalCustomerInfo(e.target.value)} 
-                        />
+                        <label className="text-xs font-black uppercase tracking-widest text-emerald-500">Cliente Ideal</label>
+                        <Input placeholder="Ej: Dueños de negocios, 25-45 años, interesados en tecnología..." className="py-7 bg-white/5 border-white/10 rounded-2xl text-lg font-bold" value={config.idealCustomer} onChange={(e) => setConfig({ ...config, idealCustomer: e.target.value })} />
                       </div>
-
                       <div className="flex gap-4">
                         <Button variant="ghost" onClick={() => setStep(2)} className="flex-1 py-8 rounded-2xl font-bold">Atrás</Button>
-                        <Button 
-                          onClick={() => setStep(4)} 
-                          disabled={!config.location || !selectedBusinessType || !selectedAgeRange || !selectedGeographicReach} 
-                          className="flex-[2] py-8 text-xl font-black bg-emerald-500 hover:bg-emerald-600 rounded-2xl shadow-xl shadow-emerald-500/20"
-                        >
-                          Último paso <ArrowRight className="ml-2 w-6 h-6" />
-                        </Button>
+                        <Button onClick={() => setStep(4)} disabled={!config.location || !config.idealCustomer} className="flex-[2] py-8 text-xl font-black bg-emerald-500 hover:bg-emerald-600 rounded-2xl shadow-xl shadow-emerald-500/20">Último paso <ArrowRight className="ml-2 w-6 h-6" /></Button>
                       </div>
                     </motion.div>
                   )}
@@ -595,105 +338,26 @@ const FlowsightAdsDashboard: React.FC = () => {
                       </div>
 
                       <div className="space-y-4">
-                        <label className="text-xs font-black uppercase tracking-widest text-emerald-500">¿Tienes una imagen para tu campaña?</label>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          {/* Option A: Upload */}
-                          <motion.button
-                            whileHover={{ y: -4, scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={() => handleImageModeSelect('upload')}
-                            className={`p-6 rounded-[24px] border-2 transition-all text-left flex flex-col gap-3 ${
-                              imageMode === 'upload'
-                                ? 'bg-emerald-500/10 border-emerald-500/50'
-                                : 'bg-white/5 border-white/10 hover:border-emerald-500/30'
-                            }`}
-                          >
-                            <div className="text-3xl">📁</div>
-                            <div>
-                              <p className="font-black text-white">Sí, subo mi imagen</p>
-                              <p className="text-xs text-gray-400 mt-1">Carga tu propia imagen</p>
+                        <label className="text-xs font-black uppercase tracking-widest text-emerald-500">Imagen de Referencia (Opcional)</label>
+                        <div onClick={() => fileInputRef.current?.click()} className="border-2 border-dashed border-white/10 rounded-[32px] p-10 flex flex-col items-center justify-center gap-4 hover:border-emerald-500/50 hover:bg-emerald-500/5 transition-all cursor-pointer group">
+                          {config.userImage ? (
+                            <div className="relative w-full aspect-video rounded-2xl overflow-hidden">
+                              <img src={config.userImage} alt="Preview" className="w-full h-full object-cover" />
+                              <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <RefreshCw className="w-8 h-8 text-white animate-spin-slow" />
+                              </div>
                             </div>
-                          </motion.button>
-
-                          {/* Option B: Placeholder */}
-                          <motion.button
-                            whileHover={{ y: -4, scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={() => handleImageModeSelect('placeholder')}
-                            className={`p-6 rounded-[24px] border-2 transition-all text-left flex flex-col gap-3 ${
-                              imageMode === 'placeholder'
-                                ? 'bg-emerald-500/10 border-emerald-500/50'
-                                : 'bg-white/5 border-white/10 hover:border-emerald-500/30'
-                            }`}
-                          >
-                            <div className="text-3xl">🎨</div>
-                            <div>
-                              <p className="font-black text-white">Usar placeholder</p>
-                              <p className="text-xs text-gray-400 mt-1">Generamos una imagen</p>
-                            </div>
-                          </motion.button>
-
-                          {/* Option C: Copy Only */}
-                          <motion.button
-                            whileHover={{ y: -4, scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={() => handleImageModeSelect('copyonly')}
-                            className={`p-6 rounded-[24px] border-2 transition-all text-left flex flex-col gap-3 ${
-                              imageMode === 'copyonly'
-                                ? 'bg-emerald-500/10 border-emerald-500/50'
-                                : 'bg-white/5 border-white/10 hover:border-emerald-500/30'
-                            }`}
-                          >
-                            <div className="text-3xl">📝</div>
-                            <div>
-                              <p className="font-black text-white">Solo el copy</p>
-                              <p className="text-xs text-gray-400 mt-1">Sin imagen, solo texto</p>
-                            </div>
-                          </motion.button>
+                          ) : (
+                            <>
+                              <div className="p-6 bg-white/5 rounded-3xl group-hover:scale-110 transition-transform">
+                                <Upload className="w-10 h-10 text-emerald-500" />
+                              </div>
+                              <p className="font-bold text-gray-400">Sube una imagen de tu producto o servicio</p>
+                            </>
+                          )}
+                          <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" className="hidden" />
                         </div>
                       </div>
-
-                      {/* Upload Area - Only show if upload mode selected */}
-                      {imageMode === 'upload' && (
-                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                          <div className="space-y-4">
-                            <label className="text-xs font-black uppercase tracking-widest text-emerald-500">Sube tu imagen</label>
-                            <div onClick={() => fileInputRef.current?.click()} className="border-2 border-dashed border-white/10 rounded-[32px] p-10 flex flex-col items-center justify-center gap-4 hover:border-emerald-500/50 hover:bg-emerald-500/5 transition-all cursor-pointer group">
-                              {config.userImage ? (
-                                <div className="relative w-full aspect-video rounded-2xl overflow-hidden">
-                                  <img src={config.userImage} alt="Preview" className="w-full h-full object-cover" />
-                                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <RefreshCw className="w-8 h-8 text-white animate-spin-slow" />
-                                  </div>
-                                </div>
-                              ) : (
-                                <>
-                                  <div className="p-6 bg-white/5 rounded-3xl group-hover:scale-110 transition-transform">
-                                    <Upload className="w-10 h-10 text-emerald-500" />
-                                  </div>
-                                  <p className="font-bold text-gray-400">Sube una imagen de tu producto o servicio</p>
-                                </>
-                              )}
-                              <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" className="hidden" />
-                            </div>
-                          </div>
-                        </motion.div>
-                      )}
-
-                      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-4 p-6 rounded-[24px] bg-white/5 border border-white/10">
-                        <div className="flex items-center justify-between mb-3">
-                          <label className="text-xs font-black uppercase tracking-widest text-emerald-500">Potencial de tu campaña</label>
-                          <span className="text-2xl font-black text-white">{estimatedScore}/100</span>
-                        </div>
-                        <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
-                          <motion.div
-                            animate={{ width: `${estimatedScore}%` }}
-                            transition={{ duration: 0.6, ease: 'easeOut' }}
-                            className={`h-full ${getScoreColor()} transition-colors duration-300`}
-                          />
-                        </div>
-                        <p className="text-sm text-gray-400 font-medium">{getScoreMessage()}</p>
-                      </motion.div>
 
                       <div className="flex gap-4 pt-4">
                         <Button variant="ghost" onClick={() => setStep(3)} className="flex-1 py-8 rounded-2xl font-bold">Atrás</Button>

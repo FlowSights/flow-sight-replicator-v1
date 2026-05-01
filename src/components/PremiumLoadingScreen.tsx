@@ -5,9 +5,11 @@ import { Sparkles, ShieldCheck, Zap, Rocket } from 'lucide-react';
 interface PremiumLoadingScreenProps {
   isVisible: boolean;
   progress: number;
+  currentMessage?: string;
+  educationalFact?: string;
 }
 
-export const PremiumLoadingScreen: React.FC<PremiumLoadingScreenProps> = ({ isVisible, progress }) => {
+export const PremiumLoadingScreen: React.FC<PremiumLoadingScreenProps> = ({ isVisible, progress, currentMessage, educationalFact }) => {
   const [messageIndex, setMessageIndex] = useState(0);
   
   const messages = [
@@ -79,16 +81,16 @@ export const PremiumLoadingScreen: React.FC<PremiumLoadingScreenProps> = ({ isVi
             {/* Text Content */}
             <div className="space-y-4">
               <motion.h2 
-                key={messageIndex}
+                key={currentMessage || messageIndex}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 className="text-3xl md:text-4xl font-black text-black dark:text-white tracking-tight"
               >
-                {messages[messageIndex]}
+                {currentMessage || messages[messageIndex]}
               </motion.h2>
               <p className="text-gray-500 dark:text-gray-400 font-medium text-lg">
-                Nuestra IA está diseñando una estrategia de alto nivel para tu negocio
+                {educationalFact || 'Nuestra IA está diseñando una estrategia de alto nivel para tu negocio'}
               </p>
             </div>
 
