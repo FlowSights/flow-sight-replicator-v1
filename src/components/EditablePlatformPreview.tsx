@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Edit2, Check, X } from 'lucide-react';
+import { Edit2, Check, X, ExternalLink } from 'lucide-react';
 import { MetaPreview, GoogleAdsPreview, TikTokPreview, LinkedInPreview } from './PlatformPreviewsNative';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
+import { Badge } from './ui/badge';
 
 interface EditablePlatformPreviewProps {
   ad: {
@@ -17,12 +18,14 @@ interface EditablePlatformPreviewProps {
   };
   platform: 'meta' | 'google' | 'tiktok' | 'linkedin';
   onUpdate?: (updates: { headline: string; description: string; cta: string }) => void;
+  onExpand?: () => void;
 }
 
 export const EditablePlatformPreview: React.FC<EditablePlatformPreviewProps> = ({
   ad,
   platform,
   onUpdate,
+  onExpand,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [headline, setHeadline] = useState(ad.headline);
@@ -115,28 +118,43 @@ export const EditablePlatformPreview: React.FC<EditablePlatformPreviewProps> = (
   }[platform];
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative group">
-      <button
-        onClick={() => setIsEditing(true)}
-        className="absolute top-4 right-4 z-20 p-3 bg-emerald-500 text-black rounded-2xl shadow-xl opacity-0 group-hover:opacity-100 transition-all hover:scale-110 active:scale-95"
+    <motion.div 
+      initial={{ opacity: 0 }} 
+      animate={{ opacity: 1 }} 
+      className="relative group"
+    >
+      {/* Subtle Expand Icon - Corner Top Right */}
+      <motion.button
+        whileHover={{ scale: 1.15, opacity: 1 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={onExpand}
+        className="absolute top-6 right-6 z-20 p-2.5 bg-white/10 hover:bg-white/20 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm border border-white/10"
+        title="Expandir vista"
       >
-        <Edit2 className="w-4 h-4" />
-      </button>
+        <ExternalLink className="w-4 h-4" strokeWidth={2.5} />
+      </motion.button>
+
+      {/* Edit Icon - Corner Bottom Right */}
+      <motion.button
+        whileHover={{ scale: 1.15, opacity: 1 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => setIsEditing(true)}
+        className="absolute bottom-6 right-6 z-20 p-2.5 bg-white/10 hover:bg-white/20 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm border border-white/10"
+        title="Editar copy"
+      >
+        <Edit2 className="w-4 h-4" strokeWidth={2.5} />
+      </motion.button>
       
-      <PreviewComponent
-        headline={ad.headline}
-        description={ad.description}
-        cta={ad.cta}
-        imageUrl={ad.imageUrl}
-        businessName={ad.businessName}
-        websiteUrl={ad.websiteUrl}
-      />
+      <div className="rounded-[32px] overflow-hidden">
+        <PreviewComponent
+          headline={ad.headline}
+          description={ad.description}
+          cta={ad.cta}
+          imageUrl={ad.imageUrl}
+          businessName={ad.businessName}
+          websiteUrl={ad.websiteUrl}
+        />
+      </div>
     </motion.div>
   );
 };
-
-const Badge = ({ children, className }: { children: React.ReactNode; className?: string }) => (
-  <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${className}`}>
-    {children}
-  </span>
-);

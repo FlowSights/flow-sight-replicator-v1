@@ -308,11 +308,26 @@ const FlowsightAdsDashboard: React.FC = () => {
                 }}
               >
                 <div className="bg-[#0A0A0A] rounded-[46px] p-8 lg:p-14 relative overflow-hidden">
-                  {/* Subtle Background Glow */}
-                  <div 
-                    className="absolute -top-40 -right-40 w-[600px] h-[600px] blur-[150px] rounded-full opacity-30 transition-all duration-1000"
-                    style={{ background: currentTheme.primary }}
-                  />
+                  {/* Dynamic Background with Radial Gradients */}
+                  <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    <div 
+                      className="absolute -top-40 -right-40 w-[600px] h-[600px] blur-[150px] rounded-full opacity-20 transition-all duration-1000"
+                      style={{ background: currentTheme.primary }}
+                    />
+                    <div 
+                      className="absolute -bottom-40 -left-40 w-[500px] h-[500px] blur-[150px] rounded-full opacity-15 transition-all duration-1000"
+                      style={{ background: currentTheme.secondary || currentTheme.primary }}
+                    />
+                    {/* Grid Overlay */}
+                    <svg className="absolute inset-0 w-full h-full opacity-[0.02] pointer-events-none" preserveAspectRatio="none">
+                      <defs>
+                        <pattern id="grid-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
+                          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="0.5"/>
+                        </pattern>
+                      </defs>
+                      <rect width="100%" height="100%" fill="url(#grid-pattern)" />
+                    </svg>
+                  </div>
                   
                   {/* Platform Selector Grid */}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16 relative z-10">
@@ -372,16 +387,9 @@ const FlowsightAdsDashboard: React.FC = () => {
                                   setGeneratedAds(newAds);
                                 }
                               }}
+                              onExpand={() => { setCurrentMockupAdIndex(generatedAds.indexOf(ad)); setMockupLightboxOpen(true); }}
                             />
                           </div>
-                          <motion.button 
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => { setCurrentMockupAdIndex(generatedAds.indexOf(ad)); setMockupLightboxOpen(true); }}
-                            className="absolute -bottom-4 left-1/2 -translate-x-1/2 px-8 py-3 bg-white text-black rounded-full text-[10px] font-black uppercase tracking-widest shadow-2xl flex items-center gap-2 hover:bg-emerald-400 transition-colors"
-                          >
-                            <ZoomIn className="w-3.5 h-3.5" /> Expandir Vista
-                          </motion.button>
                         </motion.div>
                       ))}
                     </div>
@@ -402,29 +410,33 @@ const FlowsightAdsDashboard: React.FC = () => {
                             <p className="text-xl text-gray-400 font-medium leading-relaxed max-w-lg">Copy de alto impacto diseñado para romper el scroll y maximizar el CTR.</p>
                           </div>
 
-                          {/* PREMIUM BUTTON SYSTEM */}
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                          {/* PREMIUM BUTTON SYSTEM - Morphoglass Hierarchy */}
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 relative z-20">
+                            {/* Tertiary: Guía Visual - Minimal Black */}
                             <motion.button
-                              whileHover={{ y: -2, scale: 1.02 }}
-                              whileTap={{ scale: 0.98 }}
+                              whileHover={{ y: -3, scale: 1.02 }}
+                              whileTap={{ scale: 0.97 }}
                               onClick={() => setIsGuideLightboxOpen(true)}
-                              className="py-7 rounded-[24px] font-black uppercase tracking-widest text-[11px] flex items-center justify-center gap-3 border border-white/10 bg-white/[0.02] hover:bg-white/[0.06] transition-all text-gray-300"
+                              className="py-6 px-6 rounded-[20px] font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2.5 bg-black/40 hover:bg-black/60 border border-white/5 hover:border-white/10 transition-all duration-300 text-gray-300 hover:text-white"
                             >
-                              <BookOpen className="w-5 h-5" /> Guía Visual
+                              <BookOpen className="w-4 h-4" /> Guía Visual
                             </motion.button>
                             
+                            {/* Secondary: Descargar Kit - Platform Gradient */}
                             <motion.button
-                              whileHover={{ y: -2, scale: 1.02, boxShadow: '0 20px 40px -10px rgba(16, 185, 129, 0.3)' }}
-                              whileTap={{ scale: 0.98 }}
+                              whileHover={{ y: -3, scale: 1.02 }}
+                              whileTap={{ scale: 0.97 }}
                               onClick={handleDownloadMasterKit}
-                              className="py-7 rounded-[24px] font-black uppercase tracking-widest text-[11px] flex items-center justify-center gap-3 bg-emerald-500 hover:bg-emerald-400 text-black transition-all"
+                              className={`py-6 px-6 rounded-[20px] font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2.5 bg-gradient-to-r ${currentTheme.gradient} hover:opacity-90 transition-all duration-300 text-white shadow-lg`}
+                              style={{ boxShadow: `0 15px 35px -10px ${currentTheme.glow}` }}
                             >
-                              <Download className="w-5 h-5" /> Descargar Kit
+                              <Download className="w-4 h-4" /> Descargar Kit
                             </motion.button>
 
+                            {/* Primary: Publicar - Morphoglass */}
                             <motion.button 
-                              whileHover={{ y: -2, scale: 1.01, boxShadow: `0 25px 50px -12px ${currentTheme.glow}` }}
-                              whileTap={{ scale: 0.99 }}
+                              whileHover={{ y: -4, scale: 1.02 }}
+                              whileTap={{ scale: 0.98 }}
                               onClick={() => {
                                 const urls: Record<string, string> = {
                                   meta: 'https://adsmanager.facebook.com',
@@ -434,9 +446,11 @@ const FlowsightAdsDashboard: React.FC = () => {
                                 };
                                 window.open(urls[selectedPlatform], '_blank');
                               }}
-                              className={`sm:col-span-2 py-8 rounded-[28px] font-black uppercase tracking-[0.2em] text-xs flex items-center justify-center gap-4 text-white transition-all shadow-2xl ${currentTheme.button}`}
+                              className="sm:col-span-2 py-7 px-8 rounded-[24px] font-black uppercase tracking-[0.15em] text-[10px] flex items-center justify-center gap-3 text-white transition-all duration-300 backdrop-blur-xl border border-white/20 hover:border-white/40 bg-gradient-to-br from-white/10 to-white/5 hover:from-white/15 hover:to-white/10 group relative overflow-hidden"
+                              style={{ boxShadow: `0 20px 50px -15px ${currentTheme.glow}, inset 0 1px 0 rgba(255,255,255,0.1)` }}
                             >
-                              <Share2 className="w-5 h-5" /> Publicar en {platformNames[selectedPlatform]}
+                              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: `radial-gradient(circle at 50% 50%, ${currentTheme.glow}, transparent)` }} />
+                              <Share2 className="w-4 h-4 relative z-10" /> Publicar en {platformNames[selectedPlatform]}
                             </motion.button>
                           </div>
 
