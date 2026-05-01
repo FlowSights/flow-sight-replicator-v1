@@ -774,8 +774,10 @@ const FlowsightAdsDashboard: React.FC = () => {
                         >
                           <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 shadow-xl flex-shrink-0 ${
                             isSelected ? 'bg-white scale-110' : 'bg-white/10 group-hover:bg-white/20'
-                          }`}>
-                            <PlatformIcon platform={platform} size={32} />
+                          }`}
+                          style={{ aspectRatio: '1 / 1' }}
+                          >
+                            <PlatformIcon platform={platform} size={32} className="!w-8 !h-8" />
                           </div>
                           <div className="text-left">
                             <p className={`text-[10px] font-black uppercase tracking-[0.2em] mb-1 ${isSelected ? 'text-white/60' : 'text-gray-500'}`}>Plataforma</p>
