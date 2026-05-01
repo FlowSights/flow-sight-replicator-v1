@@ -355,10 +355,21 @@ export const VisualGuideLightbox: React.FC<VisualGuideLightboxProps> = ({
   
   // Validacion defensiva: si la plataforma no existe o no tiene steps, no renderizar
   if (!guide || !guide.steps || guide.steps.length === 0) {
-    return null;
+    return (
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden rounded-3xl border-none">
+          <div className="p-12 text-center">
+            <AlertCircle className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
+            <h3 className="text-xl font-bold mb-2">Guía no disponible</h3>
+            <p className="text-muted-foreground mb-6">No pudimos encontrar la guía para esta plataforma ({platform}).</p>
+            <Button onClick={onClose} className="bg-emerald-500 hover:bg-emerald-600 text-white">Cerrar</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
   }
-  
-  const step = guide.steps[currentStep];
+
+  const step = guide.steps[currentStep] || guide.steps[0];
 
   const handleNext = () => {
     if (currentStep < guide.steps.length - 1) {
