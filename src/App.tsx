@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { AIChatbot } from "@/components/AIChatbot";
 import { AuthProvider } from "@/contexts/AuthContext";
+import ErrorBoundary from "./components/ErrorBoundary";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Privacy from "./pages/Privacy.tsx";
@@ -56,7 +57,8 @@ const App = () => {
           <Sonner />
           <BrowserRouter>
             <AuthProvider>
-              <Routes>
+              <ErrorBoundary>
+                <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
@@ -71,6 +73,7 @@ const App = () => {
               </Routes>
               {/* AI Chatbot disponible globalmente en todas las páginas */}
               <AIChatbot />
+            </ErrorBoundary>
             </AuthProvider>
           </BrowserRouter>
         </TooltipProvider>

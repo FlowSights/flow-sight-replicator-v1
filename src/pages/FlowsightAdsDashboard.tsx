@@ -68,7 +68,7 @@ interface CampaignConfig {
   businessName: string;
   websiteUrl: string;
   instagramUrl: string;
-  facebookUrl: string;
+  linkedinUrl: string;
   promote: string;
   location: string;
   idealCustomer: string;
@@ -90,8 +90,15 @@ const FlowsightAdsDashboard: React.FC = () => {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [isGuideLightboxOpen, setIsGuideLightboxOpen] = useState(false);
   const [mockupLightboxOpen, setMockupLightboxOpen] = useState(false);
+  const [currentMockupAdIndex, setCurrentMockupAdIndex] = useState(0);
+
+  useEffect(() => {
+    if (generatedAds.length > 0 && currentMockupAdIndex < generatedAds.length) {
+      setSelectedPlatform(generatedAds[currentMockupAdIndex].platform);
+    }
+  }, [currentMockupAdIndex, generatedAds]);
   const { hasPaid } = usePaymentStatus();
-  
+
   useInactivityTimeoutStrict(() => {
     setShowInactivityModal(true);
   });
@@ -100,7 +107,7 @@ const FlowsightAdsDashboard: React.FC = () => {
     businessName: '',
     websiteUrl: '',
     instagramUrl: '',
-    facebookUrl: '',
+    linkedinUrl: '',
     promote: '',
     location: '',
     idealCustomer: '',
@@ -108,7 +115,7 @@ const FlowsightAdsDashboard: React.FC = () => {
     userImage: null,
   });
 
-  const [selectedPlatform, setSelectedPlatform] = useState<'google' | 'meta' | 'tiktok' | 'linkedin'>('meta');
+  const [selectedPlatform, setSelectedPlatform] = useState<"google" | "meta" | "tiktok" | "linkedin">("meta");
 
   const suggestions = [
     { label: "Membresía de Gimnasio", icon: "💪" },
@@ -228,7 +235,7 @@ const FlowsightAdsDashboard: React.FC = () => {
         border: "border-blue-500/30",
         accent: "bg-blue-500",
         text: "text-blue-600",
-        logo: "https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_\"G\"_logo.svg",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_\'G\'_logo.svg",
         name: "Google Ads"
       },
       tiktok: {
@@ -273,460 +280,307 @@ const FlowsightAdsDashboard: React.FC = () => {
             <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="p-2.5 rounded-xl bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:text-emerald-500 transition-all">
               {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
-            <Button variant="ghost" onClick={handleLogout} className="text-gray-500 hover:text-red-500 font-bold">
-              <LogOut className="w-5 h-5 mr-2" /> Salir
+            <Button variant="ghost" onClick={handleLogout} className="font-bold text-gray-500 dark:text-gray-400 hover:text-red-500 transition-all rounded-xl">
+              <LogOut className="w-5 h-5 mr-2" />
+              Salir
             </Button>
           </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-12">
-        {!showResults ? (
-          <div className="max-w-3xl mx-auto">
-            {step === 1 && (
-              <motion.div key="step1" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-10">
-                <div className="space-y-4">
-                  <h2 className="text-5xl font-black text-gray-900 dark:text-white tracking-tight leading-tight">
-                    Cuéntanos de <span className="text-emerald-500">tu negocio</span>
-                  </h2>
-                  <p className="text-xl text-gray-500 dark:text-gray-400">La IA necesita entender tu esencia para crear una estrategia ganadora.</p>
-                </div>
-
-                <div className="space-y-8">
+      <main className="max-w-5xl mx-auto px-6 py-20">
+        <AnimatePresence mode="wait">
+          {!showResults ? (
+            <div className="max-w-2xl mx-auto">
+              {step === 1 && (
+                <motion.div key="step1" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-10">
                   <div className="space-y-4">
-                    <label className="text-sm font-black uppercase tracking-widest text-gray-400">Nombre del Negocio</label>
-                    <Input 
-                      placeholder="Ej: FlowSights AI" 
-                      value={config.businessName}
-                      onChange={(e) => setConfig({ ...config, businessName: e.target.value })}
-                      className="py-8 px-6 text-xl rounded-3xl bg-gray-50 dark:bg-white/5 border-gray-100 dark:border-white/5 focus:ring-emerald-500"
-                    />
+                    <h2 className="text-5xl font-black text-gray-900 dark:text-white tracking-tight leading-tight">
+                      Bienvenido a la <span className="text-emerald-500">nueva era</span> de la publicidad digital
+                    </h2>
+                    <p className="text-xl text-gray-500 dark:text-gray-400">Empecemos por lo básico. ¿Cómo se llama tu negocio y dónde podemos encontrarlo en línea?</p>
                   </div>
 
-                  <div className="space-y-4">
-                    <label className="text-sm font-black uppercase tracking-widest text-gray-400">Presencia Digital (Opcional)</label>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className={`p-6 rounded-3xl border-2 transition-all ${config.websiteUrl ? 'border-emerald-500 bg-emerald-500/5' : 'border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-white/5'}`}>
-                        <Globe2 className={`w-6 h-6 mb-4 ${config.websiteUrl ? 'text-emerald-500' : 'text-gray-400'}`} />
-                        <Input 
-                          placeholder="Sitio Web" 
-                          value={config.websiteUrl}
-                          onChange={(e) => setConfig({ ...config, websiteUrl: e.target.value })}
-                          className="bg-transparent border-none p-0 focus:ring-0 text-sm font-bold"
-                        />
-                      </div>
-                      <div className={`p-6 rounded-3xl border-2 transition-all ${config.instagramUrl ? 'border-pink-500 bg-pink-500/5' : 'border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-white/5'}`}>
-                        <Camera className={`w-6 h-6 mb-4 ${config.instagramUrl ? 'text-pink-500' : 'text-gray-400'}`} />
-                        <Input 
-                          placeholder="Instagram" 
-                          value={config.instagramUrl}
-                          onChange={(e) => setConfig({ ...config, instagramUrl: e.target.value })}
-                          className="bg-transparent border-none p-0 focus:ring-0 text-sm font-bold"
-                        />
-                      </div>
-                      <div className={`p-6 rounded-3xl border-2 transition-all ${config.facebookUrl ? 'border-blue-600 bg-blue-600/5' : 'border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-white/5'}`}>
-                        <Users className={`w-6 h-6 mb-4 ${config.facebookUrl ? 'text-blue-600' : 'text-gray-400'}`} />
-                        <Input 
-                          placeholder="LinkedIn" 
-                          value={config.facebookUrl}
-                          onChange={(e) => setConfig({ ...config, facebookUrl: e.target.value })}
-                          className="bg-transparent border-none p-0 focus:ring-0 text-sm font-bold"
-                        />
-                      </div>
+                  <div className="space-y-8">
+                    <div className="space-y-4">
+                      <label className="text-sm font-black uppercase tracking-widest text-gray-400">Nombre de tu Negocio</label>
+                      <Input
+                        placeholder="Ej: Flowsight"
+                        value={config.businessName}
+                        onChange={(e) => setConfig({ ...config, businessName: e.target.value })}
+                        className="py-8 px-6 text-xl rounded-3xl bg-gray-50 dark:bg-white/5 border-gray-100 dark:border-white/5 focus:ring-emerald-500"
+                      />
                     </div>
-                  </div>
 
-                  <Button 
-                    onClick={() => setStep(2)} 
-                    disabled={!config.businessName}
-                    className="w-full py-10 text-xl font-black bg-gray-900 dark:bg-white text-white dark:text-black rounded-3xl hover:scale-[1.02] transition-all"
-                  >
-                    Continuar <ArrowRight className="ml-2 w-6 h-6" />
-                  </Button>
-                </div>
-              </motion.div>
-            )}
+                    <div className="space-y-4">
+                      <label className="text-sm font-black uppercase tracking-widest text-gray-400">URL de tu Sitio Web</label>
+                      <Input
+                        placeholder="https://flowsight.com"
+                        value={config.websiteUrl}
+                        onChange={(e) => setConfig({ ...config, websiteUrl: e.target.value })}
+                        className="py-8 px-6 text-xl rounded-3xl bg-gray-50 dark:bg-white/5 border-gray-100 dark:border-white/5 focus:ring-emerald-500"
+                      />
+                    </div>
 
-            {step === 2 && (
-              <motion.div key="step2" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-10">
-                <div className="space-y-4">
-                  <h2 className="text-5xl font-black text-gray-900 dark:text-white tracking-tight leading-tight">
-                    ¿Qué quieres <span className="text-emerald-500">promover?</span>
-                  </h2>
-                  <p className="text-xl text-gray-500 dark:text-gray-400">Describe tu producto, servicio o la oferta especial que tienes en mente.</p>
-                </div>
+                    <div className="space-y-4">
+                      <label className="text-sm font-black uppercase tracking-widest text-gray-400">URL de tu Instagram (Opcional)</label>
+                      <Input
+                        placeholder="https://instagram.com/flowsight"
+                        value={config.instagramUrl}
+                        onChange={(e) => setConfig({ ...config, instagramUrl: e.target.value })}
+                        className="py-8 px-6 text-xl rounded-3xl bg-gray-50 dark:bg-white/5 border-gray-100 dark:border-white/5 focus:ring-emerald-500"
+                      />
+                    </div>
 
-                <div className="space-y-8">
-                  <Textarea 
-                    placeholder="Ej: Estamos lanzando un nuevo curso de IA para emprendedores con un 50% de descuento por tiempo limitado..." 
-                    value={config.promote}
-                    onChange={(e) => setConfig({ ...config, promote: e.target.value })}
-                    className="min-h-[200px] p-8 text-xl rounded-[40px] bg-gray-50 dark:bg-white/5 border-gray-100 dark:border-white/5 focus:ring-emerald-500"
-                  />
+                    <div className="space-y-4">
+                      <label className="text-sm font-black uppercase tracking-widest text-gray-400">URL de tu LinkedIn (Opcional)</label>
+                      <Input
+                        placeholder="https://linkedin.com/company/flowsight"
+                        value={config.linkedinUrl}
+                        onChange={(e) => setConfig({ ...config, linkedinUrl: e.target.value })}
+                        className="py-8 px-6 text-xl rounded-3xl bg-gray-50 dark:bg-white/5 border-gray-100 dark:border-white/5 focus:ring-emerald-500"
+                      />
+                    </div>
 
-                  <div className="flex flex-wrap gap-3">
-                    {suggestions.map((s) => (
-                      <button 
-                        key={s.label}
-                        onClick={() => setConfig({ ...config, promote: s.label })}
-                        className="px-6 py-3 rounded-full bg-gray-100 dark:bg-white/5 text-sm font-bold hover:bg-emerald-500 hover:text-white transition-all"
-                      >
-                        {s.icon} {s.label}
-                      </button>
-                    ))}
-                  </div>
-
-                  <div className="flex gap-4">
-                    <Button variant="ghost" onClick={() => setStep(1)} className="flex-1 py-10 text-xl font-bold rounded-3xl">Atrás</Button>
-                    <Button 
-                      onClick={() => setStep(3)} 
-                      disabled={!config.promote}
-                      className="flex-[2] py-10 text-xl font-black bg-gray-900 dark:bg-white text-white dark:text-black rounded-3xl"
+                    <Button
+                      onClick={() => setStep(2)} 
+                      disabled={!config.businessName}
+                      className="w-full py-10 text-xl font-black bg-gray-900 dark:bg-white text-white dark:text-black rounded-3xl hover:scale-[1.02] transition-all"
                     >
-                      Siguiente <ArrowRight className="ml-2 w-6 h-6" />
+                      Continuar <ArrowRight className="ml-2 w-6 h-6" />
                     </Button>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
-            {step === 3 && (
-              <motion.div key="step3" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-10">
-                <div className="space-y-4">
-                  <h2 className="text-5xl font-black text-gray-900 dark:text-white tracking-tight leading-tight">
-                    ¿Dónde está <span className="text-emerald-500">tu audiencia?</span>
-                  </h2>
-                  <p className="text-xl text-gray-500 dark:text-gray-400">Define la ubicación geográfica y el perfil de tu cliente ideal.</p>
-                </div>
-
-                <div className="space-y-8">
-                  <div className="space-y-4">
-                    <label className="text-sm font-black uppercase tracking-widest text-gray-400">Ubicación</label>
-                    <LocationInput 
-                      value={config.location}
-                      onChange={(val) => setConfig({ ...config, location: val })}
-                    />
-                  </div>
-
-                  <div className="space-y-4">
-                    <label className="text-sm font-black uppercase tracking-widest text-gray-400">Cliente Ideal</label>
-                    <Input 
-                      placeholder="Ej: Dueños de negocios, 25-45 años, interesados en tecnología..." 
-                      value={config.idealCustomer}
-                      onChange={(e) => setConfig({ ...config, idealCustomer: e.target.value })}
-                      className="py-8 px-6 text-xl rounded-3xl bg-gray-50 dark:bg-white/5 border-gray-100 dark:border-white/5"
-                    />
-                  </div>
-
-                  <div className="flex gap-4">
-                    <Button variant="ghost" onClick={() => setStep(2)} className="flex-1 py-10 text-xl font-bold rounded-3xl">Atrás</Button>
-                    <Button 
-                      onClick={() => setStep(4)} 
-                      disabled={!config.location || !config.idealCustomer}
-                      className="flex-[2] py-10 text-xl font-black bg-gray-900 dark:bg-white text-white dark:text-black rounded-3xl"
-                    >
-                      Siguiente <ArrowRight className="ml-2 w-6 h-6" />
-                    </Button>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
-            {step === 4 && (
-              <motion.div key="step4" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-10">
-                <div className="space-y-4">
-                  <h2 className="text-5xl font-black text-gray-900 dark:text-white tracking-tight leading-tight">
-                    Imagen de <span className="text-emerald-500">Campaña</span>
-                  </h2>
-                  <p className="text-xl text-gray-500 dark:text-gray-400">Sube una imagen de tu producto o deja que nuestra IA use una profesional de stock.</p>
-                </div>
-
-                <div className="space-y-8">
-                  <div 
-                    onClick={() => fileInputRef.current?.click()}
-                    className="relative aspect-video rounded-[40px] border-4 border-dashed border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-white/5 flex flex-col items-center justify-center cursor-pointer hover:bg-emerald-500/5 hover:border-emerald-500/30 transition-all group overflow-hidden"
-                  >
-                    {config.userImage ? (
-                      <>
-                        <img src={config.userImage} className="w-full h-full object-cover" alt="Preview" />
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
-                          <RefreshCw className="w-12 h-12 text-white animate-spin-slow" />
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="p-6 rounded-full bg-white dark:bg-white/10 shadow-xl mb-4 group-hover:scale-110 transition-all">
-                          <Upload className="w-10 h-10 text-emerald-500" />
-                        </div>
-                        <p className="text-xl font-black text-gray-900 dark:text-white">Subir Imagen Propia</p>
-                        <p className="text-gray-500 mt-2">O haz clic para cambiar</p>
-                      </>
-                    )}
-                    <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" className="hidden" />
-                  </div>
-
-                  <div className="flex gap-4">
-                    <Button variant="ghost" onClick={() => setStep(3)} className="flex-1 py-10 text-xl font-bold rounded-3xl">Atrás</Button>
-                    <Button 
-                      onClick={() => setStep(5)} 
-                      className="flex-[2] py-10 text-xl font-black bg-gray-900 dark:bg-white text-white dark:text-black rounded-3xl"
-                    >
-                      {config.userImage ? 'Usar mi imagen' : 'Usar imagen de IA'} <ArrowRight className="ml-2 w-6 h-6" />
-                    </Button>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
-            {step === 5 && (
-              <motion.div key="step5" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-10">
-                <div className="space-y-4">
-                  <h2 className="text-5xl font-black text-gray-900 dark:text-white tracking-tight leading-tight">
-                    Presupuesto <span className="text-emerald-500">Diario</span>
-                  </h2>
-                  <p className="text-xl text-gray-500 dark:text-gray-400">Ajusta tu inversión para ver el alcance potencial de tu campaña.</p>
-                </div>
-
-                <div className="space-y-12">
-                  <div className="p-12 rounded-[48px] bg-gray-900 text-white space-y-8 shadow-2xl shadow-emerald-500/20 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 p-8 opacity-10">
-                      <TrendingUp className="w-32 h-32" />
-                    </div>
-                    <div className="space-y-2 relative z-10">
-                      <p className="text-emerald-500 font-black uppercase tracking-[0.3em] text-xs">Inversión Recomendada</p>
-                      <h3 className="text-7xl font-black">${config.budget}<span className="text-2xl text-gray-500 ml-2">USD / día</span></h3>
-                    </div>
-                    <Slider 
-                      value={[config.budget]} 
-                      min={10} 
-                      max={1000} 
-                      step={10} 
-                      onValueChange={([val]) => setConfig({ ...config, budget: val })}
-                      className="py-4"
-                    />
-                    <div className="grid grid-cols-3 gap-6 pt-8 border-t border-white/10">
-                      <AnimatedStat stat={{ value: config.budget * 12, suffix: "", prefix: "+", label: "Alcance Estimado" }} />
-                      <AnimatedStat stat={{ value: config.budget * 0.8, suffix: "", prefix: "+", label: "Clicks Potenciales" }} />
-                      <AnimatedStat stat={{ value: Math.floor(config.budget / 15), suffix: "", prefix: "+", label: "Conversiones IA" }} />
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <Button variant="ghost" onClick={() => setStep(4)} className="flex-1 py-10 text-xl font-bold rounded-3xl hover:bg-gray-100 dark:hover:bg-white/5">Atrás</Button>
-                    <motion.div className="flex-[2]" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                      <Button 
-                        onClick={handleGenerate}
-                        className="w-full py-10 text-xl font-black bg-emerald-600 hover:bg-emerald-700 text-white rounded-3xl shadow-2xl shadow-emerald-500/40 relative overflow-hidden group"
-                      >
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
-                        <Rocket className="w-6 h-6 mr-3" /> Generar Campaña IA
-                      </Button>
-                    </motion.div>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </div>
-        ) : (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-20">
-            
-            {/* 1. GRID PRINCIPAL: RESULTADOS VISUALES */}
-            <div className="max-w-6xl mx-auto space-y-10">
-              
-              {/* Pestañas Premium Grandes con Logos Oficiales */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {(['google', 'meta', 'tiktok', 'linkedin'] as const).map((platform) => {
-                  const isActive = selectedPlatform === platform;
-                  const style = getPlatformStyle(platform);
-                  return (
-                    <button
-                      key={platform}
-                      onClick={() => setSelectedPlatform(platform)}
-                      className={`relative flex items-center gap-4 p-6 rounded-[32px] transition-all duration-500 border-2 ${
-                        isActive 
-                        ? `bg-white dark:bg-white/5 border-emerald-500 shadow-2xl shadow-emerald-500/20 scale-[1.02]` 
-                        : 'bg-gray-50 dark:bg-white/5 border-transparent grayscale opacity-40 hover:grayscale-0 hover:opacity-100'
-                      }`}
-                    >
-                      <div className="w-12 h-12 flex-shrink-0">
-                        <img src={style.logo} alt={platform} className="w-full h-full object-contain" />
-                      </div>
-                      <div className="text-left">
-                        <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">Plataforma</p>
-                        <p className="text-sm font-black text-gray-900 dark:text-white truncate">{style.name}</p>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Grid de Entrega Dinámica */}
-              <AnimatePresence mode="wait">
-                <motion.div 
-                  key={selectedPlatform}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  className={`relative p-1 rounded-[48px] border-2 transition-colors duration-700 ${getPlatformStyle(selectedPlatform).border} bg-gradient-to-br ${getPlatformStyle(selectedPlatform).gradient}`}
-                >
-                  <div className="bg-white dark:bg-[#050505]/90 backdrop-blur-3xl rounded-[46px] p-8 md:p-12">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                      
-                      {/* Mockup con Botones de Acción */}
-                      <div className="space-y-6">
-                        <div className="relative group rounded-[32px] overflow-hidden shadow-2xl border border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-black/40 p-6">
-                          <EditablePlatformPreview
-                            platform={selectedPlatform}
-                            headline={generatedAds.find(a => a.platform === selectedPlatform)?.headline || ''}
-                            description={generatedAds.find(a => a.platform === selectedPlatform)?.description || ''}
-                            cta={generatedAds.find(a => a.platform === selectedPlatform)?.cta || ''}
-                            imageUrl={config.userImage || ''}
-                            businessName={config.businessName}
-                          />
-                          <div className="absolute top-8 right-8 flex flex-col gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <Button size="icon" variant="secondary" onClick={() => setMockupLightboxOpen(true)} className="rounded-full shadow-xl">
-                              <ZoomIn className="w-4 h-4" />
-                            </Button>
-                            <Button size="icon" variant="secondary" className="rounded-full shadow-xl">
-                              <Edit2 className="w-4 h-4" />
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Estrategia y Botones */}
-                      <div className="space-y-10">
-                        <div className="space-y-6">
-                          <div className="flex items-center gap-3">
-                            <div className="px-3 py-1 rounded-full bg-blue-500 text-white text-[10px] font-black uppercase tracking-widest">Offer</div>
-                            <div className="flex items-center gap-1 text-yellow-500 font-black text-xs">
-                              <Sparkles className="w-3 h-3" /> 94/100
-                            </div>
-                          </div>
-                          <h4 className="text-4xl font-black text-gray-900 dark:text-white leading-tight">
-                            Estrategia de <span className={getPlatformStyle(selectedPlatform).text}>{getPlatformStyle(selectedPlatform).name}</span>
-                          </h4>
-                          <div className="space-y-4">
-                            <p className="text-lg text-gray-700 dark:text-gray-300 font-medium leading-relaxed">
-                              {selectedPlatform === 'meta' && "Tono visual y emocional diseñado específicamente para captar la atención en el feed de Instagram y Facebook, optimizando el CTR mediante segmentación psicográfica."}
-                              {selectedPlatform === 'google' && "Estrategia basada en intención de búsqueda directa, con copys optimizados para el Quality Score y máxima relevancia en la red de búsqueda."}
-                              {selectedPlatform === 'tiktok' && "Contenido nativo de alto impacto visual diseñado para el algoritmo 'For You', fomentando la interacción y el descubrimiento viral."}
-                              {selectedPlatform === 'linkedin' && "Tono formal y profesional diseñado específicamente para dueños de negocio y emprendedores que buscan networking de alto nivel."}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="space-y-4">
-                          <div className="grid grid-cols-2 gap-4">
-                            <Button 
-                              variant="outline"
-                              onClick={() => setIsGuideLightboxOpen(true)}
-                              className="py-8 rounded-2xl border-gray-200 dark:border-white/10 font-black uppercase tracking-widest text-xs hover:bg-gray-50 dark:hover:bg-white/5"
-                            >
-                              <Eye className="w-4 h-4 mr-2" /> Guía Visual
-                            </Button>
-                            <Button 
-                              onClick={() => {
-                                if (hasPaid) {
-                                  downloadPremiumCampaignKit({
-                                    businessName: config.businessName,
-                                    businessDescription: config.promote,
-                                    targetAudience: config.idealCustomer,
-                                    websiteUrl: config.websiteUrl,
-                                    ads: generatedAds.filter(a => a.platform === selectedPlatform),
-                                  });
-                                } else {
-                                  setShowPaymentModal(true);
-                                }
-                              }}
-                              className="py-8 text-xs font-black bg-blue-600 hover:bg-blue-700 text-white rounded-2xl shadow-xl transition-all"
-                            >
-                              <Download className="w-4 h-4 mr-2" /> Descargar Kit
-                            </Button>
-                          </div>
-                          <Button 
-                            variant="outline"
-                            className="w-full py-8 rounded-2xl border-emerald-500/30 text-emerald-500 font-black uppercase tracking-widest text-xs hover:bg-emerald-500/5"
-                          >
-                            <Rocket className="w-4 h-4 mr-2" /> Lanza en {getPlatformStyle(selectedPlatform).name}
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </motion.div>
-              </AnimatePresence>
-            </div>
+              )}
 
-            {/* 2. FULL CAMPAIGN KIT: ENTREGA MAESTRA */}
-            <div className="max-w-6xl mx-auto">
-              <div className="relative p-1 rounded-[48px] bg-gradient-to-r from-emerald-500/20 via-blue-500/20 to-emerald-500/20 border border-white/10">
-                <div className="bg-white dark:bg-[#050505]/80 backdrop-blur-3xl rounded-[46px] p-12 text-center space-y-8">
-                  <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-emerald-500/10 text-emerald-500 text-sm font-black uppercase tracking-widest">
-                    Entrega Final de Alto Valor
-                  </div>
+              {step === 2 && (
+                <motion.div key="step2" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-10">
                   <div className="space-y-4">
-                    <h2 className="text-6xl font-black text-gray-900 dark:text-white tracking-tight">
-                      Campaña <span className="text-emerald-500">Optimizada</span>
+                    <h2 className="text-5xl font-black text-gray-900 dark:text-white tracking-tight leading-tight">
+                      ¿Qué quieres <span className="text-emerald-500">promover?</span>
                     </h2>
-                    <p className="text-2xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
-                      Tu Estrategia Premium está Lista. Descarga el paquete completo con todos los activos generados.
-                    </p>
+                    <p className="text-xl text-gray-500 dark:text-gray-400">Describe tu producto, servicio o la oferta especial que tienes en mente.</p>
                   </div>
-                  
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <Button 
-                      onClick={handleDownloadMasterKit}
-                      className="py-12 px-16 text-2xl font-black bg-emerald-600 hover:bg-emerald-700 text-white rounded-[32px] shadow-2xl shadow-emerald-500/40 group"
+
+                  <div className="space-y-8">
+                    <div className="space-y-4">
+                      <label className="text-sm font-black uppercase tracking-widest text-gray-400">¿Qué quieres promover?</label>
+                      <Textarea
+                        placeholder="Ej: Un nuevo gimnasio con clases de spinning y yoga para principiantes."
+                        value={config.promote}
+                        onChange={(e) => setConfig({ ...config, promote: e.target.value })}
+                        className="py-8 px-6 text-xl rounded-3xl bg-gray-50 dark:bg-white/5 border-gray-100 dark:border-white/5 focus:ring-emerald-500"
+                        rows={5}
+                      />
+                    </div>
+
+                    <div className="space-y-4">
+                      <label className="text-sm font-black uppercase tracking-widest text-gray-400">¿Dónde quieres promoverlo? (Opcional)</label>
+                      <LocationInput
+                        value={config.location}
+                        onChange={(location) => setConfig({ ...config, location })}
+                      />
+                    </div>
+
+                    <div className="space-y-4">
+                      <label className="text-sm font-black uppercase tracking-widest text-gray-400">¿Quién es tu cliente ideal?</label>
+                      <Textarea
+                        placeholder="Ej: Mujeres de 25-45 años interesadas en fitness y bienestar."
+                        value={config.idealCustomer}
+                        onChange={(e) => setConfig({ ...config, idealCustomer: e.target.value })}
+                        className="py-8 px-6 text-xl rounded-3xl bg-gray-50 dark:bg-white/5 border-gray-100 dark:border-white/5 focus:ring-emerald-500"
+                        rows={5}
+                      />
+                    </div>
+
+                    <div className="space-y-4">
+                      <label className="text-sm font-black uppercase tracking-widest text-gray-400">Presupuesto Diario Estimado</label>
+                      <div className="flex items-center gap-4">
+                        <Slider
+                          min={10}
+                          max={1000}
+                          step={10}
+                          value={[config.budget]}
+                          onValueChange={(value) => setConfig({ ...config, budget: value[0] })}
+                          className="w-full"
+                        />
+                        <Input
+                          type="number"
+                          value={config.budget}
+                          onChange={(e) => setConfig({ ...config, budget: parseFloat(e.target.value) })}
+                          className="w-24 text-center py-2 px-2 rounded-xl bg-gray-50 dark:bg-white/5 border-gray-100 dark:border-white/5 focus:ring-emerald-500"
+                        />
+                      </div>
+                    </div>
+
+                    <Button
+                      onClick={() => setStep(3)}
+                      disabled={!config.promote || !config.idealCustomer}
+                      className="w-full py-10 text-xl font-black bg-gray-900 dark:bg-white text-white dark:text-black rounded-3xl hover:scale-[1.02] transition-all"
                     >
-                      <FileDown className="w-8 h-8 mr-4 group-hover:animate-bounce" /> Descargar Full Campaign Kit
+                      Continuar <ArrowRight className="ml-2 w-6 h-6" />
                     </Button>
-                  </motion.div>
-                </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {step === 3 && (
+                <motion.div key="step3" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-10">
+                  <div className="space-y-4">
+                    <h2 className="text-5xl font-black text-gray-900 dark:text-white tracking-tight leading-tight">
+                      ¡Casi listo! <span className="text-emerald-500">Un último paso</span>
+                    </h2>
+                    <p className="text-xl text-gray-500 dark:text-gray-400">Sube una imagen de tu producto o servicio para que la IA pueda crear anuncios visualmente atractivos.</p>
+                  </div>
+
+                  <div className="space-y-8">
+                    <div className="flex flex-col items-center justify-center p-10 border-2 border-dashed border-gray-200 dark:border-white/10 rounded-3xl bg-gray-50 dark:bg-white/5 relative">
+                      {config.userImage ? (
+                        <div className="relative w-full h-64 rounded-2xl overflow-hidden">
+                          <img src={config.userImage} alt="Vista previa del usuario" className="w-full h-full object-cover" />
+                          <Button
+                            variant="destructive"
+                            size="icon"
+                            className="absolute top-4 right-4 rounded-full"
+                            onClick={() => setConfig({ ...config, userImage: null })}
+                          >
+                            <X className="w-5 h-5" />
+                          </Button>
+                        </div>
+                      ) : (
+                        <>
+                          <Upload className="w-12 h-12 text-gray-400 mb-4" />
+                          <p className="text-lg text-gray-500 dark:text-gray-400 mb-4">Arrastra y suelta tu imagen aquí, o</p>
+                          <Button onClick={() => fileInputRef.current?.click()} className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-6 rounded-xl transition-all">
+                            Seleccionar Imagen
+                          </Button>
+                          <input
+                            type="file"
+                            ref={fileInputRef}
+                            onChange={handleImageUpload}
+                            className="hidden"
+                            accept="image/*"
+                          />
+                        </>
+                      )}
+                    </div>
+
+                    <Button
+                      onClick={handleGenerate}
+                      disabled={isLoading || !config.userImage}
+                      className="w-full py-10 text-xl font-black bg-emerald-500 hover:bg-emerald-600 text-white rounded-3xl hover:scale-[1.02] transition-all"
+                    >
+                      {isLoading ? (
+                        <div className="flex items-center justify-center">
+                          <RefreshCw className="w-6 h-6 mr-3 animate-spin" />
+                          Generando Anuncios...
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-center">
+                          <Sparkles className="w-6 h-6 mr-3" />
+                          Generar Anuncios
+                        </div>
+                      )}
+                    </Button>
+                  </div>
+                </motion.div>
+              )}
+            </div>
+          ) : (
+            <div className="space-y-12">
+              <div className="text-center space-y-4">
+                <h2 className="text-5xl font-black text-gray-900 dark:text-white tracking-tight leading-tight">
+                  ¡Tu estrategia de anuncios está <span className="text-emerald-500">lista!</span>
+                </h2>
+                <p className="text-xl text-gray-500 dark:text-gray-400">Hemos generado anuncios optimizados para tu negocio.</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {generatedAds.map((ad, index) => (
+                  <Card
+                    key={index}
+                    className={`relative p-6 rounded-3xl border-2 transition-all cursor-pointer group
+                      ${selectedPlatform === ad.platform ? getPlatformStyle(ad.platform).border : "border-gray-100 dark:border-white/5"}
+                      ${selectedPlatform === ad.platform ? getPlatformStyle(ad.platform).gradient : "bg-gray-50 dark:bg-white/5"}
+                    `}
+                    onClick={() => {
+                      setCurrentMockupAdIndex(index);
+                      setMockupLightboxOpen(true);
+                    }}
+                  >
+                    <div className="flex items-center justify-between mb-4">
+                      <img src={getPlatformStyle(ad.platform).logo} alt={ad.platform} className="h-8" />
+                      <span className={`text-sm font-bold ${getPlatformStyle(ad.platform).text}`}>{getPlatformStyle(ad.platform).name}</span>
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-2">{ad.headline}</h3>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-3 mb-4">{ad.description}</p>
+                    <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+                      <span className="flex items-center"><Zap className="w-4 h-4 mr-1" /> {ad.type}</span>
+                      <span className="flex items-center"><Star className="w-4 h-4 mr-1 text-yellow-500" /> {ad.score.toFixed(1)}</span>
+                    </div>
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl">
+                      <Maximize2 className="w-8 h-8 text-white" />
+                    </div>
+                  </Card>
+                ))}
+              </div>
+
+              <div className="flex justify-center gap-4">
+                <Button
+                  onClick={handleDownloadMasterKit}
+                  className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-6 rounded-xl transition-all"
+                >
+                  <Download className="w-5 h-5 mr-2" /> Descargar Master Kit
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsGuideLightboxOpen(true)}
+                  className="border-emerald-500 text-emerald-500 hover:bg-emerald-500 hover:text-white font-bold py-3 px-6 rounded-xl transition-all"
+                >
+                  <Lightbulb className="w-5 h-5 mr-2" /> Ver Guía Visual
+                </Button>
               </div>
             </div>
+          )}
+        </AnimatePresence>
 
-          </motion.div>
-        )}
-      </main>
+        <VisualGuideLightbox isOpen={isGuideLightboxOpen} onClose={() => setIsGuideLightboxOpen(false)} platform={generatedAds[currentMockupAdIndex]?.platform || selectedPlatform} />
+        <MockupLightbox 
+          isOpen={mockupLightboxOpen} 
+          onClose={() => setMockupLightboxOpen(false)}
+          ad={generatedAds[currentMockupAdIndex]}
+          platform={generatedAds[currentMockupAdIndex]?.platform || selectedPlatform}
+          onPrevious={() => setCurrentMockupAdIndex(prev => (prev === 0 ? generatedAds.length - 1 : prev - 1))}
+          onNext={() => setCurrentMockupAdIndex(prev => (prev === generatedAds.length - 1 ? 0 : prev + 1))}
+        />
 
-      <VisualGuideLightbox isOpen={isGuideLightboxOpen} onClose={() => setIsGuideLightboxOpen(false)} />
-      <MockupLightbox 
-        isOpen={mockupLightboxOpen} 
-        onClose={() => setMockupLightboxOpen(false)} 
-        platform={selectedPlatform}
-        ad={generatedAds.find(a => a.platform === selectedPlatform) || {
-          headline: '',
-          description: '',
-          cta: '',
-          imageUrl: config.userImage || '',
-          platform: selectedPlatform,
-          type: 'Offer',
-          score: 94,
-          platformUrl: ''
-        }}
-        businessName={config.businessName}
-      />
-      <PaymentModal isOpen={showPaymentModal} onClose={() => setShowPaymentModal(false)} />
-      
-      <AnimatePresence>
-        {showInactivityModal && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-xl">
-            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="bg-white dark:bg-[#0a0a0a] p-12 rounded-[48px] max-w-lg w-full text-center space-y-8 border border-white/10">
-              <div className="w-24 h-24 bg-red-500/10 rounded-full flex items-center justify-center mx-auto">
-                <Activity className="w-12 h-12 text-red-500" />
-              </div>
-              <div className="space-y-4">
-                <h2 className="text-4xl font-black text-gray-900 dark:text-white">Sesión Expirada</h2>
-                <p className="text-xl text-gray-500">Por seguridad, hemos cerrado tu sesión debido a inactividad prolongada.</p>
-              </div>
-              <Button onClick={() => navigate('/flowsight-ads')} className="w-full py-8 text-xl font-black bg-emerald-600 hover:bg-emerald-700 text-white rounded-3xl">
-                Volver a Entrar
-              </Button>
+        <AnimatePresence>
+          {showInactivityModal && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+            >
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-lg text-center max-w-md w-full"
+              >
+                <Info className="w-16 h-16 text-yellow-500 mx-auto mb-6" />
+                <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Sesión Expirada</h3>
+                <p className="text-gray-600 dark:text-gray-400 mb-6">Tu sesión ha expirado debido a inactividad. Por favor, inicia sesión de nuevo.</p>
+                <Button onClick={() => navigate("/flowsight-ads")} className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-6 rounded-xl transition-all">
+                  Iniciar Sesión
+                </Button>
+              </motion.div>
             </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>
+
+        <PaymentModal isOpen={showPaymentModal} onClose={() => setShowPaymentModal(false)} />
+      </main>
     </div>
   );
 };
