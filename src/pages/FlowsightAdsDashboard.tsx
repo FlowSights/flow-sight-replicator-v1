@@ -772,7 +772,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                               : 'bg-white/[0.03] hover:bg-white/[0.08] border border-white/5'
                           }`}
                         >
-                          <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 shadow-xl ${
+                          <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 shadow-xl flex-shrink-0 ${
                             isSelected ? 'bg-white scale-110' : 'bg-white/10 group-hover:bg-white/20'
                           }`}>
                             <PlatformIcon platform={platform} size={32} />
