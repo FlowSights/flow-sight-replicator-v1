@@ -241,8 +241,12 @@ const FlowsightAdsDashboard: React.FC = () => {
     }
   };
 
-  // Safe access to platform styles
-  const currentStyle = platformStyles[selectedPlatform] || platformStyles.meta;
+  // Safe access to platform styles with fallback
+  const getPlatformStyle = (platform: string) => {
+    return platformStyles[platform as keyof typeof platformStyles] || platformStyles.meta;
+  };
+
+  const currentStyle = getPlatformStyle(selectedPlatform);
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#050505] transition-colors selection:bg-emerald-500/30">
@@ -574,7 +578,7 @@ const FlowsightAdsDashboard: React.FC = () => {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {(['google', 'meta', 'tiktok', 'linkedin'] as const).map((platform) => {
                   const isActive = selectedPlatform === platform;
-                  const style = platformStyles[platform];
+                  const style = getPlatformStyle(platform);
                   return (
                     <button
                       key={platform}
@@ -791,3 +795,4 @@ const FlowsightAdsDashboard: React.FC = () => {
 };
 
 export default FlowsightAdsDashboard;
+// Force redeploy Thu Apr 30 20:23:53 EDT 2026
