@@ -41,7 +41,8 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showGuideModal, setShowGuideModal] = useState(false);
   const [paymentAction, setPaymentAction] = useState<'download' | 'publish' | 'guide'>('download');
-  const [isZoomed, setIsZoomed] = useState(false);
+
+  if (!isOpen) return null;
 
   const currentAd = ads?.[currentIndex];
   const colors = platformColors[platform];
@@ -112,15 +113,13 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
               <div className="flex-1 overflow-y-auto custom-scrollbar">
                 <div className="p-8 lg:p-12 grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
                   
-                  {/* Columna Izquierda: Mockup con Zoom */}
+                  {/* Columna Izquierda: Mockup con Hover Scale */}
                   <div className="space-y-6">
-                    <div 
-                      className={`relative group cursor-zoom-in rounded-[32px] overflow-hidden transition-all duration-500 ${isZoomed ? 'fixed inset-4 z-[60] bg-black/90 p-4 sm:p-12 flex items-center justify-center cursor-zoom-out' : 'bg-gray-50 dark:bg-white/[0.03] p-8 border border-gray-100 dark:border-white/5'}`}
-                      onClick={() => setIsZoomed(!isZoomed)}
-                    >
-                      <motion.div 
-                        layout
-                        className={`${isZoomed ? 'max-w-4xl w-full h-full flex items-center justify-center' : 'w-full'}`}
+                    <div className="relative group cursor-zoom-in rounded-[32px] overflow-hidden bg-gray-50 dark:bg-white/[0.03] p-8 border border-gray-100 dark:border-white/5">
+                      <motion.div
+                        className="w-full origin-center"
+                        whileHover={{ scale: 1.03 }}
+                        transition={{ duration: 0.3, ease: 'easeOut' }}
                       >
                         {/* El Mockup Real */}
                         <div className={`bg-white dark:bg-[#111] rounded-3xl shadow-2xl overflow-hidden border border-gray-200 dark:border-white/10 mx-auto ${platform === 'tiktok' ? 'max-w-[320px]' : 'w-full'}`}>
@@ -199,100 +198,111 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
                         </div>
                       </motion.div>
                       
-                      {!isZoomed && (
-                        <div className="absolute top-4 right-4 p-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                          <Maximize2 size={16} />
-                        </div>
-                      )}
+                      <div className="absolute top-4 right-4 p-2 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 text-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                        <Maximize2 size={16} />
+                      </div>
                     </div>
-                    <p className="text-center text-[10px] font-black uppercase tracking-widest text-gray-400">Haz clic en el mockup para ampliar (Zoom Inmersivo)</p>
+
+                    {/* Navegación */}
+                    <div className="flex items-center justify-between gap-4">
+                      <button
+                        onClick={onPrevious}
+                        className="p-3 rounded-xl bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 transition-all"
+                      >
+                        <ChevronLeft size={20} className="dark:text-white" />
+                      </button>
+                      <div className="flex-1 text-center">
+                        <p className="text-sm font-black dark:text-gray-400">Variante {currentIndex + 1} de {ads.length}</p>
+                      </div>
+                      <button
+                        onClick={onNext}
+                        className="p-3 rounded-xl bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 transition-all"
+                      >
+                        <ChevronRight size={20} className="dark:text-white" />
+                      </button>
+                    </div>
                   </div>
 
-                  {/* Columna Derecha: Detalles Premium */}
-                  <div className="space-y-10">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="p-6 rounded-3xl bg-gray-50 dark:bg-white/[0.03] border border-gray-100 dark:border-white/5">
-                        <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">Estrategia</p>
-                        <p className="text-xl font-black text-gray-900 dark:text-white">{currentAd.type}</p>
-                      </div>
-                      <div className="p-6 rounded-3xl bg-gray-50 dark:bg-white/[0.03] border border-gray-100 dark:border-white/5">
-                        <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">Calidad</p>
-                        <p className="text-xl font-black text-emerald-500">{currentAd.score}%</p>
-                      </div>
-                    </div>
-
-                    <div className="space-y-4">
-                      <h4 className="text-sm font-black uppercase tracking-widest text-gray-900 dark:text-white">Análisis del Copy</h4>
-                      <div className="p-8 rounded-[32px] bg-emerald-500/5 border border-emerald-500/10 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-4 opacity-10">
-                          <Sparkles className="text-emerald-500" size={40} />
+                  {/* Columna Derecha: Contenido */}
+                  <div className="space-y-8">
+                    <div>
+                      <h3 className="text-2xl font-black dark:text-white mb-4">Detalles del Anuncio</h3>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="text-xs font-black uppercase tracking-wider text-gray-500 dark:text-gray-400">Titular</label>
+                          <p className="text-lg font-bold dark:text-white mt-1">{currentAd.headline}</p>
                         </div>
-                        <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed relative z-10">
-                          {currentAd.reasoning || "Este copy ha sido optimizado utilizando principios de psicología de ventas y urgencia para maximizar el CTR en la plataforma seleccionada."}
-                        </p>
+                        <div>
+                          <label className="text-xs font-black uppercase tracking-wider text-gray-500 dark:text-gray-400">Descripción</label>
+                          <p className="text-sm dark:text-gray-300 mt-1 leading-relaxed">{currentAd.description}</p>
+                        </div>
+                        <div>
+                          <label className="text-xs font-black uppercase tracking-wider text-gray-500 dark:text-gray-400">CTA</label>
+                          <p className="text-sm font-bold dark:text-white mt-1">{currentAd.cta}</p>
+                        </div>
+                        <div>
+                          <label className="text-xs font-black uppercase tracking-wider text-gray-500 dark:text-gray-400">Score</label>
+                          <div className="flex items-center gap-2 mt-1">
+                            <div className="flex-1 h-2 bg-gray-200 dark:bg-white/10 rounded-full overflow-hidden">
+                              <div className="h-full bg-yellow-500" style={{ width: `${currentAd.score}%` }} />
+                            </div>
+                            <span className="text-sm font-black dark:text-white">{currentAd.score}/100</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Acciones Finales */}
-                    <div className="space-y-4 pt-6 border-t dark:border-white/5">
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <Button
-                          onClick={() => handleActionClick('guide')}
-                          variant="outline"
-                          className="py-8 rounded-2xl font-black uppercase tracking-widest text-xs gap-2 border-gray-100 dark:border-white/5"
-                        >
-                          <BookOpen size={16} /> Guía
-                        </Button>
-                        <Button
-                          onClick={() => handleActionClick('publish')}
-                          className={`py-8 rounded-2xl font-black uppercase tracking-widest text-xs gap-2 text-white bg-gradient-to-r ${colors.gradient} shadow-xl shadow-emerald-500/10`}
-                        >
-                          <Share2 size={16} /> Publicar
-                        </Button>
-                        <Button
-                          onClick={() => handleActionClick('download')}
-                          className="py-8 rounded-2xl font-black uppercase tracking-widest text-xs gap-2 bg-emerald-600 hover:bg-emerald-700 text-white"
-                        >
-                          <Download size={16} /> Kit
-                        </Button>
-                      </div>
-                      {!hasPaid && (
-                        <p className="text-[10px] text-center text-gray-500 font-bold uppercase tracking-wider">
-                          Desbloquea el Campaign Kit completo con acceso Premium
-                        </p>
-                      )}
+                    {/* Botones de Acción */}
+                    <div className="space-y-3">
+                      <button
+                        onClick={() => handleActionClick('guide')}
+                        className="w-full py-3 px-4 rounded-xl bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 font-black text-sm uppercase tracking-wider dark:text-white transition-all flex items-center justify-center gap-2"
+                      >
+                        <BookOpen size={16} />
+                        Guía Visual
+                      </button>
+                      <button
+                        onClick={() => handleActionClick('download')}
+                        className="w-full py-3 px-4 rounded-xl bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 font-black text-sm uppercase tracking-wider dark:text-white transition-all flex items-center justify-center gap-2"
+                      >
+                        <Download size={16} />
+                        Descargar Kit
+                      </button>
+                      <button
+                        onClick={() => handleActionClick('publish')}
+                        className={`w-full py-3 px-4 rounded-xl font-black text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${
+                          hasPaid
+                            ? `bg-gradient-to-r ${colors.gradient} text-white border border-white/20`
+                            : 'bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 dark:text-white'
+                        }`}
+                      >
+                        <Share2 size={16} />
+                        Publicar en {platform.charAt(0).toUpperCase() + platform.slice(1)}
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
-
-              {/* Navegador Inferior */}
-              {ads.length > 1 && (
-                <div className="p-6 bg-gray-50 dark:bg-white/[0.02] border-t border-gray-100 dark:border-white/5 flex items-center justify-between">
-                  <button onClick={onPrevious} className="p-4 hover:bg-gray-200 dark:hover:bg-white/5 rounded-2xl transition-all active:scale-90">
-                    <ChevronLeft size={24} className="dark:text-white" />
-                  </button>
-                  <div className="flex gap-2">
-                    {ads.map((_, i) => (
-                      <div key={i} className={`h-1.5 rounded-full transition-all duration-300 ${i === currentIndex ? 'w-8 bg-emerald-500' : 'w-2 bg-gray-300 dark:bg-white/10'}`} />
-                    ))}
-                  </div>
-                  <button onClick={onNext} className="p-4 hover:bg-gray-200 dark:hover:bg-white/5 rounded-2xl transition-all active:scale-90">
-                    <ChevronRight size={24} className="dark:text-white" />
-                  </button>
-                </div>
-              )}
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Modales adicionales */}
-      <VisualGuideLightbox
-        isOpen={showGuideModal}
-        onClose={() => setShowGuideModal(false)}
-        platform={platform}
-      />
+      {/* Modales */}
+      {showPaymentModal && (
+        <PaymentModal
+          isOpen={showPaymentModal}
+          onClose={() => setShowPaymentModal(false)}
+          action={paymentAction}
+        />
+      )}
+      {showGuideModal && (
+        <VisualGuideLightbox
+          isOpen={showGuideModal}
+          onClose={() => setShowGuideModal(false)}
+          platform={platform}
+        />
+      )}
     </>
   );
 };

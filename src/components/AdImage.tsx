@@ -7,12 +7,29 @@ interface AdImageProps {
   className?: string;
 }
 
-const DEFAULT_FALLBACK = "https://picsum.photos/seed/business/1200/630";
+const getPlaceholderSVG = (alt: string): string => {
+  const colors: Record<string, { bg: string; accent: string }> = {
+    google: { bg: '#f8f9fa', accent: '#4285F4' },
+    meta: { bg: '#f0f2f5', accent: '#0668E1' },
+    tiktok: { bg: '#000000', accent: '#00F2EA' },
+    linkedin: { bg: '#f3f6f8', accent: '#0077B5' },
+  };
+  const key = Object.keys(colors).find(k => alt?.toLowerCase().includes(k)) || 'google';
+  const c = colors[key];
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+    <rect width="1200" height="630" fill="${c.bg}"/>
+    <rect x="0" y="0" width="1200" height="8" fill="${c.accent}"/>
+    <text x="600" y="290" font-family="system-ui,sans-serif" font-size="48" font-weight="bold" fill="${c.accent}" text-anchor="middle" dominant-baseline="middle">📸</text>
+    <text x="600" y="360" font-family="system-ui,sans-serif" font-size="24" fill="#666" text-anchor="middle">Agrega tu imagen aquí</text>
+  </svg>`;
+  return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}`;
+};
+
 const MAX_RETRIES = 1;
 const RETRY_DELAY_MS = 500;
 
 export const AdImage: React.FC<AdImageProps> = ({ src, alt = "Ad", className = "" }) => {
-  const [currentSrc, setCurrentSrc] = useState<string>(DEFAULT_FALLBACK);
+  const [currentSrc, setCurrentSrc] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const retryCount = useRef(0);
@@ -24,8 +41,8 @@ export const AdImage: React.FC<AdImageProps> = ({ src, alt = "Ad", className = "
     setHasError(false);
     
     if (!src || src === null || src === '') {
-      console.log('[AdImage] No src provided — using fallback');
-      setCurrentSrc(DEFAULT_FALLBACK);
+      console.log('[AdImage] No src provided — using SVG placeholder');
+      setCurrentSrc(getPlaceholderSVG(alt));
       setIsLoading(false);
       return;
     }
@@ -37,7 +54,7 @@ export const AdImage: React.FC<AdImageProps> = ({ src, alt = "Ad", className = "
     return () => {
       if (retryTimer.current) clearTimeout(retryTimer.current);
     };
-  }, [src]);
+  }, [src, alt]);
 
   const handleLoad = () => {
     console.log('[AdImage] ✅ Image loaded successfully:', currentSrc.startsWith('data:') ? 'base64' : currentSrc);
@@ -68,9 +85,9 @@ export const AdImage: React.FC<AdImageProps> = ({ src, alt = "Ad", className = "
         setCurrentSrc(retryUrl);
       }, RETRY_DELAY_MS);
     } else {
-      console.log('[AdImage] Max retries reached, using fallback');
+      console.log('[AdImage] Max retries reached, using SVG placeholder');
       setHasError(true);
-      setCurrentSrc(DEFAULT_FALLBACK);
+      setCurrentSrc(getPlaceholderSVG(alt));
       setIsLoading(false);
     }
   };
@@ -95,7 +112,7 @@ export const AdImage: React.FC<AdImageProps> = ({ src, alt = "Ad", className = "
       />
 
       {/* Only show icon placeholder if truly nothing loaded */}
-      {!isLoading && hasError && currentSrc === DEFAULT_FALLBACK && (
+      {!isLoading && hasError && !currentSrc.startsWith('data:') && (
         <div className="absolute inset-0 flex items-center justify-center text-gray-400 pointer-events-none">
           <ImageIcon className="w-12 h-12 opacity-20" />
         </div>

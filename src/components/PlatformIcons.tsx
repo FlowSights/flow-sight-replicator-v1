@@ -10,9 +10,9 @@ export const PlatformIcon: React.FC<PlatformIconProps> = ({ platform, size = 24,
   if (platform === 'meta') {
     return (
       <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} preserveAspectRatio="xMidYMid meet">
-        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z" fill="currentColor"/>
+        <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z" fill="#0668E1"/>
         <path d="M16.5 12c0-2.485-2.015-4.5-4.5-4.5S7.5 9.515 7.5 12s2.015 4.5 4.5 4.5 4.5-2.015 4.5-4.5z" fill="white"/>
-        <path d="M13.5 12c0-.828-.672-1.5-1.5-1.5s-1.5.672-1.5 1.5.672 1.5 1.5 1.5 1.5-.672 1.5-1.5z" fill="currentColor"/>
+        <path d="M13.5 12c0-.828-.672-1.5-1.5-1.5s-1.5.672-1.5 1.5.672 1.5 1.5 1.5 1.5-.672 1.5-1.5z" fill="#0668E1"/>
       </svg>
     );
   }
@@ -29,16 +29,18 @@ export const PlatformIcon: React.FC<PlatformIconProps> = ({ platform, size = 24,
   if (platform === 'linkedin') {
     return (
       <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} preserveAspectRatio="xMidYMid meet">
-        <rect x="2" y="2" width="20" height="20" rx="2" fill="currentColor"/>
-        <path d="M7 9.5v8M7 6.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M11 9.5v8c0 1 .5 1.5 1.5 1.5h2c1 0 1.5-.5 1.5-1.5v-4c0-1.5.5-2.5 1.5-2.5s1.5 1 1.5 2.5v4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <rect x="2" y="2" width="20" height="20" rx="4" fill="#0077B5"/>
+        <path d="M7 9.5v8" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+        <circle cx="7" cy="6.5" r="1" fill="white"/>
+        <path d="M11 9.5v8" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+        <path d="M11 13c0-2 1-3.5 3-3.5s3 1.5 3 3.5v4" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
       </svg>
     );
   }
   if (platform === 'tiktok') {
     return (
       <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} preserveAspectRatio="xMidYMid meet">
-        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.68v13.7a2.4 2.4 0 1 1-2.4-2.4c.34 0 .67.03 1 .09V9.83a6.8 6.8 0 0 0-1-.08A6.9 6.9 0 0 0 5.6 19.9a6.9 6.9 0 0 0 10.86-5.1v-5.12a8.8 8.8 0 0 0 5.54 1.94v-3.72a4.84 4.84 0 0 1-.01-.02z" fill="currentColor"/>
+        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.68v13.7a2.4 2.4 0 1 1-2.4-2.4c.34 0 .67.03 1 .09V9.83a6.8 6.8 0 0 0-1-.08A6.9 6.9 0 0 0 5.6 19.9a6.9 6.9 0 0 0 10.86-5.1v-5.12a8.8 8.8 0 0 0 5.54 1.94v-3.72a4.84 4.84 0 0 1-1.41-.21z" fill="#000000"/>
       </svg>
     );
   }

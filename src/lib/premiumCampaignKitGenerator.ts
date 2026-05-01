@@ -15,12 +15,13 @@ interface CampaignKitData {
   targetAudience: string;
   websiteUrl: string;
   ads: Ad[];
+  platform?: string;
 }
 
 export const downloadPremiumCampaignKit = (data: CampaignKitData) => {
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
-  const platform = data.ads[0]?.platform || 'Multi-Platform';
+  const platform = data.platform || data.ads[0]?.platform || 'Multi-Platform';
   const platformName = platform.charAt(0).toUpperCase() + platform.slice(1);
 
   // --- Page 1: Cover ---
@@ -152,5 +153,5 @@ export const downloadPremiumCampaignKit = (data: CampaignKitData) => {
   doc.text(doc.splitTextToSize(psych, pageWidth - 40), 20, (doc as any).lastAutoTable.finalY + 30);
 
   // Save
-  doc.save(`FlowSight_Campaign_Kit_${data.businessName}_${platformName}.pdf`);
+  doc.save(`FlowSight_CampaignKit_${data.businessName}_${platformName}.pdf`);
 };

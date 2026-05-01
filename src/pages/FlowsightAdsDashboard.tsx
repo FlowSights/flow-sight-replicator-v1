@@ -257,12 +257,14 @@ const FlowsightAdsDashboard: React.FC = () => {
 
   const handleDownloadMasterKit = () => {
     if (hasPaid) {
+      const platformAds = generatedAds.filter(ad => ad.platform === selectedPlatform);
       downloadPremiumCampaignKit({
         businessName: config.businessName,
         businessDescription: config.promote,
         targetAudience: config.idealCustomer,
         websiteUrl: config.websiteUrl,
-        ads: generatedAds,
+        ads: platformAds.length > 0 ? platformAds : generatedAds,
+        platform: selectedPlatform,
       });
     } else {
       setShowPaymentModal(true);
@@ -724,7 +726,14 @@ const FlowsightAdsDashboard: React.FC = () => {
                   boxShadow: `0 0 80px -20px ${currentTheme.glow}`
                 }}
               >
-                <div className="bg-[#0A0A0A] rounded-[46px] p-8 lg:p-14 relative overflow-hidden">
+                <div 
+                  className="rounded-[46px] p-8 lg:p-14 relative overflow-hidden"
+                  style={{
+                    background: 'linear-gradient(145deg, rgba(15,15,15,0.98) 0%, rgba(10,10,10,1) 100%)',
+                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04), inset 0 -1px 0 rgba(0,0,0,0.3)',
+                    backdropFilter: 'blur(40px)',
+                  }}
+                >
                   {/* Dynamic Background with Radial Gradients */}
                   <div className="absolute inset-0 overflow-hidden pointer-events-none">
                     <div 
@@ -792,7 +801,15 @@ const FlowsightAdsDashboard: React.FC = () => {
                           className="relative group"
                         >
                           <div className="absolute -inset-1 bg-gradient-to-r from-transparent via-white/10 to-transparent blur-sm rounded-[40px] opacity-0 group-hover:opacity-100 transition-opacity" />
-                          <div className="bg-[#111] rounded-[40px] p-6 border border-white/10 shadow-3xl backdrop-blur-xl relative">
+                          <div 
+                            className="rounded-[40px] p-6 border relative"
+                            style={{
+                              background: 'linear-gradient(145deg, rgba(20,20,20,0.9), rgba(12,12,12,0.95))',
+                              borderColor: 'rgba(255,255,255,0.07)',
+                              boxShadow: '0 24px 64px -12px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05)',
+                              backdropFilter: 'blur(20px)',
+                            }}
+                          >
                             <EditablePlatformPreview
                               ad={ad}
                               platform={ad.platform}
@@ -823,34 +840,44 @@ const FlowsightAdsDashboard: React.FC = () => {
                                 <span className="text-xs font-black text-yellow-500 tracking-wider">{ad.score}/100 SCORE</span>
                               </div>
                             </div>
-                            <h3 className="text-5xl font-black tracking-tighter leading-[1.1]">Estrategia de <span className={currentTheme.text}>{platformNames[selectedPlatform]}</span></h3>
+                            <h3 className="text-5xl font-black tracking-tighter leading-[1.1]">Estrategia de{' '}
+                              {selectedPlatform === 'google' ? (
+                                <span className="bg-gradient-to-r from-[#4285F4] via-[#FBBC05] to-[#EA4335] bg-clip-text text-transparent">
+                                  {platformNames[selectedPlatform]}
+                                </span>
+                              ) : (
+                                <span className={currentTheme.text}>{platformNames[selectedPlatform]}</span>
+                              )}
+                            </h3>
                             <p className="text-xl text-gray-400 font-medium leading-relaxed max-w-lg">Copy de alto impacto diseñado para romper el scroll y maximizar el CTR.</p>
                           </div>
 
                           {/* PREMIUM BUTTON SYSTEM - Morphoglass Hierarchy */}
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 relative z-20">
-                            {/* Tertiary: Guía Visual - Minimal Black */}
+                            {/* Tertiary: Guía Visual - Premium Glass */}
                             <motion.button
                               whileHover={{ y: -3, scale: 1.02 }}
                               whileTap={{ scale: 0.97 }}
                               onClick={() => setIsGuideLightboxOpen(true)}
-                              className="py-6 px-6 rounded-[20px] font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2.5 bg-black/40 hover:bg-black/60 border border-white/5 hover:border-white/10 transition-all duration-300 text-gray-300 hover:text-white"
+                              className="py-6 px-6 rounded-[20px] font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2.5 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.15] backdrop-blur-md transition-all duration-300 text-gray-300 hover:text-white relative overflow-hidden group"
+                              style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.07)' }}
                             >
-                              <BookOpen className="w-4 h-4" /> Guía Visual
+                              <span className="absolute inset-0 bg-gradient-to-b from-white/[0.05] to-transparent pointer-events-none" />
+                              <BookOpen className="w-4 h-4 relative z-10" /> Guía Visual
                             </motion.button>
                             
-                            {/* Secondary: Descargar Kit - Platform Gradient */}
+                            {/* Secondary: Descargar Kit - Platform Gradient Premium */}
                             <motion.button
                               whileHover={{ y: -3, scale: 1.02 }}
                               whileTap={{ scale: 0.97 }}
                               onClick={handleDownloadMasterKit}
-                              className={`py-6 px-6 rounded-[20px] font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2.5 bg-gradient-to-r ${currentTheme.gradient} hover:opacity-90 transition-all duration-300 text-white shadow-lg`}
-                              style={{ boxShadow: `0 15px 35px -10px ${currentTheme.glow}` }}
+                              className={`py-6 px-6 rounded-[20px] font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2.5 bg-gradient-to-br ${currentTheme.gradient} border border-white/20 hover:brightness-110 transition-all duration-300 text-white relative overflow-hidden`}
+                              style={{ boxShadow: `0 4px 20px -4px ${currentTheme.glow}, inset 0 1px 0 rgba(255,255,255,0.2)` }}
                             >
-                              <Download className="w-4 h-4" /> Descargar Kit
+                              <Download className="w-4 h-4 relative z-10" /> Descargar Kit
                             </motion.button>
 
-                            {/* Primary: Publicar - Morphoglass */}
+                            {/* Primary: Publicar - Premium Morphoglass */}
                             <motion.button 
                               whileHover={{ y: -4, scale: 1.02 }}
                               whileTap={{ scale: 0.98 }}
@@ -863,8 +890,8 @@ const FlowsightAdsDashboard: React.FC = () => {
                                 };
                                 window.open(urls[selectedPlatform], '_blank');
                               }}
-                              className="sm:col-span-2 py-7 px-8 rounded-[24px] font-black uppercase tracking-[0.15em] text-[10px] flex items-center justify-center gap-3 text-white transition-all duration-300 backdrop-blur-xl border border-white/20 hover:border-white/40 bg-gradient-to-br from-white/10 to-white/5 hover:from-white/15 hover:to-white/10 group relative overflow-hidden"
-                              style={{ boxShadow: `0 20px 50px -15px ${currentTheme.glow}, inset 0 1px 0 rgba(255,255,255,0.1)` }}
+                              className="sm:col-span-2 py-7 px-8 rounded-[24px] font-black uppercase tracking-[0.15em] text-[10px] flex items-center justify-center gap-3 text-white transition-all duration-300 backdrop-blur-xl border border-white/[0.12] hover:border-white/[0.25] bg-gradient-to-br from-white/[0.12] via-white/[0.06] to-white/[0.02] hover:from-white/[0.18] hover:via-white/[0.10] hover:to-white/[0.04] group relative overflow-hidden"
+                              style={{ boxShadow: `0 20px 50px -15px ${currentTheme.glow}, 0 8px 20px -8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.2)` }}
                             >
                               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: `radial-gradient(circle at 50% 50%, ${currentTheme.glow}, transparent)` }} />
                               <Share2 className="w-4 h-4 relative z-10" /> Publicar en {platformNames[selectedPlatform]}
