@@ -9,6 +9,9 @@ const AuthCallback = () => {
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
+        const params = new URLSearchParams(window.location.search);
+        const source = params.get('source');
+        
         // Supabase maneja automáticamente el intercambio de tokens en la URL
         // Solo necesitamos verificar si ahora tenemos una sesión activa
         const { data: { session }, error } = await supabase.auth.getSession();
@@ -16,12 +19,17 @@ const AuthCallback = () => {
         if (error) throw error;
 
         if (session) {
-          // Si hay sesión, redirigimos al dashboard
-          navigate("/flowsight-ads/dashboard", { replace: true });
+          // Si venimos de ads, vamos al dashboard de ads
+          if (source === 'ads') {
+            navigate("/flowsight-ads/dashboard", { replace: true });
+          } else {
+            // Si no, al flujo normal (blog/home)
+            navigate("/", { replace: true });
+          }
         } else {
           // Si no hay sesión después del callback, algo salió mal
-          // Redirigimos al login principal
-          navigate("/auth", { replace: true });
+          const fallbackRoute = source === 'ads' ? "/flowsight-ads" : "/auth";
+          navigate(fallbackRoute, { replace: true });
         }
       } catch (error) {
         console.error("Error en el callback de autenticación:", error);
