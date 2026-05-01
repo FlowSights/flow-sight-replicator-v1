@@ -113,15 +113,15 @@ Responde SOLO con JSON válido, sin explicaciones adicionales.`;
       },
       body: JSON.stringify({
         system_instruction: {
-          parts: {
+          parts: [{
             text: systemPrompt,
-          },
+          }],
         },
-        contents: {
-          parts: {
+        contents: [{
+          parts: [{
             text: userPrompt,
-          },
-        },
+          }],
+        }],
         generation_config: {
           temperature: 0.7,
           max_output_tokens: 4000,

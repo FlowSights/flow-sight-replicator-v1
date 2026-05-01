@@ -19,6 +19,7 @@ import {
   Moon, Sun, Building2, Link2, Globe2, CreditCard,
   FileDown, ZoomIn, Edit2
 } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { useTheme } from 'next-themes';
 import { LocationInput } from '@/components/LocationInput';
 import { motion, AnimatePresence } from 'framer-motion';
