@@ -206,44 +206,43 @@ const FlowsightAdsDashboard: React.FC = () => {
     }
   };
 
-  const platformStyles = {
-    meta: {
-      gradient: "from-blue-600/20 to-blue-400/20",
-      border: "border-blue-500/30",
-      accent: "bg-blue-600",
-      text: "text-blue-500",
-      logo: "https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg",
-      name: "Meta (Facebook/Instagram)"
-    },
-    google: {
-      gradient: "from-blue-500/10 via-red-500/10 to-yellow-500/10",
-      border: "border-blue-500/30",
-      accent: "bg-blue-500",
-      text: "text-blue-600",
-      logo: "https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_\"G\"_logo.svg",
-      name: "Google Ads"
-    },
-    tiktok: {
-      gradient: "from-black/40 to-pink-500/20",
-      border: "border-pink-500/30",
-      accent: "bg-black",
-      text: "text-pink-500",
-      logo: "https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg",
-      name: "TikTok Ads"
-    },
-    linkedin: {
-      gradient: "from-blue-800/20 to-blue-600/20",
-      border: "border-blue-700/30",
-      accent: "bg-blue-800",
-      text: "text-blue-700",
-      logo: "https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png",
-      name: "LinkedIn Ads"
-    }
-  };
-
-  // Safe access to platform styles with fallback
+  // Ultra-safe helper for platform styles
   const getPlatformStyle = (platform: string) => {
-    return platformStyles[platform as keyof typeof platformStyles] || platformStyles.meta;
+    const styles = {
+      meta: {
+        gradient: "from-blue-600/20 to-blue-400/20",
+        border: "border-blue-500/30",
+        accent: "bg-blue-600",
+        text: "text-blue-500",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg",
+        name: "Meta (Facebook/Instagram)"
+      },
+      google: {
+        gradient: "from-blue-500/10 via-red-500/10 to-yellow-500/10",
+        border: "border-blue-500/30",
+        accent: "bg-blue-500",
+        text: "text-blue-600",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_\"G\"_logo.svg",
+        name: "Google Ads"
+      },
+      tiktok: {
+        gradient: "from-black/40 to-pink-500/20",
+        border: "border-pink-500/30",
+        accent: "bg-black",
+        text: "text-pink-500",
+        logo: "https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg",
+        name: "TikTok Ads"
+      },
+      linkedin: {
+        gradient: "from-blue-800/20 to-blue-600/20",
+        border: "border-blue-700/30",
+        accent: "bg-blue-800",
+        text: "text-blue-700",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png",
+        name: "LinkedIn Ads"
+      }
+    };
+    return styles[platform as keyof typeof styles] || styles.meta;
   };
 
   const currentStyle = getPlatformStyle(selectedPlatform);
@@ -608,7 +607,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  className={`relative p-1 rounded-[48px] border-2 transition-colors duration-700 ${currentStyle.border} bg-gradient-to-br ${currentStyle.gradient}`}
+                  className={`relative p-1 rounded-[48px] border-2 transition-colors duration-700 ${getPlatformStyle(selectedPlatform).border} bg-gradient-to-br ${getPlatformStyle(selectedPlatform).gradient}`}
                 >
                   <div className="bg-white dark:bg-[#050505]/90 backdrop-blur-3xl rounded-[46px] p-8 md:p-12">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -645,7 +644,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                             </div>
                           </div>
                           <h4 className="text-4xl font-black text-gray-900 dark:text-white leading-tight">
-                            Estrategia de <span className={currentStyle.text}>{currentStyle.name}</span>
+                            Estrategia de <span className={getPlatformStyle(selectedPlatform).text}>{getPlatformStyle(selectedPlatform).name}</span>
                           </h4>
                           <div className="space-y-4">
                             <p className="text-lg text-gray-700 dark:text-gray-300 font-medium leading-relaxed">
@@ -693,7 +692,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                             }}
                             className="w-full py-8 rounded-2xl border-gray-200 dark:border-white/10 font-black uppercase tracking-widest text-xs hover:bg-gray-50 dark:hover:bg-white/5"
                           >
-                            <ExternalLink className="w-4 h-4 mr-2" /> Publicar en {currentStyle.name}
+                            <ExternalLink className="w-4 h-4 mr-2" /> Publicar en {getPlatformStyle(selectedPlatform).name}
                           </Button>
                         </div>
                       </div>
@@ -795,4 +794,3 @@ const FlowsightAdsDashboard: React.FC = () => {
 };
 
 export default FlowsightAdsDashboard;
-// Force redeploy Thu Apr 30 20:23:53 EDT 2026
