@@ -3,7 +3,8 @@ const path = require('path');
 
 // Configuración
 const BASE_URL = 'https://flowsights.it.com';
-const OUTPUT_FILE = path.join(__dirname, '../public/sitemap.xml');
+const ROOT = process.cwd();
+const OUTPUT_FILE = path.join(ROOT, 'public/sitemap.xml');
 
 // Rutas estáticas
 const staticRoutes = [
@@ -17,7 +18,7 @@ const staticRoutes = [
 // Función para obtener posts del blog (simulada leyendo el archivo de datos)
 function getBlogPosts() {
   try {
-    const blogDataPath = path.join(__dirname, '../src/data/blog.ts');
+    const blogDataPath = path.join(ROOT, 'src/data/blog.ts');
     const content = fs.readFileSync(blogDataPath, 'utf8');
     
     // Extraer slugs usando regex simple para evitar dependencias de parsing complejas
