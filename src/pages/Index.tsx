@@ -288,7 +288,7 @@ const Index = () => {
             
             {/* Left Column (Sticky) */}
             <div className="lg:w-5/12 lg:sticky lg:top-0 h-auto lg:h-screen flex items-center pt-32 pb-16 lg:py-0">
-              <div className="max-w-xl">
+              <div className="max-w-xl relative z-10">
                 <motion.span 
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
@@ -314,6 +314,21 @@ const Index = () => {
                 >
                   La mayoría pierde entre 15% y 25% de sus ingresos por procesos ciegos. Si no lo puedes ver, no lo puedes arreglar.
                 </motion.p>
+              </div>
+
+              {/* Decorative Visual to fill space */}
+              <div className="absolute bottom-10 left-0 right-0 hidden lg:flex justify-center opacity-20 pointer-events-none">
+                <motion.div
+                  animate={{ 
+                    y: [0, -20, 0],
+                    opacity: [0.3, 0.6, 0.3]
+                  }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  className="relative"
+                >
+                  <Activity className="w-64 h-64 text-white/20" strokeWidth={0.5} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+                </motion.div>
               </div>
             </div>
 
@@ -349,15 +364,20 @@ const Index = () => {
               </div>
               
               <div className="mt-32 border-t border-white/10 pt-16">
-                <PremiumCard className="p-10 glass-card bg-transparent border-white/5 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-                  <div>
-                    <h3 className="font-display text-3xl font-bold text-white tracking-tight">Detén la fuga.</h3>
-                    <p className="text-white/50 mt-2 text-lg">Descubre dónde pierdes dinero en 48 horas.</p>
+                <div className="p-12 md:p-20 rounded-[2.5rem] bg-white/5 border border-white/10 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-12 relative overflow-hidden group">
+                  {/* Subtle hover glow */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                  
+                  <div className="relative z-10">
+                    <h3 className="font-display text-4xl md:text-6xl font-bold text-white tracking-tight">Detén la fuga.</h3>
+                    <p className="text-white/50 mt-4 text-xl md:text-2xl font-medium">Descubre dónde pierdes dinero en 48 horas.</p>
                   </div>
-                  <Button size="lg" className="bg-white text-black hover:bg-white/90 rounded-full px-8 py-6 text-lg tracking-tight" asChild>
-                    <a href="#contacto">Diagnóstico gratis</a>
-                  </Button>
-                </PremiumCard>
+                  <div className="relative z-10 shrink-0">
+                    <Button size="lg" className="bg-white text-black hover:bg-white/90 rounded-full px-10 py-8 text-xl font-bold tracking-tight shadow-[0_0_40px_rgba(255,255,255,0.2)]" asChild>
+                      <a href="#contacto">Diagnóstico gratis</a>
+                    </Button>
+                  </div>
+                </div>
               </div>
             </div>
             
