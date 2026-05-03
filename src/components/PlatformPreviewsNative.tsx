@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Heart, MessageCircle, Share2, MoreHorizontal, Globe, Search, MoreVertical, ThumbsUp, MessageSquare, Repeat2 } from 'lucide-react';
-import { AdImage } from './AdImage';
+import { PromoImage } from './PromoImage';
 
 interface PreviewProps {
   headline: string;
@@ -45,7 +45,7 @@ export const MetaPreview: React.FC<PreviewProps> = ({ headline, description, cta
       </div>
 
       {/* Image */}
-      <AdImage src={imageUrl} alt={headline} className="aspect-[1.91/1]" />
+      <PromoImage src={imageUrl} alt={headline} className="aspect-[1.91/1]" />
 
       {/* CTA Bar */}
       <div className="bg-[#f0f2f5] dark:bg-[#3a3b3c] p-3 flex justify-between items-center">
@@ -106,7 +106,7 @@ export const GoogleAdsPreview: React.FC<PreviewProps> = ({ headline, description
             </p>
           </div>
           <div className="w-24 h-24 flex-shrink-0">
-            <AdImage src={imageUrl} alt={headline} className="w-24 h-24 rounded-lg min-h-0" />
+            <PromoImage src={imageUrl} alt={headline} className="w-24 h-24 rounded-lg min-h-0" />
           </div>
         </div>
 
@@ -136,7 +136,7 @@ export const TikTokPreview: React.FC<PreviewProps> = ({ headline, description, c
       animate={{ opacity: 1, y: 0 }}
       className="bg-black rounded-[32px] shadow-2xl overflow-hidden max-w-[320px] mx-auto aspect-[9/16] relative border-[8px] border-gray-800"
     >
-      <AdImage src={imageUrl} alt={headline} className="absolute inset-0 w-full h-full opacity-80 min-h-0" />
+      <PromoImage src={imageUrl} alt={headline} className="absolute inset-0 w-full h-full opacity-80 min-h-0" />
       
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
 
@@ -206,7 +206,7 @@ export const LinkedInPreview: React.FC<PreviewProps> = ({ headline, description,
       </div>
 
       {/* Image */}
-      <AdImage src={imageUrl} alt={headline} className="aspect-video" />
+      <PromoImage src={imageUrl} alt={headline} className="aspect-video" />
 
       <div className="p-3 flex justify-between items-center border-b border-gray-100 dark:border-gray-800">
         <div className="flex-1 pr-4">

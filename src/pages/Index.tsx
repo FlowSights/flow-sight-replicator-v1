@@ -281,71 +281,96 @@ const Index = () => {
       <ToolsMarquee />
 
 
-      <section className="py-24 relative">
-        <div className="container">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-sm font-semibold text-primary uppercase tracking-wider">El problema</span>
-            <h2 className="font-display text-4xl md:text-5xl font-bold mt-3">
-              Tus datos te están <span className="text-gradient">costando dinero</span>
-            </h2>
-            <p className="text-muted-foreground mt-4 text-lg">
-              La mayoría de empresas pierden entre 15% y 25% de sus ingresos por datos sucios y procesos sin control. La buena noticia: cada problema tiene solución cuando lo puedes ver claro.
-            </p>
-          </div>
-
-          <motion.div 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={{
-              hidden: { opacity: 0 },
-              visible: {
-                opacity: 1,
-                transition: { staggerChildren: 0.1 }
-              }
-            }}
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-5"
-          >
-            {problems.map((p, i) => {
-              const c = pickAccent(i);
-              return (
-                <motion.div
-                  key={p.title}
-                  variants={{
-                    hidden: { opacity: 0, y: 20 },
-                    visible: { opacity: 1, y: 0 }
-                  }}
+      <section className="relative bg-black text-white">
+        {/* Sticky Container */}
+        <div className="container px-4 md:px-8 max-w-7xl mx-auto">
+          <div className="flex flex-col lg:flex-row relative">
+            
+            {/* Left Column (Sticky) */}
+            <div className="lg:w-5/12 lg:sticky lg:top-0 h-auto lg:h-screen flex items-center pt-32 pb-16 lg:py-0">
+              <div className="max-w-xl">
+                <motion.span 
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  className="text-primary font-bold tracking-widest uppercase text-sm mb-6 block"
                 >
-                  <PremiumCard className={`p-6 glass-card h-full transition-all hover:-translate-y-1 group ${c.border}`}>
-                    <div className={`w-10 h-10 rounded-lg ${c.bg} ${c.text} grid place-items-center mb-4 transition-colors`}>
-                      <Zap className="w-5 h-5" />
-                    </div>
-                    <h3 className="font-semibold text-lg mb-2">{p.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{p.desc}</p>
-                  </PremiumCard>
-                </motion.div>
-              );
-            })}
-          </motion.div>
-
-          <PremiumCard className="mt-10 p-8 md:p-10 glass-card border-primary/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 bg-gradient-to-br from-primary/10 to-accent/5">
-            <div>
-              <h3 className="font-display text-2xl font-bold">¿Cuánto te están costando tus datos sucios?</h3>
-              <p className="text-muted-foreground mt-2">Te mostramos en 48 horas y sin costo dónde se está fugando dinero en tu operación.</p>
+                  El Problema
+                </motion.span>
+                <motion.h2 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="font-display text-5xl md:text-7xl font-bold tracking-tighter leading-[1.05]"
+                >
+                  Tus datos te están <span className="text-primary">costando dinero.</span>
+                </motion.h2>
+                <motion.p 
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2 }}
+                  className="mt-8 text-xl text-white/50 leading-relaxed font-medium"
+                >
+                  La mayoría pierde entre 15% y 25% de sus ingresos por procesos ciegos. Si no lo puedes ver, no lo puedes arreglar.
+                </motion.p>
+              </div>
             </div>
-            <Button variant="hero" size="lg" asChild>
-              <a href="#contacto">Quiero saberlo gratis <ArrowRight className="ml-1" /></a>
-            </Button>
-          </PremiumCard>
+
+            {/* Right Column (Scrolling) */}
+            <div className="lg:w-7/12 py-16 lg:py-32 lg:min-h-[200vh] flex flex-col justify-center">
+              <div className="space-y-16 md:space-y-32">
+                {problems.map((p, i) => (
+                  <motion.div
+                    key={p.title}
+                    initial={{ opacity: 0, x: 50 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, margin: "-20%" }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
+                    className="group"
+                  >
+                    <div className="border-t border-white/10 pt-8 mt-8">
+                      <div className="flex items-start gap-6">
+                        <div className="w-12 h-12 shrink-0 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-primary">
+                          <span className="font-display font-bold text-lg">0{i+1}</span>
+                        </div>
+                        <div>
+                          <h3 className="font-display text-3xl md:text-4xl font-semibold tracking-tight text-white mb-4 group-hover:text-primary transition-colors">
+                            {p.title}
+                          </h3>
+                          <p className="text-lg md:text-xl text-white/40 leading-relaxed font-medium">
+                            {p.desc}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+              
+              <div className="mt-32 border-t border-white/10 pt-16">
+                <PremiumCard className="p-10 glass-card bg-transparent border-white/5 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+                  <div>
+                    <h3 className="font-display text-3xl font-bold text-white tracking-tight">Detén la fuga.</h3>
+                    <p className="text-white/50 mt-2 text-lg">Descubre dónde pierdes dinero en 48 horas.</p>
+                  </div>
+                  <Button size="lg" className="bg-white text-black hover:bg-white/90 rounded-full px-8 py-6 text-lg tracking-tight" asChild>
+                    <a href="#contacto">Diagnóstico gratis</a>
+                  </Button>
+                </PremiumCard>
+              </div>
+            </div>
+            
+          </div>
         </div>
       </section>
 
       {/* PROCESS */}
-      <section id="proceso" className="py-24 bg-card/30 border-y border-border/50">
+      <section id="proceso" className="py-32 md:py-40 bg-card/30 border-y border-border/50">
         <div className="container">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="text-sm font-semibold text-primary uppercase tracking-wider">El proceso</span>
-            <h2 className="font-display text-4xl md:text-5xl font-bold mt-3">
+            <h2 className="font-display text-5xl md:text-6xl font-semibold tracking-tight mt-4">
               Así funciona <span className="text-gradient">FlowSights</span>
             </h2>
             <p className="text-muted-foreground mt-4 text-lg">
@@ -392,140 +417,127 @@ const Index = () => {
       </section>
 
       {/* SERVICES */}
-      <section id="servicios" className="py-24">
-        <div className="container">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-sm font-semibold text-primary uppercase tracking-wider">Lo que hacemos</span>
-            <h2 className="font-display text-4xl md:text-5xl font-bold mt-3">
-              Soluciones que <span className="text-gradient">generan resultados</span>
+      <section id="servicios" className="py-32 md:py-48 bg-black relative">
+        <div className="container max-w-7xl mx-auto px-4 md:px-8">
+          <div className="max-w-3xl mb-32">
+            <h2 className="font-display text-5xl md:text-7xl font-bold tracking-tighter text-white">
+              No vendemos software. <br />
+              <span className="text-primary">Resolvemos problemas.</span>
             </h2>
-            <p className="text-muted-foreground mt-4 text-lg">
-              No vendemos software. Resolvemos problemas concretos de tu operación: menos pérdidas, más control y decisiones más rápidas.
+            <p className="mt-8 text-xl md:text-2xl text-white/50 font-medium">
+              Soluciones operativas diseñadas para detener pérdidas, acelerar decisiones y darte control absoluto.
             </p>
           </div>
 
-          <motion.div 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
-            variants={{
-              hidden: { opacity: 0 },
-              visible: {
-                opacity: 1,
-                transition: { staggerChildren: 0.05 }
-              }
-            }}
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
+          <div className="space-y-4">
             {services.map((s, i) => {
               const Icon = s.icon;
-              const c = pickAccent(i + 1);
               return (
                 <motion.div
                   key={s.title}
-                  variants={{
-                    hidden: { opacity: 0, y: 30 },
-                    visible: { opacity: 1, y: 0 }
-                  }}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-10%" }}
+                  transition={{ duration: 0.6 }}
+                  className="group relative block overflow-hidden rounded-[2rem] bg-white/5 border border-white/10 p-8 md:p-16 hover:bg-white/10 transition-all duration-500"
                 >
-                  <PremiumCard index={i} glassEffect="strong" className="p-7 h-full relative">
-                    {s.popular && (
-                      <span className="absolute -top-3 right-6 bg-gradient-primary text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full">
-                        Más popular
-                      </span>
-                    )}
-                    <div className={`w-12 h-12 rounded-xl ${c.bg} ${c.text} grid place-items-center mb-5`}>
-                      <Icon className="w-6 h-6" />
+                  <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <Icon className="w-48 h-48 md:w-64 md:h-64 text-white" />
+                  </div>
+                  
+                  <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-12">
+                    <div className="max-w-2xl">
+                      <div className="flex items-center gap-4 mb-8">
+                        <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                          <Icon className="w-8 h-8" />
+                        </div>
+                        <span className="text-sm font-bold uppercase tracking-widest text-primary">{s.tag}</span>
+                        {s.popular && (
+                          <span className="text-[10px] font-bold uppercase tracking-widest bg-white text-black px-3 py-1 rounded-full">
+                            Popular
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter text-white mb-6">
+                        {s.title}
+                      </h3>
+                      <p className="text-xl text-white/60 leading-relaxed font-medium">
+                        {s.desc}
+                      </p>
                     </div>
-                    <div className={`text-xs font-semibold uppercase tracking-wider mb-2 ${c.text}`}>{s.tag}</div>
-                    <h3 className="font-display text-2xl font-bold mb-3">{s.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed mb-5">{s.desc}</p>
-                    <ul className="space-y-2 mb-2">
-                      {s.items.map((it) => (
-                        <li key={it} className="flex items-center gap-2 text-sm">
-                          <Check className={`w-4 h-4 shrink-0 ${c.text}`} /> {it}
-                        </li>
-                      ))}
-                    </ul>
-                  </PremiumCard>
+
+                    <div className="md:w-1/3">
+                      <ul className="space-y-4">
+                        {s.items.map((it) => (
+                          <li key={it} className="flex items-start gap-4 text-white/80 font-medium">
+                            <div className="mt-1 w-6 h-6 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+                              <Check className="w-3 h-3 text-white" />
+                            </div>
+                            <span>{it}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
                 </motion.div>
               );
             })}
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* RESULTS */}
-      <section className="py-24 bg-card/30 border-y border-border/50">
-        <div className="container">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-sm font-semibold text-primary uppercase tracking-wider">Resultados reales</span>
-            <h2 className="font-display text-4xl md:text-5xl font-bold mt-3">
-              Lo que vas a <span className="text-gradient">ganar</span>
+      <section className="py-32 md:py-48 bg-black border-y border-white/5 relative overflow-hidden">
+        {/* Subtle glowing orb in background */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[150px] pointer-events-none opacity-50" />
+
+        <div className="container relative z-10">
+          <div className="text-center mb-24 md:mb-40">
+            <h2 className="font-display text-5xl md:text-8xl font-bold tracking-tighter text-white">
+              Resultados <br className="md:hidden" /> <span className="text-white/30">brutales.</span>
             </h2>
-            <p className="text-muted-foreground mt-4 text-lg">
-              Resultados medibles en menos de 90 días: menos costos, más ventas y un negocio bajo control.
-            </p>
           </div>
 
-          <motion.div 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
-            variants={{
-              hidden: { opacity: 0 },
-              visible: {
-                opacity: 1,
-                transition: { staggerChildren: 0.05 }
-              }
-            }}
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
+          <div className="space-y-32 md:space-y-48">
             {results.map((r, i) => {
-              const Icon = r.icon;
-              const c = pickAccent(i);
               const stat = parseStat(r.value);
               return (
                 <motion.div
                   key={r.title}
-                  variants={{
-                    hidden: { opacity: 0, scale: 0.9 },
-                    visible: { opacity: 1, scale: 1 }
-                  }}
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-10%" }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                  className="flex flex-col items-center text-center"
                 >
-                  <PremiumCard className={`p-7 glass-card h-full transition-all ${c.border}`}>
-                    <div className="flex items-start justify-between mb-4">
-                      <AnimatedStat
-                        stat={{ ...stat, label: "" }}
-                        className={`font-display text-5xl font-bold ${c.text}`}
-                      />
-                      <span className={`w-11 h-11 rounded-xl ${c.bg} ${c.text} grid place-items-center`}>
-                        <Icon className="w-5 h-5" />
-                      </span>
-                    </div>
-                    <div className="text-xs text-muted-foreground uppercase tracking-wider mb-3">{r.label}</div>
-                    <h3 className="font-semibold text-lg mb-2">{r.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{r.desc}</p>
-                  </PremiumCard>
+                  <AnimatedStat
+                    stat={{ ...stat, label: "" }}
+                    className="font-display text-[100px] md:text-[200px] lg:text-[250px] font-bold tracking-tighter leading-none text-transparent bg-clip-text bg-gradient-to-b from-white to-white/20"
+                  />
+                  <div className="mt-8 max-w-2xl">
+                    <h3 className="text-2xl md:text-4xl font-bold text-white mb-4 tracking-tight">{r.title}</h3>
+                    <p className="text-lg md:text-2xl text-white/50 font-medium leading-relaxed">{r.desc}</p>
+                  </div>
                 </motion.div>
               );
             })}
-          </motion.div>
+          </div>
 
-          <div className="mt-10 text-center">
-            <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-primary/10 border border-primary/30 text-primary font-semibold">
-              <Sparkles className="w-4 h-4" /> +150 empresas tomando mejores decisiones
+          <div className="mt-48 text-center flex flex-col items-center">
+            <span className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 border border-white/10 text-white font-semibold backdrop-blur-md">
+              <Sparkles className="w-5 h-5 text-primary" /> 
+              +150 empresas tomando mejores decisiones
             </span>
           </div>
         </div>
       </section>
 
       {/* INDUSTRIES */}
-      <section id="industrias" className="py-24">
+      <section id="industrias" className="py-32 md:py-40">
         <div className="container">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="text-sm font-semibold text-primary uppercase tracking-wider">Sectores</span>
-            <h2 className="font-display text-4xl md:text-5xl font-bold mt-3">
+            <h2 className="font-display text-5xl md:text-6xl font-semibold tracking-tight mt-4">
               Industrias donde ya generamos <span className="text-gradient">resultados</span>
             </h2>
             <p className="text-muted-foreground mt-4 text-lg">
@@ -557,18 +569,18 @@ const Index = () => {
                     visible: { opacity: 1, y: 0 }
                   }}
                 >
-                  <PremiumCard className={`p-6 glass-card h-full hover:-translate-y-1 transition-all ${c.border}`}>
-                    <div className={`w-11 h-11 rounded-xl ${c.bg} ${c.text} grid place-items-center mb-4`}>
-                      <Icon className="w-5 h-5" />
+                  <div className={`p-8 rounded-3xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 h-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors`}>
+                    <div className={`w-12 h-12 rounded-full bg-black/10 dark:bg-white/10 text-foreground dark:text-white flex items-center justify-center mb-6`}>
+                      <Icon className="w-6 h-6" />
                     </div>
-                    <h3 className="font-display text-xl font-bold mb-2">{ind.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed mb-4">{ind.desc}</p>
+                    <h3 className="font-display text-2xl font-bold text-foreground dark:text-white mb-3">{ind.title}</h3>
+                    <p className="text-base text-muted-foreground dark:text-white/50 leading-relaxed mb-6">{ind.desc}</p>
                     <div className="flex flex-wrap gap-2">
                       {ind.tags.map((t) => (
-                        <span key={t} className="text-xs px-2.5 py-1 rounded-md bg-secondary text-muted-foreground">{t}</span>
+                        <span key={t} className="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full bg-black/10 dark:bg-white/10 text-foreground/70 dark:text-white/70">{t}</span>
                       ))}
                     </div>
-                  </PremiumCard>
+                  </div>
                 </motion.div>
               );
             })}
@@ -578,27 +590,27 @@ const Index = () => {
                 visible: { opacity: 1, scale: 1 }
               }}
             >
-              <PremiumCard className="p-6 glass-card h-full border-dashed border-primary/40 flex flex-col justify-center items-start bg-primary/5">
-                <div className="w-11 h-11 rounded-xl bg-primary/20 text-primary grid place-items-center mb-4">
-                  <Plus className="w-5 h-5" />
+              <div className="p-8 rounded-3xl border border-dashed border-black/20 dark:border-white/20 h-full flex flex-col justify-center items-start bg-transparent">
+                <div className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/5 text-foreground dark:text-white flex items-center justify-center mb-6">
+                  <Plus className="w-6 h-6" />
                 </div>
-                <h3 className="font-display text-xl font-bold mb-2">¿Tu industria no está aquí?</h3>
-                <p className="text-sm text-muted-foreground mb-4">Si tu empresa maneja datos operativos, podemos ayudarte. Cuéntanos tu caso y te decimos cómo aportarte valor.</p>
-                <a href="#contacto" className="text-primary text-sm font-semibold inline-flex items-center gap-1 hover:gap-2 transition-all">
+                <h3 className="font-display text-2xl font-bold text-foreground dark:text-white mb-3">¿Tu industria no está aquí?</h3>
+                <p className="text-base text-muted-foreground dark:text-white/50 mb-6">Si tu empresa maneja datos operativos, podemos ayudarte. Cuéntanos tu caso y te decimos cómo aportarte valor.</p>
+                <a href="#contacto" className="text-primary text-sm font-semibold inline-flex items-center gap-2 hover:gap-3 transition-all">
                   Hablar con un experto <ArrowRight className="w-4 h-4" />
                 </a>
-              </PremiumCard>
+              </div>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-24 bg-card/30 border-y border-border/50">
+      <section className="py-32 md:py-40 bg-card/30 border-y border-border/50">
         <div className="container">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="text-sm font-semibold text-primary uppercase tracking-wider">Clientes</span>
-            <h2 className="font-display text-4xl md:text-5xl font-bold mt-3">
+            <h2 className="font-display text-5xl md:text-6xl font-semibold tracking-tight mt-4">
               Empresas que ya están <span className="text-gradient">ganando con sus datos</span>
             </h2>
             <p className="text-muted-foreground mt-4 text-lg">
@@ -627,20 +639,20 @@ const Index = () => {
                   visible: { opacity: 1, scale: 1 }
                 }}
               >
-                <PremiumCard className="p-7 glass-card h-full hover:border-primary/60 hover:-translate-y-1 hover:shadow-glow transition-all flex flex-col group">
-                  <div className="text-primary text-4xl font-display leading-none mb-3">"</div>
-                  <p className="text-foreground/90 leading-relaxed flex-1">{t.quote}</p>
-                  <div className="flex items-center gap-3 mt-6 pt-6 border-t border-border/60">
-                    <div className="w-11 h-11 rounded-full bg-gradient-primary grid place-items-center text-primary-foreground font-bold text-sm">
+                <div className="p-8 rounded-3xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 h-full flex flex-col group hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
+                  <div className="text-black/20 dark:text-white/20 text-6xl font-display leading-none mb-4 tracking-tighter">"</div>
+                  <p className="text-foreground/80 dark:text-white/80 text-lg leading-relaxed flex-1 font-medium">{t.quote}</p>
+                  <div className="flex items-center gap-4 mt-8 pt-8 border-t border-black/10 dark:border-white/10">
+                    <div className="w-12 h-12 rounded-full bg-black/10 dark:bg-white/10 flex items-center justify-center text-foreground dark:text-white font-bold text-sm shrink-0">
                       {t.initials}
                     </div>
                     <div className="flex-1">
-                      <div className="font-semibold text-sm">{t.name}</div>
-                      <div className="text-xs text-muted-foreground">{t.role}</div>
+                      <div className="font-bold text-foreground dark:text-white text-sm">{t.name}</div>
+                      <div className="text-xs text-muted-foreground dark:text-white/50">{t.role}</div>
                     </div>
-                    <span className="text-xs px-2 py-1 rounded-md bg-primary/10 text-primary">{t.sector}</span>
+                    <span className="text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full bg-primary/10 dark:bg-primary/20 text-primary">{t.sector}</span>
                   </div>
-                </PremiumCard>
+                </div>
               </motion.div>
             ))}
           </motion.div>
@@ -648,11 +660,11 @@ const Index = () => {
       </section>
 
       {/* TEAM */}
-      <section id="equipo" className="py-24">
+      <section id="equipo" className="py-32 md:py-40">
         <div className="container">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="text-sm font-semibold text-primary uppercase tracking-wider">Nuestro Equipo</span>
-            <h2 className="font-display text-4xl md:text-5xl font-bold mt-3">
+            <h2 className="font-display text-5xl md:text-6xl font-semibold tracking-tight mt-4">
               Quiénes <span className="text-gradient">Somos</span>
             </h2>
             <p className="text-muted-foreground mt-4 text-lg">
@@ -732,11 +744,11 @@ const Index = () => {
       </section>
 
       {/* BLOG PREVIEW */}
-      <section id="blog" className="py-24 border-t border-border/50">
+      <section id="blog" className="py-32 md:py-40 border-t border-border/50">
         <div className="container">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <span className="text-sm font-semibold text-primary uppercase tracking-wider">Blog & Recursos</span>
-            <h2 className="font-display text-4xl md:text-5xl font-bold mt-3">
+            <h2 className="font-display text-5xl md:text-6xl font-semibold tracking-tight mt-4">
               Aprende a operar con <span className="text-gradient">datos confiables</span>
             </h2>
             <p className="text-muted-foreground mt-4 text-lg">
@@ -794,7 +806,7 @@ const Index = () => {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="py-24 border-t border-border/50">
+      <section id="faq" className="py-32 md:py-40 border-t border-border/50">
         <div className="container">
           <div className="text-center mb-16">
             <span className="text-sm font-semibold text-primary uppercase tracking-wider">Preguntas frecuentes</span>

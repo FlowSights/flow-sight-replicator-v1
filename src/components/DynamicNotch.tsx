@@ -104,7 +104,7 @@ export const DynamicNotch = ({ navLinks, logo }: DynamicNotchProps) => {
                 >
                   <div className="flex items-center gap-1.5">
                     {link === navLinks[0] && (
-                      <Sparkles className={`text-emerald-500 transition-all duration-500 ${isCollapsed ? "w-3 h-3" : "w-4 h-4"}`} />
+                      <Sparkles className={`text-primary transition-all duration-500 ${isCollapsed ? "w-3 h-3" : "w-4 h-4"}`} />
                     )}
                     <span>{link.label}</span>
                   </div>
@@ -116,7 +116,7 @@ export const DynamicNotch = ({ navLinks, logo }: DynamicNotchProps) => {
             <div className="flex lg:hidden items-center gap-1.5 flex-1 justify-end">
               <Link 
                 to="/flowsight-ads" 
-                className="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold uppercase tracking-tight whitespace-nowrap"
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold uppercase tracking-tight whitespace-nowrap"
               >
                 <Sparkles className="w-3 h-3" />
                 <span>Ads</span>
@@ -191,10 +191,10 @@ export const DynamicNotch = ({ navLinks, logo }: DynamicNotchProps) => {
                       className="group p-4 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 transition-all"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-medium text-foreground group-hover:text-emerald-500 transition-colors">
+                        <span className="font-medium text-foreground group-hover:text-primary transition-colors">
                           {link.label}
                         </span>
-                        <ArrowRight className="w-4 h-4 text-emerald-500 opacity-0 group-hover:opacity-100 transition-all transform group-hover:translate-x-1" />
+                        <ArrowRight className="w-4 h-4 text-primary opacity-0 group-hover:opacity-100 transition-all transform group-hover:translate-x-1" />
                       </div>
                     </motion.a>
                   ))}
@@ -206,7 +206,7 @@ export const DynamicNotch = ({ navLinks, logo }: DynamicNotchProps) => {
                   <a
                     href="#contacto"
                     onClick={handleNavClick}
-                    className="w-full px-6 py-4 rounded-xl bg-emerald-500 text-white font-bold text-center shadow-lg shadow-emerald-500/20"
+                    className="w-full px-6 py-4 rounded-xl bg-primary text-primary-foreground font-bold text-center shadow-lg shadow-primary/20"
                   >
                     Solicitar diagnóstico
                   </a>

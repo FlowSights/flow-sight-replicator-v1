@@ -75,7 +75,7 @@ export const PremiumCard = ({
       {/* EFECTO DE RESPLANDOR AL HOVER - Solo en Desktop */}
       {hoverEffect && (
         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-          <div className="absolute -inset-[100%] bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.1),transparent_70%)]" />
+          <div className="absolute -inset-[100%] bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.15),transparent_70%)]" />
         </div>
       )}
 

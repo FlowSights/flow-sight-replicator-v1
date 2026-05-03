@@ -1,128 +1,128 @@
-import { motion } from "framer-motion";
-import { ArrowRight, Check, Sparkles } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { DataFlowVisualization } from "./DataFlowVisualization";
+import { useRef } from "react";
 
 interface PremiumHeroProps {
   onContactClick?: () => void;
 }
 
 export const PremiumHero = ({ onContactClick }: PremiumHeroProps) => {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  };
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: "easeOut" },
-    },
-  };
+  // Scale down and fade out the text as user scrolls down
+  const textOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const textScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.9]);
+  
+  // Scale up the background visual
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
 
   return (
-    <section className="relative min-h-screen pt-32 md:pt-40 pb-20 md:pb-32 overflow-hidden">
-      {/* FONDO GRADIENTE ANIMADO */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-30 animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl opacity-20 animate-pulse" style={{ animationDelay: "1s" }} />
-      </div>
+    <section ref={containerRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
+      {/* INITIAL BLACK REVEAL OVERLAY */}
+      <motion.div
+        initial={{ opacity: 1 }}
+        animate={{ opacity: 0 }}
+        transition={{ duration: 1.5, ease: "easeInOut" }}
+        className="absolute inset-0 z-50 bg-black pointer-events-none"
+      />
 
-      <div className="container">
+      {/* IMMERSIVE BACKGROUND VISUAL */}
+      <motion.div 
+        style={{ scale: bgScale }}
+        className="absolute inset-0 z-0 flex items-center justify-center opacity-100 mix-blend-screen"
+      >
         <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center"
+          initial={{ opacity: 0, scale: 0.8, filter: "blur(20px)" }}
+          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+          transition={{ duration: 3, ease: "easeOut", delay: 0.2 }}
+          className="w-full h-full"
         >
-          {/* CONTENIDO IZQUIERDO */}
-          <div className="space-y-8">
-            {/* BADGE */}
-            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-medium">
-                <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                Inteligencia Operativa con IA
-              </span>
-              <Link
-                to="/flowsight-ads"
-                className="group inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-sm font-medium hover:bg-emerald-500/20 transition-all"
-              >
-                <Sparkles className="w-4 h-4" />
-                Flowsight Ads NUEVO
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </motion.div>
-
-            {/* HEADLINE */}
-            <motion.h1 variants={itemVariants} className="font-display text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1]">
-              Tu IA para decisiones que{" "}
-              <span className="text-gradient">multiplican ganancias</span>
-            </motion.h1>
-
-            {/* SUBHEADLINE */}
-            <motion.p variants={itemVariants} className="text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed">
-              Transformamos tus datos dispersos (Excel, POS, WhatsApp) en inteligencia operativa. Descubre con precisión dónde optimizar costos, disparar ventas y actuar hoy.
-            </motion.p>
-
-            {/* CARACTERÍSTICAS DESTACADAS */}
-            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row flex-wrap gap-3">
-              {["Insights impulsados por IA", "Decisiones rápidas y rentables", "Control total, sin esfuerzo"].map((feature) => (
-                <span
-                  key={feature}
-                  className="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-border/50 bg-card/50 backdrop-blur-sm text-sm font-medium hover:bg-card/80 transition-colors"
-                >
-                  <Check className="w-4 h-4 text-primary" />
-                  {feature}
-                </span>
-              ))}
-            </motion.div>
-
-            {/* BOTONES CTA */}
-            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button
-                size="lg"
-                variant="hero"
-                asChild
-                className="group"
-              >
-                <a href="#contacto" onClick={onContactClick} className="flex items-center gap-2">
-                  Solicitar diagnóstico gratis
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </a>
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                asChild
-                className="group"
-              >
-                <a href="https://wa.me/message/FVHDA5OZHN66P1" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                  Hablar por WhatsApp
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </a>
-              </Button>
-            </motion.div>
-          </div>
-
-          {/* ELEMENTO 3D DERECHO - LIBERADO Y AMPLIADO */}
-          <motion.div
-            variants={itemVariants}
-            className="relative h-[500px] md:h-[700px] flex items-center justify-center lg:-mr-20 xl:-mr-40"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-500/5 to-transparent blur-3xl opacity-30 pointer-events-none" />
-            <DataFlowVisualization />
-          </motion.div>
+          <DataFlowVisualization />
         </motion.div>
-      </div>
+        {/* Dark gradient overlay to ensure text readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,black_80%)] pointer-events-none" />
+      </motion.div>
+
+      {/* FOREGROUND TEXT */}
+      <motion.div 
+        style={{ opacity: textOpacity, scale: textScale }}
+        className="container relative z-10 pt-20"
+      >
+        <div className="flex flex-col items-center text-center max-w-5xl mx-auto">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 1.5, ease: [0.16, 1, 0.3, 1] }}
+            className="mb-8"
+          >
+            <Link
+              to="/flowsight-ads"
+              className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl text-white/80 text-sm font-medium hover:bg-white/10 transition-all"
+            >
+              <Sparkles className="w-4 h-4 text-primary" />
+              Conoce Flowsight Ads
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </motion.div>
+
+          <motion.h1 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.5, delay: 1.8, ease: [0.16, 1, 0.3, 1] }}
+            className="font-display text-6xl md:text-8xl lg:text-[110px] font-bold tracking-tighter leading-[0.95] text-white"
+          >
+            Decisiones que <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40">
+              multiplican ganancias.
+            </span>
+          </motion.h1>
+
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.5, delay: 2.1, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-8 text-xl md:text-3xl text-white/50 max-w-3xl font-medium tracking-tight"
+          >
+            Inteligencia Operativa. Control total. <br className="hidden md:block"/>
+            Sin adivinanzas.
+          </motion.p>
+
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 2.4, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col sm:flex-row gap-4 mt-12"
+          >
+            <Button
+              size="lg"
+              className="bg-white text-black hover:bg-white/90 rounded-full px-8 py-6 text-lg font-semibold tracking-tight"
+              asChild
+            >
+              <a href="#contacto" onClick={onContactClick}>
+                Diagnóstico gratuito
+              </a>
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-white/20 bg-transparent text-white hover:bg-white/10 rounded-full px-8 py-6 text-lg tracking-tight backdrop-blur-md"
+              asChild
+            >
+              <a href="https://wa.me/message/FVHDA5OZHN66P1" target="_blank" rel="noopener noreferrer">
+                Hablemos por WhatsApp
+              </a>
+            </Button>
+          </motion.div>
+        </div>
+      </motion.div>
     </section>
   );
 };

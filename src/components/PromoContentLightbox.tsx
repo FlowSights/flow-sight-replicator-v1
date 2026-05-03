@@ -1,11 +1,11 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ZoomIn } from 'lucide-react';
-import { AdImage } from './AdImage';
+import { PromoImage } from './PromoImage';
 
 import { MetaPreview, GoogleAdsPreview, TikTokPreview, LinkedInPreview } from './PlatformPreviewsNative';
 
-interface AdContentLightboxProps {
+interface PromoContentLightboxProps {
   isOpen: boolean;
   imageUrl?: string;
   headline: string;
@@ -15,7 +15,7 @@ interface AdContentLightboxProps {
   onClose: () => void;
 }
 
-export const AdContentLightbox: React.FC<AdContentLightboxProps> = ({
+export const PromoContentLightbox: React.FC<PromoContentLightboxProps> = ({
   isOpen,
   imageUrl,
   headline,

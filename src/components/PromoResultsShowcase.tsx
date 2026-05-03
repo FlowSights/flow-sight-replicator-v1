@@ -16,7 +16,7 @@ import {
 import { Button } from './ui/button';
 import { MetaPreview, GoogleAdsPreview, TikTokPreview, LinkedInPreview } from './PlatformPreviewsNative';
 import { platformColors, PlatformIcon, platformNames } from './PlatformIcons';
-import { AdContentLightbox } from './AdContentLightbox';
+import { PromoContentLightbox } from './PromoContentLightbox';
 
 interface GeneratedAd {
   headline: string;
@@ -32,7 +32,7 @@ interface GeneratedAd {
   reasoning?: string;
 }
 
-interface AdsResultsShowcaseProps {
+interface PromoResultsShowcaseProps {
   ads: GeneratedAd[];
   businessName: string;
   hasPaid: boolean;
@@ -44,7 +44,7 @@ interface AdsResultsShowcaseProps {
   onCheckout: () => void;
 }
 
-export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
+export const PromoResultsShowcase: React.FC<PromoResultsShowcaseProps> = ({
   ads,
   businessName,
   hasPaid,
@@ -240,7 +240,7 @@ export const AdsResultsShowcase: React.FC<AdsResultsShowcaseProps> = ({
         </div>
       </motion.div>
 
-      <AdContentLightbox
+      <PromoContentLightbox
         isOpen={lightboxOpen}
         imageUrl={currentAd?.imageUrl}
         headline={currentAd?.headline || ''}

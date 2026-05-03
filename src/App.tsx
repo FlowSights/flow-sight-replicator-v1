@@ -29,10 +29,6 @@ const App = () => {
   const [session, setSession] = useState<any>(null);
 
   useEffect(() => {
-    // Force dark mode on app load
-    document.documentElement.classList.add('dark');
-    localStorage.setItem('theme', 'dark');
-    
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
     });

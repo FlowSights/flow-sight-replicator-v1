@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ImageIcon, Loader2 } from 'lucide-react';
 
-interface AdImageProps {
+interface PromoImageProps {
   src?: string;
   alt?: string;
   className?: string;
@@ -28,7 +28,7 @@ const getPlaceholderSVG = (alt: string): string => {
 const MAX_RETRIES = 1;
 const RETRY_DELAY_MS = 500;
 
-export const AdImage: React.FC<AdImageProps> = ({ src, alt = "Ad", className = "" }) => {
+export const PromoImage: React.FC<PromoImageProps> = ({ src, alt = "Ad", className = "" }) => {
   const [currentSrc, setCurrentSrc] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -41,14 +41,14 @@ export const AdImage: React.FC<AdImageProps> = ({ src, alt = "Ad", className = "
     setHasError(false);
     
     if (!src || src === null || src === '') {
-      console.log('[AdImage] No src provided — using SVG placeholder');
+      console.log('[PromoImage] No src provided — using SVG placeholder');
       setCurrentSrc(getPlaceholderSVG(alt));
       setIsLoading(false);
       return;
     }
 
     setIsLoading(true);
-    console.log('[AdImage] Loading image:', src.startsWith('data:') ? 'base64 image' : src);
+    console.log('[PromoImage] Loading image:', src.startsWith('data:') ? 'base64 image' : src);
     setCurrentSrc(src);
 
     return () => {
@@ -57,17 +57,17 @@ export const AdImage: React.FC<AdImageProps> = ({ src, alt = "Ad", className = "
   }, [src, alt]);
 
   const handleLoad = () => {
-    console.log('[AdImage] ✅ Image loaded successfully:', currentSrc.startsWith('data:') ? 'base64' : currentSrc);
+    console.log('[PromoImage] ✅ Image loaded successfully:', currentSrc.startsWith('data:') ? 'base64' : currentSrc);
     setIsLoading(false);
     setHasError(false);
   };
 
   const handleError = () => {
-    console.error('[AdImage] ❌ Failed to load:', currentSrc);
+    console.error('[PromoImage] ❌ Failed to load:', currentSrc);
 
     // Si es una imagen base64, no reintentar - mostrar como cargada
     if (src && src.startsWith('data:')) {
-      console.log('[AdImage] Base64 image loaded (may appear blank in some contexts)');
+      console.log('[PromoImage] Base64 image loaded (may appear blank in some contexts)');
       setIsLoading(false);
       setHasError(false);
       return;
@@ -76,16 +76,16 @@ export const AdImage: React.FC<AdImageProps> = ({ src, alt = "Ad", className = "
     // Para URLs de usuario, intentar una sola vez con cache-busting
     if (retryCount.current < MAX_RETRIES && src) {
       retryCount.current += 1;
-      console.log(`[AdImage] Retry ${retryCount.current}/${MAX_RETRIES}...`);
+      console.log(`[PromoImage] Retry ${retryCount.current}/${MAX_RETRIES}...`);
 
       retryTimer.current = setTimeout(() => {
         // Append cache-busting param
         const retryUrl = `${src}${src.includes('?') ? '&' : '?'}_t=${Date.now()}`;
-        console.log('[AdImage] Retrying with:', retryUrl);
+        console.log('[PromoImage] Retrying with:', retryUrl);
         setCurrentSrc(retryUrl);
       }, RETRY_DELAY_MS);
     } else {
-      console.log('[AdImage] Max retries reached, using SVG placeholder');
+      console.log('[PromoImage] Max retries reached, using SVG placeholder');
       setHasError(true);
       setCurrentSrc(getPlaceholderSVG(alt));
       setIsLoading(false);
