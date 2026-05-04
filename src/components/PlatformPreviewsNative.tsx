@@ -18,7 +18,7 @@ interface PreviewProps {
   platformUrl?: string;
 }
 
-export const MetaPreview: React.FC<PreviewProps> = ({ headline, description, cta, imageUrl, businessName, websiteUrl }) => {
+export const MetaPreview: React.FC<PreviewProps> = ({ headline, description, cta, imageUrl, imageUrls, businessName, websiteUrl }) => {
   const displayName = businessName || 'FlowSights';
   const displayInitial = displayName.charAt(0).toUpperCase();
   const displayDomain = websiteUrl ? websiteUrl.replace(/^https?:\/\/(www\.)?/, '').split('/')[0] : 'flowsights.com';
@@ -186,7 +186,7 @@ export const TikTokPreview: React.FC<PreviewProps> = ({ headline, description, c
   );
 };
 
-export const LinkedInPreview: React.FC<PreviewProps> = ({ headline, description, cta, imageUrl, businessName }) => {
+export const LinkedInPreview: React.FC<PreviewProps> = ({ headline, description, cta, imageUrl, imageUrls, businessName }) => {
   const displayName = businessName || 'FlowSights';
   const displayInitial = displayName.charAt(0).toUpperCase();
   return (
