@@ -68,6 +68,13 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
       const metaToken = META_CONFIG.accessToken;
       const adAccountId = META_CONFIG.adAccountId;
 
+      console.log('Publishing debug:', { 
+        platform, 
+        hasToken: !!metaToken, 
+        hasAccountId: !!adAccountId,
+        config: META_CONFIG
+      });
+
       // Si tenemos API de Meta configurada y es Meta, publicar directo
       if (platform === 'meta' && metaToken && adAccountId) {
         setIsPublishing(true);
