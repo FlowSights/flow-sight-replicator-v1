@@ -18,6 +18,18 @@ console.log('🚀 [Meta API] Diagnóstico de Conexión:', {
   tokenSource: (envToken && envToken.length > 10) ? 'Build Env' : 'Local Storage'
 });
 
+// Alerta visual inmediata para el usuario (Solo para Master Emails)
+if (typeof window !== 'undefined') {
+  setTimeout(() => {
+    const hasToken = META_CONFIG.accessToken && META_CONFIG.accessToken.length > 20;
+    if (hasToken) {
+      toast.success('Meta API: Conexión establecida (Producción)');
+    } else {
+      toast.error('Meta API: Token no detectado en Vercel');
+    }
+  }, 2000);
+}
+
 export interface MetaAdAccount {
   id: string;
   name: string;
