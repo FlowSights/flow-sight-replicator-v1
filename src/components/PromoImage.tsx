@@ -5,6 +5,8 @@ interface PromoImageProps {
   src?: string;
   alt?: string;
   className?: string;
+  platform?: 'meta' | 'tiktok' | 'linkedin' | 'google';
+  type?: 'image' | 'video';
 }
 
 const getPlaceholderSVG = (alt: string): string => {
@@ -20,7 +22,7 @@ const getPlaceholderSVG = (alt: string): string => {
     <rect width="1200" height="630" fill="${c.bg}"/>
     <rect x="0" y="0" width="1200" height="8" fill="${c.accent}"/>
     <text x="600" y="290" font-family="system-ui,sans-serif" font-size="48" font-weight="bold" fill="${c.accent}" text-anchor="middle" dominant-baseline="middle">📸</text>
-    <text x="600" y="360" font-family="system-ui,sans-serif" font-size="24" fill="#666" text-anchor="middle">Agrega tu imagen aquí</text>
+    <text x="600" y="360" font-family="system-ui,sans-serif" font-size="24" fill="#666" text-anchor="middle">Agrega tu imagen o video aquí</text>
   </svg>`;
   return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}`;
 };
@@ -28,10 +30,17 @@ const getPlaceholderSVG = (alt: string): string => {
 const MAX_RETRIES = 1;
 const RETRY_DELAY_MS = 500;
 
-export const PromoImage: React.FC<PromoImageProps> = ({ src, alt = "Ad", className = "" }) => {
+export const PromoImage: React.FC<PromoImageProps> = ({ 
+  src, 
+  alt = "Ad", 
+  className = "",
+  platform,
+  type: initialType
+}) => {
   const [currentSrc, setCurrentSrc] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [assetType, setAssetType] = useState<'image' | 'video'>(initialType || 'image');
   const retryCount = useRef(0);
   const retryTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -41,59 +50,75 @@ export const PromoImage: React.FC<PromoImageProps> = ({ src, alt = "Ad", classNa
     setHasError(false);
     
     if (!src || src === null || src === '') {
-      console.log('[PromoImage] No src provided — using SVG placeholder');
       setCurrentSrc(getPlaceholderSVG(alt));
+      setAssetType('image');
       setIsLoading(false);
       return;
     }
 
+    // Infer type from src if not provided
+    if (!initialType) {
+      if (src.startsWith('data:video/') || src.match(/\.(mp4|webm|ogg|mov)$/i)) {
+        setAssetType('video');
+      } else {
+        setAssetType('image');
+      }
+    } else {
+      setAssetType(initialType);
+    }
+
     setIsLoading(true);
-    console.log('[PromoImage] Loading image:', src.startsWith('data:') ? 'base64 image' : src);
     setCurrentSrc(src);
 
     return () => {
       if (retryTimer.current) clearTimeout(retryTimer.current);
     };
-  }, [src, alt]);
+  }, [src, alt, initialType]);
 
   const handleLoad = () => {
-    console.log('[PromoImage] ✅ Image loaded successfully:', currentSrc.startsWith('data:') ? 'base64' : currentSrc);
     setIsLoading(false);
     setHasError(false);
   };
 
   const handleError = () => {
-    console.error('[PromoImage] ❌ Failed to load:', currentSrc);
-
-    // Si es una imagen base64, no reintentar - mostrar como cargada
     if (src && src.startsWith('data:')) {
-      console.log('[PromoImage] Base64 image loaded (may appear blank in some contexts)');
       setIsLoading(false);
       setHasError(false);
       return;
     }
 
-    // Para URLs de usuario, intentar una sola vez con cache-busting
     if (retryCount.current < MAX_RETRIES && src) {
       retryCount.current += 1;
-      console.log(`[PromoImage] Retry ${retryCount.current}/${MAX_RETRIES}...`);
-
       retryTimer.current = setTimeout(() => {
-        // Append cache-busting param
         const retryUrl = `${src}${src.includes('?') ? '&' : '?'}_t=${Date.now()}`;
-        console.log('[PromoImage] Retrying with:', retryUrl);
         setCurrentSrc(retryUrl);
       }, RETRY_DELAY_MS);
     } else {
-      console.log('[PromoImage] Max retries reached, using SVG placeholder');
       setHasError(true);
       setCurrentSrc(getPlaceholderSVG(alt));
+      setAssetType('image');
       setIsLoading(false);
     }
   };
 
+  // Platform specific AI Margins (Aspect Ratios)
+  const getPlatformStyles = () => {
+    switch (platform) {
+      case 'tiktok':
+        return 'aspect-[9/16]';
+      case 'meta':
+        return 'aspect-[4/5] md:aspect-square'; // Feed style
+      case 'linkedin':
+        return 'aspect-video md:aspect-square';
+      case 'google':
+        return 'aspect-[1.91/1]';
+      default:
+        return '';
+    }
+  };
+
   return (
-    <div className={`relative w-full min-h-[200px] bg-gray-100 dark:bg-gray-800 overflow-hidden ${className}`}>
+    <div className={`relative w-full overflow-hidden bg-black/5 dark:bg-white/5 ${getPlatformStyles()} ${className}`}>
       {/* Skeleton loader while image is loading */}
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800 z-10 animate-pulse">
@@ -101,15 +126,28 @@ export const PromoImage: React.FC<PromoImageProps> = ({ src, alt = "Ad", classNa
         </div>
       )}
 
-      <img
-        key={currentSrc}
-        src={currentSrc}
-        alt={alt}
-        className={`w-full h-full object-cover transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
-        onLoad={handleLoad}
-        onError={handleError}
-        style={{ display: isLoading ? 'none' : 'block' }}
-      />
+      {assetType === 'video' ? (
+        <video
+          key={currentSrc}
+          src={currentSrc}
+          autoPlay
+          loop
+          muted
+          playsInline
+          onCanPlay={handleLoad}
+          onError={handleError}
+          className={`w-full h-full object-cover transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+        />
+      ) : (
+        <img
+          key={currentSrc}
+          src={currentSrc}
+          alt={alt}
+          className={`w-full h-full object-cover transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+          onLoad={handleLoad}
+          onError={handleError}
+        />
+      )}
 
       {/* Only show icon placeholder if truly nothing loaded */}
       {!isLoading && hasError && !currentSrc.startsWith('data:') && (

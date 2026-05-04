@@ -257,13 +257,38 @@ const FlowsightAdsDashboard: React.FC = () => {
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
 
-    Promise.all(files.map((file) => new Promise<{ name: string; dataUrl: string }>((resolve) => {
+    Promise.all(files.map((file) => new Promise<{ name: string; dataUrl: string; type: 'image' | 'video' }>((resolve) => {
       const reader = new FileReader();
-      reader.onload = (event) => resolve({ name: file.name, dataUrl: event.target?.result as string });
+      const isVideo = file.type.startsWith('video/');
+      reader.onload = (event) => resolve({ 
+        name: file.name, 
+        dataUrl: event.target?.result as string,
+        type: isVideo ? 'video' : 'image'
+      });
       reader.readAsDataURL(file);
-    }))).then((assets) => {
-      setUploadedAssets(assets);
-      setConfig(prev => ({ ...prev, userImage: assets[0]?.dataUrl || null }));
+    }))).then((newAssets) => {
+      setUploadedAssets(prev => {
+        // Si es carrusel, acumulamos. Si no, reemplazamos.
+        const updated = imageMode === 'carousel' ? [...prev, ...newAssets] : newAssets;
+        
+        // Actualizar la imagen principal del config con el primer asset
+        if (updated.length > 0) {
+          setConfig(c => ({ ...c, userImage: updated[0].dataUrl }));
+        }
+        
+        return updated;
+      });
+    });
+  };
+
+  const handleRemoveAsset = (name: string) => {
+    setUploadedAssets(prev => {
+      const updated = prev.filter(a => a.name !== name);
+      // Si borramos el que era userImage, ponemos el siguiente disponible o null
+      if (config.userImage === prev.find(a => a.name === name)?.dataUrl) {
+        setConfig(c => ({ ...c, userImage: updated[0]?.dataUrl || null }));
+      }
+      return updated;
     });
   };
 
@@ -844,9 +869,23 @@ const FlowsightAdsDashboard: React.FC = () => {
                           {uploadedAssets.length > 0 && (
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                               {uploadedAssets.map((asset) => (
-                                <div key={asset.name} className="rounded-2xl overflow-hidden border border-white/10 bg-white/5">
-                                  <img src={asset.dataUrl} alt={asset.name} className="w-full aspect-video object-cover" />
-                                  <p className="text-xs text-gray-400 font-bold p-3 truncate">{asset.name}</p>
+                                <div key={asset.name} className="relative group rounded-2xl overflow-hidden border border-white/10 bg-white/5 aspect-video">
+                                  {asset.type === 'video' ? (
+                                    <video src={asset.dataUrl} className="w-full h-full object-cover" muted loop autoPlay />
+                                  ) : (
+                                    <img src={asset.dataUrl} alt={asset.name} className="w-full h-full object-cover" />
+                                  )}
+                                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                    <button 
+                                      onClick={(e) => { e.stopPropagation(); handleRemoveAsset(asset.name); }}
+                                      className="p-2 bg-red-500 rounded-full hover:bg-red-600 transition-colors"
+                                    >
+                                      <X className="w-4 h-4 text-white" />
+                                    </button>
+                                  </div>
+                                  <div className="absolute bottom-0 left-0 right-0 p-2 bg-black/60 backdrop-blur-sm">
+                                    <p className="text-[10px] text-white font-bold truncate">{asset.name}</p>
+                                  </div>
                                 </div>
                               ))}
                             </div>

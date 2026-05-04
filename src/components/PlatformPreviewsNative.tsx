@@ -45,7 +45,7 @@ export const MetaPreview: React.FC<PreviewProps> = ({ headline, description, cta
       </div>
 
       {/* Image */}
-      <PromoImage src={imageUrl} alt={headline} className="aspect-[1.91/1]" />
+      <PromoImage src={imageUrl} alt={headline} className="aspect-[1.91/1]" platform="meta" />
 
       {/* CTA Bar */}
       <div className="bg-[#f0f2f5] dark:bg-[#3a3b3c] p-3 flex justify-between items-center">
@@ -106,7 +106,7 @@ export const GoogleAdsPreview: React.FC<PreviewProps> = ({ headline, description
             </p>
           </div>
           <div className="w-24 h-24 flex-shrink-0">
-            <PromoImage src={imageUrl} alt={headline} className="w-24 h-24 rounded-lg min-h-0" />
+            <PromoImage src={imageUrl} alt={headline} className="w-24 h-24 rounded-lg min-h-0" platform="google" />
           </div>
         </div>
 
@@ -136,7 +136,7 @@ export const TikTokPreview: React.FC<PreviewProps> = ({ headline, description, c
       animate={{ opacity: 1, y: 0 }}
       className="bg-black rounded-[32px] shadow-2xl overflow-hidden max-w-[320px] mx-auto aspect-[9/16] relative border-[8px] border-gray-800"
     >
-      <PromoImage src={imageUrl} alt={headline} className="absolute inset-0 w-full h-full opacity-80 min-h-0" />
+      <PromoImage src={imageUrl} alt={headline} className="absolute inset-0 w-full h-full opacity-80 min-h-0" platform="tiktok" />
       
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
 
@@ -206,7 +206,7 @@ export const LinkedInPreview: React.FC<PreviewProps> = ({ headline, description,
       </div>
 
       {/* Image */}
-      <PromoImage src={imageUrl} alt={headline} className="aspect-video" />
+      <PromoImage src={imageUrl} alt={headline} className="aspect-video" platform="linkedin" />
 
       <div className="p-3 flex justify-between items-center border-b border-gray-100 dark:border-gray-800">
         <div className="flex-1 pr-4">
