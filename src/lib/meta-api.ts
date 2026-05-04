@@ -7,6 +7,12 @@ export const META_CONFIG = {
   adAccountId: import.meta.env.VITE_META_AD_ACCOUNT_ID || localStorage.getItem('meta_ad_account_id'),
 };
 
+console.log('Meta API Config Loaded:', {
+  hasToken: !!META_CONFIG.accessToken,
+  adAccountId: META_CONFIG.adAccountId,
+  tokenPreview: META_CONFIG.accessToken ? `${META_CONFIG.accessToken.substring(0, 8)}...` : 'none'
+});
+
 export interface MetaAdAccount {
   id: string;
   name: string;

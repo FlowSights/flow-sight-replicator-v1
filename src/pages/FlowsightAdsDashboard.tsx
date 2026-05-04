@@ -18,10 +18,9 @@ import {
   RefreshCw, Search, Activity, Eye, MousePointer, Camera,
   Moon, Sun, Building2, Link2, Globe2, CreditCard,
   FileDown, ZoomIn, Edit2, BookOpen, Share2, Lock, Unlock,
-  Store, Coffee, Home, Copy, CheckCircle2, WandSparkles, Video, MessageSquareText, Megaphone, Settings2
+  Store, Coffee, Home, Copy, CheckCircle2, WandSparkles, Video, MessageSquareText, Megaphone
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { MetaSettingsModal } from '@/components/MetaSettingsModal';
 import { useTheme } from 'next-themes';
 import { LocationInput } from '@/components/LocationInput';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -159,7 +158,6 @@ const FlowsightAdsDashboard: React.FC = () => {
   const [generatedAds, setGeneratedAds] = useState<GeneratedAd[]>([]);
   const [showResults, setShowResults] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
-  const [isMetaSettingsOpen, setIsMetaSettingsOpen] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [isGuideLightboxOpen, setIsGuideLightboxOpen] = useState(false);
   const [mockupLightboxOpen, setMockupLightboxOpen] = useState(false);
@@ -480,8 +478,6 @@ const FlowsightAdsDashboard: React.FC = () => {
         educationalFact={educationalFacts[currentEducationalFactIndex]}
       />
       
-      <MetaSettingsModal isOpen={isMetaSettingsOpen} onClose={() => setIsMetaSettingsOpen(false)} />
-
       <header className="sticky top-0 z-40 backdrop-blur-2xl bg-black/60 border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
           <div className="flex items-center gap-3">
@@ -491,14 +487,6 @@ const FlowsightAdsDashboard: React.FC = () => {
             <h1 className="text-xl font-black tracking-tight">Flowsight <span className="text-emerald-500">Ads</span></h1>
           </div>
           <div className="flex items-center gap-4">
-            <Button 
-              onClick={() => setIsMetaSettingsOpen(true)}
-              variant="outline" 
-              className="bg-white/5 border-white/10 hover:bg-white/10 text-white rounded-xl px-4 py-2 h-auto text-[10px] font-black uppercase tracking-widest gap-2 hidden md:flex"
-            >
-              <Settings2 className="w-3 h-3 text-[#0668E1]" />
-              Meta API
-            </Button>
             <Button variant="ghost" onClick={handleLogout} className="text-gray-400 hover:text-white font-bold gap-2">
               <LogOut className="w-4 h-4" /> Salir
             </Button>
@@ -1179,10 +1167,6 @@ const FlowsightAdsDashboard: React.FC = () => {
         businessName={config.businessName}
         hasPaid={hasPaid}
         onPaymentRequired={() => setShowPaymentModal(true)}
-      />
-      <MetaSettingsModal 
-        isOpen={isMetaSettingsOpen} 
-        onClose={() => setIsMetaSettingsOpen(false)} 
       />
     </div>
   );
