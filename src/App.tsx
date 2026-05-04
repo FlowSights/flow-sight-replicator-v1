@@ -20,8 +20,8 @@ import FlowsightAdsLanding from "./pages/FlowsightAdsLanding";
 import FlowsightAdsDashboard from "./pages/FlowsightAdsDashboard";
 import ResetPassword from "./pages/ResetPassword";
 import AuthCallback from "./pages/AuthCallback";
+import { useEffect } from "react";
 import { supabase } from "./lib/supabaseClient";
-import { useEffect, useState } from "react";
 
 const queryClient = new QueryClient();
 const ADS_AUTH_INTENT_KEY = "flowsight_ads_auth_intent";
@@ -36,18 +36,13 @@ const redirectToAdsDashboardIfNeeded = (session: any) => {
 };
 
 const App = () => {
-  const [session, setSession] = useState<any>(null);
-
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      redirectToAdsDashboardIfNeeded(session);
-    });
-
+    // Escuchar cambios de autenticación para redirecciones globales (como Ads)
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
-        setSession(session);
-        redirectToAdsDashboardIfNeeded(session);
+        if (session) {
+          redirectToAdsDashboardIfNeeded(session);
+        }
       }
     );
 

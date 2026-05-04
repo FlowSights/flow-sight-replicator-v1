@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabaseClient";
 import { AppleLoader } from "@/components/AppleLoader";
@@ -10,8 +10,13 @@ const ADS_AUTH_INTENT_KEY = "flowsight_ads_auth_intent";
 const AuthCallback = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const processed = useRef(false);
 
   useEffect(() => {
+    // Evitar que el callback se procese múltiples veces (causa errores de intercambio de código)
+    if (processed.current) return;
+    processed.current = true;
+
     const handleAuthCallback = async () => {
       const searchParams = new URLSearchParams(window.location.search);
       const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
@@ -37,14 +42,14 @@ const AuthCallback = () => {
       try {
         logger.info("Procesando callback de autenticación...", { isAds, hasCode: Boolean(code) }, "AuthCallback");
 
-        // 2. En flujo PKCE, intercambiar explícitamente el código evita redirecciones prematuras
-        // cuando la sesión todavía no está disponible en localStorage.
+        // 2. En flujo PKCE, intercambiar explícitamente el código
         if (code) {
           const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
           if (exchangeError) {
+            // Si el código ya se usó, es posible que otra parte de la app ya tenga la sesión.
+            // No lanzamos el error inmediatamente, intentamos recuperar la sesión después.
             const structuredError = formatError(exchangeError, "Error al intercambiar código de autenticación");
-            logger.error("Supabase exchangeCodeForSession error:", structuredError, "AuthCallback");
-            throw exchangeError;
+            logger.warn("Supabase exchangeCodeForSession warning:", structuredError, "AuthCallback");
           }
         }
 
@@ -59,20 +64,33 @@ const AuthCallback = () => {
           await new Promise((resolve) => setTimeout(resolve, 200));
         }
 
-        if (sessionError) {
-          const structuredError = formatError(sessionError, "Error al recuperar la sesión");
-          logger.error("Supabase getSession error:", structuredError, "AuthCallback");
-          throw sessionError;
-        }
-
+        // 4. Si hay sesión, todo está bien.
         if (session) {
           sessionStorage.removeItem(ADS_AUTH_INTENT_KEY);
           logger.info("Sesión recuperada exitosamente", { userId: session.user.id, isAds }, "AuthCallback");
           navigate(isAds ? "/flowsight-ads/dashboard" : "/", { replace: true });
-        } else {
-          logger.warn("No se encontró una sesión activa tras el callback", { isAds }, "AuthCallback");
-          navigate(isAds ? "/flowsight-ads" : "/auth", { replace: true });
+          return;
         }
+
+        // 5. Si hay un error, verificar si el usuario ya está autenticado (vía getUser)
+        if (sessionError) {
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user) {
+            sessionStorage.removeItem(ADS_AUTH_INTENT_KEY);
+            logger.info("Usuario ya autenticado (recuperado via getUser)", { userId: user.id, isAds }, "AuthCallback");
+            navigate(isAds ? "/flowsight-ads/dashboard" : "/", { replace: true });
+            return;
+          }
+          
+          const structuredError = formatError(sessionError, "Error al recuperar la sesión");
+          logger.error("Supabase getSession error fatal:", structuredError, "AuthCallback");
+          throw sessionError;
+        }
+
+        // 6. Si no hay nada, redirigir a login
+        logger.warn("No se encontró una sesión activa tras el callback", { isAds }, "AuthCallback");
+        navigate(isAds ? "/flowsight-ads" : "/auth", { replace: true });
+
       } catch (err: any) {
         logger.error("Excepción crítica en AuthCallback:", err, "AuthCallback");
         sessionStorage.removeItem(ADS_AUTH_INTENT_KEY);
