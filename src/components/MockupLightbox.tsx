@@ -42,6 +42,7 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showGuideModal, setShowGuideModal] = useState(false);
   const [paymentAction, setPaymentAction] = useState<'download' | 'publish' | 'guide'>('download');
+  const [isCopied, setIsCopied] = useState(false);
 
   if (!isOpen) return null;
 
@@ -50,7 +51,7 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
 
   if (!currentAd || !colors) return null;
 
-  const handleActionClick = (action: 'download' | 'publish' | 'guide') => {
+  const handleActionClick = async (action: 'download' | 'publish' | 'guide') => {
     if (!hasPaid) {
       setPaymentAction(action);
       setShowPaymentModal(true);
@@ -60,12 +61,23 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
     if (action === 'guide') {
       setShowGuideModal(true);
     } else if (action === 'publish') {
+      // Smart Copy: Copiar descripción al portapapeles automáticamente
+      try {
+        await navigator.clipboard.writeText(currentAd.description);
+        setIsCopied(true);
+        setTimeout(() => setIsCopied(false), 3000);
+      } catch (err) {
+        console.error('Error copying text:', err);
+      }
+
       const platformUrls: Record<string, string> = {
         meta: 'https://adsmanager.facebook.com/adsmanager/manage/campaigns',
         google: 'https://ads.google.com/aw/campaigns/new',
-        tiktok: 'https://ads.tiktok.com/i18n/dashboard',
+        tiktok: 'https://ads.tiktok.com/i18n/campaign/create',
         linkedin: 'https://www.linkedin.com/campaignmanager/accounts',
       };
+      
+      // Abrir en nueva pestaña
       window.open(platformUrls[platform], '_blank');
     } else if (action === 'download') {
       onPaymentRequired();
@@ -318,8 +330,21 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
                         }`}
                       >
                         {hasPaid && <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />}
-                        <Share2 size={20} className="group-hover:rotate-12 transition-transform" />
-                        Publicar en {platform.charAt(0).toUpperCase() + platform.slice(1)}
+                        {isCopied ? (
+                          <motion.div
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            className="flex items-center gap-3 text-emerald-400"
+                          >
+                            <CheckCircle2 size={20} className="animate-bounce" />
+                            <span>¡Copiado al Portapapeles!</span>
+                          </motion.div>
+                        ) : (
+                          <>
+                            <Share2 size={20} className="group-hover:rotate-12 transition-transform" />
+                            <span>Publicar en {platform.charAt(0).toUpperCase() + platform.slice(1)}</span>
+                          </>
+                        )}
                       </button>
                     </div>
                   </div>
