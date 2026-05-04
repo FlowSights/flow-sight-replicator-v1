@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, ChevronLeft, ChevronRight, Download, Share2, BookOpen, Maximize2, Sparkles, CheckCircle2 } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Download, Share2, BookOpen, Maximize2, Sparkles, CheckCircle2, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { PaymentModal } from '@/components/PaymentModal';
@@ -44,6 +44,7 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
   const [showPublishAssistant, setShowPublishAssistant] = useState(false);
   const [paymentAction, setPaymentAction] = useState<'download' | 'publish' | 'guide'>('download');
   const [isCopied, setIsCopied] = useState(false);
+  const [isPublishing, setIsPublishing] = useState(false);
 
   if (!isOpen) return null;
 
@@ -62,7 +63,40 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
     if (action === 'guide') {
       setShowGuideModal(true);
     } else if (action === 'publish') {
-      // Smart Copy: Copiar descripción al portapapeles automáticamente
+      const metaToken = localStorage.getItem('meta_access_token');
+      const adAccountId = localStorage.getItem('meta_ad_account_id');
+
+      // Si tenemos API de Meta configurada y es Meta, publicar directo
+      if (platform === 'meta' && metaToken && adAccountId) {
+        setIsPublishing(true);
+        const publishToast = toast.loading('Publicando anuncio en Meta...');
+        
+        try {
+          // 1. Subir Imagen a Meta
+          const imageHash = await metaApi.uploadImage(metaToken, adAccountId, currentAd.imageUrl);
+          
+          // 2. Crear Ad Creative
+          const creativeId = await metaApi.createAdCreative(metaToken, adAccountId, {
+            name: currentAd.headline,
+            imageHash: imageHash,
+            headline: currentAd.headline,
+            body: currentAd.description,
+            link: currentAd.websiteUrl || 'https://flowsights.it',
+            callToAction: currentAd.cta,
+          });
+
+          toast.success('¡Anuncio publicado como borrador en Meta!', { id: publishToast });
+          setShowPublishAssistant(true);
+        } catch (error: any) {
+          console.error('Meta Publish Error:', error);
+          toast.error(`Error al publicar: ${error.message}`, { id: publishToast });
+        } finally {
+          setIsPublishing(false);
+        }
+        return;
+      }
+
+      // Fallback: Smart Copy: Copiar descripción al portapapeles automáticamente
       try {
         await navigator.clipboard.writeText(currentAd.description);
         setIsCopied(true);
@@ -325,14 +359,20 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
                       
                       <button
                         onClick={() => handleActionClick('publish')}
+                        disabled={isPublishing}
                         className={`w-full py-7 px-8 rounded-3xl font-black text-xs uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-4 relative overflow-hidden shadow-2xl group ${
                           hasPaid
                             ? `bg-gradient-to-r ${colors.gradient} text-white border border-white/20`
                             : 'bg-white/5 hover:bg-white/10 border border-white/10 text-white'
-                        }`}
+                        } ${isPublishing ? 'opacity-70 cursor-not-allowed' : ''}`}
                       >
                         {hasPaid && <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />}
-                        {isCopied ? (
+                        {isPublishing ? (
+                          <>
+                            <Loader2 className="w-5 h-5 animate-spin" />
+                            <span>Publicando en Meta...</span>
+                          </>
+                        ) : isCopied ? (
                           <motion.div
                             initial={{ scale: 0.8, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}

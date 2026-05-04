@@ -18,9 +18,10 @@ import {
   RefreshCw, Search, Activity, Eye, MousePointer, Camera,
   Moon, Sun, Building2, Link2, Globe2, CreditCard,
   FileDown, ZoomIn, Edit2, BookOpen, Share2, Lock, Unlock,
-  Store, Coffee, Home, Copy, CheckCircle2, WandSparkles, Video, MessageSquareText, Megaphone
+  Store, Coffee, Home, Copy, CheckCircle2, WandSparkles, Video, MessageSquareText, Megaphone, Settings2
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { MetaSettingsModal } from '@/components/MetaSettingsModal';
 import { useTheme } from 'next-themes';
 import { LocationInput } from '@/components/LocationInput';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -158,6 +159,7 @@ const FlowsightAdsDashboard: React.FC = () => {
   const [generatedAds, setGeneratedAds] = useState<GeneratedAd[]>([]);
   const [showResults, setShowResults] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [isMetaSettingsOpen, setIsMetaSettingsOpen] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [isGuideLightboxOpen, setIsGuideLightboxOpen] = useState(false);
   const [mockupLightboxOpen, setMockupLightboxOpen] = useState(false);
@@ -478,6 +480,8 @@ const FlowsightAdsDashboard: React.FC = () => {
         educationalFact={educationalFacts[currentEducationalFactIndex]}
       />
       
+      <MetaSettingsModal isOpen={isMetaSettingsOpen} onClose={() => setIsMetaSettingsOpen(false)} />
+
       <header className="sticky top-0 z-40 backdrop-blur-2xl bg-black/60 border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
           <div className="flex items-center gap-3">
@@ -496,7 +500,17 @@ const FlowsightAdsDashboard: React.FC = () => {
         <AnimatePresence mode="wait">
           {showPreview && !hasPaid ? (
             <motion.div key="preview" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="max-w-3xl mx-auto">
-              <div className="text-center mb-12">
+              <div className="text-center mb-16 relative">
+                <div className="flex justify-center mb-6">
+                  <Button 
+                    onClick={() => setIsMetaSettingsOpen(true)}
+                    variant="outline" 
+                    className="bg-white/5 border-white/10 hover:bg-white/10 text-white rounded-full px-6 py-2 h-auto text-[10px] font-black uppercase tracking-widest gap-2"
+                  >
+                    <Settings2 className="w-3 h-3 text-[#0668E1]" />
+                    Configurar Meta API
+                  </Button>
+                </div>
                 <motion.h2 initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-5xl font-black mb-4 tracking-tight">Tu campaña está <span className="text-emerald-500">lista</span></motion.h2>
                 <p className="text-gray-400 text-lg font-medium">Hemos generado 4 estrategias optimizadas para tu negocio</p>
               </div>
@@ -1165,6 +1179,10 @@ const FlowsightAdsDashboard: React.FC = () => {
         businessName={config.businessName}
         hasPaid={hasPaid}
         onPaymentRequired={() => setShowPaymentModal(true)}
+      />
+      <MetaSettingsModal 
+        isOpen={isMetaSettingsOpen} 
+        onClose={() => setIsMetaSettingsOpen(false)} 
       />
     </div>
   );
