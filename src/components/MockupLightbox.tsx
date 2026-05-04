@@ -6,6 +6,8 @@ import { PaymentModal } from '@/components/PaymentModal';
 import { VisualGuideLightbox } from '@/components/VisualGuideLightbox';
 import { GeneratedAd } from '@/types/ads';
 import { PromoImage } from './PromoImage';
+import { metaApi, META_CONFIG } from '@/lib/meta-api';
+import { toast } from 'sonner';
 
 interface MockupLightboxProps {
   isOpen: boolean;
@@ -63,8 +65,8 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
     if (action === 'guide') {
       setShowGuideModal(true);
     } else if (action === 'publish') {
-      const metaToken = localStorage.getItem('meta_access_token');
-      const adAccountId = localStorage.getItem('meta_ad_account_id');
+      const metaToken = META_CONFIG.accessToken;
+      const adAccountId = META_CONFIG.adAccountId;
 
       // Si tenemos API de Meta configurada y es Meta, publicar directo
       if (platform === 'meta' && metaToken && adAccountId) {

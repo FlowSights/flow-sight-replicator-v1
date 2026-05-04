@@ -1,6 +1,12 @@
 const META_API_VERSION = 'v19.0';
 const BASE_URL = `https://graph.facebook.com/${META_API_VERSION}`;
 
+// Configuración de "Producción" desde variables de entorno
+export const META_CONFIG = {
+  accessToken: import.meta.env.VITE_META_ACCESS_TOKEN || localStorage.getItem('meta_access_token'),
+  adAccountId: import.meta.env.VITE_META_AD_ACCOUNT_ID || localStorage.getItem('meta_ad_account_id'),
+};
+
 export interface MetaAdAccount {
   id: string;
   name: string;
