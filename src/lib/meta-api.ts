@@ -10,11 +10,12 @@ export const META_CONFIG = {
   adAccountId: (envAccountId && envAccountId.length > 5) ? envAccountId : (localStorage.getItem('meta_ad_account_id') || ''),
 };
 
-console.log('🚀 [Meta API] Configuración Cargada:', {
-  tokenOrigen: (envToken && envToken.length > 10) ? 'Vercel/Env' : 'LocalStorage/None',
-  tieneToken: !!META_CONFIG.accessToken && META_CONFIG.accessToken.length > 10,
+console.log('🚀 [Meta API] Diagnóstico de Conexión:', {
+  estadoToken: (META_CONFIG.accessToken && META_CONFIG.accessToken.length > 20) ? '✅ PRESENTE' : '❌ VACÍO/CORTO',
+  estadoCuenta: (META_CONFIG.adAccountId && META_CONFIG.adAccountId.length > 5) ? '✅ PRESENTE' : '❌ VACÍO',
   cuentaId: META_CONFIG.adAccountId || 'No detectada',
-  tokenLen: META_CONFIG.accessToken?.length || 0
+  variablesDetectadas: Object.keys(import.meta.env).filter(k => k.startsWith('VITE_')),
+  tokenSource: (envToken && envToken.length > 10) ? 'Build Env' : 'Local Storage'
 });
 
 export interface MetaAdAccount {
