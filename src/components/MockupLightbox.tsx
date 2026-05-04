@@ -41,6 +41,7 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
 }) => {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showGuideModal, setShowGuideModal] = useState(false);
+  const [showPublishAssistant, setShowPublishAssistant] = useState(false);
   const [paymentAction, setPaymentAction] = useState<'download' | 'publish' | 'guide'>('download');
   const [isCopied, setIsCopied] = useState(false);
 
@@ -65,13 +66,14 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
       try {
         await navigator.clipboard.writeText(currentAd.description);
         setIsCopied(true);
+        setShowPublishAssistant(true); // Mostrar el asistente de pasos
         setTimeout(() => setIsCopied(false), 3000);
       } catch (err) {
         console.error('Error copying text:', err);
       }
 
       const platformUrls: Record<string, string> = {
-        meta: 'https://adsmanager.facebook.com/adsmanager/manage/campaigns',
+        meta: 'https://business.facebook.com/latest/composer', // Más directo para subir contenido
         google: 'https://ads.google.com/aw/campaigns/new',
         tiktok: 'https://ads.tiktok.com/i18n/campaign/create',
         linkedin: 'https://www.linkedin.com/campaignmanager/accounts',
@@ -370,6 +372,52 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
           platform={platform}
         />
       )}
+
+      {/* Asistente de Publicación Inteligente */}
+      <AnimatePresence>
+        {showPublishAssistant && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            className="fixed bottom-12 right-12 z-[200] max-w-sm w-full"
+          >
+            <div className="bg-white dark:bg-[#121212] rounded-[32px] shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 overflow-hidden backdrop-blur-xl">
+              <div className={`p-6 bg-gradient-to-r ${colors.gradient} flex justify-between items-center`}>
+                <div className="flex items-center gap-3">
+                  <Sparkles className="w-5 h-5 text-white animate-pulse" />
+                  <h4 className="text-white font-black text-sm uppercase tracking-widest">Asistente de Publicación</h4>
+                </div>
+                <button onClick={() => setShowPublishAssistant(false)} className="text-white/60 hover:text-white">
+                  <X size={20} />
+                </button>
+              </div>
+              <div className="p-8 space-y-6">
+                <div className="space-y-4">
+                  <div className="flex gap-4">
+                    <div className="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center font-black flex-shrink-0">1</div>
+                    <p className="text-sm dark:text-gray-300"><b>¡Copy listo!</b> El texto del anuncio ya está en tu portapapeles. Solo dale <b>Pegar (Ctrl+V)</b> en la plataforma.</p>
+                  </div>
+                  <div className="flex gap-4">
+                    <div className="w-8 h-8 rounded-full bg-blue-500/20 text-blue-500 flex items-center justify-center font-black flex-shrink-0">2</div>
+                    <p className="text-sm dark:text-gray-300">Sube la imagen o video que descargaste de <b>Flowsight</b>.</p>
+                  </div>
+                  <div className="flex gap-4">
+                    <div className="w-8 h-8 rounded-full bg-purple-500/20 text-purple-500 flex items-center justify-center font-black flex-shrink-0">3</div>
+                    <p className="text-sm dark:text-gray-300">Configura tu presupuesto y audiencia en {platform} y dale a <b>Publicar</b>.</p>
+                  </div>
+                </div>
+                <Button 
+                  onClick={() => setShowPublishAssistant(false)}
+                  className="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white font-black uppercase text-[10px] tracking-widest py-4 rounded-xl"
+                >
+                  Entendido, ¡gracias!
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
