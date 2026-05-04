@@ -43,19 +43,7 @@ const FALLBACK_ADS_TEMPLATE = {
   ],
 };
 
-export interface GeneratedAd {
-  headline: string;
-  description: string;
-  cta: string;
-  imageUrl: string;
-  platform: 'google' | 'meta' | 'tiktok' | 'linkedin';
-  type: 'Offer' | 'Emotional' | 'Urgency';
-  score: number;
-  platformUrl: string;
-  businessName?: string;
-  websiteUrl?: string;
-  reasoning?: string;
-}
+import { GeneratedAd } from '@/types/ads';
 
 /**
  * Integración de Gemini AI con el Dashboard
@@ -71,6 +59,7 @@ export const generateAdsWithGeminiIntegration = async (
     idealCustomer: string;
     budget: number;
     userImage: string | null;
+    imageUrls?: string[];
   },
   onStepUpdate?: (step: number) => void
 ): Promise<GeneratedAd[]> => {
@@ -156,6 +145,7 @@ export const generateAdsWithGeminiIntegration = async (
         description: ad.description,
         cta: ad.cta,
         imageUrl: config.userImage || 'https://picsum.photos/seed/business/1200/630',
+        imageUrls: config.imageUrls,
         platform: platform as 'google' | 'meta' | 'tiktok' | 'linkedin',
         type: ad.type,
         score: ad.score,

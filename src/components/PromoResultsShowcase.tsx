@@ -17,20 +17,8 @@ import { Button } from './ui/button';
 import { MetaPreview, GoogleAdsPreview, TikTokPreview, LinkedInPreview } from './PlatformPreviewsNative';
 import { platformColors, PlatformIcon, platformNames } from './PlatformIcons';
 import { PromoContentLightbox } from './PromoContentLightbox';
+import { GeneratedAd } from '@/types/ads';
 
-interface GeneratedAd {
-  headline: string;
-  description: string;
-  cta: string;
-  imageUrl: string;
-  platform: 'google' | 'meta' | 'tiktok' | 'linkedin';
-  type: 'Offer' | 'Emotional' | 'Urgency';
-  score: number;
-  platformUrl: string;
-  businessName?: string;
-  websiteUrl?: string;
-  reasoning?: string;
-}
 
 interface PromoResultsShowcaseProps {
   ads: GeneratedAd[];
@@ -243,6 +231,7 @@ export const PromoResultsShowcase: React.FC<PromoResultsShowcaseProps> = ({
       <PromoContentLightbox
         isOpen={lightboxOpen}
         imageUrl={currentAd?.imageUrl}
+        imageUrls={currentAd?.imageUrls}
         headline={currentAd?.headline || ''}
         description={currentAd?.description || ''}
         platform={selectedPlatform}

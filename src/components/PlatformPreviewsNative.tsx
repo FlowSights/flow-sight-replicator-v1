@@ -2,15 +2,20 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Heart, MessageCircle, Share2, MoreHorizontal, Globe, Search, MoreVertical, ThumbsUp, MessageSquare, Repeat2 } from 'lucide-react';
 import { PromoImage } from './PromoImage';
+import { AdCarousel } from './AdCarousel';
 
 interface PreviewProps {
   headline: string;
   description: string;
   cta: string;
   imageUrl?: string;
+  imageUrls?: string[];
   platform: 'meta' | 'tiktok' | 'linkedin' | 'google';
   businessName?: string;
   websiteUrl?: string;
+  type?: string;
+  score?: number;
+  platformUrl?: string;
 }
 
 export const MetaPreview: React.FC<PreviewProps> = ({ headline, description, cta, imageUrl, businessName, websiteUrl }) => {
@@ -44,8 +49,12 @@ export const MetaPreview: React.FC<PreviewProps> = ({ headline, description, cta
         <p className="text-[14px] text-gray-900 dark:text-gray-200 leading-normal">{description}</p>
       </div>
 
-      {/* Image */}
-      <PromoImage src={imageUrl} alt={headline} className="aspect-[1.91/1]" platform="meta" />
+      {/* Image or Carousel */}
+      {imageUrls && imageUrls.length > 1 ? (
+        <AdCarousel images={imageUrls} aspectRatio="aspect-[1.91/1]" />
+      ) : (
+        <PromoImage src={imageUrl} alt={headline} className="aspect-[1.91/1]" platform="meta" />
+      )}
 
       {/* CTA Bar */}
       <div className="bg-[#f0f2f5] dark:bg-[#3a3b3c] p-3 flex justify-between items-center">
@@ -205,8 +214,12 @@ export const LinkedInPreview: React.FC<PreviewProps> = ({ headline, description,
         <p className="text-[14px] text-gray-900 dark:text-gray-200 leading-normal">{description}</p>
       </div>
 
-      {/* Image */}
-      <PromoImage src={imageUrl} alt={headline} className="aspect-video" platform="linkedin" />
+      {/* Image or Carousel */}
+      {imageUrls && imageUrls.length > 1 ? (
+        <AdCarousel images={imageUrls} aspectRatio="aspect-video" />
+      ) : (
+        <PromoImage src={imageUrl} alt={headline} className="aspect-video" platform="linkedin" />
+      )}
 
       <div className="p-3 flex justify-between items-center border-b border-gray-100 dark:border-gray-800">
         <div className="flex-1 pr-4">

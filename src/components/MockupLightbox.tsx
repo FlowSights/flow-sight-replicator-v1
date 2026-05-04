@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { PaymentModal } from '@/components/PaymentModal';
 import { VisualGuideLightbox } from '@/components/VisualGuideLightbox';
 import { GeneratedAd } from '@/types/ads';
-import { PromoImage } from './PromoImage';
+import { MetaPreview, GoogleAdsPreview, TikTokPreview, LinkedInPreview } from './PlatformPreviewsNative';
 import { metaApi, META_CONFIG } from '@/lib/meta-api';
 import { toast } from 'sonner';
 
@@ -180,116 +180,57 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.2 }}
                       >
-                        {/* Mockups por Plataforma con PromoImage para Soporte de Video e IA Margins */}
-                        <div className={`bg-white dark:bg-[#0c0c0c] rounded-[36px] shadow-[0_40px_100px_rgba(0,0,0,0.6)] overflow-hidden border border-white/10 mx-auto ${platform === 'tiktok' ? 'max-w-[340px]' : 'w-full'}`}>
-                          
+                        {/* Mockups por Plataforma con componentes nativos */}
+                        <div className={`mx-auto ${platform === 'tiktok' ? 'max-w-[340px]' : 'w-full'}`}>
                           {platform === 'meta' && (
-                            <div className="p-5 space-y-4">
-                              <div className="flex items-center gap-3">
-                                <div className="w-11 h-11 bg-[#0668E1] rounded-full flex items-center justify-center text-white font-black text-lg">
-                                  {businessName.charAt(0).toUpperCase()}
-                                </div>
-                                <div>
-                                  <p className="font-black text-[15px] dark:text-white leading-tight">{businessName}</p>
-                                  <div className="flex items-center gap-1">
-                                    <p className="text-[11px] text-gray-400 font-bold">Publicidad</p>
-                                    <span className="text-gray-600 text-[10px]">•</span>
-                                    <Sparkles className="w-3 h-3 text-emerald-500" />
-                                  </div>
-                                </div>
-                              </div>
-                              <p className="text-[14px] dark:text-gray-200 leading-relaxed font-medium">{currentAd.description}</p>
-                              <div className="rounded-2xl overflow-hidden shadow-lg border border-white/5">
-                                <PromoImage src={currentAd.imageUrl} platform="meta" />
-                              </div>
-                              <div className="flex justify-between items-center pt-3 border-t border-white/5 bg-white/[0.02] -mx-5 px-5 -mb-5 py-4">
-                                <div className="flex-1 pr-4">
-                                  <p className="text-[12px] font-black dark:text-white uppercase truncate tracking-tight">{currentAd.headline}</p>
-                                  <p className="text-[10px] text-gray-500 font-bold truncate mt-0.5">{currentAd.websiteUrl}</p>
-                                </div>
-                                <button className="bg-white/10 hover:bg-white/20 px-6 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest dark:text-white transition-all border border-white/10">{currentAd.cta}</button>
-                              </div>
-                            </div>
+                            <MetaPreview 
+                              headline={currentAd.headline}
+                              description={currentAd.description}
+                              cta={currentAd.cta}
+                              imageUrl={currentAd.imageUrl}
+                              imageUrls={currentAd.imageUrls}
+                              businessName={businessName}
+                              websiteUrl={currentAd.websiteUrl}
+                              platform="meta"
+                            />
                           )}
 
                           {platform === 'google' && (
-                            <div className="p-8 space-y-4">
-                              <div className="flex items-center gap-2.5">
-                                <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center">
-                                  <div className="w-5 h-5 bg-[#4285F4] rounded-sm" />
-                                </div>
-                                <div>
-                                  <span className="text-[12px] font-black text-gray-400 uppercase tracking-widest">Patrocinado</span>
-                                  <p className="text-[11px] text-gray-500 font-bold">{currentAd.websiteUrl}</p>
-                                </div>
-                              </div>
-                              <div className="flex gap-6 items-start">
-                                <div className="flex-1 space-y-2">
-                                  <h3 className="text-2xl font-bold text-[#8ab4f8] leading-tight hover:underline cursor-pointer">{currentAd.headline}</h3>
-                                  <p className="text-[15px] text-gray-400 leading-relaxed font-medium">{currentAd.description}</p>
-                                </div>
-                                <div className="w-28 h-28 flex-shrink-0 rounded-2xl overflow-hidden border border-white/5 shadow-xl">
-                                  <PromoImage src={currentAd.imageUrl} platform="google" />
-                                </div>
-                              </div>
-                            </div>
+                            <GoogleAdsPreview 
+                              headline={currentAd.headline}
+                              description={currentAd.description}
+                              cta={currentAd.cta}
+                              imageUrl={currentAd.imageUrl}
+                              platform="google"
+                              businessName={businessName}
+                              websiteUrl={currentAd.websiteUrl}
+                            />
                           )}
 
                           {platform === 'tiktok' && (
-                            <div className="relative aspect-[9/16] bg-black text-white">
-                              <PromoImage src={currentAd.imageUrl} platform="tiktok" className="absolute inset-0 opacity-90" />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
-                              <div className="absolute bottom-0 left-0 p-6 w-full space-y-4">
-                                <div className="flex items-center gap-2">
-                                  <p className="font-black text-[15px] tracking-tight">@{businessName.toLowerCase().replace(/\s/g, '')}</p>
-                                  <Badge className="bg-white/20 text-[9px] h-4">Publicidad</Badge>
-                                </div>
-                                <p className="text-[13px] leading-snug font-medium line-clamp-3">{currentAd.description}</p>
-                                <div className={`py-4 rounded-xl text-center font-black text-[12px] uppercase tracking-[0.2em] shadow-2xl ${colors.accent}`}>{currentAd.cta}</div>
-                              </div>
-                              <div className="absolute right-4 bottom-32 flex flex-col items-center gap-8">
-                                <div className="w-12 h-12 rounded-full border-2 border-white bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center font-black shadow-xl">
-                                  {businessName.charAt(0)}
-                                </div>
-                                <div className="flex flex-col items-center gap-1.5">
-                                  <div className="p-2 bg-white/10 rounded-full backdrop-blur-md">
-                                    <Sparkles className="w-5 h-5 text-white fill-white" />
-                                  </div>
-                                  <span className="text-[11px] font-black">24.5K</span>
-                                </div>
-                                <div className="flex flex-col items-center gap-1.5">
-                                  <div className="p-2 bg-white/10 rounded-full backdrop-blur-md">
-                                    <Maximize2 className="w-5 h-5 text-white" />
-                                  </div>
-                                  <span className="text-[11px] font-black">1,203</span>
-                                </div>
-                              </div>
-                            </div>
+                            <TikTokPreview 
+                              headline={currentAd.headline}
+                              description={currentAd.description}
+                              cta={currentAd.cta}
+                              imageUrl={currentAd.imageUrl}
+                              platform="tiktok"
+                              businessName={businessName}
+                            />
                           )}
 
                           {platform === 'linkedin' && (
-                            <div className="p-7 space-y-5">
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                  <div className="w-14 h-14 bg-[#0077B5] rounded flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-blue-500/20">in</div>
-                                  <div>
-                                    <p className="font-black text-[16px] dark:text-white leading-tight">{businessName}</p>
-                                    <p className="text-[11px] text-gray-500 font-bold mt-0.5">Promocionado</p>
-                                  </div>
-                                </div>
-                                <X size={20} className="text-gray-600" />
-                              </div>
-                              <p className="text-[14px] dark:text-gray-300 leading-relaxed font-medium">{currentAd.description}</p>
-                              <div className="rounded-2xl overflow-hidden shadow-2xl border border-white/5">
-                                <PromoImage src={currentAd.imageUrl} platform="linkedin" />
-                              </div>
-                              <div className="flex justify-between items-center py-2">
-                                <p className="text-[15px] font-black dark:text-white tracking-tight">{currentAd.headline}</p>
-                                <button className="border-2 border-[#0077B5] text-[#0077B5] dark:text-[#0077B5] dark:border-[#0077B5] px-6 py-2 rounded-full text-[13px] font-black uppercase tracking-widest hover:bg-blue-500/10 transition-all">{currentAd.cta}</button>
-                              </div>
-                            </div>
+                            <LinkedInPreview 
+                              headline={currentAd.headline}
+                              description={currentAd.description}
+                              cta={currentAd.cta}
+                              imageUrl={currentAd.imageUrl}
+                              imageUrls={currentAd.imageUrls}
+                              platform="linkedin"
+                              businessName={businessName}
+                            />
                           )}
                         </div>
+
                       </motion.div>
                     </div>
 

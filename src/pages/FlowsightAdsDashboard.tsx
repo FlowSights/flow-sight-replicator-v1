@@ -36,19 +36,7 @@ import { MockupLightbox } from '@/components/MockupLightbox';
 import { logger } from '@/lib/logger';
 import { PlatformIcon, platformThemes, platformNames } from '@/components/PlatformIcons';
 
-interface GeneratedAd {
-  headline: string;
-  description: string;
-  cta: string;
-  imageUrl: string;
-  platform: 'google' | 'meta' | 'tiktok' | 'linkedin';
-  type: 'Offer' | 'Emotional' | 'Urgency';
-  score: number;
-  platformUrl: string;
-  businessName?: string;
-  websiteUrl?: string;
-  reasoning?: string;
-}
+import { GeneratedAd } from '@/types/ads';
 
 interface CampaignConfig {
   businessName: string;
@@ -300,7 +288,10 @@ const FlowsightAdsDashboard: React.FC = () => {
         setLoadingProgress(prev => (prev >= 95 ? 95 : prev + 5));
       }, 300);
 
-      const ads = await generateAdsWithGeminiIntegration(config);
+      const ads = await generateAdsWithGeminiIntegration({
+        ...config,
+        imageUrls: imageMode === 'carousel' ? uploadedAssets.map(a => a.dataUrl) : undefined
+      });
       
       clearInterval(progressInterval);
       setLoadingProgress(100);

@@ -13,6 +13,7 @@ interface EditablePlatformPreviewProps {
     description: string;
     cta: string;
     imageUrl?: string;
+    imageUrls?: string[];
     businessName?: string;
     websiteUrl?: string;
   };
@@ -151,6 +152,7 @@ export const EditablePlatformPreview: React.FC<EditablePlatformPreviewProps> = (
           description={ad.description}
           cta={ad.cta}
           imageUrl={ad.imageUrl}
+          imageUrls={ad.imageUrls}
           businessName={ad.businessName}
           websiteUrl={ad.websiteUrl}
         />

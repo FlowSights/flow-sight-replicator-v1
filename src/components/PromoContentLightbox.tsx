@@ -8,6 +8,7 @@ import { MetaPreview, GoogleAdsPreview, TikTokPreview, LinkedInPreview } from '.
 interface PromoContentLightboxProps {
   isOpen: boolean;
   imageUrl?: string;
+  imageUrls?: string[];
   headline: string;
   description: string;
   platform: 'meta' | 'google' | 'tiktok' | 'linkedin';
@@ -18,6 +19,7 @@ interface PromoContentLightboxProps {
 export const PromoContentLightbox: React.FC<PromoContentLightboxProps> = ({
   isOpen,
   imageUrl,
+  imageUrls,
   headline,
   description,
   platform,
@@ -56,10 +58,10 @@ export const PromoContentLightbox: React.FC<PromoContentLightboxProps> = ({
               {/* Preview - Main Focus */}
               <div className="relative w-full bg-gray-100 dark:bg-gray-800 p-8 flex justify-center">
                 <div className="w-full max-w-md scale-110 origin-top">
-                  {platform === 'meta' && <MetaPreview headline={headline} description={description} cta={cta} imageUrl={imageUrl || ''} platform="meta" type="Offer" score={100} platformUrl="" />}
+                  {platform === 'meta' && <MetaPreview headline={headline} description={description} cta={cta} imageUrl={imageUrl || ''} imageUrls={imageUrls} platform="meta" type="Offer" score={100} platformUrl="" />}
                   {platform === 'google' && <GoogleAdsPreview headline={headline} description={description} cta={cta} imageUrl={imageUrl || ''} platform="google" type="Offer" score={100} platformUrl="" />}
                   {platform === 'tiktok' && <TikTokPreview headline={headline} description={description} cta={cta} imageUrl={imageUrl || ''} platform="tiktok" type="Offer" score={100} platformUrl="" />}
-                  {platform === 'linkedin' && <LinkedInPreview headline={headline} description={description} cta={cta} imageUrl={imageUrl || ''} platform="linkedin" type="Offer" score={100} platformUrl="" />}
+                  {platform === 'linkedin' && <LinkedInPreview headline={headline} description={description} cta={cta} imageUrl={imageUrl || ''} imageUrls={imageUrls} platform="linkedin" type="Offer" score={100} platformUrl="" />}
                 </div>
                 <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1.5 bg-emerald-500 text-white rounded-full text-xs font-bold shadow-lg">
                   <ZoomIn className="w-4 h-4" />
