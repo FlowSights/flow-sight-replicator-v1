@@ -12,25 +12,9 @@ export const META_CONFIG = {
   adAccountId: (envAccountId && envAccountId.length > 5) ? envAccountId : (localStorage.getItem('meta_ad_account_id') || ''),
 };
 
-console.log('🚀 [Meta API] Diagnóstico de Conexión:', {
-  estadoToken: (META_CONFIG.accessToken && META_CONFIG.accessToken.length > 20) ? '✅ PRESENTE' : '❌ VACÍO/CORTO',
-  estadoCuenta: (META_CONFIG.adAccountId && META_CONFIG.adAccountId.length > 5) ? '✅ PRESENTE' : '❌ VACÍO',
-  cuentaId: META_CONFIG.adAccountId || 'No detectada',
-  variablesDetectadas: Object.keys(import.meta.env).filter(k => k.startsWith('VITE_')),
-  tokenSource: (envToken && envToken.length > 10) ? 'Build Env' : 'Local Storage'
-});
+// Configuración de "Producción" limpia
 
-// Alerta visual inmediata para el usuario (Solo para Master Emails)
-if (typeof window !== 'undefined') {
-  setTimeout(() => {
-    const hasToken = META_CONFIG.accessToken && META_CONFIG.accessToken.length > 20;
-    if (hasToken) {
-      toast.success('Meta API: Conexión establecida (Producción)');
-    } else {
-      toast.error('Meta API: Token no detectado en Vercel');
-    }
-  }, 2000);
-}
+// Alertas de diagnóstico eliminadas
 
 export interface MetaAdAccount {
   id: string;

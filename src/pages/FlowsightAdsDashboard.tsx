@@ -35,7 +35,6 @@ import { useToast } from '@/hooks/use-toast';
 import { MockupLightbox } from '@/components/MockupLightbox';
 import { logger } from '@/lib/logger';
 import { PlatformIcon, platformThemes, platformNames } from '@/components/PlatformIcons';
-import { META_CONFIG } from '@/lib/meta-api';
 
 interface GeneratedAd {
   headline: string;

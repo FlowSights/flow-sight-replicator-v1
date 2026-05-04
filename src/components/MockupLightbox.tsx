@@ -65,15 +65,12 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
     if (action === 'guide') {
       setShowGuideModal(true);
     } else if (action === 'publish') {
+      // MODO HÍBRIDO TEMPORAL: Usar flujo manual con UI de IA mientras se verifica Meta
+      // Para activar API real, descomentar el bloque siguiente y comentar la sección de "Copia Inteligente"
+      
+      /*
       const metaToken = META_CONFIG.accessToken;
       const adAccountId = META_CONFIG.adAccountId;
-
-      console.log('Publishing debug:', { 
-        platform, 
-        hasToken: !!metaToken, 
-        hasAccountId: !!adAccountId,
-        config: META_CONFIG
-      });
 
       // Si tenemos API de Meta configurada y es Meta, publicar directo
       if (platform === 'meta' && metaToken && adAccountId) {
@@ -104,8 +101,9 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
         }
         return;
       }
+      */
 
-      // Fallback: Smart Copy: Copiar descripción al portapapeles automáticamente
+      // Copia Inteligente: Copiar descripción al portapapeles automáticamente
       try {
         await navigator.clipboard.writeText(currentAd.description);
         setIsCopied(true);
