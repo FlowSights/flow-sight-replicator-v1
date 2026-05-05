@@ -32,6 +32,13 @@ export const downloadPremiumCampaignKit = (data: CampaignKitData) => {
   const colors = PLATFORM_COLORS[platform] || PLATFORM_COLORS.generic;
   const platformName = data.platform ? data.platform.charAt(0).toUpperCase() + data.platform.slice(1) : 'Multi-Platform';
 
+  // HELPER: Clean text from emojis and incompatible characters for jsPDF standard fonts
+  const cleanText = (text: string) => {
+    if (!text) return "";
+    // Remove emojis and characters outside basic WinAnsi range to prevent weird symbols
+    return text.replace(/[^\x00-\x7F\x80-\xFF\u20AC]/g, "").trim();
+  };
+
   // HELPER: Draw Header
   const drawHeader = (title: string, subTitle: string) => {
     doc.setFillColor(...colors.primary);
@@ -113,7 +120,7 @@ export const downloadPremiumCampaignKit = (data: CampaignKitData) => {
   doc.text('PREPARADO PARA:', 40, 175);
   doc.setTextColor(30, 30, 30);
   doc.setFontSize(16);
-  doc.text(data.businessName.toUpperCase(), 40, 185);
+  doc.text(cleanText(data.businessName).toUpperCase(), 40, 185);
 
   doc.setTextColor(100, 100, 100);
   doc.setFontSize(10);
@@ -128,7 +135,7 @@ export const downloadPremiumCampaignKit = (data: CampaignKitData) => {
 
   // --- Page 2: STRATEGY OVERVIEW ---
   doc.addPage();
-  drawHeader('1. ANÁLISIS ESTRATÉGICO', `Definición de mercado para ${data.businessName}`);
+  drawHeader('1. ANÁLISIS ESTRATÉGICO', `Definición de mercado para ${cleanText(data.businessName)}`);
   
   doc.setTextColor(40, 40, 40);
   doc.setFontSize(14);
@@ -137,7 +144,7 @@ export const downloadPremiumCampaignKit = (data: CampaignKitData) => {
   
   doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
-  doc.text(doc.splitTextToSize(data.businessDescription, pageWidth - 40), 20, 75);
+  doc.text(doc.splitTextToSize(cleanText(data.businessDescription), pageWidth - 40), 20, 75);
 
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
@@ -147,7 +154,7 @@ export const downloadPremiumCampaignKit = (data: CampaignKitData) => {
   doc.roundedRect(20, 130, pageWidth - 40, 30, 3, 3, 'F');
   doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
-  doc.text(doc.splitTextToSize(data.targetAudience, pageWidth - 60), 30, 145);
+  doc.text(doc.splitTextToSize(cleanText(data.targetAudience), pageWidth - 60), 30, 145);
 
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
@@ -159,19 +166,29 @@ export const downloadPremiumCampaignKit = (data: CampaignKitData) => {
   doc.addPage();
   drawHeader('2. PIEZAS CREATIVAS (COPYWRITING)', `Activos listos para publicar en ${platformName}`);
 
+  let currentY = 60;
+  const cardHeight = 70;
+  const cardSpacing = 15;
+
   data.ads.forEach((ad, index) => {
-    const yStart = 60 + (index * 80);
-    if (yStart > 240) doc.addPage();
+    // Check for page overflow
+    if (currentY + cardHeight > pageHeight - 30) {
+      doc.addPage();
+      drawHeader('2. PIEZAS CREATIVAS (COPYWRITING)', `Activos listos para publicar en ${platformName}`);
+      currentY = 60; // Reset Y for new page
+    }
+
+    const yStart = currentY;
 
     // Ad Card
     doc.setFillColor(252, 252, 252);
     doc.setDrawColor(...colors.primary);
     doc.setLineWidth(0.5);
-    doc.roundedRect(15, yStart - 10, pageWidth - 30, 70, 4, 4, 'FD');
+    doc.roundedRect(15, yStart - 10, pageWidth - 30, cardHeight, 4, 4, 'FD');
 
     // Accent bar
     doc.setFillColor(...colors.primary);
-    doc.rect(15, yStart - 10, 5, 70, 'F');
+    doc.rect(15, yStart - 10, 5, cardHeight, 'F');
 
     doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
@@ -184,20 +201,22 @@ export const downloadPremiumCampaignKit = (data: CampaignKitData) => {
     doc.setTextColor(20, 20, 20);
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    doc.text(doc.splitTextToSize(ad.headline, pageWidth - 70), 55, yStart + 10);
+    doc.text(doc.splitTextToSize(cleanText(ad.headline), pageWidth - 70), 55, yStart + 10);
 
     doc.setTextColor(60, 60, 60);
     doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
     doc.text('CUERPO DEL ANUNCIO:', 25, yStart + 25);
     doc.setTextColor(40, 40, 40);
-    doc.text(doc.splitTextToSize(ad.description, pageWidth - 70), 55, yStart + 25);
+    doc.text(doc.splitTextToSize(cleanText(ad.description), pageWidth - 70), 55, yStart + 25);
 
     doc.setTextColor(60, 60, 60);
     doc.text('LLAMADO A LA ACCIÓN (CTA):', 25, yStart + 55);
     doc.setTextColor(...colors.secondary);
     doc.setFont('helvetica', 'bold');
-    doc.text(ad.cta.toUpperCase(), 80, yStart + 55);
+    doc.text(cleanText(ad.cta).toUpperCase(), 80, yStart + 55);
+
+    currentY += cardHeight + cardSpacing;
   });
 
   // --- Page 4: IMPLEMENTATION GUIDE ---
