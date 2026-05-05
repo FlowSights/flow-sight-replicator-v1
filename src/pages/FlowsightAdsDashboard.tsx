@@ -39,6 +39,7 @@ import { logger } from '@/lib/logger';
 import { PlatformIcon, platformThemes, platformNames } from '@/components/PlatformIcons';
 
 import { GeneratedAd } from '@/types/ads';
+import { AIAgentBar } from '@/components/AIAgentBar';
 
 interface CampaignConfig {
   businessName: string;
@@ -1028,11 +1029,19 @@ const FlowsightAdsDashboard: React.FC = () => {
           ) : (
             <motion.div key="results" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-12">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-                <div>
-                  <h2 className="text-4xl font-black tracking-tight">Tu Estrategia <span className="text-emerald-500">Premium</span></h2>
-                  <p className="text-lg text-gray-400 font-medium">Análisis y activos optimizados para máxima conversión.</p>
+                <div className="flex-1 max-w-2xl">
+                  <h2 className="text-4xl font-black tracking-tight mb-2">Tu Estrategia <span className="text-emerald-500">Premium</span></h2>
+                  <p className="text-lg text-gray-400 font-medium mb-6">Análisis y activos optimizados para máxima conversión.</p>
+                  
+                  <AIAgentBar context={{
+                    businessName: config.businessName,
+                    promote: config.promote,
+                    idealCustomer: config.idealCustomer,
+                    location: config.location,
+                    generatedAds: generatedAds
+                  }} />
                 </div>
-                <Button variant="outline" onClick={() => setShowResults(false)} className="rounded-2xl font-bold px-6 py-6 border-white/10 hover:bg-white/5">
+                <Button variant="outline" onClick={() => setShowResults(false)} className="rounded-2xl font-bold px-6 py-6 border-white/10 hover:bg-white/5 shrink-0">
                   <RefreshCw className="w-4 h-4 mr-2" /> Nueva Campaña
                 </Button>
               </div>
