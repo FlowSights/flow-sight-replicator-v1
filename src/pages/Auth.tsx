@@ -136,173 +136,143 @@ const Auth = () => {
         url="/auth"
         noindex={true}
       />
-      <div className="min-h-screen bg-[#000000] text-white selection:bg-cyan-500/30 overflow-hidden relative">
-        {/* Cinematic Background Elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-500/10 blur-[120px] rounded-full animate-pulse" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600/10 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_0%,transparent_70%)]" />
-        </div>
-
+      <div className="min-h-screen bg-[#050505] text-white selection:bg-white/20">
         <header className="fixed top-0 inset-x-0 z-50">
-          <nav className="container max-w-7xl mx-auto flex items-center justify-between h-24 px-8">
+          <nav className="container max-w-7xl mx-auto flex items-center justify-between h-24 px-6">
             <Link 
               to="/" 
-              className="flex items-center gap-3 group"
+              className="flex items-center gap-3 font-black text-2xl tracking-tighter hover:opacity-80 transition-all"
             >
-              <div className="w-10 h-10 bg-gradient-to-br from-white to-white/60 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.2)] group-hover:scale-110 transition-transform duration-500">
-                <BarChart3 className="w-6 h-6 text-black" />
+              <div className="w-8 h-8 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                <BarChart3 className="w-5 h-5 text-white" />
               </div>
-              <span className="text-2xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-white/40">FlowSights</span>
+              <span className="bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60 font-display">FlowSights</span>
             </Link>
-            <div className="flex items-center gap-8">
+            <div className="flex items-center gap-6">
               <ThemeToggle />
-              <Link 
-                to="/blog" 
-                className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 hover:text-white transition-all flex items-center gap-3 group"
-              >
-                <div className="w-1 h-1 bg-white/40 rounded-full group-hover:w-4 group-hover:bg-cyan-400 transition-all" />
-                Blog
+              <Link to="/blog" className="text-xs font-black uppercase tracking-widest text-gray-500 hover:text-white transition-colors flex items-center gap-2 group">
+                <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" /> Blog
               </Link>
             </div>
           </nav>
         </header>
 
-        <section className="relative flex items-center justify-center min-h-screen px-6 pt-20">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full max-w-[460px] relative"
-          >
-            {/* Metallic Card Frame */}
-            <div className="absolute -inset-[1px] bg-gradient-to-b from-white/20 via-white/5 to-transparent rounded-[40px] opacity-50" />
+      <section className="flex items-center justify-center min-h-screen px-6">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full max-w-[440px]"
+        >
+          <div className="p-10 rounded-[32px] bg-[#0A0A0A] border border-white/[0.05] shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
             
-            <div className="relative p-12 rounded-[40px] bg-black/40 backdrop-blur-[40px] border border-white/[0.08] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.8)] overflow-hidden">
-              {/* Internal Bevel */}
-              <div className="absolute inset-0 rounded-[40px] border border-white/5 pointer-events-none" />
-              
-              <div className="text-center mb-12">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.2 }}
-                  className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-6"
+            <div className="text-center mb-10">
+              <h1 className="text-4xl font-black tracking-tight mb-3">
+                {mode === "signin" ? "Inicia sesión" : "Crea tu cuenta"}
+              </h1>
+              <p className="text-gray-500 text-sm font-medium">
+                {mode === "signin"
+                  ? "Inicia sesión para participar en la conversación."
+                  : "Crea una cuenta para comentar en nuestros artículos."}
+              </p>
+            </div>
+
+            <div className="space-y-6">
+              <Button 
+                type="button" 
+                className="w-full h-14 bg-black hover:bg-white/[0.03] border border-white/10 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all text-sm"
+                onClick={handleGoogleLogin}
+              >
+                <svg className="w-5 h-5" viewBox="0 0 24 24">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-1 .67-2.28 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 12 23 12 23z"/>
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Continuar con Google
+              </Button>
+
+              <div className="relative py-4 flex items-center justify-center">
+                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/[0.05]"></div></div>
+                <span className="relative px-4 bg-[#0A0A0A] text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">O con email</span>
+              </div>
+
+              <form onSubmit={handleEmail} className="space-y-5">
+                {mode === "signup" && (
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-1">Nombre</label>
+                    <div className="relative">
+                      <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+                      <Input 
+                        id="name" 
+                        value={name} 
+                        onChange={(e) => setName(e.target.value)} 
+                        className="h-14 pl-12 bg-white/[0.02] border-white/5 rounded-2xl focus:ring-1 focus:ring-white/20 transition-all text-sm font-bold placeholder:text-gray-700 text-white" 
+                        placeholder="Tu nombre" 
+                        required 
+                      />
+                    </div>
+                  </div>
+                )}
+                
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-1">Correo</label>
+                  <div className="relative">
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+                    <Input 
+                      id="email" 
+                      type="email" 
+                      value={email} 
+                      onChange={(e) => setEmail(e.target.value)} 
+                      className="h-14 pl-12 bg-white/[0.02] border-white/5 rounded-2xl focus:ring-1 focus:ring-white/20 transition-all text-sm font-bold placeholder:text-gray-700 text-white" 
+                      placeholder="tu@empresa.com" 
+                      required 
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-1">Contraseña</label>
+                  <div className="relative">
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+                    <Input 
+                      id="password" 
+                      type="password" 
+                      value={password} 
+                      onChange={(e) => setPassword(e.target.value)} 
+                      className="h-14 pl-12 bg-white/[0.02] border-white/5 rounded-2xl focus:ring-1 focus:ring-white/20 transition-all text-sm font-bold placeholder:text-gray-700 text-white" 
+                      placeholder="Mínimo 6 caracteres" 
+                      required 
+                    />
+                  </div>
+                </div>
+
+                <Button 
+                  type="submit" 
+                  className="w-full h-14 bg-gray-200 hover:bg-white text-black font-black uppercase tracking-widest text-xs rounded-2xl transition-all shadow-xl shadow-white/5 mt-4" 
+                  disabled={loading}
                 >
-                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                  <span className="text-[10px] font-black uppercase tracking-widest text-white/60">Sistema Seguro v2.0</span>
-                </motion.div>
-                <h1 className="text-5xl font-black tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-b from-white to-white/40">
-                  {mode === "signin" ? "Bienvenido" : "Crea tu ID"}
-                </h1>
-                <p className="text-white/40 text-sm font-medium tracking-tight">
-                  {mode === "signin"
-                    ? "Acceso exclusivo a la terminal de inteligencia."
-                    : "Únete a la nueva era de la pauta publicitaria."}
+                  {loading ? <Loader2 className="w-4 h-4 animate-spin text-black" /> : (mode === "signin" ? "Entrar" : "Crear cuenta")}
+                </Button>
+              </form>
+
+              <div className="text-center pt-4">
+                <p className="text-sm font-medium text-gray-500">
+                  {mode === "signin" ? "¿No tienes cuenta?" : "¿Ya tienes cuenta?"}{" "}
+                  <button 
+                    type="button" 
+                    onClick={() => setMode(mode === "signin" ? "signup" : "signin")} 
+                    className="text-white hover:underline transition-all underline-offset-4"
+                  >
+                    {mode === "signin" ? "Regístrate" : "Inicia sesión"}
+                  </button>
                 </p>
               </div>
-
-              <div className="space-y-8">
-                <Button 
-                  type="button" 
-                  className="w-full h-16 bg-white text-black hover:bg-white/90 rounded-2xl font-black flex items-center justify-center gap-4 transition-all text-sm group shadow-[0_0_20px_rgba(255,255,255,0.1)]"
-                  onClick={handleGoogleLogin}
-                >
-                  <svg className="w-5 h-5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
-                    <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                    <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-1 .67-2.28 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 12 23 12 23z"/>
-                    <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
-                    <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                  </svg>
-                  Continuar con Google
-                </Button>
-
-                <div className="relative flex items-center justify-center">
-                  <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/5"></div></div>
-                  <span className="relative px-6 bg-black text-[9px] font-black uppercase tracking-[0.3em] text-white/20">Identidad Digital</span>
-                </div>
-
-                <form onSubmit={handleEmail} className="space-y-6">
-                  {mode === "signup" && (
-                    <div className="space-y-3">
-                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 ml-1">Nombre Completo</label>
-                      <div className="relative group">
-                        <UserIcon className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-cyan-400 transition-colors" />
-                        <Input 
-                          id="name" 
-                          value={name} 
-                          onChange={(e) => setName(e.target.value)} 
-                          className="h-16 pl-14 bg-white/[0.03] border-white/5 rounded-2xl focus:bg-white/[0.05] focus:border-white/20 transition-all text-sm font-bold placeholder:text-white/10 text-white" 
-                          placeholder="John Doe" 
-                          required 
-                        />
-                      </div>
-                    </div>
-                  )}
-                  
-                  <div className="space-y-3">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 ml-1">Correo Electrónico</label>
-                    <div className="relative group">
-                      <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-cyan-400 transition-colors" />
-                      <Input 
-                        id="email" 
-                        type="email" 
-                        value={email} 
-                        onChange={(e) => setEmail(e.target.value)} 
-                        className="h-16 pl-14 bg-white/[0.03] border-white/5 rounded-2xl focus:bg-white/[0.05] focus:border-white/20 transition-all text-sm font-bold placeholder:text-white/10 text-white" 
-                        placeholder="john@company.com" 
-                        required 
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 ml-1">Contraseña</label>
-                    <div className="relative group">
-                      <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-cyan-400 transition-colors" />
-                      <Input 
-                        id="password" 
-                        type="password" 
-                        value={password} 
-                        onChange={(e) => setPassword(e.target.value)} 
-                        className="h-16 pl-14 bg-white/[0.03] border-white/5 rounded-2xl focus:bg-white/[0.05] focus:border-white/20 transition-all text-sm font-bold placeholder:text-white/10 text-white" 
-                        placeholder="••••••••" 
-                        required 
-                      />
-                    </div>
-                  </div>
-
-                  <Button 
-                    type="submit" 
-                    className="w-full h-16 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-black uppercase tracking-[0.2em] text-xs rounded-2xl transition-all shadow-[0_10px_30px_rgba(6,182,212,0.2)] mt-4" 
-                    disabled={loading}
-                  >
-                    {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : (mode === "signin" ? "Acceder a Terminal" : "Registrar Identidad")}
-                  </Button>
-                </form>
-
-                <div className="text-center pt-2">
-                  <p className="text-sm font-medium text-white/30">
-                    {mode === "signin" ? "¿No tienes cuenta?" : "¿Ya tienes cuenta?"}{" "}
-                    <button 
-                      type="button" 
-                      onClick={() => setMode(mode === "signin" ? "signup" : "signin")} 
-                      className="text-white hover:text-cyan-400 transition-colors underline underline-offset-8 decoration-white/10"
-                    >
-                      {mode === "signin" ? "Crear ID" : "Iniciar Sesión"}
-                    </button>
-                  </p>
-                </div>
-              </div>
             </div>
-          </motion.div>
-        </section>
-
-        {/* Footer info */}
-        <footer className="fixed bottom-8 inset-x-0 text-center pointer-events-none">
-          <p className="text-[9px] font-black uppercase tracking-[0.5em] text-white/10">FlowSights Core Authentication Pipeline</p>
-        </footer>
-      </div>
+          </div>
+        </motion.div>
+      </section>
+    </div>
     </>
   );
 };
