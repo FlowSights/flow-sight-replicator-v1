@@ -45,7 +45,12 @@ export const usePaymentStatus = () => {
         }
 
         // Lógica de Cuenta Master
-        const MASTER_EMAILS = ['spineda2014.123@gmail.com', 'spinedaram2000@gmail.com'];
+        const MASTER_EMAILS = [
+          'spineda2014.123@gmail.com', 
+          'spinedaram2000@gmail.com',
+          'zapataoscar286@gmail.com',
+          'marcos161919@gmail.com'
+        ];
         if (MASTER_EMAILS.includes(session.user.email || '')) {
           logger.info("Usuario master detectado, acceso concedido", { email: session.user.email }, "PaymentHook");
           setHasPaid(true);
