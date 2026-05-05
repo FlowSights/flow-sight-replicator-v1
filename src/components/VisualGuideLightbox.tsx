@@ -41,7 +41,7 @@ const platformGuides: Record<string, PlatformGuide> = {
     platform: 'meta',
     platformName: 'Meta Ads (Facebook & Instagram)',
     color: 'from-[#0668E1] to-[#0047AB]',
-    platformUrl: 'https://adsmanager.facebook.com/adsmanager/manage/campaigns',
+    platformUrl: 'https://adsmanager.facebook.com/adsmanager/creation',
     steps: [
       {
         step: 1,
@@ -53,7 +53,7 @@ const platformGuides: Record<string, PlatformGuide> = {
           'Si es tu primera vez, puede que necesites crear una cuenta publicitaria',
           'Tienes acceso a Facebook, Instagram, Messenger y Audience Network'
         ],
-        link: 'https://adsmanager.facebook.com/adsmanager/manage/campaigns'
+        link: 'https://adsmanager.facebook.com/adsmanager/creation'
       },
       {
         step: 2,
@@ -191,7 +191,7 @@ const platformGuides: Record<string, PlatformGuide> = {
     platform: 'tiktok',
     platformName: 'TikTok Ads',
     color: 'from-black via-[#121212] to-[#FE2C55]',
-    platformUrl: 'https://ads.tiktok.com/i18n/dashboard',
+    platformUrl: 'https://ads.tiktok.com/i18n/campaign/create',
     steps: [
       {
         step: 1,
@@ -203,7 +203,7 @@ const platformGuides: Record<string, PlatformGuide> = {
           'Si no tienes una, puedes convertir tu cuenta personal en Business',
           'TikTok tiene acceso a millones de usuarios activos'
         ],
-        link: 'https://ads.tiktok.com/i18n/dashboard'
+        link: 'https://ads.tiktok.com/i18n/campaign/create'
       },
       {
         step: 2,
@@ -266,7 +266,7 @@ const platformGuides: Record<string, PlatformGuide> = {
     platform: 'linkedin',
     platformName: 'LinkedIn Ads',
     color: 'from-[#0077B5] to-[#004182]',
-    platformUrl: 'https://www.linkedin.com/campaignmanager/accounts',
+    platformUrl: 'https://www.linkedin.com/campaignmanager/new',
     steps: [
       {
         step: 1,
@@ -278,7 +278,7 @@ const platformGuides: Record<string, PlatformGuide> = {
           'Si es tu primera vez, LinkedIn te guiará en la configuración',
           'Tienes acceso a anuncios de texto, imagen y video'
         ],
-        link: 'https://www.linkedin.com/campaignmanager/accounts'
+        link: 'https://www.linkedin.com/campaignmanager/new'
       },
       {
         step: 2,

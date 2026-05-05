@@ -1159,10 +1159,10 @@ const FlowsightAdsDashboard: React.FC = () => {
                               whileTap={{ scale: 0.98 }}
                               onClick={() => {
                                 const urls: Record<string, string> = {
-                                  meta: 'https://adsmanager.facebook.com',
-                                  google: 'https://ads.google.com',
-                                  tiktok: 'https://ads.tiktok.com',
-                                  linkedin: 'https://www.linkedin.com/campaignmanager'
+                                  meta: 'https://adsmanager.facebook.com/adsmanager/creation',
+                                  google: 'https://ads.google.com/aw/campaigns/new',
+                                  tiktok: 'https://ads.tiktok.com/i18n/campaign/create',
+                                  linkedin: 'https://www.linkedin.com/campaignmanager/new'
                                 };
                                 window.open(urls[selectedPlatform], '_blank');
                               }}
