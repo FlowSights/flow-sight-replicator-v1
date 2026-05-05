@@ -856,19 +856,14 @@ const FlowsightAdsDashboard: React.FC = () => {
                       <div className="grid md:grid-cols-4 gap-4">
                         {contentTypes.map((type) => {
                           const Icon = type.icon;
-                          const colors = {
-                            copyonly: 'hover:border-blue-500/50 hover:bg-blue-500/5 selected:bg-blue-500/10 selected:border-blue-500',
-                            single: 'hover:border-purple-500/50 hover:bg-purple-500/5 selected:bg-purple-500/10 selected:border-purple-500',
-                            carousel: 'hover:border-amber-500/50 hover:bg-amber-500/5 selected:bg-amber-500/10 selected:border-amber-500',
-                            video: 'hover:border-emerald-500/50 hover:bg-emerald-500/5 selected:bg-emerald-500/10 selected:border-emerald-500',
-                          }[type.id as keyof typeof colors];
+                          const colorConfig = {
+                            copyonly: { border: 'hover:border-blue-500/50', bg: 'hover:bg-blue-500/5', selected: 'bg-blue-500/10 border-blue-500/40', icon: 'text-blue-400' },
+                            image: { border: 'hover:border-purple-500/50', bg: 'hover:bg-purple-500/5', selected: 'bg-purple-500/10 border-purple-500/40', icon: 'text-purple-400' },
+                            carousel: { border: 'hover:border-amber-500/50', bg: 'hover:bg-amber-500/5', selected: 'bg-amber-500/10 border-amber-500/40', icon: 'text-amber-400' },
+                            video: { border: 'hover:border-emerald-500/50', bg: 'hover:bg-emerald-500/5', selected: 'bg-emerald-500/10 border-emerald-500/40', icon: 'text-emerald-400' },
+                          }[type.id as keyof typeof colorConfig];
 
-                          const activeColor = {
-                            copyonly: 'text-blue-400',
-                            single: 'text-purple-400',
-                            carousel: 'text-amber-400',
-                            video: 'text-emerald-400',
-                          }[type.id as keyof typeof activeColor];
+                          const isActive = imageMode === type.id;
 
                           return (
                             <motion.button
@@ -876,11 +871,14 @@ const FlowsightAdsDashboard: React.FC = () => {
                               whileHover={{ y: -4, scale: 1.02 }}
                               whileTap={{ scale: 0.98 }}
                               onClick={() => handleImageModeSelect(type.id)}
-                              className={`p-5 rounded-[26px] border-2 transition-all text-left ${imageMode === type.id ? `bg-white/5 border-white/40 shadow-xl` : 'bg-white/5 border-white/10'} ${colors}`}
+                              className={`p-5 rounded-[26px] border-2 transition-all text-left relative overflow-hidden group ${isActive ? colorConfig.selected : `bg-white/5 border-white/10 ${colorConfig.border} ${colorConfig.bg}`}`}
                             >
-                              <Icon className={`w-7 h-7 mb-5 ${imageMode === type.id ? activeColor : 'text-gray-500 group-hover:text-emerald-400'}`} />
-                              <p className="font-black text-white text-lg">{type.title}</p>
-                              <p className="text-xs text-gray-400 mt-1 font-medium">{type.description}</p>
+                              <div className={`absolute top-0 right-0 p-4 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity ${colorConfig.icon}`}>
+                                <Icon className="w-12 h-12" />
+                              </div>
+                              <Icon className={`w-7 h-7 mb-5 transition-colors ${isActive ? colorConfig.icon : `${colorConfig.icon} opacity-60 group-hover:opacity-100`}`} />
+                              <p className="font-black text-white text-lg relative z-10">{type.title}</p>
+                              <p className="text-xs text-gray-400 mt-1 font-medium relative z-10">{type.description}</p>
                             </motion.button>
                           );
                         })}
