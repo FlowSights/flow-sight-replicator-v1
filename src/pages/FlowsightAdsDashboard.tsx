@@ -221,7 +221,7 @@ const FlowsightAdsDashboard: React.FC = () => {
   // Auth Protection & Inactivity Redirect
   useEffect(() => {
     if (!session && !isInputFlowPreview) {
-      navigate('/auth');
+      navigate('/auth?redirect=/flowsight-ads/dashboard');
     }
   }, [session, navigate, isInputFlowPreview]);
 

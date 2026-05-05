@@ -34,7 +34,7 @@ const Auth = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [params] = useSearchParams();
-  const redirectTo = params.get("redirect") || "/blog";
+  const redirectTo = params.get("redirect") || "/flowsight-ads/dashboard";
   const { toast } = useToast();
 
   useEffect(() => {

@@ -76,7 +76,7 @@ const AuthCallback = () => {
         if (session) {
           sessionStorage.removeItem(ADS_AUTH_INTENT_KEY);
           logger.info("Sesión recuperada exitosamente", { userId: session.user.id, isAds }, "AuthCallback");
-          setNavTarget(isAds ? "/flowsight-ads/dashboard" : "/");
+          setNavTarget("/flowsight-ads/dashboard");
           return;
         }
 
@@ -86,7 +86,7 @@ const AuthCallback = () => {
           if (user) {
             sessionStorage.removeItem(ADS_AUTH_INTENT_KEY);
             logger.info("Usuario ya autenticado (recuperado via getUser)", { userId: user.id, isAds }, "AuthCallback");
-            setNavTarget(isAds ? "/flowsight-ads/dashboard" : "/");
+            setNavTarget("/flowsight-ads/dashboard");
             return;
           }
           
