@@ -18,7 +18,8 @@ import {
   RefreshCw, Search, Activity, Eye, MousePointer, Camera,
   Moon, Sun, Building2, Link2, Globe2, CreditCard,
   FileDown, ZoomIn, Edit2, BookOpen, Share2, Lock, Unlock,
-  Store, Coffee, Home, Copy, CheckCircle2, WandSparkles, Video, MessageSquareText, Megaphone
+  Store, Coffee, Home, Copy, CheckCircle2, WandSparkles, Video, MessageSquareText, Megaphone,
+  Scissors, Scale, Heart, PartyPopper
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useTheme } from 'next-themes';
@@ -54,16 +55,23 @@ interface CampaignConfig {
 type ImageMode = 'copyonly' | 'image' | 'carousel' | 'video';
 
 const businessTypes = [
-  { icon: Store, label: 'Ecommerce / Tienda online', keywords: ['tienda', 'ecommerce', 'online', 'shop', 'producto', 'ventas'] },
-  { icon: Coffee, label: 'Cafetería / Gastronomía', keywords: ['cafe', 'café', 'cafeteria', 'cafetería', 'restaurante', 'comida', 'helado', 'heladería', 'pizzería', 'hamburguesas', 'sushi'] },
-  { icon: ShieldCheck, label: 'Salud / Clínica', keywords: ['salud', 'bienestar', 'clinica', 'clínica', 'médico', 'medico', 'dentista', 'odontologia', 'terapia'] },
-  { icon: SparklesIcon, label: 'Belleza / Estética', keywords: ['spa', 'fitness', 'yoga', 'uñas', 'manicura', 'salon', 'belleza', 'peluquería', 'barbería', 'corte', 'cabello', 'estética', 'estetica', 'pestañas', 'cejas'] },
-  { icon: Home, label: 'Servicios al hogar', keywords: ['hogar', 'limpieza', 'reparacion', 'reparación', 'jardín', 'jardin', 'mantenimiento', 'plomería', 'pintura', 'aire acondicionado'] },
-  { icon: Building2, label: 'Corporativo / Legal', keywords: ['consultoria', 'consultoría', 'software', 'agencia', 'servicio profesional', 'b2b', 'abogado', 'legal', 'firma', 'leyes', 'corporativo', 'contabilidad', 'asesoría'] },
-  { icon: BookOpen, label: 'Educación / Cursos', keywords: ['curso', 'educación', 'educacion', 'clase', 'academia', 'formación', 'taller', 'seminario'] },
-  { icon: Globe2, label: 'Turismo / Hospitalidad', keywords: ['hotel', 'turismo', 'viaje', 'hospedaje', 'hostal', 'tour', 'agencia de viajes'] },
-  { icon: Zap, label: 'Automotriz / Repuestos', keywords: ['repuestos', 'automotriz', 'taller', 'mecanico', 'autos', 'piezas', 'llantas', 'baterías', 'accesorios autos'] },
-  { icon: Store, label: 'Retail / Local', keywords: ['retail', 'local', 'boutique', 'tienda física', 'tienda fisica', 'zapatería', 'ropa', 'ferretería'] },
+  { icon: Store, label: 'Ecommerce / Tienda Online', keywords: ['tienda', 'ecommerce', 'online', 'shop', 'producto', 'ventas', 'shopify', 'dropshipping'] },
+  { icon: Store, label: 'Pizzería / Restaurante', keywords: ['pizzeria', 'pizzería', 'pizza', 'restaurante', 'comida', 'gastronomia', 'parrillada', 'asado', 'sushi', 'hamburguesas', 'burguer', 'tacos', 'mexicana', 'pastas'] },
+  { icon: Coffee, label: 'Cafetería / Bakery', keywords: ['cafe', 'café', 'cafeteria', 'cafetería', 'bakery', 'panaderia', 'reposteria', 'helado', 'heladería', 'postres', 'desayunos'] },
+  { icon: ShieldCheck, label: 'Médico / Clínica', keywords: ['medico', 'médico', 'doctor', 'clinica', 'clínica', 'hospital', 'pediatra', 'ginecologo', 'cardiologo', 'psicologo', 'terapia', 'salud'] },
+  { icon: Activity, label: 'Dental / Odontología', keywords: ['dentista', 'odontologia', 'odontología', 'ortodoncia', 'diseño de sonrisa', 'brackets', 'implantes'] },
+  { icon: Zap, label: 'Gimnasio / Fitness', keywords: ['gym', 'gimnasio', 'fitness', 'crossfit', 'entrenamiento', 'personal trainer', 'yoga', 'pilates', 'deporte', 'zumba', 'boxeo', 'artes marciales'] },
+  { icon: SparklesIcon, label: 'Belleza / Estética', keywords: ['spa', 'uñas', 'nails', 'manicura', 'pedicura', 'pestañas', 'cejas', 'estética', 'estetica', 'facial', 'masajes', 'skin care'] },
+  { icon: Scissors, label: 'Barbería / Peluquería', keywords: ['barberia', 'barbería', 'barber', 'peluqueria', 'peluquería', 'corte de cabello', 'estilista', 'salon de belleza', 'barba'] },
+  { icon: Building2, label: 'Inmobiliaria / Real Estate', keywords: ['inmobiliaria', 'bienes raices', 'propiedades', 'apartamento', 'casa', 'alquiler', 'venta de casas', 'terrenos', 'broker'] },
+  { icon: Scale, label: 'Legal / Abogados', keywords: ['abogado', 'legal', 'firma de abogados', 'bufete', 'leyes', 'notaria', 'asesoria legal', 'divorcios', 'penalista'] },
+  { icon: Home, label: 'Servicios al Hogar', keywords: ['limpieza', 'fumigacion', 'plomeria', 'electricista', 'pintura', 'reparacion', 'aire acondicionado', 'jardin', 'mantenimiento', 'mudanzas'] },
+  { icon: Zap, label: 'Automotriz / Taller', keywords: ['repuestos', 'automotriz', 'taller', 'mecanico', 'autos', 'carros', 'llantas', 'baterias', 'frenos', 'mantenimiento preventivo'] },
+  { icon: BookOpen, label: 'Educación / Cursos', keywords: ['curso', 'academia', 'escuela', 'clases', 'ingles', 'formacion', 'taller', 'seminario', 'colegio', 'universidad'] },
+  { icon: Globe2, label: 'Turismo / Viajes', keywords: ['hotel', 'turismo', 'viaje', 'tour', 'agencia de viajes', 'hospedaje', 'boletos aereos', 'vacaciones'] },
+  { icon: Heart, label: 'Mascotas / Veterinaria', keywords: ['veterinaria', 'pet shop', 'perros', 'gatos', 'grooming', 'mascotas', 'entrenamiento canino'] },
+  { icon: PartyPopper, label: 'Eventos / Bodas', keywords: ['eventos', 'bodas', 'catering', 'fiestas', 'decoracion', 'fotografia', 'dj', 'planner'] },
+  { icon: Building2, label: 'Corporativo / Agencia', keywords: ['consultoria', 'agencia', 'marketing', 'software', 'b2b', 'logistica', 'transporte', 'contabilidad', 'empresa'] },
 ];
 
 const MIN_BUDGET = 5;
@@ -105,10 +113,23 @@ const contentTypes = [
 const normalizeText = (value: string) => value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
 const inferBusinessCategory = (businessName: string, promote: string, selectedType?: string | null) => {
-  if (selectedType) return selectedType.split(' /')[0];
+  if (selectedType) return selectedType.split(' / ')[0];
   const source = normalizeText(`${businessName} ${promote}`);
-  const match = businessTypes.find((type) => type.keywords.some((keyword) => source.includes(normalizeText(keyword))));
-  return match ? match.label.split(' /')[0] : 'negocio local';
+  
+  const match = businessTypes.find((type) => 
+    type.keywords.some((keyword) => source.includes(normalizeText(keyword)))
+  );
+
+  if (match) {
+    const labelParts = match.label.split(' / ');
+    // Intentar encontrar la parte del label que más se acerque a lo que escribió el usuario
+    const specificPart = labelParts.find(part => 
+      match.keywords.some(kw => source.includes(normalizeText(kw)) && normalizeText(part).includes(normalizeText(kw)))
+    );
+    return specificPart || labelParts[0];
+  }
+  
+  return 'Negocio Local';
 };
 
 const inferCommunicationStyle = (promote: string) => {
@@ -345,14 +366,20 @@ const FlowsightAdsDashboard: React.FC = () => {
   const handleDownloadMasterKit = () => {
     if (hasPaid) {
       const platformAds = generatedAds.filter(ad => ad.platform === selectedPlatform);
-      downloadPremiumCampaignKit({
-        businessName: config.businessName,
-        businessDescription: config.promote,
-        targetAudience: config.idealCustomer,
-        websiteUrl: config.websiteUrl,
-        ads: platformAds.length > 0 ? platformAds : generatedAds,
-        platform: selectedPlatform,
-      });
+      
+      try {
+        downloadPremiumCampaignKit({
+          businessName: config.businessName,
+          businessDescription: config.promote,
+          targetAudience: config.idealCustomer,
+          websiteUrl: config.websiteUrl,
+          ads: platformAds.length > 0 ? platformAds : generatedAds,
+          platform: selectedPlatform,
+        });
+        toast({ title: 'Descarga iniciada', description: `Tu kit para ${platformNames[selectedPlatform]} se está preparando.` });
+      } catch (err) {
+        toast({ title: 'Error al generar PDF', variant: 'destructive' });
+      }
     } else {
       setShowPaymentModal(true);
     }
