@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Plus, Wrench, ChevronDown, Mic, Send, Loader2, X } from 'lucide-react';
+import { Sparkles, Send, Loader2, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { supabase } from '@/lib/supabaseClient';
 import { logger, formatError } from '@/lib/logger';
@@ -18,9 +18,29 @@ interface AIAgentBarProps {
 export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context }) => {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
-  const [response, setResponse] = useState<string | null>(null);
+  const [fullResponse, setFullResponse] = useState<string | null>(null);
+  const [displayedResponse, setDisplayedResponse] = useState('');
   const [isOpen, setIsOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const typingTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Typing effect logic
+  useEffect(() => {
+    if (fullResponse) {
+      setDisplayedResponse('');
+      let index = 0;
+      
+      if (typingTimerRef.current) clearInterval(typingTimerRef.current);
+      
+      typingTimerRef.current = setInterval(() => {
+        if (index < fullResponse.length) {
+          setDisplayedResponse((prev) => prev + fullResponse.charAt(index));
+          index++;
+        } else {
+          if (typingTimerRef.current) clearInterval(typingTimerRef.current);
+        }
+      }, 15); // Adjust typing speed here
+    }
+  }, [fullResponse]);
 
   const handleAskGemini = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -28,21 +48,22 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context }) => {
 
     setLoading(true);
     setIsOpen(true);
+    setFullResponse(null);
+    setDisplayedResponse('');
     
     try {
-      logger.info("Enviando consulta a Gemini Agent", { query }, "AIAgentBar");
+      logger.info("Enviando consulta a Gemini Pro Agent", { query }, "AIAgentBar");
       
-      const systemPrompt = `Eres un experto estratega de marketing digital de la plataforma FlowSights Ads. 
-      Tu objetivo es ayudar al usuario a interpretar su campaña actual.
+      const systemPrompt = `Eres un experto estratega de marketing digital de FlowSights Ads. 
+      Analiza la campaña actual y responde de forma ejecutiva y brillante.
       
-      CONTEXTO DE LA CAMPAÑA:
+      CAMPAÑA:
       - Negocio: ${context.businessName}
       - Promoción: ${context.promote}
-      - Público Objetivo: ${context.idealCustomer}
-      - Ubicación: ${context.location}
-      - Anuncios Generados: ${JSON.stringify(context.generatedAds.map(ad => ({ platform: ad.platform, headline: ad.headline, score: ad.score })))}
+      - Público: ${context.idealCustomer}
+      - Anuncios: ${context.generatedAds.length} variantes.
       
-      Responde de forma concisa, profesional y estratégica. Usa un tono que empodere al usuario.`;
+      Responde de forma concisa (máximo 3 párrafos).`;
 
       const { data, error } = await supabase.functions.invoke('chat-with-ai', {
         body: {
@@ -54,116 +75,102 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context }) => {
       });
 
       if (error) throw error;
-      setResponse(data.reply);
+      setFullResponse(data.reply);
     } catch (err) {
       logger.error("Error en Gemini Agent", formatError(err), "AIAgentBar");
-      setResponse("Lo siento, tuve un problema al procesar tu consulta. Por favor, intenta de nuevo.");
+      setFullResponse("Hubo un error en la conexión. Por favor, intenta de nuevo.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="relative w-full max-w-2xl" ref={containerRef}>
-      {/* Search Bar Pill */}
+    <div className="relative w-full max-w-xl">
+      {/* Compact Translucent Glass Bar */}
       <form 
         onSubmit={handleAskGemini}
-        className="relative flex items-center bg-[#1a1a1b] hover:bg-[#202124] border border-white/5 rounded-full px-6 py-4 shadow-2xl transition-all group focus-within:ring-2 focus-within:ring-emerald-500/20"
+        className="relative flex items-center bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-2xl px-5 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all group focus-within:bg-white/[0.06] focus-within:border-white/20"
       >
-        <div className="flex items-center gap-3 text-white/40 mr-4">
-          <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 p-[1px]">
-            <div className="w-full h-full bg-[#1a1a1b] rounded-[7px] flex items-center justify-center">
-              <Sparkles className="w-3.5 h-3.5 text-white" />
-            </div>
+        {/* FlowSight Glass Icon */}
+        <div className="relative mr-4 shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center shadow-inner overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
+            <Sparkles className="w-5 h-5 text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.5)]" />
           </div>
         </div>
 
         <Input 
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Pregunta a Gemini sobre tu estrategia..."
-          className="bg-transparent border-none focus-visible:ring-0 text-white placeholder:text-white/20 p-0 h-auto text-sm font-medium"
+          placeholder="Pregunta a la IA sobre tu estrategia..."
+          className="bg-transparent border-none focus-visible:ring-0 text-white placeholder:text-white/20 p-0 h-auto text-sm font-medium tracking-tight"
         />
 
-        <div className="flex items-center gap-4 ml-4">
-          <div className="flex items-center gap-2 text-white/40 border-r border-white/10 pr-4">
-            <Plus className="w-4 h-4 cursor-pointer hover:text-white transition-colors" />
-            <div className="flex items-center gap-1 cursor-pointer hover:text-white transition-colors">
-              <Wrench className="w-3.5 h-3.5" />
-              <span className="text-[10px] font-black uppercase tracking-widest hidden sm:block">Herramientas</span>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1 text-white/40 cursor-pointer hover:text-white transition-colors">
-              <span className="text-[10px] font-black uppercase tracking-widest hidden sm:block">Rápido</span>
-              <ChevronDown className="w-3 h-3" />
-            </div>
-            <Mic className="w-4 h-4 text-white/40 cursor-pointer hover:text-white transition-colors" />
-            {query && !loading && (
-              <motion.button 
-                initial={{ scale: 0 }} 
-                animate={{ scale: 1 }} 
-                type="submit"
-                className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-black"
-              >
-                <Send className="w-4 h-4" />
-              </motion.button>
-            )}
-            {loading && <Loader2 className="w-4 h-4 text-emerald-500 animate-spin" />}
-          </div>
+        <div className="flex items-center gap-3 ml-4">
+          {query && !loading && (
+            <motion.button 
+              initial={{ opacity: 0, scale: 0.8 }} 
+              animate={{ opacity: 1, scale: 1 }} 
+              type="submit"
+              className="w-8 h-8 flex items-center justify-center text-emerald-400 hover:text-emerald-300 transition-colors"
+            >
+              <Send className="w-5 h-5" />
+            </motion.button>
+          )}
+          {loading && <Loader2 className="w-5 h-5 text-emerald-400 animate-spin" />}
         </div>
       </form>
 
-      {/* AI Response Panel */}
+      {/* AI Response Panel - Premium Style */}
       <AnimatePresence>
-        {isOpen && (response || loading) && (
+        {isOpen && (displayedResponse || loading) && (
           <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.95 }}
-            className="absolute top-full mt-4 w-full bg-[#1a1a1b] border border-white/10 rounded-[28px] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-[100] backdrop-blur-xl"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            className="absolute top-full mt-4 w-full bg-[#0a0a0a]/90 backdrop-blur-3xl border border-white/[0.08] rounded-[32px] p-8 shadow-[0_40px_80px_rgba(0,0,0,0.7)] z-[100]"
           >
             <div className="flex justify-between items-start mb-6">
               <div className="flex items-center gap-3">
-                <Sparkles className="w-5 h-5 text-emerald-400" />
-                <span className="text-xs font-black uppercase tracking-[0.2em] text-white/40">Gemini Strategy Agent</span>
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Análisis Estratégico AI</span>
               </div>
               <button 
-                onClick={() => { setIsOpen(false); setResponse(null); }}
-                className="text-white/20 hover:text-white"
+                onClick={() => { setIsOpen(false); setFullResponse(null); setDisplayedResponse(''); }}
+                className="p-2 -mr-2 text-white/10 hover:text-white transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            {loading ? (
-              <div className="space-y-4">
-                <div className="h-4 bg-white/5 rounded-full w-[90%] animate-pulse" />
-                <div className="h-4 bg-white/5 rounded-full w-[70%] animate-pulse" />
-                <div className="h-4 bg-white/5 rounded-full w-[80%] animate-pulse" />
-              </div>
-            ) : (
-              <div className="text-white/90 text-sm leading-relaxed font-medium">
-                {response}
-              </div>
-            )}
+            <div className="text-white/80 text-sm leading-relaxed font-medium min-h-[60px]">
+              {displayedResponse}
+              {loading && !displayedResponse && (
+                <div className="flex gap-1.5 py-2">
+                  <div className="w-1.5 h-1.5 bg-emerald-500/50 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                  <div className="w-1.5 h-1.5 bg-emerald-500/50 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                  <div className="w-1.5 h-1.5 bg-emerald-500/50 rounded-full animate-bounce" />
+                </div>
+              )}
+              {loading && displayedResponse && <span className="inline-block w-1.5 h-4 ml-1 bg-emerald-500 animate-pulse align-middle" />}
+            </div>
 
-            {!loading && (
-              <div className="mt-8 pt-6 border-t border-white/5 flex gap-2">
-                <button 
-                  onClick={() => { setQuery("¿Cómo puedo mejorar el CTR?"); handleAskGemini(); }}
-                  className="text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 text-white/40 hover:text-white transition-all"
-                >
-                  Mejorar CTR
-                </button>
-                <button 
-                  onClick={() => { setQuery("Explica la audiencia"); handleAskGemini(); }}
-                  className="text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-full bg-white/5 hover:bg-white/10 text-white/40 hover:text-white transition-all"
-                >
-                  Explicar Audiencia
-                </button>
-              </div>
+            {!loading && displayedResponse === fullResponse && (
+              <motion.div 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }}
+                className="mt-8 pt-6 border-t border-white/5 flex flex-wrap gap-2"
+              >
+                {["Mejorar CTR", "Explicar Audiencia", "Variaciones"].map((btn) => (
+                  <button 
+                    key={btn}
+                    onClick={() => { setQuery(`Dime cómo ${btn.toLowerCase()}`); handleAskGemini(); }}
+                    className="text-[9px] font-black uppercase tracking-widest px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/5 hover:bg-white/10 text-white/40 hover:text-white transition-all"
+                  >
+                    {btn}
+                  </button>
+                ))}
+              </motion.div>
             )}
           </motion.div>
         )}
