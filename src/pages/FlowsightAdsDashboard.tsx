@@ -33,6 +33,7 @@ import { PaymentModal } from '@/components/PaymentModal';
 import { usePaymentStatus } from '@/hooks/usePaymentStatus';
 import { generateAdsWithGeminiIntegration } from '@/lib/dashboardIntegration';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 import { MockupLightbox } from '@/components/MockupLightbox';
 import { logger } from '@/lib/logger';
 import { PlatformIcon, platformThemes, platformNames } from '@/components/PlatformIcons';
@@ -162,6 +163,7 @@ const FlowsightAdsDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
   const { toast } = useToast();
+  const { session, signOut } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -216,6 +218,13 @@ const FlowsightAdsDashboard: React.FC = () => {
     updateIdealCustomer();
   }, [selectedBusinessType, selectedAgeRange, selectedGeographicReach, additionalCustomerInfo, updateIdealCustomer]);
 
+  // Auth Protection & Inactivity Redirect
+  useEffect(() => {
+    if (!session && !isInputFlowPreview) {
+      navigate('/auth');
+    }
+  }, [session, navigate, isInputFlowPreview]);
+
   const handleImageModeSelect = (mode: ImageMode) => {
     setImageMode(mode);
     setPromptCopied(false);
@@ -249,7 +258,7 @@ const FlowsightAdsDashboard: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      await supabase.auth.signOut();
+      await signOut();
       navigate('/flowsight-ads');
     } catch (err) {
       logger.error("Error al cerrar sesión", err, "Dashboard");
