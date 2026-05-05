@@ -11,9 +11,14 @@ interface CampaignKitData {
   platform?: string;
 }
 
-const PLATFORM_COLORS: Record<string, { primary: [number, number, number], secondary: [number, number, number], light: [number, number, number] }> = {
+const PLATFORM_COLORS: Record<string, { primary: [number, number, number], secondary: [number, number, number], light: [number, number, number], accent?: [number, number, number][] }> = {
   meta: { primary: [0, 102, 255], secondary: [6, 104, 225], light: [240, 247, 255] },
-  google: { primary: [66, 133, 244], secondary: [52, 168, 83], light: [241, 243, 244] },
+  google: { 
+    primary: [66, 133, 244], // Google Blue
+    secondary: [15, 157, 88], // Google Green
+    light: [248, 249, 250],
+    accent: [[66, 133, 244], [219, 68, 55], [244, 180, 0], [15, 157, 88]] // Blue, Red, Yellow, Green
+  },
   tiktok: { primary: [254, 44, 85], secondary: [37, 244, 238], light: [255, 240, 243] },
   linkedin: { primary: [0, 119, 181], secondary: [0, 65, 106], light: [232, 240, 247] },
   generic: { primary: [16, 185, 129], secondary: [20, 184, 166], light: [236, 253, 245] }
@@ -31,6 +36,16 @@ export const downloadPremiumCampaignKit = (data: CampaignKitData) => {
   const drawHeader = (title: string, subTitle: string) => {
     doc.setFillColor(...colors.primary);
     doc.rect(0, 0, pageWidth, 40, 'F');
+
+    // Multi-color accent line if Google
+    if (colors.accent) {
+      const segmentWidth = pageWidth / colors.accent.length;
+      colors.accent.forEach((color, i) => {
+        doc.setFillColor(...color);
+        doc.rect(i * segmentWidth, 38, segmentWidth, 2, 'F');
+      });
+    }
+
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(18);
     doc.setFont('helvetica', 'bold');
@@ -53,6 +68,15 @@ export const downloadPremiumCampaignKit = (data: CampaignKitData) => {
   // Design Element (Side bar)
   doc.setFillColor(...colors.primary);
   doc.rect(0, 0, 15, pageHeight, 'F');
+
+  // Multi-color side bar if Google
+  if (colors.accent) {
+    const segmentHeight = pageHeight / colors.accent.length;
+    colors.accent.forEach((color, i) => {
+      doc.setFillColor(...color);
+      doc.rect(13, i * segmentHeight, 2, segmentHeight, 'F');
+    });
+  }
 
   doc.setTextColor(...colors.secondary);
   doc.setFontSize(12);
