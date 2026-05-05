@@ -375,6 +375,7 @@ const FlowsightAdsDashboard: React.FC = () => {
   const handleDownloadMasterKit = () => {
     if (hasPaid) {
       const platformAds = generatedAds.filter(ad => ad.platform === selectedPlatform);
+      console.log(`Descargando Master Kit para ${selectedPlatform}. Variantes encontradas: ${platformAds.length}`);
       
       try {
         downloadPremiumCampaignKit({
@@ -385,7 +386,10 @@ const FlowsightAdsDashboard: React.FC = () => {
           ads: platformAds.length > 0 ? platformAds : generatedAds,
           platform: selectedPlatform,
         });
-        toast({ title: 'Descarga iniciada', description: `Tu kit para ${platformNames[selectedPlatform]} se está preparando.` });
+        toast({ 
+          title: 'Descarga iniciada', 
+          description: `Tu kit con ${platformAds.length > 0 ? platformAds.length : 'todas'} las variantes para ${platformNames[selectedPlatform]} se está preparando.` 
+        });
       } catch (err) {
         toast({ title: 'Error al generar PDF', variant: 'destructive' });
       }
