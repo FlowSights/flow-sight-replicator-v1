@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Send, Loader2, X } from 'lucide-react';
+import { Send, Loader2, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { supabase } from '@/lib/supabaseClient';
 import { logger, formatError } from '@/lib/logger';
@@ -15,6 +15,21 @@ interface AIAgentBarProps {
   };
 }
 
+const GeminiIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 animate-pulse">
+    <path d="M12 2L14.85 9.15L22 12L14.85 14.85L12 22L9.15 14.85L2 12L9.15 9.15L12 2Z" 
+      className="fill-gradient-to-br from-blue-400 via-purple-400 to-pink-400"
+      style={{ fill: 'url(#gemini-gradient)' }}
+    />
+    <defs>
+      <linearGradient id="gemini-gradient" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor="#4facfe" />
+        <stop offset="100%" stopColor="#00f2fe" />
+      </linearGradient>
+    </defs>
+  </svg>
+);
+
 export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context }) => {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
@@ -23,14 +38,11 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context }) => {
   const [isOpen, setIsOpen] = useState(false);
   const typingTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Typing effect logic
   useEffect(() => {
     if (fullResponse) {
       setDisplayedResponse('');
       let index = 0;
-      
       if (typingTimerRef.current) clearInterval(typingTimerRef.current);
-      
       typingTimerRef.current = setInterval(() => {
         if (index < fullResponse.length) {
           setDisplayedResponse((prev) => prev + fullResponse.charAt(index));
@@ -38,7 +50,7 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context }) => {
         } else {
           if (typingTimerRef.current) clearInterval(typingTimerRef.current);
         }
-      }, 15); // Adjust typing speed here
+      }, 15);
     }
   }, [fullResponse]);
 
@@ -52,58 +64,42 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context }) => {
     setDisplayedResponse('');
     
     try {
-      logger.info("Enviando consulta a Gemini Pro Agent", { query }, "AIAgentBar");
-      
       const systemPrompt = `Eres un experto estratega de marketing digital de FlowSights Ads. 
-      Analiza la campaña actual y responde de forma ejecutiva y brillante.
-      
-      CAMPAÑA:
-      - Negocio: ${context.businessName}
-      - Promoción: ${context.promote}
-      - Público: ${context.idealCustomer}
-      - Anuncios: ${context.generatedAds.length} variantes.
-      
-      Responde de forma concisa (máximo 3 párrafos).`;
+      CAMPAÑA: ${context.businessName}, Promoción: ${context.promote}, Público: ${context.idealCustomer}.
+      Responde de forma ejecutiva y brillante.`;
 
       const { data, error } = await supabase.functions.invoke('chat-with-ai', {
         body: {
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: query }
-          ]
+          messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: query }]
         }
       });
 
       if (error) throw error;
       setFullResponse(data.reply);
     } catch (err) {
-      logger.error("Error en Gemini Agent", formatError(err), "AIAgentBar");
-      setFullResponse("Hubo un error en la conexión. Por favor, intenta de nuevo.");
+      setFullResponse("Error en la conexión. Por favor, intenta de nuevo.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="relative w-full max-w-xl">
-      {/* Compact Translucent Glass Bar */}
+    <div className="relative w-full max-w-2xl">
+      {/* Ultra Translucent Glass Bar */}
       <form 
         onSubmit={handleAskGemini}
-        className="relative flex items-center bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-2xl px-5 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all group focus-within:bg-white/[0.06] focus-within:border-white/20"
+        className="relative flex items-center bg-white/[0.01] backdrop-blur-[60px] border border-white/[0.05] rounded-[24px] px-6 py-4 shadow-[0_20px_40px_rgba(0,0,0,0.4)] transition-all group hover:bg-white/[0.03] hover:border-white/10"
       >
-        {/* FlowSight Glass Icon */}
-        <div className="relative mr-4 shrink-0">
-          <div className="w-9 h-9 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center shadow-inner overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
-            <Sparkles className="w-5 h-5 text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.5)]" />
-          </div>
+        <div className="mr-5 shrink-0 drop-shadow-[0_0_10px_rgba(79,172,254,0.4)]">
+          <GeminiIcon />
         </div>
 
         <Input 
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Pregunta a la IA sobre tu estrategia..."
-          className="bg-transparent border-none focus-visible:ring-0 text-white placeholder:text-white/20 p-0 h-auto text-sm font-medium tracking-tight"
+          placeholder="Pregúntale a Gemini sobre tu campaña"
+          className="bg-transparent border-none focus-visible:ring-0 text-white placeholder:text-white/20 p-0 h-auto text-base font-medium tracking-tight shadow-none"
+          style={{ boxShadow: 'none' }}
         />
 
         <div className="flex items-center gap-3 ml-4">
@@ -112,60 +108,60 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context }) => {
               initial={{ opacity: 0, scale: 0.8 }} 
               animate={{ opacity: 1, scale: 1 }} 
               type="submit"
-              className="w-8 h-8 flex items-center justify-center text-emerald-400 hover:text-emerald-300 transition-colors"
+              className="w-10 h-10 flex items-center justify-center text-cyan-400 hover:text-cyan-300 transition-colors"
             >
-              <Send className="w-5 h-5" />
+              <Send className="w-6 h-6" />
             </motion.button>
           )}
-          {loading && <Loader2 className="w-5 h-5 text-emerald-400 animate-spin" />}
+          {loading && <Loader2 className="w-6 h-6 text-cyan-400 animate-spin" />}
         </div>
       </form>
 
-      {/* AI Response Panel - Premium Style */}
+      {/* Response Panel - Immersive Glass */}
       <AnimatePresence>
         {isOpen && (displayedResponse || loading) && (
           <motion.div
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 8 }}
-            className="absolute top-full mt-4 w-full bg-[#0a0a0a]/90 backdrop-blur-3xl border border-white/[0.08] rounded-[32px] p-8 shadow-[0_40px_80px_rgba(0,0,0,0.7)] z-[100]"
+            exit={{ opacity: 0, y: 10 }}
+            className="absolute top-full mt-6 w-full bg-[#050505]/60 backdrop-blur-[80px] border border-white/[0.03] rounded-[40px] p-10 shadow-[0_50px_100px_rgba(0,0,0,0.8)] z-[100]"
           >
-            <div className="flex justify-between items-start mb-6">
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Análisis Estratégico AI</span>
+            <div className="flex justify-between items-start mb-8">
+              <div className="flex items-center gap-4">
+                <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_15px_rgba(34,211,238,0.8)]" />
+                <span className="text-[11px] font-black uppercase tracking-[0.4em] text-white/20">Estratega Virtual Gemini</span>
               </div>
               <button 
                 onClick={() => { setIsOpen(false); setFullResponse(null); setDisplayedResponse(''); }}
-                className="p-2 -mr-2 text-white/10 hover:text-white transition-colors"
+                className="p-3 -mr-3 text-white/5 hover:text-white transition-all"
               >
-                <X className="w-4 h-4" />
+                <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="text-white/80 text-sm leading-relaxed font-medium min-h-[60px]">
+            <div className="text-white/70 text-base leading-relaxed font-medium min-h-[80px]">
               {displayedResponse}
               {loading && !displayedResponse && (
-                <div className="flex gap-1.5 py-2">
-                  <div className="w-1.5 h-1.5 bg-emerald-500/50 rounded-full animate-bounce [animation-delay:-0.3s]" />
-                  <div className="w-1.5 h-1.5 bg-emerald-500/50 rounded-full animate-bounce [animation-delay:-0.15s]" />
-                  <div className="w-1.5 h-1.5 bg-emerald-500/50 rounded-full animate-bounce" />
+                <div className="flex gap-2 py-3">
+                  {[0, 1, 2].map(i => (
+                    <div key={i} className="w-2 h-2 bg-cyan-500/30 rounded-full animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
+                  ))}
                 </div>
               )}
-              {loading && displayedResponse && <span className="inline-block w-1.5 h-4 ml-1 bg-emerald-500 animate-pulse align-middle" />}
+              {loading && displayedResponse && <span className="inline-block w-2 h-5 ml-2 bg-cyan-400 animate-pulse align-middle rounded-full" />}
             </div>
 
             {!loading && displayedResponse === fullResponse && (
               <motion.div 
                 initial={{ opacity: 0 }} 
                 animate={{ opacity: 1 }}
-                className="mt-8 pt-6 border-t border-white/5 flex flex-wrap gap-2"
+                className="mt-10 pt-8 border-t border-white/[0.03] flex flex-wrap gap-3"
               >
-                {["Mejorar CTR", "Explicar Audiencia", "Variaciones"].map((btn) => (
+                {["Optimizar CTR", "Análisis de Audiencia", "Nuevos Copys"].map((btn) => (
                   <button 
                     key={btn}
-                    onClick={() => { setQuery(`Dime cómo ${btn.toLowerCase()}`); handleAskGemini(); }}
-                    className="text-[9px] font-black uppercase tracking-widest px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/5 hover:bg-white/10 text-white/40 hover:text-white transition-all"
+                    onClick={() => { setQuery(`Ayúdame a ${btn.toLowerCase()}`); handleAskGemini(); }}
+                    className="text-[10px] font-black uppercase tracking-[0.2em] px-6 py-3 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] text-white/30 hover:text-white transition-all shadow-xl"
                   >
                     {btn}
                   </button>
