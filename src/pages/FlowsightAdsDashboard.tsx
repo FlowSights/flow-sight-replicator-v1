@@ -667,35 +667,35 @@ const FlowsightAdsDashboard: React.FC = () => {
                       </div>
 
                       <div className="grid md:grid-cols-2 gap-5">
-                        <div className="space-y-2">
-                          <label className="text-xs font-black uppercase tracking-widest text-emerald-500">Nombre del negocio</label>
-                          <Input placeholder="Ej: Café Sol" className="py-7 bg-white/5 border-white/10 rounded-2xl text-lg font-bold" value={config.businessName} onChange={(e) => setConfig({ ...config, businessName: e.target.value })} />
+                        <div className="space-y-2 group">
+                          <label className="text-[10px] font-black uppercase tracking-widest text-emerald-500/70 group-focus-within:text-emerald-400 transition-colors">Nombre del negocio</label>
+                          <Input placeholder="Ej: Café Sol" className="py-7 bg-emerald-500/5 border-emerald-500/10 focus-visible:ring-emerald-500/50 rounded-2xl text-lg font-bold transition-all" value={config.businessName} onChange={(e) => setConfig({ ...config, businessName: e.target.value })} />
                         </div>
-                        <div className="space-y-2">
-                          <label className="text-xs font-black uppercase tracking-widest text-emerald-500">Sitio web / landing page</label>
+                        <div className="space-y-2 group">
+                          <label className="text-[10px] font-black uppercase tracking-widest text-blue-500/70 group-focus-within:text-blue-400 transition-colors">Sitio web / landing page</label>
                           <div className="relative">
-                            <Globe className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                            <Input placeholder="https://tudominio.com" className="pl-12 py-7 bg-white/5 border-white/10 rounded-2xl text-lg font-bold" value={config.websiteUrl} onChange={(e) => setConfig({ ...config, websiteUrl: e.target.value })} onBlur={() => fetchSiteMetadata(config.websiteUrl)} />
+                            <Globe className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-500/50" />
+                            <Input placeholder="https://tudominio.com" className="pl-12 py-7 bg-blue-500/5 border-blue-500/10 focus-visible:ring-blue-500/50 rounded-2xl text-lg font-bold transition-all" value={config.websiteUrl} onChange={(e) => setConfig({ ...config, websiteUrl: e.target.value })} onBlur={() => fetchSiteMetadata(config.websiteUrl)} />
                             {siteAnalyzing && (
                               <motion.div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
-                                <RefreshCw className="w-4 h-4 text-emerald-500 animate-spin" />
-                                <span className="text-xs text-gray-400 font-bold">Analizando...</span>
+                                <RefreshCw className="w-4 h-4 text-blue-500 animate-spin" />
+                                <span className="text-[10px] text-blue-400/60 font-black uppercase">Analizando...</span>
                               </motion.div>
                             )}
                           </div>
                         </div>
-                        <div className="space-y-2">
-                          <label className="text-xs font-black uppercase tracking-widest text-emerald-500">Instagram</label>
+                        <div className="space-y-2 group">
+                          <label className="text-[10px] font-black uppercase tracking-widest text-purple-500/70 group-focus-within:text-purple-400 transition-colors">Instagram</label>
                           <div className="relative">
-                            <Camera className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                            <Input placeholder="https://instagram.com/tu_negocio" className="pl-12 py-7 bg-white/5 border-white/10 rounded-2xl text-lg font-bold" value={config.instagramUrl} onChange={(e) => setConfig({ ...config, instagramUrl: e.target.value })} />
+                            <Camera className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-500/50" />
+                            <Input placeholder="https://instagram.com/tu_negocio" className="pl-12 py-7 bg-purple-500/5 border-purple-500/10 focus-visible:ring-purple-500/50 rounded-2xl text-lg font-bold transition-all" value={config.instagramUrl} onChange={(e) => setConfig({ ...config, instagramUrl: e.target.value })} />
                           </div>
                         </div>
-                        <div className="space-y-2">
-                          <label className="text-xs font-black uppercase tracking-widest text-emerald-500">Facebook</label>
+                        <div className="space-y-2 group">
+                          <label className="text-[10px] font-black uppercase tracking-widest text-indigo-500/70 group-focus-within:text-indigo-400 transition-colors">Facebook</label>
                           <div className="relative">
-                            <Share2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
-                            <Input placeholder="https://facebook.com/tu_negocio" className="pl-12 py-7 bg-white/5 border-white/10 rounded-2xl text-lg font-bold" value={config.facebookUrl} onChange={(e) => setConfig({ ...config, facebookUrl: e.target.value })} />
+                            <Share2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-indigo-500/50" />
+                            <Input placeholder="https://facebook.com/tu_negocio" className="pl-12 py-7 bg-indigo-500/5 border-indigo-500/10 focus-visible:ring-indigo-500/50 rounded-2xl text-lg font-bold transition-all" value={config.facebookUrl} onChange={(e) => setConfig({ ...config, facebookUrl: e.target.value })} />
                           </div>
                         </div>
                       </div>
@@ -856,17 +856,31 @@ const FlowsightAdsDashboard: React.FC = () => {
                       <div className="grid md:grid-cols-4 gap-4">
                         {contentTypes.map((type) => {
                           const Icon = type.icon;
+                          const colors = {
+                            copyonly: 'hover:border-blue-500/50 hover:bg-blue-500/5 selected:bg-blue-500/10 selected:border-blue-500',
+                            single: 'hover:border-purple-500/50 hover:bg-purple-500/5 selected:bg-purple-500/10 selected:border-purple-500',
+                            carousel: 'hover:border-amber-500/50 hover:bg-amber-500/5 selected:bg-amber-500/10 selected:border-amber-500',
+                            video: 'hover:border-emerald-500/50 hover:bg-emerald-500/5 selected:bg-emerald-500/10 selected:border-emerald-500',
+                          }[type.id as keyof typeof colors];
+
+                          const activeColor = {
+                            copyonly: 'text-blue-400',
+                            single: 'text-purple-400',
+                            carousel: 'text-amber-400',
+                            video: 'text-emerald-400',
+                          }[type.id as keyof typeof activeColor];
+
                           return (
                             <motion.button
                               key={type.id}
                               whileHover={{ y: -4, scale: 1.02 }}
                               whileTap={{ scale: 0.98 }}
                               onClick={() => handleImageModeSelect(type.id)}
-                              className={`p-5 rounded-[26px] border-2 transition-all text-left ${imageMode === type.id ? 'bg-emerald-500/12 border-emerald-500/60 shadow-xl shadow-emerald-500/10' : 'bg-white/5 border-white/10 hover:border-emerald-500/30'}`}
+                              className={`p-5 rounded-[26px] border-2 transition-all text-left ${imageMode === type.id ? `bg-white/5 border-white/40 shadow-xl` : 'bg-white/5 border-white/10'} ${colors}`}
                             >
-                              <Icon className="w-7 h-7 text-emerald-400 mb-5" />
+                              <Icon className={`w-7 h-7 mb-5 ${imageMode === type.id ? activeColor : 'text-gray-500 group-hover:text-emerald-400'}`} />
                               <p className="font-black text-white text-lg">{type.title}</p>
-                              <p className="text-sm text-gray-400 mt-1 font-medium">{type.description}</p>
+                              <p className="text-xs text-gray-400 mt-1 font-medium">{type.description}</p>
                             </motion.button>
                           );
                         })}
@@ -932,8 +946,12 @@ const FlowsightAdsDashboard: React.FC = () => {
                             <label className="text-xs font-black uppercase tracking-widest text-emerald-500">Potencial de tu campaña</label>
                             <span className="text-3xl font-black text-white">{estimatedScore}/100</span>
                           </div>
-                          <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
-                            <motion.div animate={{ width: `${estimatedScore}%` }} transition={{ duration: 0.6, ease: 'easeOut' }} className={`h-full ${getScoreColor()} transition-colors duration-300`} />
+                          <div className="w-full bg-white/10 rounded-full h-3 overflow-hidden shadow-inner">
+                            <motion.div 
+                              animate={{ width: `${estimatedScore}%` }} 
+                              transition={{ duration: 1, ease: 'easeOut' }} 
+                              className="h-full bg-gradient-to-r from-emerald-500 to-cyan-400 shadow-[0_0_20px_rgba(16,185,129,0.5)]" 
+                            />
                           </div>
                           <p className="text-sm text-gray-400 font-medium">{getScoreMessage()}</p>
                           <div className="pt-4 space-y-3 text-sm text-gray-300 font-bold">
