@@ -78,10 +78,15 @@ export const downloadPremiumCampaignKit = (data: CampaignKitData) => {
     });
   }
 
-  doc.setTextColor(...colors.secondary);
+  doc.setTextColor(0, 0, 0);
   doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
   doc.text('DOSSIER ESTRATÉGICO DE PUBLICIDAD', 30, 60);
+  
+  // Decorative line
+  doc.setDrawColor(0, 0, 0);
+  doc.setLineWidth(1);
+  doc.line(30, 65, 120, 65);
 
   doc.setTextColor(30, 30, 30);
   doc.setFontSize(48);
