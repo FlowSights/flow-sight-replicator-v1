@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ImageIcon, Loader2 } from 'lucide-react';
 
+import defaultMockup from '@/assets/default-ad-mockup.png';
+
 interface PromoImageProps {
   src?: string;
   alt?: string;
@@ -8,28 +10,14 @@ interface PromoImageProps {
   platform?: 'meta' | 'tiktok' | 'linkedin' | 'google';
   type?: 'image' | 'video';
 }
-
+ 
 const getPlaceholderSVG = (alt: string): string => {
-  const colors: Record<string, { bg: string; accent: string }> = {
-    google: { bg: '#f8f9fa', accent: '#4285F4' },
-    meta: { bg: '#f0f2f5', accent: '#0668E1' },
-    tiktok: { bg: '#000000', accent: '#00F2EA' },
-    linkedin: { bg: '#f3f6f8', accent: '#0077B5' },
-  };
-  const key = Object.keys(colors).find(k => alt?.toLowerCase().includes(k)) || 'google';
-  const c = colors[key];
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-    <rect width="1200" height="630" fill="${c.bg}"/>
-    <rect x="0" y="0" width="1200" height="8" fill="${c.accent}"/>
-    <text x="600" y="290" font-family="system-ui,sans-serif" font-size="48" font-weight="bold" fill="${c.accent}" text-anchor="middle" dominant-baseline="middle">📸</text>
-    <text x="600" y="360" font-family="system-ui,sans-serif" font-size="24" fill="#666" text-anchor="middle">Agrega tu imagen o video aquí</text>
-  </svg>`;
-  return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}`;
+  return defaultMockup;
 };
-
+ 
 const MAX_RETRIES = 1;
 const RETRY_DELAY_MS = 500;
-
+ 
 export const PromoImage: React.FC<PromoImageProps> = ({ 
   src, 
   alt = "Ad", 
@@ -43,14 +31,14 @@ export const PromoImage: React.FC<PromoImageProps> = ({
   const [assetType, setAssetType] = useState<'image' | 'video'>(initialType || 'image');
   const retryCount = useRef(0);
   const retryTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
+ 
   useEffect(() => {
     // Reset state when src changes
     retryCount.current = 0;
     setHasError(false);
     
     if (!src || src === null || src === '') {
-      setCurrentSrc(getPlaceholderSVG(alt));
+      setCurrentSrc(defaultMockup);
       setAssetType('image');
       setIsLoading(false);
       return;
