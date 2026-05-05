@@ -303,7 +303,6 @@ const Auth = () => {
           <p className="text-[9px] font-black uppercase tracking-[0.5em] text-white/10">FlowSights Core Authentication Pipeline</p>
         </footer>
       </div>
-    </div>
     </>
   );
 };
