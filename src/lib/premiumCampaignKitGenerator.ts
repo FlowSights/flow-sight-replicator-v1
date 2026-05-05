@@ -166,57 +166,88 @@ export const downloadPremiumCampaignKit = (data: CampaignKitData) => {
   doc.addPage();
   drawHeader('2. PIEZAS CREATIVAS (COPYWRITING)', `Activos listos para publicar en ${platformName}`);
 
-  let currentY = 60;
-  const cardHeight = 70;
-  const cardSpacing = 15;
+  let currentY = 55;
+  const leftMargin = 20;
+  const contentWidth = pageWidth - 40;
+  const labelWidth = 40;
+  const textX = 25;
 
   data.ads.forEach((ad, index) => {
-    // Check for page overflow
-    if (currentY + cardHeight > pageHeight - 30) {
+    // 1. Calculate dynamic heights
+    const headlineLines = doc.splitTextToSize(cleanText(ad.headline), contentWidth - 10);
+    const descriptionLines = doc.splitTextToSize(cleanText(ad.description), contentWidth - 10);
+    
+    const headlineHeight = headlineLines.length * 5;
+    const descriptionHeight = descriptionLines.length * 5;
+    
+    // Total height for this variant: Title label (5) + Title (h) + Body label (5) + Body (d) + CTA (10) + Spacing (15)
+    const variantContentHeight = 10 + headlineHeight + 10 + descriptionHeight + 15 + 10;
+    const variantBoxHeight = variantContentHeight + 10;
+
+    // 2. Check for page overflow
+    if (currentY + variantBoxHeight > pageHeight - 20) {
       doc.addPage();
       drawHeader('2. PIEZAS CREATIVAS (COPYWRITING)', `Activos listos para publicar en ${platformName}`);
-      currentY = 60; // Reset Y for new page
+      currentY = 55;
     }
 
     const yStart = currentY;
 
-    // Ad Card
+    // Ad Card Box
     doc.setFillColor(252, 252, 252);
     doc.setDrawColor(...colors.primary);
     doc.setLineWidth(0.5);
-    doc.roundedRect(15, yStart - 10, pageWidth - 30, cardHeight, 4, 4, 'FD');
+    doc.roundedRect(15, yStart, pageWidth - 30, variantBoxHeight, 4, 4, 'FD');
 
-    // Accent bar
+    // Left accent bar
     doc.setFillColor(...colors.primary);
-    doc.rect(15, yStart - 10, 5, cardHeight, 'F');
+    doc.rect(15, yStart, 4, variantBoxHeight, 'F');
 
+    let localY = yStart + 8;
+
+    // Variant Header
     doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(...colors.primary);
-    doc.text(`VARIANTE ${index + 1}: ${ad.type.toUpperCase()}`, 25, yStart);
+    doc.text(`VARIANTE ${index + 1}: ${ad.type.toUpperCase()}`, textX, localY);
+    localY += 10;
 
-    doc.setTextColor(60, 60, 60);
-    doc.setFontSize(9);
-    doc.text('TÍTULO / GANCHO:', 25, yStart + 10);
+    // Headline section
+    doc.setTextColor(100, 100, 100);
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'normal');
+    doc.text('TÍTULO / GANCHO:', textX, localY);
+    localY += 5;
+
     doc.setTextColor(20, 20, 20);
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    doc.text(doc.splitTextToSize(cleanText(ad.headline), pageWidth - 70), 55, yStart + 10);
+    doc.text(headlineLines, textX, localY);
+    localY += headlineHeight + 6;
 
-    doc.setTextColor(60, 60, 60);
-    doc.setFontSize(9);
+    // Description section
+    doc.setTextColor(100, 100, 100);
+    doc.setFontSize(8);
     doc.setFont('helvetica', 'normal');
-    doc.text('CUERPO DEL ANUNCIO:', 25, yStart + 25);
+    doc.text('CUERPO DEL ANUNCIO:', textX, localY);
+    localY += 5;
+
     doc.setTextColor(40, 40, 40);
-    doc.text(doc.splitTextToSize(cleanText(ad.description), pageWidth - 70), 55, yStart + 25);
+    doc.setFontSize(10);
+    doc.text(descriptionLines, textX, localY);
+    localY += descriptionHeight + 8;
 
-    doc.setTextColor(60, 60, 60);
-    doc.text('LLAMADO A LA ACCIÓN (CTA):', 25, yStart + 55);
+    // CTA section
+    doc.setTextColor(100, 100, 100);
+    doc.setFontSize(8);
+    doc.text('LLAMADO A LA ACCIÓN (CTA):', textX, localY);
+    
     doc.setTextColor(...colors.secondary);
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    doc.text(cleanText(ad.cta).toUpperCase(), 80, yStart + 55);
+    doc.text(cleanText(ad.cta).toUpperCase(), textX + 45, localY);
 
-    currentY += cardHeight + cardSpacing;
+    currentY += variantBoxHeight + 10;
   });
 
   // --- Page 4: IMPLEMENTATION GUIDE ---

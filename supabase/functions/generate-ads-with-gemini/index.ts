@@ -75,8 +75,8 @@ async function generateAdsWithGemini(request: GenerateAdsRequest): Promise<Gener
   }
 
   const userPrompt = `
-Genera 12 copys de anuncios (3 por plataforma: Google, Meta, TikTok, LinkedIn) para el siguiente negocio:
-
+Genera 16 copys de anuncios (4 por plataforma: Google, Meta, TikTok, LinkedIn) para el siguiente negocio:
+ 
 INFORMACIÓN DEL NEGOCIO:
 - Nombre: ${request.businessName}
 - Qué promueve: ${request.promote}
@@ -84,24 +84,25 @@ INFORMACIÓN DEL NEGOCIO:
 - Cliente ideal: ${request.idealCustomer}
 - Sitio web: ${request.websiteUrl}
 - Presupuesto diario: $${request.budget}
-
+ 
 REQUISITOS:
-1. Genera 3 tipos de copys por plataforma:
-   - Offer (enfocado en descuentos/beneficios)
-   - Emotional (conecta emocionalmente)
-   - Urgency (crea sentido de urgencia)
-
+1. Genera 4 tipos de copys por plataforma:
+   - Offer (enfocado en descuentos/beneficios directos)
+   - Emotional (conecta emocionalmente con el deseo)
+   - Urgency (crea sentido de urgencia/escasez)
+   - Pain Point (ataca un problema específico que el cliente tiene)
+ 
 2. Cada copy debe:
    - Ser específico para ${request.businessName}
    - Dirigirse a ${request.idealCustomer}
    - Mencionar ${request.promote}
    - Ser optimizado para su plataforma
-
+ 
 3. Proporciona un score de 85-99 basado en:
    - Relevancia para el negocio
    - Potencial de conversión
    - Adaptación a la plataforma
-
+ 
 Responde SOLO con JSON válido, sin explicaciones adicionales.`;
 
   try {

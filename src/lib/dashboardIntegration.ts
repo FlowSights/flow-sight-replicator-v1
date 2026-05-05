@@ -4,42 +4,26 @@ import { GeneratedAdCopy } from '@/hooks/useGeminiAdGenerator';
 // Fallback de anuncios de calidad si Gemini falla
 const FALLBACK_ADS_TEMPLATE = {
   ads: [
-    {
-      type: 'Offer',
-      platform: 'google',
-      headline: 'Ofertas exclusivas para ti',
-      description: 'Descubre nuestras mejores promociones y ahorra hasta 50%',
-      cta: 'Compra ahora',
-      reasoning: 'Offer-based copy con urgencia y descuento específico',
-      score: 85,
-    },
-    {
-      type: 'Emotional',
-      platform: 'meta',
-      headline: 'Transforma tu experiencia',
-      description: 'Únete a miles de clientes satisfechos que ya han mejorado su vida',
-      cta: 'Empieza gratis',
-      reasoning: 'Emotional connection con prueba social',
-      score: 88,
-    },
-    {
-      type: 'Urgency',
-      platform: 'tiktok',
-      headline: '⏰ Solo quedan 24 horas',
-      description: 'Esta oportunidad no volverá. Actúa ahora antes de que se agote',
-      cta: 'No me lo pierdo',
-      reasoning: 'Urgency-driven copy con límite de tiempo',
-      score: 90,
-    },
-    {
-      type: 'Offer',
-      platform: 'linkedin',
-      headline: 'Soluciones profesionales',
-      description: 'Aumenta tu productividad con nuestras herramientas premium',
-      cta: 'Solicita demo',
-      reasoning: 'Professional tone con valor empresarial',
-      score: 87,
-    },
+    // GOOGLE
+    { type: 'Offer', platform: 'google', headline: 'Impulsa tu negocio hoy', description: 'Obtén resultados reales con nuestra estrategia probada. ¡Empieza ahora!', cta: 'Más información', reasoning: 'Enfoque en beneficio directo', score: 92 },
+    { type: 'Emotional', platform: 'google', headline: 'Tu éxito, nuestra meta', description: 'Únete a cientos de emprendedores que transformaron su futuro con nosotros.', cta: 'Ver éxito', reasoning: 'Conexión emocional y social', score: 88 },
+    { type: 'Urgency', platform: 'google', headline: 'Oferta por tiempo limitado', description: 'No dejes pasar esta oportunidad única. Solo 10 cupos disponibles.', cta: 'Asegurar cupo', reasoning: 'Urgencia por escasez', score: 95 },
+    { type: 'Pain Point', platform: 'google', headline: '¿Cansado de no vender?', description: 'Deja de perder dinero en anuncios que no funcionan. Tenemos la solución.', cta: 'Solución aquí', reasoning: 'Ataca el problema principal', score: 90 },
+    // META
+    { type: 'Offer', platform: 'meta', headline: 'Regalo exclusivo para ti 🎁', description: 'Descarga nuestra guía maestra y empieza a escalar tu negocio gratis.', cta: 'Descargar', reasoning: 'Lead magnet de alto valor', score: 94 },
+    { type: 'Emotional', platform: 'meta', headline: 'Vive la vida que mereces', description: 'Imagina despertar cada día sabiendo que tu negocio crece solo.', cta: 'Saber más', reasoning: 'Visualización del estado deseado', score: 89 },
+    { type: 'Urgency', platform: 'meta', headline: 'ÚLTIMAS HORAS ⏰', description: 'El descuento del 50% termina a medianoche. ¡No te quedes fuera!', cta: 'Comprar ahora', reasoning: 'Urgencia temporal clásica', score: 96 },
+    { type: 'Pain Point', platform: 'meta', headline: '¿Tu competencia te supera?', description: 'Recupera tu lugar en el mercado con estrategias de vanguardia.', cta: 'Superarlos', reasoning: 'Miedo a quedarse atrás', score: 91 },
+    // TIKTOK
+    { type: 'Offer', platform: 'tiktok', headline: 'Hack para vender más 🚀', description: 'Este método secreto está cambiando el juego. Úsalo antes que todos.', cta: 'Ver hack', reasoning: 'Curiosidad y beneficio', score: 93 },
+    { type: 'Emotional', platform: 'tiktok', headline: 'Pov: Tu negocio escala', description: 'Esa sensación cuando las ventas no dejan de llegar. Hazlo realidad.', cta: 'Lograrlo', reasoning: 'Formato nativo de TikTok', score: 87 },
+    { type: 'Urgency', platform: 'tiktok', headline: 'Corre, se agotan 🏃‍♂️', description: 'Solo quedan 5 unidades con este precio especial. ¡Vuelan!', cta: 'Lo quiero', reasoning: 'Escasez de inventario', score: 97 },
+    { type: 'Pain Point', platform: 'tiktok', headline: '¿Haces ads y nada?', description: 'Deja de quemar presupuesto. Mira cómo lo hacen los expertos.', cta: 'Aprender', reasoning: 'Empatía con el fracaso previo', score: 89 },
+    // LINKEDIN
+    { type: 'Offer', platform: 'linkedin', headline: 'Auditoría gratuita B2B', description: 'Analizamos tu embudo de ventas sin costo. Solo para profesionales.', cta: 'Agendar', reasoning: 'Valor profesional directo', score: 91 },
+    { type: 'Emotional', platform: 'linkedin', headline: 'Lidera tu industria', description: 'Construye una marca personal y empresarial que imponga respeto.', cta: 'Ser líder', reasoning: 'Aspiración de estatus', score: 86 },
+    { type: 'Urgency', platform: 'linkedin', headline: 'Cierre de inscripciones', description: 'Último día para unirse al programa de aceleración empresarial.', cta: 'Aplicar', reasoning: 'Exclusividad y límite', score: 94 },
+    { type: 'Pain Point', platform: 'linkedin', headline: '¿Ventas estancadas?', description: 'Descubre por qué tu crecimiento se detuvo y cómo reactivarlo hoy.', cta: 'Diagnóstico', reasoning: 'Identificación de cuello de botella', score: 92 },
   ],
 };
 
