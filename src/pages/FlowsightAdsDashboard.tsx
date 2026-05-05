@@ -668,18 +668,18 @@ const FlowsightAdsDashboard: React.FC = () => {
 
                       <div className="grid md:grid-cols-2 gap-5">
                         <div className="space-y-2 group">
-                          <label className="text-[10px] font-black uppercase tracking-widest text-emerald-500/70 group-focus-within:text-emerald-400 transition-colors">Nombre del negocio</label>
-                          <Input placeholder="Ej: Café Sol" className="py-7 bg-emerald-500/5 border-emerald-500/10 focus-visible:ring-emerald-500/50 rounded-2xl text-lg font-bold transition-all" value={config.businessName} onChange={(e) => setConfig({ ...config, businessName: e.target.value })} />
+                          <label className="text-[10px] font-black uppercase tracking-widest text-cyan-500/70 group-focus-within:text-cyan-400 transition-colors">Nombre del negocio</label>
+                          <Input placeholder="Ej: Café Sol" className="py-7 bg-cyan-500/5 border-cyan-500/10 focus-visible:ring-cyan-500/50 rounded-2xl text-lg font-bold transition-all" value={config.businessName} onChange={(e) => setConfig({ ...config, businessName: e.target.value })} />
                         </div>
                         <div className="space-y-2 group">
-                          <label className="text-[10px] font-black uppercase tracking-widest text-blue-500/70 group-focus-within:text-blue-400 transition-colors">Sitio web / landing page</label>
+                          <label className="text-[10px] font-black uppercase tracking-widest text-emerald-500/70 group-focus-within:text-emerald-400 transition-colors">Sitio web / landing page</label>
                           <div className="relative">
-                            <Globe className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-500/50" />
-                            <Input placeholder="https://tudominio.com" className="pl-12 py-7 bg-blue-500/5 border-blue-500/10 focus-visible:ring-blue-500/50 rounded-2xl text-lg font-bold transition-all" value={config.websiteUrl} onChange={(e) => setConfig({ ...config, websiteUrl: e.target.value })} onBlur={() => fetchSiteMetadata(config.websiteUrl)} />
+                            <Globe className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-500/50" />
+                            <Input placeholder="https://tudominio.com" className="pl-12 py-7 bg-emerald-500/5 border-emerald-500/10 focus-visible:ring-emerald-500/50 rounded-2xl text-lg font-bold transition-all" value={config.websiteUrl} onChange={(e) => setConfig({ ...config, websiteUrl: e.target.value })} onBlur={() => fetchSiteMetadata(config.websiteUrl)} />
                             {siteAnalyzing && (
                               <motion.div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
-                                <RefreshCw className="w-4 h-4 text-blue-500 animate-spin" />
-                                <span className="text-[10px] text-blue-400/60 font-black uppercase">Analizando...</span>
+                                <RefreshCw className="w-4 h-4 text-emerald-500 animate-spin" />
+                                <span className="text-[10px] text-emerald-400/60 font-black uppercase">Analizando...</span>
                               </motion.div>
                             )}
                           </div>
@@ -692,10 +692,10 @@ const FlowsightAdsDashboard: React.FC = () => {
                           </div>
                         </div>
                         <div className="space-y-2 group">
-                          <label className="text-[10px] font-black uppercase tracking-widest text-indigo-500/70 group-focus-within:text-indigo-400 transition-colors">Facebook</label>
+                          <label className="text-[10px] font-black uppercase tracking-widest text-blue-500/70 group-focus-within:text-blue-400 transition-colors">Facebook</label>
                           <div className="relative">
-                            <Share2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-indigo-500/50" />
-                            <Input placeholder="https://facebook.com/tu_negocio" className="pl-12 py-7 bg-indigo-500/5 border-indigo-500/10 focus-visible:ring-indigo-500/50 rounded-2xl text-lg font-bold transition-all" value={config.facebookUrl} onChange={(e) => setConfig({ ...config, facebookUrl: e.target.value })} />
+                            <Share2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-500/50" />
+                            <Input placeholder="https://facebook.com/tu_negocio" className="pl-12 py-7 bg-blue-500/5 border-blue-500/10 focus-visible:ring-blue-500/50 rounded-2xl text-lg font-bold transition-all" value={config.facebookUrl} onChange={(e) => setConfig({ ...config, facebookUrl: e.target.value })} />
                           </div>
                         </div>
                       </div>
