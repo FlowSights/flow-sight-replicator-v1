@@ -707,10 +707,22 @@ const FlowsightAdsDashboard: React.FC = () => {
                       </div>
 
                       <div className="grid md:grid-cols-2 gap-5">
+                        <div className="space-y-2 group md:col-span-2">
+                          <label className="text-[10px] font-black uppercase tracking-widest text-emerald-500 group-focus-within:text-emerald-400 transition-colors flex items-center gap-2">
+                            <MapPin className="w-3 h-3" /> Ubicación de la campaña (Países, ciudades o regiones)
+                          </label>
+                          <LocationInput 
+                            value={config.location} 
+                            onChange={(val) => setConfig({ ...config, location: val })}
+                            placeholder="Ej: Madrid, España o Ciudad de México"
+                          />
+                        </div>
+
                         <div className="space-y-2 group">
                           <label className="text-[10px] font-black uppercase tracking-widest text-cyan-500/70 group-focus-within:text-cyan-400 transition-colors">Nombre del negocio</label>
                           <Input placeholder="Ej: Café Sol" className="py-7 bg-cyan-500/5 border-cyan-500/10 focus-visible:ring-cyan-500/50 rounded-2xl text-lg font-bold transition-all" value={config.businessName} onChange={(e) => setConfig({ ...config, businessName: e.target.value })} />
                         </div>
+
                         <div className="space-y-2 group">
                           <label className="text-[10px] font-black uppercase tracking-widest text-emerald-500/70 group-focus-within:text-emerald-400 transition-colors">Sitio web / landing page</label>
                           <div className="relative">
@@ -724,6 +736,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                             )}
                           </div>
                         </div>
+
                         <div className="space-y-2 group">
                           <label className="text-[10px] font-black uppercase tracking-widest text-purple-500/70 group-focus-within:text-purple-400 transition-colors">Instagram</label>
                           <div className="relative">
@@ -731,6 +744,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                             <Input placeholder="https://instagram.com/tu_negocio" className="pl-12 py-7 bg-purple-500/5 border-purple-500/10 focus-visible:ring-purple-500/50 rounded-2xl text-lg font-bold transition-all" value={config.instagramUrl} onChange={(e) => setConfig({ ...config, instagramUrl: e.target.value })} />
                           </div>
                         </div>
+
                         <div className="space-y-2 group">
                           <label className="text-[10px] font-black uppercase tracking-widest text-blue-500/70 group-focus-within:text-blue-400 transition-colors">Facebook</label>
                           <div className="relative">
@@ -766,12 +780,13 @@ const FlowsightAdsDashboard: React.FC = () => {
                         <p className="text-gray-400 font-medium mt-3">Antes de pedirte presupuesto, te mostramos el razonamiento de campaña para que veas que entendimos el negocio.</p>
                       </div>
 
-                      <div className="grid md:grid-cols-2 gap-5">
+                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
                         {[
                           { title: 'Tipo de campaña sugerida', value: 'Captación de alta intención', icon: Megaphone, color: 'blue' },
                           { title: 'Público objetivo', value: suggestedAudience, icon: Users, color: 'purple' },
                           { title: 'Tono de comunicación', value: detectedTone, icon: MessageSquareText, color: 'amber' },
                           { title: 'Objetivo principal', value: suggestedObjective, icon: Target, color: 'emerald' },
+                          { title: 'Geolocalización Estratégica', value: config.location || 'Todo el país (recomendado)', icon: MapPin, color: 'cyan' },
                         ].map((card, index) => {
                           const Icon = card.icon;
                           const colors = {
@@ -779,6 +794,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                             purple: 'from-purple-500/10 to-purple-500/5 border-purple-500/20 text-purple-400',
                             amber: 'from-amber-500/10 to-amber-500/5 border-amber-500/20 text-amber-400',
                             emerald: 'from-emerald-500/10 to-emerald-500/5 border-emerald-500/20 text-emerald-400',
+                            cyan: 'from-cyan-500/10 to-cyan-500/5 border-cyan-500/20 text-cyan-400',
                           }[card.color as keyof typeof colors];
 
                           return (

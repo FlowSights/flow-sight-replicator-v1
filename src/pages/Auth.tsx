@@ -8,8 +8,9 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import SEO from "@/components/SEO";
-import { ArrowLeft, Loader2, Mail, Lock, User as UserIcon } from "lucide-react";
+import { ArrowLeft, Loader2, Mail, Lock, User as UserIcon, BarChart3 } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { motion } from "framer-motion";
 import logo from "@/assets/logo.png";
 import { z } from "zod";
 import { logger, formatError } from "@/lib/logger";
@@ -135,44 +136,51 @@ const Auth = () => {
         url="/auth"
         noindex={true}
       />
-      <div className="min-h-screen">
-      <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-xl bg-background/70 border-b border-border/50">
-        <nav className="container flex items-center justify-between h-20">
-          <Link 
-            to="/" 
-            className="flex items-center gap-2.5 font-display font-bold text-xl md:text-2xl hover:opacity-90 transition-opacity"
-          >
-            <img src={logo} alt="FlowSights logo" width={48} height={48} className="w-12 h-12 object-contain" />
-            <span>FlowSights</span>
-          </Link>
-          <div className="flex items-center gap-2">
-            <ThemeToggle />
-            <Button variant="ghost" size="sm" asChild>
-              <Link to="/blog"><ArrowLeft className="w-4 h-4 mr-1" /> Blog</Link>
-            </Button>
-          </div>
-        </nav>
-      </header>
+      <div className="min-h-screen bg-[#050505] text-white selection:bg-white/20">
+        <header className="fixed top-0 inset-x-0 z-50">
+          <nav className="container max-w-7xl mx-auto flex items-center justify-between h-24 px-6">
+            <Link 
+              to="/" 
+              className="flex items-center gap-3 font-black text-2xl tracking-tighter hover:opacity-80 transition-all"
+            >
+              <div className="w-8 h-8 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                <BarChart3 className="w-5 h-5 text-white" />
+              </div>
+              <span className="bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60 font-display">FlowSights</span>
+            </Link>
+            <div className="flex items-center gap-6">
+              <ThemeToggle />
+              <Link to="/blog" className="text-xs font-black uppercase tracking-widest text-gray-500 hover:text-white transition-colors flex items-center gap-2 group">
+                <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" /> Blog
+              </Link>
+            </div>
+          </nav>
+        </header>
 
-      <section className="pt-32 pb-16 min-h-screen flex items-center">
-        <div className="container max-w-md">
-          <Card className="p-8 glass-card">
-            <h1 className="font-display text-3xl font-bold text-center">
-              {mode === "signin" ? "Inicia sesión" : "Crea tu cuenta"}
-            </h1>
-            <p className="text-muted-foreground text-center text-sm mt-2">
-              {mode === "signin"
-                ? "Inicia sesión para participar en la conversación."
-                : "Crea una cuenta para comentar en nuestros artículos."}
-            </p>
+      <section className="flex items-center justify-center min-h-screen px-6">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full max-w-[440px]"
+        >
+          <div className="p-10 rounded-[32px] bg-[#0A0A0A] border border-white/[0.05] shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+            
+            <div className="text-center mb-10">
+              <h1 className="text-4xl font-black tracking-tight mb-3">
+                {mode === "signin" ? "Inicia sesión" : "Crea tu cuenta"}
+              </h1>
+              <p className="text-gray-500 text-sm font-medium">
+                {mode === "signin"
+                  ? "Inicia sesión para participar en la conversación."
+                  : "Crea una cuenta para comentar en nuestros artículos."}
+              </p>
+            </div>
 
-            <div className="mt-8" />
-
-            <div className="space-y-4">
+            <div className="space-y-6">
               <Button 
                 type="button" 
-                variant="outline" 
-                className="w-full h-11 font-bold flex items-center justify-center gap-2 border-border/50 hover:bg-accent transition-all"
+                className="w-full h-14 bg-black hover:bg-white/[0.03] border border-white/10 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all text-sm"
                 onClick={handleGoogleLogin}
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -184,50 +192,85 @@ const Auth = () => {
                 Continuar con Google
               </Button>
 
-              <div className="relative py-2">
-                <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-border/50"></span></div>
-                <div className="relative flex justify-center text-[10px] font-black uppercase tracking-widest"><span className="bg-card px-4 text-muted-foreground">O con email</span></div>
+              <div className="relative py-4 flex items-center justify-center">
+                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/[0.05]"></div></div>
+                <span className="relative px-4 bg-[#0A0A0A] text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">O con email</span>
               </div>
 
-              <form onSubmit={handleEmail} className="space-y-4">
+              <form onSubmit={handleEmail} className="space-y-5">
                 {mode === "signup" && (
-                  <div>
-                    <Label htmlFor="name">Nombre</Label>
-                    <div className="relative mt-1">
-                      <UserIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                      <Input id="name" value={name} onChange={(e) => setName(e.target.value)} className="pl-9" placeholder="Tu nombre" required />
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-1">Nombre</label>
+                    <div className="relative">
+                      <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+                      <Input 
+                        id="name" 
+                        value={name} 
+                        onChange={(e) => setName(e.target.value)} 
+                        className="h-14 pl-12 bg-white/[0.02] border-white/5 rounded-2xl focus:ring-1 focus:ring-white/20 transition-all text-sm font-bold placeholder:text-gray-700 text-white" 
+                        placeholder="Tu nombre" 
+                        required 
+                      />
                     </div>
                   </div>
                 )}
-                <div>
-                  <Label htmlFor="email">Correo</Label>
-                  <div className="relative mt-1">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="pl-9" placeholder="tu@empresa.com" required />
-                  </div>
-                </div>
-                <div>
-                  <Label htmlFor="password">Contraseña</Label>
-                  <div className="relative mt-1">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="pl-9" placeholder="Mínimo 6 caracteres" required />
+                
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-1">Correo</label>
+                  <div className="relative">
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+                    <Input 
+                      id="email" 
+                      type="email" 
+                      value={email} 
+                      onChange={(e) => setEmail(e.target.value)} 
+                      className="h-14 pl-12 bg-white/[0.02] border-white/5 rounded-2xl focus:ring-1 focus:ring-white/20 transition-all text-sm font-bold placeholder:text-gray-700 text-white" 
+                      placeholder="tu@empresa.com" 
+                      required 
+                    />
                   </div>
                 </div>
 
-                <Button type="submit" variant="hero" className="w-full h-11" disabled={loading}>
-                  {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : (mode === "signin" ? "Entrar" : "Crear cuenta")}
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-1">Contraseña</label>
+                  <div className="relative">
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
+                    <Input 
+                      id="password" 
+                      type="password" 
+                      value={password} 
+                      onChange={(e) => setPassword(e.target.value)} 
+                      className="h-14 pl-12 bg-white/[0.02] border-white/5 rounded-2xl focus:ring-1 focus:ring-white/20 transition-all text-sm font-bold placeholder:text-gray-700 text-white" 
+                      placeholder="Mínimo 6 caracteres" 
+                      required 
+                    />
+                  </div>
+                </div>
+
+                <Button 
+                  type="submit" 
+                  className="w-full h-14 bg-gray-200 hover:bg-white text-black font-black uppercase tracking-widest text-xs rounded-2xl transition-all shadow-xl shadow-white/5 mt-4" 
+                  disabled={loading}
+                >
+                  {loading ? <Loader2 className="w-4 h-4 animate-spin text-black" /> : (mode === "signin" ? "Entrar" : "Crear cuenta")}
                 </Button>
               </form>
-            </div>
 
-            <p className="text-center text-sm text-muted-foreground mt-6">
-              {mode === "signin" ? "¿No tienes cuenta?" : "¿Ya tienes cuenta?"}{" "}
-              <button type="button" onClick={() => setMode(mode === "signin" ? "signup" : "signin")} className="text-primary font-medium hover:underline">
-                {mode === "signin" ? "Regístrate" : "Inicia sesión"}
-              </button>
-            </p>
-          </Card>
-        </div>
+              <div className="text-center pt-4">
+                <p className="text-sm font-medium text-gray-500">
+                  {mode === "signin" ? "¿No tienes cuenta?" : "¿Ya tienes cuenta?"}{" "}
+                  <button 
+                    type="button" 
+                    onClick={() => setMode(mode === "signin" ? "signup" : "signin")} 
+                    className="text-white hover:underline transition-all underline-offset-4"
+                  >
+                    {mode === "signin" ? "Regístrate" : "Inicia sesión"}
+                  </button>
+                </p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </section>
     </div>
     </>
