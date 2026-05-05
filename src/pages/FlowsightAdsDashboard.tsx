@@ -623,19 +623,19 @@ const FlowsightAdsDashboard: React.FC = () => {
                         </div>
 
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: config.promote ? 1 : 0.55 }} className="grid sm:grid-cols-3 gap-3">
-                          <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
-                            <Target className="w-5 h-5 text-emerald-400 mb-3" />
-                            <p className="text-xs text-gray-400 font-black uppercase tracking-widest">Enfoque</p>
+                          <div className="p-4 rounded-2xl bg-blue-500/5 border border-blue-500/10 group hover:bg-blue-500/10 transition-colors">
+                            <Target className="w-5 h-5 text-blue-400 mb-3" />
+                            <p className="text-xs text-blue-400/70 font-black uppercase tracking-widest">Enfoque</p>
                             <p className="text-sm font-bold mt-1">Clientes reales</p>
                           </div>
-                          <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
-                            <Users className="w-5 h-5 text-emerald-400 mb-3" />
-                            <p className="text-xs text-gray-400 font-black uppercase tracking-widest">Audiencia</p>
+                          <div className="p-4 rounded-2xl bg-purple-500/5 border border-purple-500/10 group hover:bg-purple-500/10 transition-colors">
+                            <Users className="w-5 h-5 text-purple-400 mb-3" />
+                            <p className="text-xs text-purple-400/70 font-black uppercase tracking-widest">Audiencia</p>
                             <p className="text-sm font-bold mt-1">Se detecta sola</p>
                           </div>
-                          <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
+                          <div className="p-4 rounded-2xl bg-emerald-500/5 border border-emerald-500/10 group hover:bg-emerald-500/10 transition-colors">
                             <TrendingUp className="w-5 h-5 text-emerald-400 mb-3" />
-                            <p className="text-xs text-gray-400 font-black uppercase tracking-widest">Meta</p>
+                            <p className="text-xs text-emerald-400/70 font-black uppercase tracking-widest">Meta</p>
                             <p className="text-sm font-bold mt-1">Más ventas</p>
                           </div>
                         </motion.div>
@@ -728,32 +728,55 @@ const FlowsightAdsDashboard: React.FC = () => {
 
                       <div className="grid md:grid-cols-2 gap-5">
                         {[
-                          { title: 'Tipo de campaña sugerida', value: 'Captación de clientes con intención alta', icon: Megaphone },
-                          { title: 'Público objetivo', value: suggestedAudience, icon: Users },
-                          { title: 'Tono de comunicación', value: detectedTone, icon: MessageSquareText },
-                          { title: 'Objetivo principal', value: suggestedObjective, icon: Target },
+                          { title: 'Tipo de campaña sugerida', value: 'Captación de alta intención', icon: Megaphone, color: 'blue' },
+                          { title: 'Público objetivo', value: suggestedAudience, icon: Users, color: 'purple' },
+                          { title: 'Tono de comunicación', value: detectedTone, icon: MessageSquareText, color: 'amber' },
+                          { title: 'Objetivo principal', value: suggestedObjective, icon: Target, color: 'emerald' },
                         ].map((card, index) => {
                           const Icon = card.icon;
+                          const colors = {
+                            blue: 'from-blue-500/10 to-blue-500/5 border-blue-500/20 text-blue-400',
+                            purple: 'from-purple-500/10 to-purple-500/5 border-purple-500/20 text-purple-400',
+                            amber: 'from-amber-500/10 to-amber-500/5 border-amber-500/20 text-amber-400',
+                            emerald: 'from-emerald-500/10 to-emerald-500/5 border-emerald-500/20 text-emerald-400',
+                          }[card.color as keyof typeof colors];
+
                           return (
-                            <motion.div key={card.title} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.08 }} className="p-6 rounded-[28px] border border-white/10 bg-gradient-to-br from-white/[0.08] to-white/[0.03] hover:border-emerald-500/35 hover:bg-emerald-500/[0.05] transition-all">
-                              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-center mb-5">
-                                <Icon className="w-6 h-6 text-emerald-400" />
+                            <motion.div 
+                              key={card.title} 
+                              initial={{ opacity: 0, y: 18 }} 
+                              animate={{ opacity: 1, y: 0 }} 
+                              transition={{ delay: index * 0.08 }} 
+                              className={`p-6 rounded-[28px] border bg-gradient-to-br transition-all hover:scale-[1.02] ${colors}`}
+                            >
+                              <div className={`w-12 h-12 rounded-2xl bg-white/5 border border-current flex items-center justify-center mb-5`}>
+                                <Icon className="w-6 h-6" />
                               </div>
-                              <p className="text-xs font-black uppercase tracking-widest text-emerald-400 mb-3">{card.title}</p>
-                              <p className="text-xl font-black leading-snug">{card.value}</p>
+                              <p className="text-[10px] font-black uppercase tracking-widest opacity-70 mb-2">{card.title}</p>
+                              <p className="text-lg font-black leading-snug text-white">{card.value}</p>
                             </motion.div>
                           );
                         })}
                       </div>
 
-                      <div className="p-5 rounded-[28px] bg-emerald-500/10 border border-emerald-500/25 flex items-start gap-4">
-                        <CheckCircle2 className="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1" />
-                        <p className="text-gray-200 font-bold leading-relaxed">La campaña se enfocará en resultados concretos: atención, clicks y clientes potenciales. El presupuesto se elegirá en el siguiente paso con estimaciones claras.</p>
+                      <div className="p-8 rounded-[34px] bg-white/5 border border-white/10 relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
+                          <SparklesIcon className="w-20 h-20 text-emerald-500" />
+                        </div>
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="p-1.5 bg-emerald-500/20 rounded-lg">
+                            <SparklesIcon className="w-4 h-4 text-emerald-500" />
+                          </div>
+                          <span className="text-[11px] font-black uppercase tracking-[0.2em] text-emerald-500">¿Por qué esto funcionará?</span>
+                        </div>
+                        <p className="text-gray-300 font-medium leading-relaxed relative z-10 italic text-base">
+                          "He analizado tu {detectedBusinessLabel} y detectado que un tono <span className="text-white font-bold">{detectedTone}</span> con un enfoque en <span className="text-white font-bold">{suggestedObjective}</span> es la forma más rápida de generar confianza en {suggestedAudience.toLowerCase()}."
+                        </p>
                       </div>
 
                       <div className="flex gap-4 pt-2">
                         <Button variant="ghost" onClick={() => setStep(2)} className="flex-1 py-8 rounded-2xl font-bold">Atrás</Button>
-                        <Button onClick={() => { setConfig({ ...config, idealCustomer: `${suggestedAudience} — ${suggestedObjective}` }); setStep(4); }} className="flex-[2] py-8 text-xl font-black bg-emerald-500 hover:bg-emerald-600 rounded-2xl shadow-xl shadow-emerald-500/20">Elegir inversión <ArrowRight className="ml-2 w-6 h-6" /></Button>
+                        <Button onClick={() => { setConfig({ ...config, idealCustomer: `${suggestedAudience} — ${suggestedObjective}` }); setStep(4); }} className="flex-[2] py-8 text-xl font-black bg-emerald-500 hover:bg-emerald-600 rounded-2xl shadow-xl shadow-emerald-500/20">Confirmar y elegir inversión <ArrowRight className="ml-2 w-6 h-6" /></Button>
                       </div>
                     </motion.div>
                   )}
@@ -800,17 +823,17 @@ const FlowsightAdsDashboard: React.FC = () => {
                         </div>
 
                         <div className="grid md:grid-cols-3 gap-4">
-                          <div className="p-5 rounded-[24px] bg-white/5 border border-white/10">
-                            <p className="text-xs text-emerald-400 font-black uppercase tracking-widest mb-2">Alcance estimado</p>
-                            <p className="text-lg font-black text-white">{budgetProjection.reach}</p>
+                          <div className="p-5 rounded-[24px] bg-blue-500/5 border border-blue-500/10">
+                            <p className="text-[10px] text-blue-400/80 font-black uppercase tracking-widest mb-2">Alcance estimado</p>
+                            <p className="text-xl font-black text-white">{budgetProjection.reach}</p>
                           </div>
-                          <div className="p-5 rounded-[24px] bg-white/5 border border-white/10">
-                            <p className="text-xs text-emerald-400 font-black uppercase tracking-widest mb-2">Clicks estimados</p>
-                            <p className="text-lg font-black text-white">{budgetProjection.clicks}</p>
+                          <div className="p-5 rounded-[24px] bg-purple-500/5 border border-purple-500/10">
+                            <p className="text-[10px] text-purple-400/80 font-black uppercase tracking-widest mb-2">Clicks estimados</p>
+                            <p className="text-xl font-black text-white">{budgetProjection.clicks}</p>
                           </div>
-                          <div className="p-5 rounded-[24px] bg-white/5 border border-white/10">
-                            <p className="text-xs text-emerald-400 font-black uppercase tracking-widest mb-2">Clientes potenciales</p>
-                            <p className="text-lg font-black text-white">{budgetProjection.leads}</p>
+                          <div className="p-5 rounded-[24px] bg-emerald-500/10 border border-emerald-500/20 shadow-[inset_0_0_20px_rgba(16,185,129,0.05)]">
+                            <p className="text-[10px] text-emerald-400 font-black uppercase tracking-widest mb-2">Clientes potenciales</p>
+                            <p className="text-xl font-black text-white">{budgetProjection.leads}</p>
                           </div>
                         </div>
                       </div>
