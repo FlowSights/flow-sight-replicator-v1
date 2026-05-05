@@ -54,14 +54,16 @@ interface CampaignConfig {
 type ImageMode = 'copyonly' | 'image' | 'carousel' | 'video';
 
 const businessTypes = [
-  { icon: Store, label: 'Ecommerce / Tienda online', keywords: ['tienda', 'ecommerce', 'online', 'shop', 'producto'] },
-  { icon: Coffee, label: 'Cafetería / Gastronomía', keywords: ['cafe', 'café', 'cafeteria', 'cafetería', 'restaurante', 'comida', 'helado', 'heladería'] },
-  { icon: ShieldCheck, label: 'Salud / Bienestar', keywords: ['salud', 'bienestar', 'clinica', 'clínica', 'spa', 'fitness', 'yoga'] },
-  { icon: Home, label: 'Servicios al hogar', keywords: ['hogar', 'limpieza', 'reparacion', 'reparación', 'jardín', 'jardin', 'mantenimiento'] },
-  { icon: Building2, label: 'B2B / Servicios profesionales', keywords: ['consultoria', 'consultoría', 'software', 'agencia', 'servicio profesional', 'b2b'] },
-  { icon: BookOpen, label: 'Educación / Cursos', keywords: ['curso', 'educación', 'educacion', 'clase', 'academia', 'formación'] },
-  { icon: Globe2, label: 'Turismo / Hospitalidad', keywords: ['hotel', 'turismo', 'viaje', 'hospedaje', 'hostal', 'tour'] },
-  { icon: Store, label: 'Retail / Local', keywords: ['retail', 'local', 'boutique', 'tienda física', 'tienda fisica'] },
+  { icon: Store, label: 'Ecommerce / Tienda online', keywords: ['tienda', 'ecommerce', 'online', 'shop', 'producto', 'ventas'] },
+  { icon: Coffee, label: 'Cafetería / Gastronomía', keywords: ['cafe', 'café', 'cafeteria', 'cafetería', 'restaurante', 'comida', 'helado', 'heladería', 'pizzería', 'hamburguesas', 'sushi'] },
+  { icon: ShieldCheck, label: 'Salud / Clínica', keywords: ['salud', 'bienestar', 'clinica', 'clínica', 'médico', 'medico', 'dentista', 'odontologia', 'terapia'] },
+  { icon: SparklesIcon, label: 'Belleza / Estética', keywords: ['spa', 'fitness', 'yoga', 'uñas', 'manicura', 'salon', 'belleza', 'peluquería', 'barbería', 'corte', 'cabello', 'estética', 'estetica', 'pestañas', 'cejas'] },
+  { icon: Home, label: 'Servicios al hogar', keywords: ['hogar', 'limpieza', 'reparacion', 'reparación', 'jardín', 'jardin', 'mantenimiento', 'plomería', 'pintura', 'aire acondicionado'] },
+  { icon: Building2, label: 'Corporativo / Legal', keywords: ['consultoria', 'consultoría', 'software', 'agencia', 'servicio profesional', 'b2b', 'abogado', 'legal', 'firma', 'leyes', 'corporativo', 'contabilidad', 'asesoría'] },
+  { icon: BookOpen, label: 'Educación / Cursos', keywords: ['curso', 'educación', 'educacion', 'clase', 'academia', 'formación', 'taller', 'seminario'] },
+  { icon: Globe2, label: 'Turismo / Hospitalidad', keywords: ['hotel', 'turismo', 'viaje', 'hospedaje', 'hostal', 'tour', 'agencia de viajes'] },
+  { icon: Zap, label: 'Automotriz / Repuestos', keywords: ['repuestos', 'automotriz', 'taller', 'mecanico', 'autos', 'piezas', 'llantas', 'baterías', 'accesorios autos'] },
+  { icon: Store, label: 'Retail / Local', keywords: ['retail', 'local', 'boutique', 'tienda física', 'tienda fisica', 'zapatería', 'ropa', 'ferretería'] },
 ];
 
 const MIN_BUDGET = 5;
@@ -152,8 +154,9 @@ const FlowsightAdsDashboard: React.FC = () => {
   const [currentMockupAdIndex, setCurrentMockupAdIndex] = useState(0);
   const [selectedPlatform, setSelectedPlatform] = useState<"google" | "meta" | "tiktok" | "linkedin">("meta");
 
-  const { hasPaid } = usePaymentStatus();
+  const { hasPaid: actualHasPaid } = usePaymentStatus();
   const isInputFlowPreview = import.meta.env.DEV && new URLSearchParams(window.location.search).get('preview') === 'input-flow';
+  const hasPaid = isInputFlowPreview ? true : actualHasPaid;
 
   const [config, setConfig] = useState<CampaignConfig>({
     businessName: '',
@@ -939,6 +942,11 @@ const FlowsightAdsDashboard: React.FC = () => {
                 </Button>
               </div>
 
+              <div className="flex items-center gap-3 pt-4">
+                <div className="w-1 h-6 bg-emerald-500 rounded-full" />
+                <h3 className="text-xl font-black uppercase tracking-widest text-gray-400">Contenido del Anuncio</h3>
+              </div>
+
               {/* PREMIUM DELIVERY CONTAINER */}
               <div 
                 className="relative rounded-[48px] p-1 transition-all duration-700"
@@ -965,18 +973,9 @@ const FlowsightAdsDashboard: React.FC = () => {
                       className="absolute -bottom-40 -left-40 w-[500px] h-[500px] blur-[150px] rounded-full opacity-15 transition-all duration-1000"
                       style={{ background: currentTheme.secondary || currentTheme.primary }}
                     />
-                    {/* Grid Overlay */}
-                    <svg className="absolute inset-0 w-full h-full opacity-[0.02] pointer-events-none" preserveAspectRatio="none">
-                      <defs>
-                        <pattern id="grid-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
-                          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="0.5"/>
-                        </pattern>
-                      </defs>
-                      <rect width="100%" height="100%" fill="url(#grid-pattern)" />
-                    </svg>
                   </div>
                   
-                  {/* Platform Selector Grid */}
+                  {/* RESTAURADO: Platform Selector Grid original (más grande) */}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16 relative z-10">
                     {(['google', 'meta', 'tiktok', 'linkedin'] as const).map((platform) => {
                       const isSelected = selectedPlatform === platform;
@@ -1013,7 +1012,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                   </div>
 
                   {/* Main Content Grid */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative z-10">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start relative z-10">
                     {/* Left: Interactive Mockup */}
                     <div className="space-y-8">
                       {generatedAds.filter(ad => ad.platform === selectedPlatform).slice(0, 1).map((ad, i) => (
@@ -1045,6 +1044,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                                 }
                               }}
                               onExpand={() => { setCurrentMockupAdIndex(generatedAds.indexOf(ad)); setMockupLightboxOpen(true); }}
+                              imageUrls={imageMode === 'carousel' ? uploadedAssets.map(a => a.dataUrl) : undefined}
                             />
                           </div>
                         </motion.div>
@@ -1063,44 +1063,31 @@ const FlowsightAdsDashboard: React.FC = () => {
                                 <span className="text-xs font-black text-yellow-500 tracking-wider">{ad.score}/100 SCORE</span>
                               </div>
                             </div>
-                            <h3 className="text-5xl font-black tracking-tighter leading-[1.1]">Estrategia de{' '}
-                              {selectedPlatform === 'google' ? (
-                                <span className="bg-gradient-to-r from-[#4285F4] via-[#FBBC05] to-[#EA4335] bg-clip-text text-transparent">
-                                  {platformNames[selectedPlatform]}
-                                </span>
-                              ) : (
-                                <span className={currentTheme.text}>{platformNames[selectedPlatform]}</span>
-                              )}
-                            </h3>
+                            <h3 className="text-5xl font-black tracking-tighter leading-[1.1]">Estrategia de <span className={currentTheme.text}>{platformNames[selectedPlatform]}</span></h3>
                             <p className="text-xl text-gray-400 font-medium leading-relaxed max-w-lg">Copy de alto impacto diseñado para romper el scroll y maximizar el CTR.</p>
                           </div>
 
-                          {/* PREMIUM BUTTON SYSTEM - Morphoglass Hierarchy */}
+                          {/* PREMIUM BUTTON SYSTEM */}
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 relative z-20">
-                            {/* Tertiary: Guía Visual - Premium Glass */}
                             <motion.button
                               whileHover={{ y: -3, scale: 1.02 }}
                               whileTap={{ scale: 0.97 }}
                               onClick={() => setIsGuideLightboxOpen(true)}
-                              className="py-6 px-6 rounded-[20px] font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2.5 bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.15] backdrop-blur-md transition-all duration-300 text-gray-300 hover:text-white relative overflow-hidden group"
-                              style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.07)' }}
+                              className="py-6 px-6 rounded-[20px] font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2.5 bg-black/40 hover:bg-black/60 border border-white/5 hover:border-white/10 transition-all duration-300 text-gray-300 hover:text-white"
                             >
-                              <span className="absolute inset-0 bg-gradient-to-b from-white/[0.05] to-transparent pointer-events-none" />
-                              <BookOpen className="w-4 h-4 relative z-10" /> Guía Visual
+                              <BookOpen className="w-4 h-4" /> Guía Visual
                             </motion.button>
                             
-                            {/* Secondary: Descargar Kit - Platform Gradient Premium */}
                             <motion.button
                               whileHover={{ y: -3, scale: 1.02 }}
                               whileTap={{ scale: 0.97 }}
                               onClick={handleDownloadMasterKit}
-                              className={`py-6 px-6 rounded-[20px] font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2.5 bg-gradient-to-br ${currentTheme.gradient} border border-white/20 hover:brightness-110 transition-all duration-300 text-white relative overflow-hidden`}
-                              style={{ boxShadow: `0 4px 20px -4px ${currentTheme.glow}, inset 0 1px 0 rgba(255,255,255,0.2)` }}
+                              className={`py-6 px-6 rounded-[20px] font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2.5 bg-gradient-to-r ${currentTheme.gradient} hover:opacity-90 transition-all duration-300 text-white shadow-lg`}
+                              style={{ boxShadow: `0 15px 35px -10px ${currentTheme.glow}` }}
                             >
-                              <Download className="w-4 h-4 relative z-10" /> Descargar Kit
+                              <Download className="w-4 h-4" /> Descargar Kit
                             </motion.button>
 
-                            {/* Primary: Publicar - Premium Morphoglass */}
                             <motion.button 
                               whileHover={{ y: -4, scale: 1.02 }}
                               whileTap={{ scale: 0.98 }}
@@ -1113,29 +1100,157 @@ const FlowsightAdsDashboard: React.FC = () => {
                                 };
                                 window.open(urls[selectedPlatform], '_blank');
                               }}
-                              className="sm:col-span-2 py-7 px-8 rounded-[24px] font-black uppercase tracking-[0.15em] text-[10px] flex items-center justify-center gap-3 text-white transition-all duration-300 backdrop-blur-xl border border-white/[0.12] hover:border-white/[0.25] bg-gradient-to-br from-white/[0.12] via-white/[0.06] to-white/[0.02] hover:from-white/[0.18] hover:via-white/[0.10] hover:to-white/[0.04] group relative overflow-hidden"
-                              style={{ boxShadow: `0 20px 50px -15px ${currentTheme.glow}, 0 8px 20px -8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.2)` }}
+                              className="sm:col-span-2 py-7 px-8 rounded-[24px] font-black uppercase tracking-[0.15em] text-[10px] flex items-center justify-center gap-3 text-white transition-all duration-300 backdrop-blur-xl border border-white/20 hover:border-white/40 bg-gradient-to-br from-white/10 to-white/5 hover:from-white/15 hover:to-white/10 group relative overflow-hidden"
+                              style={{ boxShadow: `0 20px 50px -15px ${currentTheme.glow}, inset 0 1px 0 rgba(255,255,255,0.1)` }}
                             >
                               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: `radial-gradient(circle at 50% 50%, ${currentTheme.glow}, transparent)` }} />
-                              <Share2 className="w-4 h-4 relative z-10" /> Publicar en {platformNames[selectedPlatform]}
+                              <Rocket className="w-4 h-4 relative z-10" /> Lanzar mi campaña ahora
                             </motion.button>
                           </div>
 
-                          {/* AI Reasoning - Yellow Note Style */}
-                          <div className="p-10 rounded-[40px] bg-yellow-500/[0.03] border border-yellow-500/10 relative overflow-hidden group">
-                            <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 group-hover:scale-125 transition-all duration-700">
-                              <Lightbulb className="text-yellow-500 w-20 h-20" />
-                            </div>
-                            <div className="flex items-center gap-3 mb-5">
-                              <div className="p-1.5 bg-yellow-500/20 rounded-lg">
-                                <Sparkles className="w-4 h-4 text-yellow-500" />
+                          {/* AI Reasoning - Yellow Note Style - Compactado */}
+                          <div className="p-8 rounded-[32px] bg-yellow-500/[0.03] border border-yellow-500/10 relative overflow-hidden group">
+                            <div className="flex items-center gap-3 mb-3">
+                              <div className="p-1 bg-yellow-500/20 rounded-lg">
+                                <Sparkles className="w-3.5 h-3.5 text-yellow-500" />
                               </div>
-                              <span className="text-[11px] font-black uppercase tracking-[0.25em] text-yellow-500/80">Análisis Estratégico</span>
+                              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-yellow-500/80">Análisis Estratégico</span>
                             </div>
-                            <p className="text-base text-gray-300 font-medium leading-relaxed relative z-10 italic">"{ad.reasoning}"</p>
+                            <p className="text-sm text-gray-300 font-medium leading-relaxed relative z-10 italic">"{ad.reasoning}"</p>
                           </div>
                         </div>
                       ))}
+                    </div>
+                  </div>
+
+                  {/* BLOQUE 3: Pasos a seguir (Checklist) - MOVIDO AL FINAL, FULL WIDTH */}
+                  <div className="mt-16 p-10 rounded-[40px] bg-white/[0.02] border border-white/5 space-y-8 relative z-10">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-blue-500/20 rounded-xl">
+                          <CheckCircle2 className="w-5 h-5 text-blue-400" />
+                        </div>
+                        <h4 className="text-xl font-black uppercase tracking-widest text-gray-400">¿Qué hacer ahora?</h4>
+                      </div>
+                      <div className="hidden md:block text-[10px] font-black text-gray-600 uppercase tracking-widest">Guía de implementación rápida</div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                      {[
+                        { title: "Copia el mensaje", desc: "El texto ya está optimizado." },
+                        { title: "Baja las imágenes", desc: "Usa el carrusel para impactar." },
+                        { title: "Configura cuenta", desc: "Entra al Ads Manager." },
+                        { title: "Lanza y mide", desc: "Espera 5 días resultados." }
+                      ].map((step, i) => (
+                        <div key={i} className="flex gap-4 group">
+                          <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center font-black text-sm text-gray-500 group-hover:border-emerald-500 group-hover:text-emerald-500 transition-all shrink-0">
+                            {i + 1}
+                          </div>
+                          <div className="space-y-1">
+                            <p className="font-black text-sm text-gray-200 group-hover:text-white transition-colors uppercase tracking-tight">{step.title}</p>
+                            <p className="text-xs text-gray-500 font-medium leading-tight">{step.desc}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* BLOQUE DE ESTRATEGIA - MOVED TO BOTTOM */}
+              <div className="space-y-8 mt-12">
+                <div className="flex items-center gap-3">
+                  <div className="w-1 h-6 bg-emerald-500 rounded-full" />
+                  <h3 className="text-xl font-black uppercase tracking-widest text-gray-400">Tu Estrategia</h3>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  {/* Resultado Estimado Card */}
+                  <div className="lg:col-span-2 p-8 rounded-[40px] bg-white/[0.03] border border-white/10 relative overflow-hidden group shadow-[0_20px_50px_rgba(16,185,129,0.05)]">
+                    <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+                      <BarChart3 className="w-32 h-32 text-emerald-500" />
+                    </div>
+                    
+                    <div className="relative z-10">
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="p-2 bg-emerald-500/20 rounded-xl shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+                          <TrendingUp className="w-5 h-5 text-emerald-400" />
+                        </div>
+                        <h4 className="text-2xl font-black">Resultado estimado de tu campaña</h4>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                        <div className="p-4 rounded-3xl bg-blue-500/5 border border-blue-500/10">
+                          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-400/70 mb-2">Alcance estimado</p>
+                          <p className="text-3xl font-black text-white">{budgetProjection.reach.split(' ')[0]}</p>
+                          <p className="text-xs text-gray-500 font-bold mt-1">Personas</p>
+                        </div>
+                        <div className="p-4 rounded-3xl bg-purple-500/5 border border-purple-500/10">
+                          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-purple-400/70 mb-2">Clicks estimados</p>
+                          <p className="text-3xl font-black text-white">{budgetProjection.clicks.split(' ')[0]}</p>
+                          <p className="text-xs text-gray-500 font-bold mt-1">Visitas</p>
+                        </div>
+                        <div className="p-4 rounded-3xl bg-emerald-500/10 border border-emerald-500/20 shadow-[inset_0_0_20px_rgba(16,185,129,0.05)]">
+                          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-400 mb-2">Clientes potenciales</p>
+                          <p className="text-3xl font-black text-emerald-400">{budgetProjection.leads.split(' ')[0]}</p>
+                          <p className="text-xs text-gray-500 font-bold mt-1">Contactos</p>
+                        </div>
+                      </div>
+
+                      {/* Mini Funnel Visual */}
+                      <div className="flex items-center gap-4 py-6 px-8 bg-black/40 rounded-3xl border border-white/5">
+                        <div className="flex flex-col items-center">
+                          <Eye className="w-5 h-5 text-gray-500 mb-1" />
+                          <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Alcance</span>
+                        </div>
+                        <ArrowRight className="w-4 h-4 text-gray-700" />
+                        <div className="flex flex-col items-center">
+                          <MousePointer2 className="w-5 h-5 text-gray-500 mb-1" />
+                          <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Clicks</span>
+                        </div>
+                        <ArrowRight className="w-4 h-4 text-gray-700" />
+                        <div className="flex flex-col items-center">
+                          <Target className="w-5 h-5 text-emerald-500 mb-1" />
+                          <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400">Clientes</span>
+                        </div>
+                        <div className="ml-auto text-sm text-gray-400 font-medium italic">
+                          "Esta campaña está diseñada para atraer clientes reales a tu negocio."
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* BLOQUE 2: TU CAMPAÑA EN SIMPLE */}
+                  <div className="p-8 rounded-[40px] bg-emerald-500/5 border border-emerald-500/20 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="p-2 bg-emerald-500/20 rounded-xl">
+                          <Zap className="w-5 h-5 text-emerald-400" />
+                        </div>
+                        <h4 className="text-2xl font-black">Tu campaña en simple</h4>
+                      </div>
+
+                      <div className="space-y-5">
+                        <div className="flex items-start gap-4">
+                          <div className="w-2 h-2 rounded-full bg-emerald-500 mt-2 flex-shrink-0" />
+                          <p className="text-sm font-bold text-gray-300"><b>Público:</b> Personas cercanas interesadas en {detectedBusinessLabel}.</p>
+                        </div>
+                        <div className="flex items-start gap-4">
+                          <div className="w-2 h-2 rounded-full bg-emerald-500 mt-2 flex-shrink-0" />
+                          <p className="text-sm font-bold text-gray-300"><b>Objetivo:</b> Atraer clientes reales y visitas a tu negocio.</p>
+                        </div>
+                        <div className="flex items-start gap-4">
+                          <div className="w-2 h-2 rounded-full bg-emerald-500 mt-2 flex-shrink-0" />
+                          <p className="text-sm font-bold text-gray-300"><b>Estrategia:</b> Mensaje directo + oferta irresistible.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-8 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/10">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-emerald-400 mb-1">Recomendación</p>
+                      <p className="text-xs text-emerald-300/80 font-bold italic leading-relaxed">
+                        Mantenla activa entre 5-7 días antes de hacer cambios para ver los mejores resultados.
+                      </p>
                     </div>
                   </div>
                 </div>

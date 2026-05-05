@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, ChevronLeft, ChevronRight, Download, Share2, BookOpen, Maximize2, Sparkles, CheckCircle2, Loader2, Zap } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Download, Share2, BookOpen, Maximize2, Sparkles, CheckCircle2, Loader2, Zap, Rocket, Check, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { PaymentModal } from '@/components/PaymentModal';
@@ -47,6 +47,7 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
   const [paymentAction, setPaymentAction] = useState<'download' | 'publish' | 'guide'>('download');
   const [isCopied, setIsCopied] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
+  const [showAlternative, setShowAlternative] = useState(false);
 
   if (!isOpen) return null;
 
@@ -283,6 +284,65 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
                             {currentAd.cta}
                           </div>
                         </div>
+
+                        {/* BLOQUE 5: VARIACIÓN — Copy alternativo */}
+                        {ads.length > 1 && (
+                          <div className="pt-4">
+                            <button 
+                              onClick={() => setShowAlternative(!showAlternative)}
+                              className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-emerald-400 hover:text-emerald-300 transition-colors"
+                            >
+                              <ChevronDown className={`w-3 h-3 transition-transform ${showAlternative ? 'rotate-180' : ''}`} />
+                              Ver versión alternativa del anuncio
+                            </button>
+                            
+                            <AnimatePresence>
+                              {showAlternative && (
+                                <motion.div
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: 'auto', opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  className="overflow-hidden"
+                                >
+                                  <div className="mt-4 p-6 rounded-2xl bg-white/[0.02] border border-white/5 space-y-4">
+                                    {ads.map((ad, idx) => idx !== currentIndex && (
+                                      <div key={idx} className="space-y-2">
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-gray-600">Variante {idx + 1}</p>
+                                        <p className="text-sm text-gray-400 leading-relaxed italic">"{ad.description}"</p>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* BLOQUE 3: Cómo usar este campaign kit */}
+                    <div className="p-8 rounded-[32px] bg-white/[0.02] border border-white/5 space-y-6">
+                      <div className="flex items-center gap-3">
+                        <div className="p-1.5 bg-blue-500/20 rounded-lg">
+                          <CheckCircle2 className="w-4 h-4 text-blue-400" />
+                        </div>
+                        <h4 className="text-[11px] font-black uppercase tracking-[0.2em] text-gray-400">Cómo usar este kit</h4>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 gap-3">
+                        {[
+                          "Copia el texto generado",
+                          "Usa el contenido visual recomendado",
+                          "Accede al Ads Manager",
+                          "Publica tu campaña"
+                        ].map((step, i) => (
+                          <div key={i} className="flex items-center gap-3 group">
+                            <div className="w-5 h-5 rounded-full border border-white/10 flex items-center justify-center group-hover:border-emerald-500/50 transition-colors">
+                              <Check className="w-3 h-3 text-emerald-500 opacity-50 group-hover:opacity-100" />
+                            </div>
+                            <span className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors">{step}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
 
@@ -335,10 +395,15 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
                             <span>¡Copiado al Portapapeles!</span>
                           </motion.div>
                         ) : (
-                          <>
-                            <Share2 size={20} className="group-hover:rotate-12 transition-transform" />
-                            <span>Publicar en {platform.charAt(0).toUpperCase() + platform.slice(1)}</span>
-                          </>
+                           <>
+                             <div className="flex flex-col items-center">
+                               <div className="flex items-center gap-3 relative z-10">
+                                 <Rocket size={20} className="group-hover:rotate-12 transition-transform" />
+                                 <span>Lanzar mi campaña ahora</span>
+                               </div>
+                               <span className="text-[9px] font-bold text-white/50 tracking-widest mt-1 lowercase">Te tomará menos de 5 minutos</span>
+                             </div>
+                           </>
                         )}
                       </button>
                     </div>
