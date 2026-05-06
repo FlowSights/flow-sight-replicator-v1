@@ -65,7 +65,7 @@ Deno.serve(async (req) => {
         "Authorization": `Bearer ${GROQ_API_KEY}`
       },
       body: JSON.stringify({
-        model: "llama-3.2-90b-vision-preview",
+        model: "llama-3.2-11b-vision-preview",
         messages: [
           { role: "system", content: finalSystemPrompt },
           ...chatMessages
