@@ -974,13 +974,16 @@ const FlowsightAdsDashboard: React.FC = () => {
                     {hasPaid ? 'Análisis y activos optimizados para máxima conversión.' : 'Previsualiza tu campaña. Desbloquea para obtener el material profesional.'}
                   </p>
                   
-                  <AIAgentBar context={{
-                    businessName: config.businessName,
-                    promote: config.promote,
-                    idealCustomer: config.idealCustomer,
-                    location: config.location,
-                    generatedAds: generatedAds
-                  }} />
+                  <AIAgentBar 
+                    context={{
+                      businessName: config.businessName,
+                      promote: config.promote,
+                      idealCustomer: config.idealCustomer,
+                      location: config.location,
+                      generatedAds: generatedAds
+                    }} 
+                    hasPaid={hasPaid}
+                  />
                 </div>
                 <Button variant="outline" onClick={() => setShowResults(false)} className="rounded-2xl font-bold px-6 py-6 border-white/10 hover:bg-white/5 shrink-0">
                   <RefreshCw className="w-4 h-4 mr-2" /> Nueva Campaña

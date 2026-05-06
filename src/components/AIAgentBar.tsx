@@ -13,6 +13,7 @@ interface AIAgentBarProps {
     location: string;
     generatedAds: any[];
   };
+  hasPaid?: boolean;
 }
 
 const GeminiIcon = () => (
@@ -30,7 +31,7 @@ const GeminiIcon = () => (
   </svg>
 );
 
-export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context }) => {
+export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true }) => {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [fullResponse, setFullResponse] = useState<string | null>(null);
@@ -97,8 +98,9 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context }) => {
         <Input 
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Pregúntale a Gemini sobre tu campaña"
-          className="bg-transparent border-none focus-visible:ring-0 text-white placeholder:text-white/20 p-0 h-auto text-base font-medium tracking-tight shadow-none"
+          placeholder={hasPaid ? "Pregúntale a Gemini sobre tu campaña" : "🔒 Desbloquea para hablar con Gemini"}
+          readOnly={!hasPaid}
+          className={`bg-transparent border-none focus-visible:ring-0 text-white placeholder:text-white/20 p-0 h-auto text-base font-medium tracking-tight shadow-none ${!hasPaid ? 'cursor-not-allowed' : ''}`}
           style={{ boxShadow: 'none' }}
         />
 
