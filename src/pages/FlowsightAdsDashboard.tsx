@@ -535,7 +535,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                   initial={{ opacity: 0, scale: 0.96 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.45 }}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-300 text-xs font-black uppercase tracking-[0.18em] mb-6"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-300 text-[10px] font-bold uppercase tracking-widest mb-6"
                 >
                   <WandSparkles className="w-4 h-4" /> Estrategia guiada por IA
                 </motion.div>
@@ -575,7 +575,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                           <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center mb-6">
                             <MessageSquareText className="w-6 h-6 text-emerald-400" />
                           </div>
-                          <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-400 mb-4">Cuéntame tu negocio</p>
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-400 mb-4">Cuéntame tu negocio</p>
                           <h3 className="text-3xl font-black tracking-tight leading-tight mb-4">
                             {config.promote ? `Atrae clientes para ${detectedBusinessLabel}` : 'Empecemos por lo más importante'}
                           </h3>
@@ -590,7 +590,7 @@ const FlowsightAdsDashboard: React.FC = () => {
 
                       <div className="space-y-6">
                         <div className="space-y-3">
-                          <label className="text-xs font-black uppercase tracking-widest text-emerald-500">¿Qué quieres promocionar?</label>
+                          <label className="text-[10px] font-bold uppercase tracking-widest text-emerald-500">¿Qué quieres promocionar?</label>
                           <Textarea
                             placeholder="Ej: Café artesanal, desayunos para llevar y promociones de temporada para clientes cercanos al local."
                             className="min-h-[210px] bg-white/5 border-white/10 rounded-[28px] text-xl font-bold p-6 focus-visible:ring-emerald-500/60 transition-all"
@@ -992,7 +992,7 @@ const FlowsightAdsDashboard: React.FC = () => {
 
               <div className="flex items-center gap-3 pt-4">
                 <div className="w-1 h-6 bg-emerald-500 rounded-full" />
-                <h3 className="text-xl font-black uppercase tracking-widest text-gray-400">Contenido del Anuncio</h3>
+                <h3 className="text-xl font-bold uppercase tracking-widest text-gray-400">Contenido del Anuncio</h3>
               </div>
 
               {/* PREMIUM DELIVERY CONTAINER */}

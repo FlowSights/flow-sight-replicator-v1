@@ -140,7 +140,7 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true 
             <div className="flex justify-between items-start mb-8">
               <div className="flex items-center gap-4">
                 <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_15px_rgba(34,211,238,0.8)]" />
-                <span className="text-[11px] font-black uppercase tracking-[0.4em] text-white/20">Estratega Virtual Gemini</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-white/40">Estratega Virtual Gemini</span>
               </div>
               <button 
                 onClick={() => { setIsOpen(false); setFullResponse(null); setDisplayedResponse(''); }}
@@ -172,7 +172,7 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true 
                   <button 
                     key={btn}
                     onClick={() => { setQuery(`Ayúdame a ${btn.toLowerCase()}`); handleAskGemini(); }}
-                    className="text-[10px] font-black uppercase tracking-[0.2em] px-6 py-3 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] text-white/30 hover:text-white transition-all shadow-xl"
+                    className="text-[10px] font-bold uppercase tracking-widest px-6 py-3 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] text-white/40 hover:text-white transition-all shadow-xl"
                   >
                     {btn}
                   </button>

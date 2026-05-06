@@ -156,7 +156,7 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
                     <div className="p-1 bg-white/20 rounded-lg backdrop-blur-md">
                       <CheckCircle2 className="w-4 h-4 text-white" />
                     </div>
-                    <span className="text-[11px] font-black uppercase tracking-[0.3em] text-white/90">Vista Previa Premium</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-white/90">Vista Previa Premium</span>
                   </div>
                   <h2 className="text-4xl font-black text-white tracking-tighter uppercase">{businessName}</h2>
                 </div>
@@ -244,7 +244,7 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
                         <ChevronLeft size={24} className="text-white group-hover:-translate-x-1 transition-transform" />
                       </button>
                       <div className="flex-1 py-4 bg-white/5 rounded-2xl border border-white/5 text-center backdrop-blur-md">
-                        <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-500 mb-1">Estrategia Activa</p>
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Estrategia Activa</p>
                         <p className="text-lg font-black text-white">Variante {currentIndex + 1} de {ads.length}</p>
                       </div>
                       <button
@@ -265,7 +265,7 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
                      )}
                     <div className="space-y-10">
                       <div className="flex items-center gap-4">
-                        <Badge className={`px-5 py-2 rounded-full font-black text-[10px] uppercase tracking-[0.2em] shadow-xl ${colors.accent} text-white border-none`}>
+                        <Badge className={`px-5 py-2 rounded-full font-bold text-[10px] uppercase tracking-widest shadow-xl ${colors.accent} text-white border-none`}>
                           {platform} Campaign
                         </Badge>
                         <div className="flex items-center gap-2 px-4 py-2 bg-yellow-500/10 rounded-full border border-yellow-500/20">
