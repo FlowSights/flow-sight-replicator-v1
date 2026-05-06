@@ -47,16 +47,18 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!isOpen) return;
+
     const handleClickOutside = (event: MouseEvent) => {
-      // Si el click no es dentro del contenedor, cerramos
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
-    // Usamos 'click' en lugar de 'mousedown' para evitar conflictos con otros botones
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, []);
+
+    // Usamos fase de captura (true) para asegurar que el evento se detecte antes de que otros lo detengan
+    document.addEventListener('click', handleClickOutside, true);
+    return () => document.removeEventListener('click', handleClickOutside, true);
+  }, [isOpen]);
 
   useEffect(() => {
     if (fullResponse) {
