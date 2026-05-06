@@ -419,15 +419,15 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
                        <motion.div 
                          initial={{ scale: 0.9, opacity: 0 }}
                          animate={{ scale: 1, opacity: 1 }}
-                         className="bg-emerald-500 rounded-[40px] p-10 md:p-14 shadow-[0_20px_100px_-15px_rgba(16,185,129,0.7)] text-black text-center space-y-8 border border-white/30"
+                         className="bg-black/60 backdrop-blur-3xl rounded-[40px] p-10 md:p-14 shadow-[0_40px_120px_rgba(0,0,0,0.9)] text-white text-center space-y-8 border border-emerald-500/30"
                        >
-                         <div className="w-20 h-20 bg-black rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-2xl">
+                         <div className="w-20 h-20 bg-emerald-500/10 rounded-3xl flex items-center justify-center mx-auto mb-4 border border-emerald-500/20">
                            <Lock className="w-10 h-10 text-emerald-500" />
                          </div>
                          <div className="space-y-3">
-                           <h3 className="text-4xl font-black tracking-tight leading-tight uppercase italic">Estrategia Bloqueada</h3>
-                           <p className="font-bold text-black/80 text-xl leading-relaxed">
-                             Desbloquea este anuncio para obtener el <span className="underline decoration-black/40">copy maestro</span> y los <span className="underline decoration-black/40">activos premium</span>.
+                           <h3 className="text-4xl font-black tracking-tight leading-tight uppercase italic text-emerald-500">Estrategia Bloqueada</h3>
+                           <p className="font-bold text-gray-300 text-xl leading-relaxed">
+                             Desbloquea este anuncio para obtener el <span className="underline decoration-emerald-500/40">copy maestro</span> y los <span className="underline decoration-emerald-500/40">activos premium</span>.
                            </p>
                          </div>
                          <Button 
@@ -437,9 +437,9 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
                            DESBLOQUEAR — $49.99
                            <ArrowRight className="w-7 h-7 group-hover:translate-x-1 transition-transform" />
                          </Button>
-                         <div className="flex items-center justify-center gap-3 opacity-60">
+                         <div className="flex items-center justify-center gap-3 opacity-40 text-gray-400">
                            <ShieldCheck className="w-4 h-4" />
-                           <span className="text-xs font-black uppercase tracking-widest">Pago Seguro por Stripe</span>
+                           <span className="text-[10px] font-bold uppercase tracking-widest">Pago Seguro por Stripe</span>
                          </div>
                        </motion.div>
                      </div>
@@ -515,3 +515,9 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
     </>
   );
 };
+
+const Button = ({ children, onClick, className, disabled }: any) => (
+  <button onClick={onClick} disabled={disabled} className={className}>
+    {children}
+  </button>
+);

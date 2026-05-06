@@ -1181,14 +1181,14 @@ const FlowsightAdsDashboard: React.FC = () => {
                       <motion.div 
                         initial={{ scale: 0.9, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
-                        className="bg-emerald-500 rounded-[32px] p-8 md:p-12 shadow-[0_20px_80px_-15px_rgba(16,185,129,0.6)] text-black text-center space-y-6 border border-white/20"
+                        className="bg-black/60 backdrop-blur-3xl rounded-[32px] p-8 md:p-12 shadow-[0_40px_100px_rgba(0,0,0,0.8)] text-white text-center space-y-6 border border-emerald-500/30"
                       >
-                        <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl">
+                        <div className="w-16 h-16 bg-emerald-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-emerald-500/20">
                           <Lock className="w-8 h-8 text-emerald-500" />
                         </div>
-                        <h3 className="text-3xl font-black tracking-tight leading-tight uppercase italic">Contenido Bloqueado</h3>
-                        <p className="font-bold text-black/80 text-lg leading-relaxed">
-                          Tu campaña está lista. Desbloquea ahora para obtener todos los <span className="underline decoration-black/40">copys de alto impacto</span> y el <span className="underline decoration-black/40">Campaign Kit</span> profesional.
+                        <h3 className="text-3xl font-black tracking-tight leading-tight uppercase italic text-emerald-500">Contenido Bloqueado</h3>
+                        <p className="font-bold text-gray-300 text-lg leading-relaxed">
+                          Tu campaña está lista. Desbloquea ahora para obtener todos los <span className="underline decoration-emerald-500/40">copys de alto impacto</span> y el <span className="underline decoration-emerald-500/40">Campaign Kit</span> profesional.
                         </p>
                         <Button 
                           onClick={() => setShowPaymentModal(true)}
