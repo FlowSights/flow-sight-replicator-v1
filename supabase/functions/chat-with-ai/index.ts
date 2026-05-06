@@ -34,27 +34,10 @@ Deno.serve(async (req) => {
       });
     }
 
-    const chatMessages = messages.map((m, index) => {
-      const isLastMessage = index === messages.length - 1;
-      
-      if (isLastMessage && images.length > 0) {
-        return {
-          role: m.role,
-          content: [
-            { type: "text", text: m.content.toString() },
-            ...images.map(img => ({
-              type: "image_url",
-              image_url: { url: img }
-            }))
-          ]
-        };
-      }
-      
-      return {
-        role: m.role,
-        content: m.content.toString()
-      };
-    });
+    const chatMessages = messages.map((m) => ({
+      role: m.role,
+      content: m.content.toString()
+    }));
 
     const groqUrl = "https://api.groq.com/openai/v1/chat/completions";
 
@@ -65,7 +48,7 @@ Deno.serve(async (req) => {
         "Authorization": `Bearer ${GROQ_API_KEY}`
       },
       body: JSON.stringify({
-        model: "llama-3.2-11b-vision-preview",
+        model: "llama-3.3-70b-versatile",
         messages: [
           { role: "system", content: finalSystemPrompt },
           ...chatMessages
