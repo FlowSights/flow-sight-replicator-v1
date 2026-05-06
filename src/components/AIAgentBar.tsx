@@ -128,52 +128,57 @@ Nota: Solo envía las plataformas que fueron modificadas. No uses markdown dentr
       let cleanReply = (data.reply || '').trim();
       let hasUpdated = false;
 
-      // Extracción indestructible de JSON: ignorar las etiquetas y buscar el array directamente
-      const startIndex = cleanReply.indexOf('[');
-      const endIndex = cleanReply.lastIndexOf(']');
+      // Extraer y ocultar CUALQUIER bloque de código o JSON del texto, sin importar si es válido o no
+      let startIndex = cleanReply.indexOf('[');
+      let endIndex = cleanReply.lastIndexOf(']');
 
       if (startIndex !== -1 && endIndex !== -1 && endIndex > startIndex) {
         try {
           let jsonString = cleanReply.substring(startIndex, endIndex + 1);
-          
-          // Limpiar el string de cualquier markdown residual (```json) que pudiera estar dentro
           jsonString = jsonString.replace(/```json/gi, "").replace(/```/gi, "").trim();
-          
           const parsed = JSON.parse(jsonString);
           if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].headline) {
             if (onUpdateAds) {
               onUpdateAds(parsed);
               hasUpdated = true;
             }
-            
-            // Remover TODO el JSON del texto visible
-            cleanReply = cleanReply.substring(0, startIndex) + cleanReply.substring(endIndex + 1);
           }
         } catch (e) {
           console.error("Indestructible JSON Parse Error:", e);
         }
+        // FORCE REMOVE the array from the visible text no matter what
+        cleanReply = cleanReply.substring(0, startIndex) + cleanReply.substring(endIndex + 1);
       }
 
       if (hasUpdated) {
         setShowSuccess(true);
       }
 
-      // Limpieza exhaustiva de cualquier basura de etiquetas que la IA haya dejado
-      cleanReply = cleanReply.replace(/<update_ads>/gi, "");
-      cleanReply = cleanReply.replace(/<\/update_ads>/gi, "");
-      cleanReply = cleanReply.replace(/<update_ads/gi, "");
-      cleanReply = cleanReply.replace(/<\/update_ads/gi, "");
+      // Limpieza extrema: Eliminar CUALQUIER bloque de código residual (markdown)
+      cleanReply = cleanReply.replace(/```[\s\S]*?```/g, "");
+      
+      // Limpieza de cualquier etiqueta XML
+      cleanReply = cleanReply.replace(/<[^>]+>/g, "");
       cleanReply = cleanReply.replace(/\[update_ads\]/gi, "");
       cleanReply = cleanReply.replace(/\[\/update_ads\]/gi, "");
-      cleanReply = cleanReply.replace(/```json/gi, "");
-      cleanReply = cleanReply.replace(/```/gi, "");
+      
+      // Limpiar texto que dice "Aquí tienes el JSON" o variaciones
+      cleanReply = cleanReply.replace(/Aquí te presento las modificaciones en el bloque JSON:/gi, "");
+      cleanReply = cleanReply.replace(/Aquí tienes el JSON.*/gi, "");
+      cleanReply = cleanReply.replace(/\*\*Actualización de anuncios\*\*/gi, "");
+
       cleanReply = cleanReply.trim();
       
       if (hasUpdated && !cleanReply.includes("✨")) {
         cleanReply += "\n\n✨ He actualizado la estrategia con éxito.";
       }
       
-      setFullResponse(cleanReply || "✨ He actualizado los anuncios con las mejoras solicitadas.");
+      // Si la respuesta quedó vacía después de limpiar el código, ponemos un mensaje genérico
+      if (!cleanReply) {
+        cleanReply = "✨ He actualizado los anuncios con las mejoras solicitadas.";
+      }
+
+      setFullResponse(cleanReply);
     } catch (err) {
       console.error(err);
       setFullResponse("Error en la conexión. Por favor, intenta de nuevo.");
