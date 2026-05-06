@@ -48,12 +48,14 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      // Si el click no es dentro del contenedor, cerramos
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    // Usamos 'click' en lugar de 'mousedown' para evitar conflictos con otros botones
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -139,9 +141,10 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
       // Preparar el mensaje del usuario con imágenes si las hay
       const userMessage: any = { role: 'user', content: query || "Analiza estas imágenes para mi campaña" };
       
-      // Si hay imágenes, enviarlas (esto depende de si la edge function lo soporta, 
-      // pero el formato estándar de OpenAI/Gemini suele aceptar arrays o base64)
-      const images = context.uploadedAssets?.map(a => a.dataUrl) || [];
+      // Enviamos las imágenes pendientes de esta sesión + las que ya estaban cargadas
+      const currentImages = pendingAssets.map(a => a.dataUrl);
+      const existingImages = context.uploadedAssets?.map(a => a.dataUrl) || [];
+      const allImages = [...new Set([...currentImages, ...existingImages])];
 
       const { data, error } = await supabase.functions.invoke('chat-with-ai', {
         body: {
@@ -149,15 +152,16 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
             { role: 'system', content: systemPrompt },
             userMessage
           ],
-          images: images // Enviamos las imágenes en un campo separado para la Edge Function
+          images: allImages
         }
       });
 
       if (error) throw error;
       
+      // Limpiar etiquetas de actualización de forma agresiva (múltiples pasadas para seguridad)
       let cleanReply = (data.reply || '').trim();
       
-      // Limpiar etiquetas de actualización de forma agresiva
+      // 1. Extraer y aplicar actualizaciones
       const updateRegex = /<update_ads>([\s\S]*?)<\/update_ads>/g;
       const matches = [...cleanReply.matchAll(updateRegex)];
       
@@ -165,25 +169,38 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
         if (onUpdateAds) {
           matches.forEach(match => {
             try {
-              const newAds = JSON.parse(match[1]);
-              onUpdateAds(newAds);
-              toast.success("¡Estrategia actualizada!", {
-                description: "Los anuncios han sido optimizados por la IA.",
-                icon: <Sparkles className="w-5 h-5 text-emerald-400" />,
-                duration: 5000,
-              });
+              const content = match[1].trim();
+              if (content) {
+                const newAds = JSON.parse(content);
+                onUpdateAds(newAds);
+                toast.success("¡Estrategia actualizada!", {
+                  description: "Los anuncios han sido optimizados por la IA.",
+                  icon: <Sparkles className="w-5 h-5 text-emerald-400" />,
+                  duration: 5000,
+                });
+              }
             } catch (e) {
               console.error("Error parsing ads update", e);
             }
           });
         }
-        
-        // Eliminar todos los bloques de actualización del texto visible
-        cleanReply = cleanReply.replace(updateRegex, "").trim();
-        
+      }
+
+      // 2. Limpieza total del texto para el usuario
+      // Eliminamos etiquetas <update_ads> y todo lo que haya entre ellas
+      cleanReply = cleanReply.replace(/<update_ads>[\s\S]*?<\/update_ads>/gi, "");
+      // Eliminamos posibles bloques de código residuales
+      cleanReply = cleanReply.replace(/```json[\s\S]*?```/gi, "");
+      cleanReply = cleanReply.replace(/```[\s\S]*?```/gi, "");
+      // Eliminar posibles objetos JSON sueltos si el regex falló
+      cleanReply = cleanReply.replace(/\[\s*{\s*"headline":[\s\S]*?}\s*\]/gi, "");
+      
+      cleanReply = cleanReply.trim();
+      
+      if (matches.length > 0) {
         if (cleanReply) {
           if (!cleanReply.includes("✨")) {
-            cleanReply += "\n\n✨ He actualizado los anuncios con estas mejoras.";
+            cleanReply += "\n\n✨ He actualizado la estrategia con éxito.";
           }
         } else {
           cleanReply = "✨ He actualizado los anuncios con las mejoras solicitadas.";
