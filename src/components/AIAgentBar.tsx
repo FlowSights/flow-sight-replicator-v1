@@ -112,42 +112,61 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
       Enfócate 100% en el negocio del cliente. No hables de FlowSights como empresa, tú ERES el estratega de esta campaña.
       
       INSTRUCCIÓN TÉCNICA CRÍTICA:
-      Si el usuario te pide cambiar, mejorar o ajustar los anuncios (copys, títulos, CTAs), DEBES generar el nuevo contenido y enviarlo AL FINAL de tu respuesta envuelto en etiquetas <update_ads>.
+      Si el usuario te pide cambiar, mejorar o ajustar los anuncios (copys, títulos, CTAs) o subir nuevas imágenes, DEBES generar el nuevo contenido y enviarlo AL FINAL de tu respuesta envuelto en etiquetas <update_ads>.
       FORMATO: <update_ads>[{"headline": "...", "description": "...", "cta": "...", "platform": "..."}]</update_ads>
       
-      Si no incluyes el bloque <update_ads>, los cambios NO se verán en el dashboard. Úsalo siempre que sugieras mejoras para que el usuario solo tenga que ver el resultado.
+      Si el usuario subió una imagen, analízala y úsala para inspirar los nuevos copys o confirma que la has recibido.
+      
+      Si no incluyes el bloque <update_ads>, los cambios NO se verán en el dashboard. Úsalo siempre que sugieras mejoras.
       
       ESTADO DE LA CAMPAÑA:
       Anuncios actuales: ${JSON.stringify(context.generatedAds)}
       Archivos disponibles: ${context.uploadedAssets?.map(a => a.name).join(', ') || 'Ninguno aún'}.`;
 
+      // Preparar el mensaje del usuario con imágenes si las hay
+      const userMessage: any = { role: 'user', content: query || "Analiza estas imágenes para mi campaña" };
+      
+      // Si hay imágenes, enviarlas (esto depende de si la edge function lo soporta, 
+      // pero el formato estándar de OpenAI/Gemini suele aceptar arrays o base64)
+      const images = context.uploadedAssets?.map(a => a.dataUrl) || [];
+
       const { data, error } = await supabase.functions.invoke('chat-with-ai', {
         body: {
           messages: [
             { role: 'system', content: systemPrompt },
-            { role: 'user', content: query }
-          ]
+            userMessage
+          ],
+          images: images // Enviamos las imágenes en un campo separado para la Edge Function
         }
       });
 
       if (error) throw error;
       
       let cleanReply = (data.reply || '').trim();
-      cleanReply = cleanReply.replace(/^\s*hla\b/i, 'Hola');
-
-      const updateMatch = cleanReply.match(/<update_ads>([\s\S]*?)<\/update_ads>/);
-      if (updateMatch) {
+      
+      // Limpiar etiquetas de actualización de forma agresiva
+      const updateRegex = /<update_ads>([\s\S]*?)<\/update_ads>/g;
+      const matches = [...cleanReply.matchAll(updateRegex)];
+      
+      if (matches.length > 0) {
         if (onUpdateAds) {
-          try {
-            const newAds = JSON.parse(updateMatch[1]);
-            onUpdateAds(newAds);
-          } catch (e) {
-            console.error("Error parsing ads update", e);
-          }
+          matches.forEach(match => {
+            try {
+              const newAds = JSON.parse(match[1]);
+              onUpdateAds(newAds);
+            } catch (e) {
+              console.error("Error parsing ads update", e);
+            }
+          });
         }
-        cleanReply = cleanReply.replace(/<update_ads>[\s\S]*?<\/update_ads>/g, "").trim();
+        
+        // Eliminar todos los bloques de actualización del texto visible
+        cleanReply = cleanReply.replace(updateRegex, "").trim();
+        
         if (cleanReply) {
-          cleanReply += "\n\n✨ He actualizado los anuncios con estas mejoras.";
+          if (!cleanReply.includes("✨")) {
+            cleanReply += "\n\n✨ He actualizado los anuncios con estas mejoras.";
+          }
         } else {
           cleanReply = "✨ He actualizado los anuncios con las mejoras solicitadas.";
         }
