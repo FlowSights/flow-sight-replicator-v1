@@ -85,13 +85,21 @@ Deno.serve(async (req) => {
       });
     }
 
-    const chatMessages = [
-      { role: "system", content: SYSTEM_PROMPT },
-      ...messages.slice(-10).map((m) => ({
-        role: m.role,
-        content: m.content.toString().slice(0, 2000),
-      })),
-    ];
+    // Si ya viene un mensaje de sistema desde el frontend, no agregamos el predeterminado
+    const hasSystemMessage = messages.some(m => m.role === 'system');
+    
+    const chatMessages = hasSystemMessage 
+      ? messages.slice(-11).map((m) => ({
+          role: m.role,
+          content: m.content.toString().slice(0, 3000),
+        }))
+      : [
+          { role: "system", content: SYSTEM_PROMPT },
+          ...messages.slice(-10).map((m) => ({
+            role: m.role,
+            content: m.content.toString().slice(0, 3000),
+          })),
+        ];
 
     const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
