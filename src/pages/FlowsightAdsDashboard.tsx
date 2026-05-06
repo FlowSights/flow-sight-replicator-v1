@@ -275,8 +275,7 @@ const FlowsightAdsDashboard: React.FC = () => {
     checkUser();
   }, [navigate, isInputFlowPreview]);
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
+  const processFiles = (files: File[]) => {
     if (!files.length) return;
 
     Promise.all(files.map((file) => new Promise<{ name: string; dataUrl: string; type: 'image' | 'video' }>((resolve) => {
@@ -301,6 +300,10 @@ const FlowsightAdsDashboard: React.FC = () => {
         return updated;
       });
     });
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    processFiles(Array.from(e.target.files || []));
   };
 
   const handleRemoveAsset = (name: string) => {
@@ -980,9 +983,24 @@ const FlowsightAdsDashboard: React.FC = () => {
                       promote: config.promote,
                       idealCustomer: config.idealCustomer,
                       location: config.location,
-                      generatedAds: generatedAds
+                      generatedAds: generatedAds,
+                      uploadedAssets: uploadedAssets
                     }} 
-                    hasPaid={hasPaid}
+                    onUpdateAds={(newAds) => {
+                      setGeneratedAds(prev => {
+                        const updated = [...prev];
+                        newAds.forEach(newAd => {
+                          const idx = updated.findIndex(a => a.platform === newAd.platform);
+                          if (idx !== -1) {
+                            updated[idx] = { ...updated[idx], ...newAd };
+                          } else {
+                            updated.push(newAd);
+                          }
+                        });
+                        return updated;
+                      });
+                    }}
+                    onAddAssets={processFiles}
                   />
                 </div>
                 <Button variant="outline" onClick={() => setShowResults(false)} className="rounded-2xl font-bold px-6 py-6 border-white/10 hover:bg-white/5 shrink-0">

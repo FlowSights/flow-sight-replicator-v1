@@ -5,15 +5,13 @@ import { Input } from '@/components/ui/input';
 import { supabase } from '@/lib/supabaseClient';
 import { logger, formatError } from '@/lib/logger';
 
-interface AIAgentBarProps {
-  context: {
-    businessName: string;
-    promote: string;
-    idealCustomer: string;
     location: string;
     generatedAds: any[];
+    uploadedAssets?: any[];
   };
   hasPaid?: boolean;
+  onUpdateAds?: (newAds: any[]) => void;
+  onAddAssets?: (files: File[]) => void;
 }
 
 const GeminiIcon = () => (
@@ -31,7 +29,8 @@ const GeminiIcon = () => (
   </svg>
 );
 
-export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true }) => {
+export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true, onUpdateAds, onAddAssets }) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [fullResponse, setFullResponse] = useState<string | null>(null);
@@ -68,11 +67,21 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true 
     setDisplayedResponse('');
     setQuery('');
     
-    try {
-      // Solo enviamos los mensajes del usuario, el sistema ya está configurado en el servidor
+      const systemPrompt = `Eres el cerebro estratégico de FlowSights. Tu objetivo es ayudar al usuario a optimizar su campaña en tiempo real.
+      
+      ACCIONES ESPECIALES:
+      Si el usuario te pide cambiar los copys, textos o mejorar los anuncios, DEBES responder con tu análisis normal Y AL FINAL incluir un bloque JSON con el nuevo estado de los anuncios envuelto en etiquetas <update_ads>.
+      Ejemplo: <update_ads>[{"headline": "Nuevo Titulo", "description": "Nueva Desc", "cta": "Comprar", "platform": "meta"}]</update_ads>
+      
+      CONTEXTO ACTUAL:
+      CAMPAÑA: ${context.businessName}, Promoción: ${context.promote}.
+      Anuncios actuales: ${JSON.stringify(context.generatedAds)}.
+      Archivos subidos: ${context.uploadedAssets?.map(a => a.name).join(', ') || 'Ninguno aún'}.`;
+
       const { data, error } = await supabase.functions.invoke('chat-with-ai', {
         body: {
           messages: [
+            { role: 'system', content: systemPrompt },
             { role: 'user', content: query }
           ]
         }
@@ -81,9 +90,20 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true 
       if (error) throw error;
       
       let cleanReply = (data.reply || '').trim();
-      
-      // Corrección agresiva de saludos comunes si vienen mal
       cleanReply = cleanReply.replace(/^\s*hla\b/i, 'Hola');
+
+      // Detectar comando de actualización de anuncios
+      const updateMatch = cleanReply.match(/<update_ads>([\s\S]*?)<\/update_ads>/);
+      if (updateMatch && onUpdateAds) {
+        try {
+          const newAds = JSON.parse(updateMatch[1]);
+          onUpdateAds(newAds);
+          // Ocultar el JSON del usuario en la respuesta visual
+          cleanReply = cleanReply.replace(/<update_ads>[\s\S]*?<\/update_ads>/, "\n\n✨ He actualizado los anuncios con estas mejoras.");
+        } catch (e) {
+          console.error("Error parsing ads update", e);
+        }
+      }
       
       setFullResponse(cleanReply);
     } catch (err) {
@@ -100,8 +120,31 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true 
         onSubmit={handleAskGemini}
         className="relative flex items-center bg-white/[0.01] backdrop-blur-[60px] border border-white/[0.05] rounded-[24px] px-6 py-4 shadow-[0_20px_40px_rgba(0,0,0,0.4)] transition-all group hover:bg-white/[0.03] hover:border-white/10"
       >
-        <div className="mr-5 shrink-0 drop-shadow-[0_0_10px_rgba(79,172,254,0.4)]">
-          <GeminiIcon />
+        <input 
+          type="file" 
+          multiple 
+          accept="image/*,video/*" 
+          className="hidden" 
+          ref={fileInputRef}
+          onChange={(e) => {
+            if (e.target.files && onAddAssets) {
+              onAddAssets(Array.from(e.target.files));
+            }
+          }}
+        />
+        
+        <div className="flex items-center gap-3 mr-5 shrink-0">
+          <div className="drop-shadow-[0_0_10px_rgba(79,172,254,0.4)]">
+            <GeminiIcon />
+          </div>
+          <button
+            type="button"
+            disabled={!hasPaid}
+            onClick={() => fileInputRef.current?.click()}
+            className={`w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all ${!hasPaid ? 'opacity-30 cursor-not-allowed' : 'opacity-60 hover:opacity-100'}`}
+          >
+            <span className="text-xl font-light text-cyan-400">+</span>
+          </button>
         </div>
 
         <Input 
