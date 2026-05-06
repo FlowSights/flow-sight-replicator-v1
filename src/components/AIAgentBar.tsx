@@ -124,13 +124,13 @@ OBJETIVO: "${context.promote}"
 AUDIENCIA: "${context.idealCustomer}"
 
 INSTRUCCIÓN TÉCNICA OBLIGATORIA:
-Debes generar los textos para los anuncios (títulos, descripciones y llamadas a la acción) según lo pida el usuario.
-Siempre responde de manera amable y, AL FINAL DE TU RESPUESTA, adjunta exactamente este bloque JSON con los nuevos datos generados para que la interfaz se actualice.
+Debes comportarte como un asistente proactivo. Si el usuario solo te saluda, devuélvele el saludo amablemente y pregúntale cómo puedes optimizar sus campañas.
+SOLO SI el usuario te pide crear o modificar anuncios, DEBES adjuntar AL FINAL DE TU RESPUESTA exactamente este bloque JSON con los nuevos datos generados para que la interfaz se actualice:
 
 FORMATO EXACTO REQUERIDO:
 <update_ads>[{"headline": "Tu Título Atractivo", "description": "Tu descripción persuasiva aquí", "cta": "Comprar ahora", "platform": "meta"}]</update_ads>
 
-Nota: El usuario puede haber adjuntado imágenes. Si lo hizo, asume que son de excelente calidad para el producto y redacta copys acordes.`;
+Nota: El usuario puede haber adjuntado imágenes. Si lo hizo, redacta copys acordes. No uses markdown dentro del bloque JSON.`;
 
       const currentImages = pendingAssets.map(a => a.dataUrl);
       const existingImages = context.uploadedAssets?.map(a => a.dataUrl) || [];
@@ -155,12 +155,13 @@ Nota: El usuario puede haber adjuntado imágenes. Si lo hizo, asume que son de e
       if (matches.length > 0 && onUpdateAds) {
         matches.forEach(match => {
           try {
-            const content = match[1].trim();
+            let content = match[1].trim();
+            content = content.replace(/```json/gi, "").replace(/```/gi, "").trim();
             if (content) {
               onUpdateAds(JSON.parse(content));
               setShowSuccess(true);
             }
-          } catch (e) { console.error(e); }
+          } catch (e) { console.error("JSON Parse Error:", e, content); }
         });
       }
 
