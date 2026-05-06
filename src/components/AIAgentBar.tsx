@@ -126,37 +126,31 @@ Nota: Solo envía las plataformas que fueron modificadas. No uses markdown dentr
       if (error) throw error;
       
       let cleanReply = (data.reply || '').trim();
-      const updateRegex = /[<(\[]update_ads[>)\]]([\s\S]*?)[<(\[]\/update_ads[>)\]]/gi;
-      const matches = [...cleanReply.matchAll(updateRegex)];
-      
       let hasUpdated = false;
 
-      if (matches.length > 0 && onUpdateAds) {
-        matches.forEach(match => {
-          try {
-            let content = match[1].trim();
-            content = content.replace(/```json/gi, "").replace(/```/gi, "").trim();
-            if (content) {
-              onUpdateAds(JSON.parse(content));
-              hasUpdated = true;
-            }
-          } catch (e) { console.error("JSON Parse Error:", e, content); }
-        });
-      } else if (onUpdateAds) {
-        // Fallback robusto: Si la IA olvidó las etiquetas <update_ads>, buscar un array JSON crudo
-        const rawJsonMatch = cleanReply.match(/\[\s*\{[\s\S]*\}\s*\]/);
-        if (rawJsonMatch) {
-          try {
-            let content = rawJsonMatch[0].trim();
-            content = content.replace(/```json/gi, "").replace(/```/gi, "").trim();
-            const parsed = JSON.parse(content);
-            if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].headline) {
+      // Extracción indestructible de JSON: ignorar las etiquetas y buscar el array directamente
+      const startIndex = cleanReply.indexOf('[');
+      const endIndex = cleanReply.lastIndexOf(']');
+
+      if (startIndex !== -1 && endIndex !== -1 && endIndex > startIndex) {
+        try {
+          let jsonString = cleanReply.substring(startIndex, endIndex + 1);
+          
+          // Limpiar el string de cualquier markdown residual (```json) que pudiera estar dentro
+          jsonString = jsonString.replace(/```json/gi, "").replace(/```/gi, "").trim();
+          
+          const parsed = JSON.parse(jsonString);
+          if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].headline) {
+            if (onUpdateAds) {
               onUpdateAds(parsed);
               hasUpdated = true;
-              // Remover el JSON crudo del texto para que no se vea feo
-              cleanReply = cleanReply.replace(rawJsonMatch[0], "").trim();
             }
-          } catch (e) { console.error("Raw JSON Parse Error:", e); }
+            
+            // Remover TODO el JSON del texto visible
+            cleanReply = cleanReply.substring(0, startIndex) + cleanReply.substring(endIndex + 1);
+          }
+        } catch (e) {
+          console.error("Indestructible JSON Parse Error:", e);
         }
       }
 
@@ -164,8 +158,16 @@ Nota: Solo envía las plataformas que fueron modificadas. No uses markdown dentr
         setShowSuccess(true);
       }
 
-      cleanReply = cleanReply.replace(/[<(\[]update_ads[>)\]][\s\S]*?[<(\[]\/update_ads[>)\]]/gi, "").trim();
-      cleanReply = cleanReply.replace(/```json[\s\S]*?```/gi, "").trim();
+      // Limpieza exhaustiva de cualquier basura de etiquetas que la IA haya dejado
+      cleanReply = cleanReply.replace(/<update_ads>/gi, "");
+      cleanReply = cleanReply.replace(/<\/update_ads>/gi, "");
+      cleanReply = cleanReply.replace(/<update_ads/gi, "");
+      cleanReply = cleanReply.replace(/<\/update_ads/gi, "");
+      cleanReply = cleanReply.replace(/\[update_ads\]/gi, "");
+      cleanReply = cleanReply.replace(/\[\/update_ads\]/gi, "");
+      cleanReply = cleanReply.replace(/```json/gi, "");
+      cleanReply = cleanReply.replace(/```/gi, "");
+      cleanReply = cleanReply.trim();
       
       if (hasUpdated && !cleanReply.includes("✨")) {
         cleanReply += "\n\n✨ He actualizado la estrategia con éxito.";
