@@ -195,7 +195,7 @@ const FlowsightAdsDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
   const { toast } = useToast();
-  const { session, signOut } = useAuth();
+  const { session, loading: authLoading, signOut } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -252,10 +252,10 @@ const FlowsightAdsDashboard: React.FC = () => {
 
   // Auth Protection & Inactivity Redirect
   useEffect(() => {
-    if (!session && !isInputFlowPreview) {
-      navigate('/auth?redirect=/flowsight-ads/dashboard');
+    if (!authLoading && !session && !isInputFlowPreview) {
+      navigate('/flowsight-ads');
     }
-  }, [session, navigate, isInputFlowPreview]);
+  }, [session, authLoading, navigate, isInputFlowPreview]);
 
   const handleImageModeSelect = (mode: ImageMode) => {
     setImageMode(mode);

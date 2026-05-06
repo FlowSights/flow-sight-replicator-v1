@@ -34,7 +34,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const contents = messages.slice(-10).map((m, index) => {
+    let contents = messages.slice(-10).map((m, index) => {
       const isLastMessage = index === messages.length - 1;
       const parts: any[] = [{ text: m.content.toString() }];
 
@@ -58,7 +58,12 @@ Deno.serve(async (req) => {
       };
     });
 
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    // Gemini requires the conversation to start with a user message
+    while (contents.length > 0 && contents[0].role === "model") {
+      contents.shift();
+    }
+
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
     const resp = await fetch(geminiUrl, {
       method: "POST",
@@ -85,11 +90,6 @@ Deno.serve(async (req) => {
     }
 
     const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
-
-    return new Response(JSON.stringify({ reply }), {
-      status: 200,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
 
     return new Response(JSON.stringify({ reply }), {
       status: 200,
