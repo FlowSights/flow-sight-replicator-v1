@@ -74,34 +74,79 @@ Deno.serve(async (req) => {
       contents.shift();
     }
 
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    let reply = "";
 
-    const resp = await fetch(geminiUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        systemInstruction: { role: "system", parts: [{ text: finalSystemPrompt }] },
-        contents,
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 2000,
-          topP: 0.9,
-        },
-      }),
-    });
-
-    const data = await resp.json();
-    
-    if (!resp.ok) {
-      console.error("Gemini error:", resp.status, data);
-      const errorDetails = data?.error?.message || JSON.stringify(data);
-      return new Response(JSON.stringify({ reply: `🔥 Error de API de Google: ${errorDetails}` }), { 
-        status: 200, 
-        headers: { ...corsHeaders, "Content-Type": "application/json" } 
+    try {
+      const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+      const resp = await fetch(geminiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          systemInstruction: { role: "system", parts: [{ text: finalSystemPrompt }] },
+          contents,
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 2000,
+            topP: 0.9,
+          },
+        }),
       });
-    }
 
-    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+      const data = await resp.json();
+      
+      if (!resp.ok) {
+        throw new Error(data?.error?.message || JSON.stringify(data));
+      }
+
+      reply = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+    } catch (geminiError) {
+      console.error("Gemini attempt failed:", geminiError);
+      console.log("Falling back to Groq...");
+      
+      try {
+        const GROQ_API_KEY = Deno.env.get("GROQ_API_KEY");
+        if (!GROQ_API_KEY) {
+          throw new Error(`Gemini falló y no hay llave de Groq para el respaldo. Error original: ${geminiError}`);
+        }
+
+        const chatMessages = messages.map((m) => ({
+          role: m.role,
+          content: m.content.toString()
+        }));
+
+        const groqUrl = "https://api.groq.com/openai/v1/chat/completions";
+        const groqResp = await fetch(groqUrl, {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${GROQ_API_KEY}`
+          },
+          body: JSON.stringify({
+            model: "llama-3.1-8b-instant",
+            messages: [
+              { role: "system", content: finalSystemPrompt },
+              ...chatMessages
+            ],
+            temperature: 0.7,
+            max_completion_tokens: 1000,
+            top_p: 0.9,
+          }),
+        });
+        
+        const groqData = await groqResp.json();
+        if (!groqResp.ok) {
+          throw new Error(`Ambas APIs (Gemini y Groq) fallaron. Groq: ${JSON.stringify(groqData)}`);
+        }
+        
+        reply = groqData?.choices?.[0]?.message?.content ?? "";
+      } catch (fallbackError) {
+        const msg = fallbackError instanceof Error ? fallbackError.message : "Unknown error";
+        return new Response(JSON.stringify({ reply: `🚨 Lo siento, nuestros servidores de IA están saturados en este momento. Por favor, intenta en unos minutos.` }), { 
+          status: 200, 
+          headers: { ...corsHeaders, "Content-Type": "application/json" } 
+        });
+      }
+    }
 
     return new Response(JSON.stringify({ reply }), {
       status: 200,
