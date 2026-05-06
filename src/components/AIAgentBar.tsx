@@ -133,13 +133,16 @@ FORMATO EXACTO REQUERIDO:
 [MENSAJE DEL USUARIO]
 ${query || "Por favor, crea una nueva estrategia y optimiza los copys de mi campaña."}`;
 
+      const currentImages = pendingAssets.map(a => a.dataUrl);
+      const existingImages = context.uploadedAssets?.map(a => a.dataUrl) || [];
+      const allImages = [...new Set([...currentImages, ...existingImages])];
+
       const { data, error } = await supabase.functions.invoke('chat-with-ai', {
         body: {
           messages: [
             { role: 'user', content: combinedPrompt }
-          ]
-          // NOTA: No enviamos 'images' ni usamos el rol 'system' para evitar errores 500/502
-          // en el gateway de IA (Payload Too Large / Unsupported Role para Gemini).
+          ],
+          images: allImages
         }
       });
 
