@@ -2,9 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Loader2, X, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
-import { Input } from '@/components/ui/input';
 import { supabase } from '@/lib/supabaseClient';
-import { logger, formatError } from '@/lib/logger';
 
 interface AIAgentBarProps {
   context: {
@@ -23,7 +21,7 @@ interface AIAgentBarProps {
 const GeminiIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 animate-pulse">
     <path d="M12 2L14.85 9.15L22 12L14.85 14.85L12 22L9.15 14.85L2 12L9.15 9.15L12 2Z" 
-      className="fill-gradient-to-br from-blue-400 via-purple-400 to-pink-400"
+      className="fill-cyan-400"
       style={{ fill: 'url(#gemini-gradient)' }}
     />
     <defs>
@@ -48,14 +46,11 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
 
   useEffect(() => {
     if (!isOpen) return;
-
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
-
-    // Usamos fase de captura (true) para asegurar que el evento se detecte antes de que otros lo detengan
     document.addEventListener('click', handleClickOutside, true);
     return () => document.removeEventListener('click', handleClickOutside, true);
   }, [isOpen]);
@@ -64,25 +59,21 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
     if (fullResponse) {
       setDisplayedResponse('');
       let currentIndex = 0;
-      
       if (typingTimerRef.current) clearInterval(typingTimerRef.current);
-      
       typingTimerRef.current = setInterval(() => {
         currentIndex++;
         setDisplayedResponse(fullResponse.substring(0, currentIndex));
-        
         if (currentIndex >= fullResponse.length) {
           if (typingTimerRef.current) clearInterval(typingTimerRef.current);
         }
       }, 5);
-      return () => clearInterval(typingTimerRef.current as NodeJS.Timeout);
+      return () => { if (typingTimerRef.current) clearInterval(typingTimerRef.current); };
     }
   }, [fullResponse]);
 
   const handleFilePreload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
-
     files.forEach(file => {
       const reader = new FileReader();
       reader.onload = (event) => {
@@ -118,32 +109,17 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
     setQuery('');
     
     try {
-      const systemPrompt = `Eres un Experto Estratega de Marketing Senior y Consultor de Crecimiento. 
-      TU CLIENTE ACTUAL: "${context.businessName}"
-      OBJETIVO DE LA CAMPAÑA: "${context.promote}"
-      AUDIENCIA IDEAL: "${context.idealCustomer}"
-      UBICACIÓN: "${context.location}"
+      const systemPrompt = `Eres un Experto Estratega de Marketing Senior. 
+      CLIENTE: "${context.businessName}"
+      OBJETIVO: "${context.promote}"
+      AUDIENCIA: "${context.idealCustomer}"
       
-      MISIÓN:
-      Tu único objetivo es el éxito de "${context.businessName}". Responde de forma ejecutiva y brillante.
-      Enfócate 100% en el negocio del cliente. No hables de FlowSights como empresa, tú ERES el estratega de esta campaña.
-      
-      INSTRUCCIÓN TÉCNICA CRÍTICA:
-      Si el usuario te pide cambiar, mejorar o ajustar los anuncios (copys, títulos, CTAs) o subir nuevas imágenes, DEBES generar el nuevo contenido y enviarlo AL FINAL de tu respuesta envuelto en etiquetas <update_ads>.
+      INSTRUCCIÓN TÉCNICA:
+      Si el usuario pide cambios, genera el nuevo contenido y envíalo AL FINAL envuelto en <update_ads>.
       FORMATO: <update_ads>[{"headline": "...", "description": "...", "cta": "...", "platform": "..."}]</update_ads>
       
-      Si el usuario subió una imagen, analízala y úsala para inspirar los nuevos copys o confirma que la has recibido.
-      
-      Si no incluyes el bloque <update_ads>, los cambios NO se verán en el dashboard. Úsalo siempre que sugieras mejoras.
-      
-      ESTADO DE LA CAMPAÑA:
-      Anuncios actuales: ${JSON.stringify(context.generatedAds)}
-      Archivos disponibles: ${context.uploadedAssets?.map(a => a.name).join(', ') || 'Ninguno aún'}.`;
+      IMPORTANTE: Analiza las imágenes adjuntas para personalizar los copys.`;
 
-      // Preparar el mensaje del usuario con imágenes si las hay
-      const userMessage: any = { role: 'user', content: query || "Analiza estas imágenes para mi campaña" };
-      
-      // Enviamos las imágenes pendientes de esta sesión + las que ya estaban cargadas
       const currentImages = pendingAssets.map(a => a.dataUrl);
       const existingImages = context.uploadedAssets?.map(a => a.dataUrl) || [];
       const allImages = [...new Set([...currentImages, ...existingImages])];
@@ -152,7 +128,7 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
         body: {
           messages: [
             { role: 'system', content: systemPrompt },
-            userMessage
+            { role: 'user', content: query || "Analiza estas imágenes para mi campaña" }
           ],
           images: allImages
         }
@@ -160,61 +136,39 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
 
       if (error) throw error;
       
-      // Limpiar etiquetas de actualización de forma agresiva (múltiples pasadas para seguridad)
       let cleanReply = (data.reply || '').trim();
-      
-      // 1. Extraer y aplicar actualizaciones
-      const updateRegex = /<update_ads>([\s\S]*?)<\/update_ads>/g;
+      const updateRegex = /<update_ads>([\s\S]*?)<\/update_ads>/gi;
       const matches = [...cleanReply.matchAll(updateRegex)];
       
-      if (matches.length > 0) {
-        if (onUpdateAds) {
-          matches.forEach(match => {
-            try {
-              const content = match[1].trim();
-              if (content) {
-                const newAds = JSON.parse(content);
-                onUpdateAds(newAds);
-                toast.success("¡Estrategia actualizada!", {
-                  description: "Los anuncios han sido optimizados por la IA.",
-                  icon: <Sparkles className="w-5 h-5 text-emerald-400" />,
-                  duration: 5000,
-                });
-              }
-            } catch (e) {
-              console.error("Error parsing ads update", e);
+      if (matches.length > 0 && onUpdateAds) {
+        matches.forEach(match => {
+          try {
+            const content = match[1].trim();
+            if (content) {
+              onUpdateAds(JSON.parse(content));
+              toast.success("¡Estrategia actualizada!", {
+                icon: <Sparkles className="w-5 h-5 text-emerald-400" />,
+              });
             }
-          });
-        }
+          } catch (e) { console.error(e); }
+        });
       }
 
-      // 2. Limpieza total del texto para el usuario
-      // Eliminamos etiquetas <update_ads> y todo lo que haya entre ellas
-      cleanReply = cleanReply.replace(/<update_ads>[\s\S]*?<\/update_ads>/gi, "");
-      // Eliminamos posibles bloques de código residuales
-      cleanReply = cleanReply.replace(/```json[\s\S]*?```/gi, "");
-      cleanReply = cleanReply.replace(/```[\s\S]*?```/gi, "");
-      // Eliminar posibles objetos JSON sueltos si el regex falló
-      cleanReply = cleanReply.replace(/\[\s*{\s*"headline":[\s\S]*?}\s*\]/gi, "");
+      cleanReply = cleanReply.replace(/<update_ads>[\s\S]*?<\/update_ads>/gi, "").trim();
+      cleanReply = cleanReply.replace(/```json[\s\S]*?```/gi, "").trim();
       
-      cleanReply = cleanReply.trim();
-      
-      if (matches.length > 0) {
-        if (cleanReply) {
-          if (!cleanReply.includes("✨")) {
-            cleanReply += "\n\n✨ He actualizado la estrategia con éxito.";
-          }
-        } else {
-          cleanReply = "✨ He actualizado los anuncios con las mejoras solicitadas.";
-        }
+      if (matches.length > 0 && !cleanReply.includes("✨")) {
+        cleanReply += "\n\n✨ He actualizado la estrategia con éxito.";
       }
       
-      setFullResponse(cleanReply);
+      setFullResponse(cleanReply || "✨ He actualizado los anuncios con las mejoras solicitadas.");
     } catch (err) {
       setFullResponse("Error en la conexión. Por favor, intenta de nuevo.");
     } finally {
       setLoading(false);
     }
+  };
+
   return (
     <div className="relative w-full max-w-2xl" ref={containerRef}>
       <form 
@@ -235,7 +189,7 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
                   <button 
                     type="button"
                     onClick={() => removePendingAsset(asset.name)}
-                    className="absolute -top-2 -right-2 bg-black text-white rounded-full p-1 opacity-0 group-asset/hover:opacity-100 transition-opacity border border-white/20 z-10"
+                    className="absolute -top-2 -right-2 bg-black text-white rounded-full p-1 opacity-0 group-hover/asset:opacity-100 transition-opacity border border-white/20 z-10"
                   >
                     <X size={12} />
                   </button>
@@ -247,24 +201,20 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
 
         <div className="flex items-center px-4 py-1.5">
           <input 
-            type="file" 
-            multiple 
-            accept="image/*,video/*" 
-            className="hidden" 
-            ref={fileInputRef}
-            onChange={handleFilePreload}
+            type="file" multiple accept="image/*,video/*" className="hidden" 
+            ref={fileInputRef} onChange={handleFilePreload}
           />
           
           <div className="mr-3 shrink-0 drop-shadow-[0_0_12px_rgba(79,172,254,0.4)]">
             <GeminiIcon />
           </div>
 
-          <Input 
+          <input 
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={hasPaid ? "Pregúntale a Gemini..." : "Desbloquea premium para usar la IA"}
             disabled={!hasPaid || loading}
-            className="bg-transparent border-none border-0 focus:border-0 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-lg md:text-xl font-medium text-white placeholder:text-white/20 px-0 h-10 py-0 transition-all caret-white selection:bg-white/20"
+            className="flex-1 bg-transparent border-none outline-none text-lg md:text-xl font-medium text-white placeholder:text-white/20 px-0 h-10 py-0 transition-all caret-white"
           />
 
           <div className="flex items-center gap-2 ml-3">
@@ -286,11 +236,7 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
                   : 'bg-white/5 text-white/20'
               } disabled:opacity-50`}
             >
-              {loading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <Send className="w-5 h-5" />
-              )}
+              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
             </button>
           </div>
         </div>
@@ -317,7 +263,7 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
               </button>
             </div>
 
-            <div className="text-white/70 text-base leading-relaxed font-medium min-h-[80px]">
+            <div className="text-white/70 text-base leading-relaxed font-medium min-h-[80px] whitespace-pre-wrap">
               {displayedResponse}
               {loading && !displayedResponse && (
                 <div className="flex gap-2 py-3">
@@ -333,7 +279,6 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
               )}
             </div>
             
-            {/* Action Chips */}
             <div className="flex flex-wrap gap-3 mt-10">
               {['OPTIMIZAR CTR', 'ANÁLISIS DE AUDIENCIA', 'NUEVOS COPYS'].map(label => (
                 <button
