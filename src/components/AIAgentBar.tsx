@@ -95,7 +95,7 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
     setQuery('');
     
     try {
-      const systemPrompt = `Eres un Estratega de Marketing Senior experto en Ads.
+      const systemPrompt = `Eres un Estratega de Marketing Senior experto en Ads, conversando con el cliente de la agencia FlowSights.
 CLIENTE: "${context.businessName}"
 OBJETIVO: "${context.promote}"
 AUDIENCIA: "${context.idealCustomer}"
@@ -104,13 +104,14 @@ TUS ANUNCIOS ACTUALES (Campaña Activa):
 ${JSON.stringify(context.generatedAds, null, 2)}
 
 INSTRUCCIÓN TÉCNICA OBLIGATORIA:
-PROHIBICIÓN ABSOLUTA: NO expliques tus pensamientos. NO escribas listas de los cambios que hiciste. NO uses viñetas ni guiones ni asteriscos. Tu respuesta en texto debe ser SOLO UNA frase corta confirmando que hiciste el trabajo (ej. '✨ He optimizado los copys.'). TODO el resto debe ser únicamente el bloque JSON.
-SOLO SI el usuario te pide crear o modificar anuncios, DEBES adjuntar AL FINAL DE TU RESPUESTA exactamente este bloque JSON envuelto en etiquetas XML (usa los símbolos menor que < y mayor que >), tomando como base los anuncios actuales y aplicando ÚNICAMENTE las mejoras solicitadas:
+1. Sé conversacional, amigable y extremadamente experto en marketing digital.
+2. Puedes responder preguntas, dar consejos sobre marketing, o charlar sobre la campaña actual.
+3. Evita introducciones largas. Sé conciso y al grano. Usa un tono persuasivo.
+4. SOLO SI el usuario te pide explícitamente modificar, optimizar, cambiar o crear anuncios (o si tu consejo implica directamente un nuevo copy que el usuario aceptaría implementar), DEBES aplicar los cambios y adjuntar AL FINAL DE TU RESPUESTA exactamente este bloque JSON envuelto en etiquetas XML:
 
-FORMATO EXACTO REQUERIDO:
 <update_ads>[{"headline": "Tu Título Atractivo", "description": "Tu descripción persuasiva aquí", "cta": "Comprar ahora", "platform": "meta"}]</update_ads>
 
-Nota: Solo envía las plataformas que fueron modificadas. No uses markdown dentro del bloque JSON.`;
+Nota sobre modificaciones: Solo incluye las plataformas que realmente modificaste. No uses markdown dentro del bloque JSON. Si no hay modificaciones, NO incluyas el bloque JSON ni las etiquetas.`;
 
       const { data, error } = await supabase.functions.invoke('chat-with-ai', {
         body: {
@@ -127,10 +128,11 @@ Nota: Solo envía las plataformas que fueron modificadas. No uses markdown dentr
       let cleanReply = (data.reply || '').trim();
       let hasUpdated = false;
 
-      // Extraer y ocultar CUALQUIER bloque de código o JSON del texto, sin importar si es válido o no
+      // Extraer y ocultar CUALQUIER bloque de código o JSON del texto
       let startIndex = cleanReply.indexOf('[');
       let endIndex = cleanReply.lastIndexOf(']');
 
+      // Validar si el bloque JSON parece ser de actualización de anuncios (revisando si hay headline, description, etc)
       if (startIndex !== -1 && endIndex !== -1 && endIndex > startIndex) {
         try {
           let jsonString = cleanReply.substring(startIndex, endIndex + 1);
@@ -141,25 +143,23 @@ Nota: Solo envía las plataformas que fueron modificadas. No uses markdown dentr
               onUpdateAds(parsed);
               hasUpdated = true;
             }
+            // Eliminar solo si logramos parsearlo como actualización
+            cleanReply = cleanReply.substring(0, startIndex) + cleanReply.substring(endIndex + 1);
           }
         } catch (e) {
-          console.error("Indestructible JSON Parse Error:", e);
+          console.error("JSON Parse Error:", e);
         }
-        // FORCE REMOVE the array from the visible text no matter what
-        cleanReply = cleanReply.substring(0, startIndex) + cleanReply.substring(endIndex + 1);
       }
 
       if (hasUpdated) {
         setShowSuccess(true);
       }
 
-      // Limpieza extrema: Eliminar CUALQUIER bloque de código residual (markdown)
+      // Limpieza de cualquier etiqueta XML y residuos
+      cleanReply = cleanReply.replace(/```json[\s\S]*?```/gi, "");
       cleanReply = cleanReply.replace(/```[\s\S]*?```/g, "");
-      
-      // Limpieza de cualquier etiqueta XML
-      cleanReply = cleanReply.replace(/<[^>]+>/g, "");
-      cleanReply = cleanReply.replace(/\[update_ads\]/gi, "");
-      cleanReply = cleanReply.replace(/\[\/update_ads\]/gi, "");
+      cleanReply = cleanReply.replace(/<update_ads>/gi, "");
+      cleanReply = cleanReply.replace(/<\/update_ads>/gi, "");
       
       // Limpiar texto que dice "Aquí tienes el JSON" o variaciones
       cleanReply = cleanReply.replace(/Aquí te presento las modificaciones en el bloque JSON:/gi, "");
@@ -172,12 +172,16 @@ Nota: Solo envía las plataformas que fueron modificadas. No uses markdown dentr
       cleanReply = cleanReply.trim();
       
       if (hasUpdated && !cleanReply.includes("✨")) {
-        cleanReply += "\n\n✨ He actualizado la estrategia con éxito.";
+        if (cleanReply) {
+          cleanReply += "\n\n✨ He actualizado la estrategia con éxito.";
+        } else {
+          cleanReply = "✨ He actualizado los anuncios con las mejoras solicitadas.";
+        }
       }
       
-      // Si la respuesta quedó vacía después de limpiar el código, ponemos un mensaje genérico
-      if (!cleanReply) {
-        cleanReply = "✨ He actualizado los anuncios con las mejoras solicitadas.";
+      // Si la respuesta quedó vacía después de limpiar el código y no hubo actualización
+      if (!cleanReply && !hasUpdated) {
+        cleanReply = "No estoy seguro de cómo responder a eso. ¿En qué te ayudo con tu campaña?";
       }
 
       setFullResponse(cleanReply);
