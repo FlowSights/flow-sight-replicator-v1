@@ -16,7 +16,29 @@ interface PreviewProps {
   type?: string;
   score?: number;
   platformUrl?: string;
+  isUpdating?: boolean;
 }
+
+const TypingText = ({ text, isUpdating }: { text: string; isUpdating?: boolean }) => {
+  const [displayedText, setDisplayedText] = React.useState(text);
+  
+  React.useEffect(() => {
+    if (isUpdating) {
+      let i = 0;
+      setDisplayedText('');
+      const timer = setInterval(() => {
+        i++;
+        setDisplayedText(text.substring(0, i));
+        if (i >= text.length) clearInterval(timer);
+      }, 15);
+      return () => clearInterval(timer);
+    } else {
+      setDisplayedText(text);
+    }
+  }, [text, isUpdating]);
+
+  return <>{displayedText}</>;
+};
 
 export const MetaPreview: React.FC<PreviewProps> = ({ headline, description, cta, imageUrl, imageUrls, businessName, websiteUrl }) => {
   const displayName = businessName || 'FlowSights';
@@ -46,7 +68,9 @@ export const MetaPreview: React.FC<PreviewProps> = ({ headline, description, cta
 
       {/* Description */}
       <div className="px-3 pb-3">
-        <p className="text-[14px] text-gray-900 dark:text-gray-200 leading-normal">{description}</p>
+        <p className="text-[14px] text-gray-900 dark:text-gray-200 leading-normal">
+          <TypingText text={description} isUpdating={isUpdating} />
+        </p>
       </div>
 
       {/* Image or Carousel */}
@@ -60,7 +84,9 @@ export const MetaPreview: React.FC<PreviewProps> = ({ headline, description, cta
       <div className="bg-[#f0f2f5] dark:bg-[#3a3b3c] p-3 flex justify-between items-center">
         <div className="flex-1 pr-4">
           <p className="text-[12px] text-gray-500 dark:text-gray-400 uppercase">{displayDomain.toUpperCase()}</p>
-          <p className="text-[16px] font-bold text-gray-900 dark:text-white truncate">{headline}</p>
+          <p className="text-[16px] font-bold text-gray-900 dark:text-white truncate">
+            <TypingText text={headline} isUpdating={isUpdating} />
+          </p>
         </div>
         <button className="bg-[#e4e6eb] dark:bg-[#4e4f50] hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-semibold py-2 px-4 rounded-lg text-[14px] transition-colors whitespace-nowrap">
           {cta}
@@ -108,10 +134,10 @@ export const GoogleAdsPreview: React.FC<PreviewProps> = ({ headline, description
         <div className="flex gap-4">
           <div className="flex-1">
             <h3 className="text-[20px] text-[#1a0dab] dark:text-[#8ab4f8] hover:underline cursor-pointer leading-tight mb-1">
-              {headline}
+              <TypingText text={headline} isUpdating={isUpdating} />
             </h3>
             <p className="text-[14px] text-[#4d5156] dark:text-[#bdc1c6] leading-relaxed">
-              {description}
+              <TypingText text={description} isUpdating={isUpdating} />
             </p>
           </div>
           <div className="w-24 h-24 flex-shrink-0">
@@ -154,10 +180,14 @@ export const TikTokPreview: React.FC<PreviewProps> = ({ headline, description, c
         <div className="flex items-end justify-between mb-4">
           <div className="flex-1 pr-12">
             <p className="text-white font-bold mb-1">{displayHandle}</p>
-            <p className="text-white text-[13px] line-clamp-3 mb-3">{description}</p>
+            <p className="text-white text-[13px] line-clamp-3 mb-3">
+              <TypingText text={description} isUpdating={isUpdating} />
+            </p>
             <div className="flex items-center gap-2 text-white text-[13px] font-medium">
               <span className="bg-white/20 backdrop-blur px-2 py-0.5 rounded">Ad</span>
-              <span className="truncate">{headline}</span>
+              <span className="truncate">
+                <TypingText text={headline} isUpdating={isUpdating} />
+              </span>
             </div>
           </div>
           
@@ -223,7 +253,9 @@ export const LinkedInPreview: React.FC<PreviewProps> = ({ headline, description,
 
       <div className="p-3 flex justify-between items-center border-b border-gray-100 dark:border-gray-800">
         <div className="flex-1 pr-4">
-          <p className="text-[14px] font-bold text-gray-900 dark:text-white truncate">{headline}</p>
+          <p className="text-[14px] font-bold text-gray-900 dark:text-white truncate">
+            <TypingText text={headline} isUpdating={isUpdating} />
+          </p>
         </div>
         <button className="border-2 border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 font-bold py-1.5 px-4 rounded-full text-[14px] transition-colors">
           {cta}

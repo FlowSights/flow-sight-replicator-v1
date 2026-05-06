@@ -41,6 +41,7 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
   const [fullResponse, setFullResponse] = useState<string | null>(null);
   const [displayedResponse, setDisplayedResponse] = useState('');
   const [isOpen, setIsOpen] = useState(false);
+  const [pendingAssets, setPendingAssets] = useState<{name: string, dataUrl: string, file: File}[]>([]);
   const typingTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -52,7 +53,6 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
       
       typingTimerRef.current = setInterval(() => {
         currentIndex++;
-        // Usar substring garantiza que no se salten caracteres por desincronización de estado
         setDisplayedResponse(fullResponse.substring(0, currentIndex));
         
         if (currentIndex >= fullResponse.length) {
@@ -62,15 +62,44 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
     }
   }, [fullResponse]);
 
+  const handleFilePreload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setPendingAssets(prev => [...prev, { 
+          name: file.name, 
+          dataUrl: event.target?.result as string,
+          file: file
+        }]);
+      };
+      reader.readAsDataURL(file);
+    });
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const removePendingAsset = (name: string) => {
+    setPendingAssets(prev => prev.filter(a => a.name !== name));
+  };
+
   const handleAskGemini = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    if (!query.trim() || loading) return;
+    if ((!query.trim() && pendingAssets.length === 0) || loading) return;
 
     setLoading(true);
     setIsOpen(true);
+    
+    if (pendingAssets.length > 0 && onAddAssets) {
+      onAddAssets(pendingAssets.map(a => a.file));
+      setPendingAssets([]);
+    }
+
     setFullResponse(null);
     setDisplayedResponse('');
     setQuery('');
+    
     try {
       const systemPrompt = `Eres un Experto Estratega de Marketing Senior y Consultor de Crecimiento. 
       TU CLIENTE ACTUAL: "${context.businessName}"
@@ -106,16 +135,21 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
       let cleanReply = (data.reply || '').trim();
       cleanReply = cleanReply.replace(/^\s*hla\b/i, 'Hola');
 
-      // Detectar comando de actualización de anuncios
       const updateMatch = cleanReply.match(/<update_ads>([\s\S]*?)<\/update_ads>/);
-      if (updateMatch && onUpdateAds) {
-        try {
-          const newAds = JSON.parse(updateMatch[1]);
-          onUpdateAds(newAds);
-          // Ocultar el JSON del usuario en la respuesta visual
-          cleanReply = cleanReply.replace(/<update_ads>[\s\S]*?<\/update_ads>/, "\n\n✨ He actualizado los anuncios con estas mejoras.");
-        } catch (e) {
-          console.error("Error parsing ads update", e);
+      if (updateMatch) {
+        if (onUpdateAds) {
+          try {
+            const newAds = JSON.parse(updateMatch[1]);
+            onUpdateAds(newAds);
+          } catch (e) {
+            console.error("Error parsing ads update", e);
+          }
+        }
+        cleanReply = cleanReply.replace(/<update_ads>[\s\S]*?<\/update_ads>/g, "").trim();
+        if (cleanReply) {
+          cleanReply += "\n\n✨ He actualizado los anuncios con estas mejoras.";
+        } else {
+          cleanReply = "✨ He actualizado los anuncios con las mejoras solicitadas.";
         }
       }
       
@@ -129,63 +163,86 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
 
   return (
     <div className="relative w-full max-w-2xl">
-      {/* Ultra Translucent Glass Bar */}
       <form 
         onSubmit={handleAskGemini}
-        className="relative flex items-center bg-white/[0.01] backdrop-blur-[60px] border border-white/[0.05] rounded-[24px] px-6 py-4 shadow-[0_20px_40px_rgba(0,0,0,0.4)] transition-all group hover:bg-white/[0.03] hover:border-white/10"
+        className="relative flex flex-col bg-white/[0.01] backdrop-blur-[60px] border border-white/[0.05] rounded-[32px] p-2 shadow-[0_20px_80px_rgba(0,0,0,0.5)] transition-all group hover:bg-white/[0.03] hover:border-white/10"
       >
-        <input 
-          type="file" 
-          multiple 
-          accept="image/*,video/*" 
-          className="hidden" 
-          ref={fileInputRef}
-          onChange={(e) => {
-            if (e.target.files && onAddAssets) {
-              onAddAssets(Array.from(e.target.files));
-            }
-          }}
-        />
-        
-        <div className="flex items-center gap-3 mr-5 shrink-0">
-          <div className="drop-shadow-[0_0_10px_rgba(79,172,254,0.4)]">
+        <AnimatePresence>
+          {pendingAssets.length > 0 && (
+            <motion.div 
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="flex gap-3 px-4 pt-4 pb-2 overflow-x-auto"
+            >
+              {pendingAssets.map((asset) => (
+                <div key={asset.name} className="relative group/asset shrink-0">
+                  <img src={asset.dataUrl} className="w-16 h-16 rounded-xl object-cover border border-white/10" />
+                  <button 
+                    type="button"
+                    onClick={() => removePendingAsset(asset.name)}
+                    className="absolute -top-2 -right-2 bg-black text-white rounded-full p-1 opacity-0 group-asset/hover:opacity-100 transition-opacity border border-white/20 z-10"
+                  >
+                    <X size={12} />
+                  </button>
+                </div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <div className="flex items-center px-4 py-3">
+          <input 
+            type="file" 
+            multiple 
+            accept="image/*,video/*" 
+            className="hidden" 
+            ref={fileInputRef}
+            onChange={handleFilePreload}
+          />
+          
+          <div className="mr-4 shrink-0 drop-shadow-[0_0_15px_rgba(79,172,254,0.6)]">
             <GeminiIcon />
           </div>
-          <button
-            type="button"
-            disabled={!hasPaid}
-            onClick={() => fileInputRef.current?.click()}
-            className={`w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all ${!hasPaid ? 'opacity-30 cursor-not-allowed' : 'opacity-60 hover:opacity-100'}`}
-          >
-            <span className="text-xl font-light text-cyan-400">+</span>
-          </button>
-        </div>
 
-        <Input 
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder={hasPaid ? "Pregúntale a Gemini sobre tu campaña" : "🔒 Desbloquea para hablar con Gemini"}
-          readOnly={!hasPaid}
-          className={`bg-transparent border-none focus-visible:ring-0 text-white placeholder:text-white/20 p-0 h-auto text-base font-medium tracking-tight shadow-none ${!hasPaid ? 'cursor-not-allowed' : ''}`}
-          style={{ boxShadow: 'none' }}
-        />
+          <Input 
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={hasPaid ? "Pregúntale a Gemini sobre tu campaña..." : "Desbloquea premium para usar la IA"}
+            disabled={!hasPaid || loading}
+            className="bg-transparent border-none text-xl md:text-2xl font-medium text-white placeholder:text-white/20 focus-visible:ring-0 px-0 h-auto py-2 transition-all caret-white selection:bg-white/20 drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]"
+            style={{ textShadow: '0 0 10px rgba(255,255,255,0.2)' }}
+          />
 
-        <div className="flex items-center gap-3 ml-4">
-          {query && !loading && (
-            <motion.button 
-              initial={{ opacity: 0, scale: 0.8 }} 
-              animate={{ opacity: 1, scale: 1 }} 
-              type="submit"
-              className="w-10 h-10 flex items-center justify-center text-cyan-400 hover:text-cyan-300 transition-colors"
+          <div className="flex items-center gap-2 ml-4">
+            <button
+              type="button"
+              disabled={!hasPaid}
+              onClick={() => fileInputRef.current?.click()}
+              className={`w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all ${!hasPaid ? 'opacity-30 cursor-not-allowed' : 'opacity-80 hover:opacity-100 hover:scale-110'}`}
             >
-              <Send className="w-6 h-6" />
-            </motion.button>
-          )}
-          {loading && <Loader2 className="w-6 h-6 text-cyan-400 animate-spin" />}
+              <span className="text-2xl font-light text-white">+</span>
+            </button>
+            
+            <button 
+              type="submit"
+              disabled={(!query.trim() && pendingAssets.length === 0) || loading || !hasPaid}
+              className={`p-3 rounded-full transition-all flex items-center justify-center ${
+                query.trim() || pendingAssets.length > 0
+                  ? 'bg-white text-black scale-110 shadow-[0_0_20px_rgba(255,255,255,0.4)]' 
+                  : 'bg-white/5 text-white/20'
+              } disabled:opacity-50`}
+            >
+              {loading ? (
+                <Loader2 className="w-6 h-6 animate-spin" />
+              ) : (
+                <Send className="w-6 h-6" />
+              )}
+            </button>
+          </div>
         </div>
       </form>
 
-      {/* Response Panel - Immersive Glass */}
       <AnimatePresence>
         {isOpen && (displayedResponse || loading) && (
           <motion.div
@@ -212,30 +269,29 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
               {loading && !displayedResponse && (
                 <div className="flex gap-2 py-3">
                   {[0, 1, 2].map(i => (
-                    <div key={i} className="w-2 h-2 bg-cyan-500/30 rounded-full animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />
+                    <motion.div
+                      key={i}
+                      animate={{ opacity: [0.3, 1, 0.3] }}
+                      transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.2 }}
+                      className="w-2 h-2 rounded-full bg-cyan-400/50"
+                    />
                   ))}
                 </div>
               )}
-              {loading && displayedResponse && <span className="inline-block w-2 h-5 ml-2 bg-cyan-400 animate-pulse align-middle rounded-full" />}
             </div>
-
-            {!loading && displayedResponse === fullResponse && (
-              <motion.div 
-                initial={{ opacity: 0 }} 
-                animate={{ opacity: 1 }}
-                className="mt-10 pt-8 border-t border-white/[0.03] flex flex-wrap gap-3"
-              >
-                {["Optimizar CTR", "Análisis de Audiencia", "Nuevos Copys"].map((btn) => (
-                  <button 
-                    key={btn}
-                    onClick={() => { setQuery(`Ayúdame a ${btn.toLowerCase()}`); handleAskGemini(); }}
-                    className="text-[10px] font-bold uppercase tracking-widest px-6 py-3 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] text-white/40 hover:text-white transition-all shadow-xl"
-                  >
-                    {btn}
-                  </button>
-                ))}
-              </motion.div>
-            )}
+            
+            {/* Action Chips */}
+            <div className="flex flex-wrap gap-3 mt-10">
+              {['OPTIMIZAR CTR', 'ANÁLISIS DE AUDIENCIA', 'NUEVOS COPYS'].map(label => (
+                <button
+                  key={label}
+                  onClick={() => setQuery(label.toLowerCase())}
+                  className="px-5 py-2.5 rounded-full bg-white/[0.03] border border-white/5 text-[10px] font-bold text-white/40 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all uppercase tracking-widest"
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

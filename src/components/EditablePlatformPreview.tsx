@@ -20,6 +20,7 @@ interface EditablePlatformPreviewProps {
   platform: 'meta' | 'google' | 'tiktok' | 'linkedin';
   onUpdate?: (updates: { headline: string; description: string; cta: string }) => void;
   onExpand?: () => void;
+  isUpdating?: boolean;
 }
 
 export const EditablePlatformPreview: React.FC<EditablePlatformPreviewProps> = ({
@@ -27,6 +28,7 @@ export const EditablePlatformPreview: React.FC<EditablePlatformPreviewProps> = (
   platform,
   onUpdate,
   onExpand,
+  isUpdating,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [headline, setHeadline] = useState(ad.headline);
@@ -155,6 +157,7 @@ export const EditablePlatformPreview: React.FC<EditablePlatformPreviewProps> = (
           imageUrls={ad.imageUrls}
           businessName={ad.businessName}
           websiteUrl={ad.websiteUrl}
+          isUpdating={isUpdating}
         />
       </div>
     </motion.div>

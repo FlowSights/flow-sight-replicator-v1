@@ -40,6 +40,37 @@ import { PlatformIcon, platformThemes, platformNames } from '@/components/Platfo
 
 import { GeneratedAd } from '@/types/ads';
 import { AIAgentBar } from '@/components/AIAgentBar';
+import { toast } from 'sonner';
+
+const TypewriterText = ({ text, isUpdating }: { text: string; isUpdating?: boolean }) => {
+  const [displayedText, setDisplayedText] = useState(text);
+  const [isTyping, setIsTyping] = useState(false);
+
+  useEffect(() => {
+    if (isUpdating) {
+      setIsTyping(true);
+      setDisplayedText('');
+      let index = 0;
+      const interval = setInterval(() => {
+        index++;
+        setDisplayedText(text.substring(0, index));
+        if (index >= text.length) {
+          clearInterval(interval);
+          setIsTyping(false);
+        }
+      }, 15);
+      return () => clearInterval(interval);
+    } else {
+      setDisplayedText(text);
+    }
+  }, [isUpdating, text]);
+
+  return (
+    <span className={isTyping ? 'relative after:content-["|"] after:animate-pulse after:ml-1 after:text-emerald-500 font-medium' : 'font-medium'}>
+      {displayedText}
+    </span>
+  );
+};
 
 interface CampaignConfig {
   businessName: string;
@@ -992,12 +1023,23 @@ const FlowsightAdsDashboard: React.FC = () => {
                         newAds.forEach(newAd => {
                           const idx = updated.findIndex(a => a.platform === newAd.platform);
                           if (idx !== -1) {
-                            updated[idx] = { ...updated[idx], ...newAd };
+                            updated[idx] = { ...updated[idx], ...newAd, isUpdating: true };
+                            // Remover el flag después de la animación
+                            setTimeout(() => {
+                              setGeneratedAds(current => current.map(a => 
+                                a.platform === newAd.platform ? { ...a, isUpdating: false } : a
+                              ));
+                            }, 2000);
                           } else {
-                            updated.push(newAd);
+                            updated.push({ ...newAd, isUpdating: true });
                           }
                         });
                         return updated;
+                      });
+                      toast.success("¡Estrategia actualizada por la IA!", {
+                        description: "Los copys y activos han sido optimizados.",
+                        icon: <Sparkles className="w-5 h-5 text-yellow-400" />,
+                        duration: 5000,
                       });
                     }}
                     onAddAssets={processFiles}
@@ -1111,6 +1153,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                               }}
                               onExpand={() => { setCurrentMockupAdIndex(generatedAds.indexOf(ad)); setMockupLightboxOpen(true); }}
                               imageUrls={imageMode === 'carousel' ? uploadedAssets.map(a => a.dataUrl) : undefined}
+                              isUpdating={ad.isUpdating}
                             />
                           </div>
                         </motion.div>
@@ -1187,7 +1230,9 @@ const FlowsightAdsDashboard: React.FC = () => {
                               </div>
                               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-yellow-500/80">Análisis Estratégico</span>
                             </div>
-                            <p className="text-sm text-gray-300 font-medium leading-relaxed relative z-10 italic">"{ad.reasoning}"</p>
+                            <p className="text-sm text-gray-300 leading-relaxed relative z-10 italic">
+                              "<TypewriterText text={ad.reasoning} isUpdating={ad.isUpdating} />"
+                            </p>
                           </div>
                         </div>
                       ))}
