@@ -140,35 +140,38 @@ export const generateAdsWithGeminiIntegration = async (
       };
     });
 
-    // Paso 4: Variant Booster - Asegurar 4 variantes por plataforma si la IA devuelve menos
+    // Paso 4: Variant Control - Entregar exactamente 4 variantes (1 por plataforma)
     onStepUpdate?.(3);
     const platforms = ['google', 'meta', 'tiktok', 'linkedin'] as const;
-    let boostedAds: GeneratedAd[] = [...generatedAds];
+    let finalAds: GeneratedAd[] = [];
 
     platforms.forEach(platform => {
-      const platformAds = boostedAds.filter(a => a.platform === platform);
-      if (platformAds.length > 0 && platformAds.length < 4) {
-        console.log(`🚀 Boosting variantes para ${platform}. De ${platformAds.length} a 4.`);
-        const baseAd = platformAds[0];
-        const missingTypes = ['Offer', 'Emotional', 'Urgency', 'Pain Point'].filter(
-          t => !platformAds.find(a => a.type === t)
-        );
-
-        missingTypes.forEach(type => {
-          if (boostedAds.filter(a => a.platform === platform).length < 4) {
-            boostedAds.push({
-              ...baseAd,
-              type: type as any,
-              score: Math.floor(Math.random() * (98 - 88 + 1)) + 88,
-              reasoning: `Variante estratégica optimizada para enfoque de ${type}.`
-            });
-          }
+      const platformAds = generatedAds.filter(a => a.platform === platform);
+      if (platformAds.length > 0) {
+        // Tomar el mejor de los que devolvió la IA para esta plataforma
+        finalAds.push(platformAds.reduce((prev, current) => prev.score > current.score ? prev : current));
+      } else {
+        // Si la IA no devolvió nada para esta plataforma, usar el fallback personalizado
+        const fallbackTemplate = FALLBACK_ADS_TEMPLATE.ads.find(a => a.platform === platform) || FALLBACK_ADS_TEMPLATE.ads[0];
+        finalAds.push({
+          headline: fallbackTemplate.headline,
+          description: fallbackTemplate.description,
+          cta: fallbackTemplate.cta,
+          imageUrl: config.userImage || '',
+          imageUrls: config.imageUrls,
+          platform: platform,
+          type: fallbackTemplate.type as any,
+          score: fallbackTemplate.score,
+          platformUrl: platformUrls[platform],
+          businessName: config.businessName,
+          websiteUrl: config.websiteUrl,
+          reasoning: fallbackTemplate.reasoning,
         });
       }
     });
 
-    console.log('✅ Anuncios generados y potenciados exitosamente:', boostedAds.length);
-    return boostedAds;
+    console.log('✅ Anuncios finales (4 variantes total):', finalAds.length);
+    return finalAds;
   } catch (error) {
     console.error('❌ Error crítico en generateAdsWithGeminiIntegration:', error);
     // Fallback final: retornar anuncios de fallback incluso si todo falla

@@ -66,7 +66,7 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context }) => {
     try {
       const systemPrompt = `Eres un experto estratega de marketing digital de FlowSights Ads. 
       CAMPAÑA: ${context.businessName}, Promoción: ${context.promote}, Público: ${context.idealCustomer}.
-      Responde de forma ejecutiva y brillante.`;
+      Responde de forma ejecutiva y brillante. Asegúrate de escribir perfectamente bien, especialmente el saludo (siempre usa "Hola" en lugar de "Hla").`;
 
       const { data, error } = await supabase.functions.invoke('chat-with-ai', {
         body: {

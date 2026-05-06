@@ -349,11 +349,8 @@ const FlowsightAdsDashboard: React.FC = () => {
           // silencioso
         }
         
-        if (hasPaid) {
-          setShowResults(true);
-        } else {
-          setShowPreview(true);
-        }
+        setShowResults(true);
+        setShowPreview(false);
         setIsLoading(false);
         toast({ title: 'Estrategia Maestra lista' });
       }, 500);
@@ -531,65 +528,6 @@ const FlowsightAdsDashboard: React.FC = () => {
 
       <main className="max-w-7xl mx-auto px-6 py-12">
         <AnimatePresence mode="wait">
-          {showPreview && !hasPaid ? (
-            <motion.div key="preview" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="max-w-3xl mx-auto">
-              <div className="text-center mb-16 relative">
-                <motion.h2 initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-5xl font-black mb-4 tracking-tight">Tu campaña está <span className="text-emerald-500">lista</span></motion.h2>
-                <p className="text-gray-400 text-lg font-medium">Hemos generado 4 estrategias optimizadas para tu negocio</p>
-              </div>
-
-              <div className="space-y-8">
-                <div className="relative rounded-[48px] p-1" style={{ background: 'linear-gradient(135deg, rgba(16,185,129,0.3), transparent, rgba(16,185,129,0.3))', boxShadow: '0 0 80px -20px rgba(16,185,129,0.5)' }}>
-                  <div className="bg-[#0A0A0A] rounded-[46px] p-8 lg:p-14 relative overflow-hidden">
-                    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                      <div className="absolute -top-40 -right-40 w-[600px] h-[600px] blur-[150px] rounded-full opacity-20" style={{ background: 'rgb(16, 185, 129)' }} />
-                    </div>
-                    
-                    <div className="relative z-10">
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-                        {(['google', 'meta', 'tiktok', 'linkedin'] as const).map((platform) => (
-                          <div key={platform} className="relative">
-                            <div className="filter blur-md pointer-events-none select-none opacity-60 p-6 rounded-[24px] bg-white/5 border border-white/10 h-32 flex items-center justify-center">
-                              <PlatformIcon platform={platform} size={24} />
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 pointer-events-none">
-                        <div className="p-4 bg-black/80 backdrop-blur-xl rounded-2xl border border-white/10">
-                          <Lock className="w-8 h-8 text-emerald-500" />
-                        </div>
-                        <p className="font-black text-white text-lg">Desbloquea tu estrategia</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <motion.button
-                    whileHover={{ y: -3, scale: 1.02 }}
-                    whileTap={{ scale: 0.97 }}
-                    onClick={handlePreviewPayment}
-                    className="py-7 px-8 rounded-[24px] font-black uppercase tracking-[0.15em] text-[10px] flex items-center justify-center gap-3 text-white transition-all duration-300 backdrop-blur-xl border border-emerald-500/50 bg-gradient-to-br from-emerald-500/20 to-emerald-500/10 hover:from-emerald-500/30 hover:to-emerald-500/20 group relative overflow-hidden"
-                    style={{ boxShadow: '0 20px 50px -15px rgba(16,185,129,0.5)' }}
-                  >
-                    <Unlock className="w-4 h-4 relative z-10" /> Ver mi campaña — $49.99 USD
-                  </motion.button>
-
-                  <motion.button
-                    whileHover={{ y: -3, scale: 1.02 }}
-                    whileTap={{ scale: 0.97 }}
-                    onClick={handlePreviewBasicView}
-                    className="py-7 px-8 rounded-[24px] font-black uppercase tracking-[0.15em] text-[10px] flex items-center justify-center gap-3 text-gray-300 transition-all duration-300 backdrop-blur-xl border border-white/10 bg-white/5 hover:bg-white/10 group relative overflow-hidden"
-                  >
-                    <Eye className="w-4 h-4 relative z-10" /> Solo ver el copy básico
-                  </motion.button>
-                </div>
-              </div>
-            </motion.div>
-
-          ) : !showResults ? (
             <motion.div key="form" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="max-w-5xl mx-auto">
               <div className="text-center mb-12 relative">
                 <motion.div
@@ -1031,7 +969,9 @@ const FlowsightAdsDashboard: React.FC = () => {
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                 <div className="flex-1 max-w-2xl">
                   <h2 className="text-4xl font-black tracking-tight mb-2">Tu Estrategia <span className="text-emerald-500">Premium</span></h2>
-                  <p className="text-lg text-gray-400 font-medium mb-6">Análisis y activos optimizados para máxima conversión.</p>
+                  <p className="text-lg text-gray-400 font-medium mb-6">
+                    {hasPaid ? 'Análisis y activos optimizados para máxima conversión.' : 'Previsualiza tu campaña. Desbloquea para obtener el material profesional.'}
+                  </p>
                   
                   <AIAgentBar context={{
                     businessName: config.businessName,
@@ -1156,7 +1096,12 @@ const FlowsightAdsDashboard: React.FC = () => {
                     </div>
 
                     {/* Right: Strategy & Premium Buttons */}
-                    <div className="space-y-12">
+                    <div className={`space-y-12 relative transition-all duration-500 ${!hasPaid ? 'blur-md pointer-events-none grayscale opacity-40 select-none' : ''}`}>
+                      {!hasPaid && (
+                        <div className="absolute inset-0 z-50 flex items-center justify-center">
+                          {/* Este overlay bloquea interacción pero la visualización se mantiene por el blur */}
+                        </div>
+                      )}
                       {generatedAds.filter(ad => ad.platform === selectedPlatform).slice(0, 1).map((ad) => (
                         <div key={ad.type} className="space-y-10">
                           <div className="space-y-6">
@@ -1227,8 +1172,34 @@ const FlowsightAdsDashboard: React.FC = () => {
                     </div>
                   </div>
 
+                  {!hasPaid && (
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg z-[60] p-4">
+                      <motion.div 
+                        initial={{ scale: 0.9, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        className="bg-emerald-500 rounded-[32px] p-8 md:p-12 shadow-[0_20px_80px_-15px_rgba(16,185,129,0.6)] text-black text-center space-y-6 border border-white/20"
+                      >
+                        <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl">
+                          <Lock className="w-8 h-8 text-emerald-500" />
+                        </div>
+                        <h3 className="text-3xl font-black tracking-tight leading-tight uppercase italic">Contenido Bloqueado</h3>
+                        <p className="font-bold text-black/80 text-lg leading-relaxed">
+                          Tu campaña está lista. Desbloquea ahora para obtener todos los <span className="underline decoration-black/40">copys de alto impacto</span> y el <span className="underline decoration-black/40">Campaign Kit</span> profesional.
+                        </p>
+                        <Button 
+                          onClick={() => setShowPaymentModal(true)}
+                          className="w-full py-8 text-xl font-black bg-black hover:bg-black/90 text-emerald-500 rounded-2xl shadow-2xl transition-all active:scale-[0.98] group"
+                        >
+                          DESBLOQUEAR AHORA — $49.99
+                          <ArrowRight className="ml-2 w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                        </Button>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-black/60">Acceso instantáneo de por vida</p>
+                      </motion.div>
+                    </div>
+                  )}
+
                   {/* BLOQUE 3: Pasos a seguir (Checklist) - MOVIDO AL FINAL, FULL WIDTH */}
-                  <div className="mt-16 p-10 rounded-[40px] bg-white/[0.02] border border-white/5 space-y-8 relative z-10">
+                  <div className={`mt-16 p-10 rounded-[40px] bg-white/[0.02] border border-white/5 space-y-8 relative z-10 transition-all duration-500 ${!hasPaid ? 'blur-sm grayscale opacity-30 pointer-events-none' : ''}`}>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="p-2 bg-blue-500/20 rounded-xl">
@@ -1262,7 +1233,7 @@ const FlowsightAdsDashboard: React.FC = () => {
               </div>
 
               {/* BLOQUE DE ESTRATEGIA - MOVED TO BOTTOM */}
-              <div className="space-y-8 mt-12">
+              <div className={`space-y-8 mt-12 transition-all duration-500 ${!hasPaid ? 'blur-sm grayscale opacity-30 pointer-events-none' : ''}`}>
                 <div className="flex items-center gap-3">
                   <div className="w-1 h-6 bg-emerald-500 rounded-full" />
                   <h3 className="text-xl font-black uppercase tracking-widest text-gray-400">Tu Estrategia</h3>
@@ -1325,7 +1296,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                   </div>
 
                   {/* BLOQUE 2: TU CAMPAÑA EN SIMPLE */}
-                  <div className="p-8 rounded-[40px] bg-emerald-500/5 border border-emerald-500/20 flex flex-col justify-between">
+                  <div className={`p-8 rounded-[40px] bg-emerald-500/5 border border-emerald-500/20 flex flex-col justify-between ${!hasPaid ? 'blur-sm grayscale opacity-30 pointer-events-none' : ''}`}>
                     <div>
                       <div className="flex items-center gap-3 mb-6">
                         <div className="p-2 bg-emerald-500/20 rounded-xl">

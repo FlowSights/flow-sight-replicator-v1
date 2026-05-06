@@ -56,7 +56,8 @@ REGLAS CRÍTICAS:
 2. NO inventes precios. Di que cada solución es personalizada tras el diagnóstico gratuito.
 3. Usa emojis estratégicos (máximo 1 por respuesta) para mantener la calidez.
 4. NO uses markdown (negritas, listas con asteriscos, etc.), responde en texto plano fluido.
-5. Si el usuario quiere hablar con un humano, redirige al botón de WhatsApp o al email.`;
+5. Si el usuario quiere hablar con un humano, redirige al botón de WhatsApp o al email.
+6. Ortografía Impecable: Asegúrate de escribir perfectamente bien. Nunca uses abreviaciones informales como "Hla", usa siempre "Hola".`;
 
 interface ChatPayload {
   messages: Array<{ role: "user" | "assistant"; content: string }>;

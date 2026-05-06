@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, ChevronLeft, ChevronRight, Download, Share2, BookOpen, Maximize2, Sparkles, CheckCircle2, Loader2, Zap, Rocket, Check, ChevronDown } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Download, Share2, BookOpen, Maximize2, Sparkles, CheckCircle2, Loader2, Zap, Rocket, Check, ChevronDown, Lock, ArrowRight, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { PaymentModal } from '@/components/PaymentModal';
@@ -257,7 +257,12 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
                   </div>
 
                   {/* Columna Derecha: Contenido y Acciones */}
-                  <div className="space-y-12">
+                  <div className={`space-y-12 relative transition-all duration-500 ${!hasPaid ? 'blur-md pointer-events-none grayscale opacity-40 select-none' : ''}`}>
+                     {!hasPaid && (
+                       <div className="absolute inset-0 z-[70] flex items-center justify-center">
+                         {/* Bloqueo de interacción */}
+                       </div>
+                     )}
                     <div className="space-y-10">
                       <div className="flex items-center gap-4">
                         <Badge className={`px-5 py-2 rounded-full font-black text-[10px] uppercase tracking-[0.2em] shadow-xl ${colors.accent} text-white border-none`}>
@@ -408,6 +413,37 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
                       </button>
                     </div>
                   </div>
+                   
+                   {!hasPaid && (
+                     <div className="lg:absolute lg:top-1/2 lg:right-0 lg:-translate-y-1/2 lg:w-[45%] z-[80] p-8">
+                       <motion.div 
+                         initial={{ scale: 0.9, opacity: 0 }}
+                         animate={{ scale: 1, opacity: 1 }}
+                         className="bg-emerald-500 rounded-[40px] p-10 md:p-14 shadow-[0_20px_100px_-15px_rgba(16,185,129,0.7)] text-black text-center space-y-8 border border-white/30"
+                       >
+                         <div className="w-20 h-20 bg-black rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-2xl">
+                           <Lock className="w-10 h-10 text-emerald-500" />
+                         </div>
+                         <div className="space-y-3">
+                           <h3 className="text-4xl font-black tracking-tight leading-tight uppercase italic">Estrategia Bloqueada</h3>
+                           <p className="font-bold text-black/80 text-xl leading-relaxed">
+                             Desbloquea este anuncio para obtener el <span className="underline decoration-black/40">copy maestro</span> y los <span className="underline decoration-black/40">activos premium</span>.
+                           </p>
+                         </div>
+                         <Button 
+                           onClick={() => setShowPaymentModal(true)}
+                           className="w-full py-9 text-2xl font-black bg-black hover:bg-black/90 text-emerald-500 rounded-[28px] shadow-2xl transition-all active:scale-[0.98] group flex items-center justify-center gap-4"
+                         >
+                           DESBLOQUEAR — $49.99
+                           <ArrowRight className="w-7 h-7 group-hover:translate-x-1 transition-transform" />
+                         </Button>
+                         <div className="flex items-center justify-center gap-3 opacity-60">
+                           <ShieldCheck className="w-4 h-4" />
+                           <span className="text-xs font-black uppercase tracking-widest">Pago Seguro por Stripe</span>
+                         </div>
+                       </motion.div>
+                     </div>
+                   )}
                 </div>
               </div>
             </motion.div>
