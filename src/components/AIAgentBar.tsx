@@ -42,16 +42,19 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true 
   useEffect(() => {
     if (fullResponse) {
       setDisplayedResponse('');
-      let index = 0;
+      let currentIndex = 0;
+      
       if (typingTimerRef.current) clearInterval(typingTimerRef.current);
+      
       typingTimerRef.current = setInterval(() => {
-        if (index < fullResponse.length) {
-          setDisplayedResponse((prev) => prev + fullResponse.charAt(index));
-          index++;
-        } else {
+        currentIndex++;
+        // Usar substring garantiza que no se salten caracteres por desincronización de estado
+        setDisplayedResponse(fullResponse.substring(0, currentIndex));
+        
+        if (currentIndex >= fullResponse.length) {
           if (typingTimerRef.current) clearInterval(typingTimerRef.current);
         }
-      }, 15);
+      }, 20);
     }
   }, [fullResponse]);
 
@@ -77,7 +80,7 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true 
 
       if (error) throw error;
       
-      let cleanReply = data.reply || '';
+      let cleanReply = (data.reply || '').trim();
       
       // Corrección agresiva de saludos comunes si vienen mal
       cleanReply = cleanReply.replace(/^\s*hla\b/i, 'Hola');
