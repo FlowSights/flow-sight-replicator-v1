@@ -71,7 +71,7 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
     setFullResponse(null);
     setDisplayedResponse('');
     setQuery('');
-    
+    try {
       const systemPrompt = `Eres un Experto Estratega de Marketing Senior y Consultor de Crecimiento. 
       TU CLIENTE ACTUAL: "${context.businessName}"
       OBJETIVO DE LA CAMPAÑA: "${context.promote}"
