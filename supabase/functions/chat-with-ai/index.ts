@@ -18,8 +18,8 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const GROQ_API_KEY = Deno.env.get("GROQ_API_KEY");
-    if (!GROQ_API_KEY) throw new Error("GROQ_API_KEY is not configured");
+    const GEMINI_API_KEY = Deno.env.get("GEMINI_SECRET_KEY");
+    if (!GEMINI_API_KEY) throw new Error("GEMINI_SECRET_KEY is not configured");
 
     const body = (await req.json()) as Partial<ChatPayload>;
     const messages = Array.isArray(body.messages) ? body.messages : [];
@@ -34,42 +34,62 @@ Deno.serve(async (req) => {
       });
     }
 
-    const chatMessages = messages.map((m) => ({
-      role: m.role,
-      content: m.content.toString()
-    }));
+    const contents = messages.slice(-10).map((m, index) => {
+      const isLastMessage = index === messages.length - 1;
+      const parts: any[] = [{ text: m.content.toString() }];
 
-    const groqUrl = "https://api.groq.com/openai/v1/chat/completions";
+      if (isLastMessage && images.length > 0) {
+        images.forEach(dataUrl => {
+          const match = dataUrl.match(/^data:(image\/[a-zA-Z]+);base64,(.+)$/);
+          if (match && match.length === 3) {
+            parts.push({
+              inlineData: {
+                mimeType: match[1],
+                data: match[2]
+              }
+            });
+          }
+        });
+      }
 
-    const resp = await fetch(groqUrl, {
+      return {
+        role: m.role === "assistant" ? "model" : "user",
+        parts
+      };
+    });
+
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+    const resp = await fetch(geminiUrl, {
       method: "POST",
-      headers: { 
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${GROQ_API_KEY}`
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        messages: [
-          { role: "system", content: finalSystemPrompt },
-          ...chatMessages
-        ],
-        temperature: 0.7,
-        max_completion_tokens: 2000,
-        top_p: 0.9,
+        systemInstruction: { parts: [{ text: finalSystemPrompt }] },
+        contents,
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 2000,
+          topP: 0.9,
+        },
       }),
     });
 
     const data = await resp.json();
     
     if (!resp.ok) {
-      console.error("Groq error:", resp.status, data);
+      console.error("Gemini error:", resp.status, data);
       return new Response(JSON.stringify({ error: "AI Error", details: data }), { 
         status: 502, 
         headers: { ...corsHeaders, "Content-Type": "application/json" } 
       });
     }
 
-    const reply = data?.choices?.[0]?.message?.content ?? "";
+    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+
+    return new Response(JSON.stringify({ reply }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
 
     return new Response(JSON.stringify({ reply }), {
       status: 200,
