@@ -40,7 +40,7 @@ const TypingText = ({ text, isUpdating }: { text: string; isUpdating?: boolean }
   return <>{displayedText}</>;
 };
 
-export const MetaPreview: React.FC<PreviewProps> = ({ headline, description, cta, imageUrl, imageUrls, businessName, websiteUrl }) => {
+export const MetaPreview: React.FC<PreviewProps> = ({ headline, description, cta, imageUrl, imageUrls, businessName, websiteUrl, isUpdating }) => {
   const displayName = businessName || 'FlowSights';
   const displayInitial = displayName.charAt(0).toUpperCase();
   const displayDomain = websiteUrl ? websiteUrl.replace(/^https?:\/\/(www\.)?/, '').split('/')[0] : 'flowsights.com';
@@ -105,7 +105,7 @@ export const MetaPreview: React.FC<PreviewProps> = ({ headline, description, cta
   );
 };
 
-export const GoogleAdsPreview: React.FC<PreviewProps> = ({ headline, description, cta, imageUrl, businessName, websiteUrl }) => {
+export const GoogleAdsPreview: React.FC<PreviewProps> = ({ headline, description, cta, imageUrl, businessName, websiteUrl, isUpdating }) => {
   const displayName = businessName || 'FlowSights';
   const displayDomain = websiteUrl ? websiteUrl.replace(/^https?:\/\/(www\.)?/, '').split('/')[0] : 'flowsights.com';
   const searchQuery = encodeURIComponent(displayName);
@@ -161,7 +161,7 @@ export const GoogleAdsPreview: React.FC<PreviewProps> = ({ headline, description
   );
 };
 
-export const TikTokPreview: React.FC<PreviewProps> = ({ headline, description, cta, imageUrl, businessName }) => {
+export const TikTokPreview: React.FC<PreviewProps> = ({ headline, description, cta, imageUrl, businessName, isUpdating }) => {
   const displayName = businessName || 'FlowSights';
   const displayHandle = '@' + displayName.toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '');
   const displayInitial = displayName.charAt(0).toUpperCase();
@@ -216,7 +216,7 @@ export const TikTokPreview: React.FC<PreviewProps> = ({ headline, description, c
   );
 };
 
-export const LinkedInPreview: React.FC<PreviewProps> = ({ headline, description, cta, imageUrl, imageUrls, businessName }) => {
+export const LinkedInPreview: React.FC<PreviewProps> = ({ headline, description, cta, imageUrl, imageUrls, businessName, isUpdating }) => {
   const displayName = businessName || 'FlowSights';
   const displayInitial = displayName.charAt(0).toUpperCase();
   return (
