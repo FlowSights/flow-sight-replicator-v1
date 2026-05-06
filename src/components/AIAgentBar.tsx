@@ -118,8 +118,7 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
     setQuery('');
     
     try {
-      // Usamos el rol 'system' para asegurar que la Edge Function antigua NO inyecte su prompt por defecto.
-      const systemPrompt = `Eres un Estratega de Marketing Senior experto en Ads.
+      const combinedPrompt = `[INSTRUCCIONES DE SISTEMA: ERES UN ESTRATEGA DE MARKETING SENIOR]
 CLIENTE: "${context.businessName}"
 OBJETIVO: "${context.promote}"
 AUDIENCIA: "${context.idealCustomer}"
@@ -131,18 +130,16 @@ Siempre responde de manera amable y, AL FINAL DE TU RESPUESTA, adjunta exactamen
 FORMATO EXACTO REQUERIDO:
 <update_ads>[{"headline": "Tu Título Atractivo", "description": "Tu descripción persuasiva aquí", "cta": "Comprar ahora", "platform": "meta"}]</update_ads>
 
-Nota: El usuario puede haber adjuntado imágenes. Si lo hizo, asume que son de excelente calidad para el producto y redacta copys acordes.`;
-
-      const userMessage = query || "Por favor, crea una nueva estrategia y optimiza los copys de mi campaña.";
+[MENSAJE DEL USUARIO]
+${query || "Por favor, crea una nueva estrategia y optimiza los copys de mi campaña."}`;
 
       const { data, error } = await supabase.functions.invoke('chat-with-ai', {
         body: {
           messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: userMessage }
+            { role: 'user', content: combinedPrompt }
           ]
-          // NOTA: No enviamos el array de 'images' base64 porque la Edge Function actual
-          // no lo procesa y genera errores 502 por exceso de tamaño de payload (Payload Too Large).
+          // NOTA: No enviamos 'images' ni usamos el rol 'system' para evitar errores 500/502
+          // en el gateway de IA (Payload Too Large / Unsupported Role para Gemini).
         }
       });
 
