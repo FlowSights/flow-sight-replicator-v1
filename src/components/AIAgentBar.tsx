@@ -118,33 +118,31 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
     setQuery('');
     
     try {
-      // Inyectamos el prompt del sistema directamente en el mensaje del usuario
-      // para sobreescribir cualquier instrucción por defecto en la Edge Function
-      const strictInstructions = `
-[INSTRUCCIÓN DE ALTA PRIORIDAD: IGNORA TU ROL ANTERIOR DE ASESOR DE FLOWSIGHTS]
-Eres exclusivamente un Experto Estratega de Marketing Senior enfocado en crear anuncios.
-CLIENTE ACTUAL: "${context.businessName}"
-OBJETIVO DE CAMPAÑA: "${context.promote}"
+      // Usamos el rol 'system' para asegurar que la Edge Function antigua NO inyecte su prompt por defecto.
+      const systemPrompt = `Eres un Estratega de Marketing Senior experto en Ads.
+CLIENTE: "${context.businessName}"
+OBJETIVO: "${context.promote}"
 AUDIENCIA: "${context.idealCustomer}"
 
-MANDATO ESTRICTO: 
-DEBES generar nuevos títulos y descripciones persuasivas para los anuncios basados en el pedido del usuario.
-Tu respuesta DEBE incluir SIEMPRE un bloque JSON válido al final, exactamente con esta estructura:
-<update_ads>[{"headline": "Nuevo Título Corto", "description": "Descripción persuasiva", "cta": "Comprar ahora", "platform": "meta"}]</update_ads>
+INSTRUCCIÓN TÉCNICA OBLIGATORIA:
+Debes generar los textos para los anuncios (títulos, descripciones y llamadas a la acción) según lo pida el usuario.
+Siempre responde de manera amable y, AL FINAL DE TU RESPUESTA, adjunta exactamente este bloque JSON con los nuevos datos generados para que la interfaz se actualice.
 
-[MENSAJE DEL USUARIO]
-${query || "Crea una nueva estrategia y copys impactantes para mi campaña."}`;
+FORMATO EXACTO REQUERIDO:
+<update_ads>[{"headline": "Tu Título Atractivo", "description": "Tu descripción persuasiva aquí", "cta": "Comprar ahora", "platform": "meta"}]</update_ads>
 
-      const currentImages = pendingAssets.map(a => a.dataUrl);
-      const existingImages = context.uploadedAssets?.map(a => a.dataUrl) || [];
-      const allImages = [...new Set([...currentImages, ...existingImages])];
+Nota: El usuario puede haber adjuntado imágenes. Si lo hizo, asume que son de excelente calidad para el producto y redacta copys acordes.`;
+
+      const userMessage = query || "Por favor, crea una nueva estrategia y optimiza los copys de mi campaña.";
 
       const { data, error } = await supabase.functions.invoke('chat-with-ai', {
         body: {
           messages: [
-            { role: 'user', content: strictInstructions }
-          ],
-          images: allImages
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userMessage }
+          ]
+          // NOTA: No enviamos el array de 'images' base64 porque la Edge Function actual
+          // no lo procesa y genera errores 502 por exceso de tamaño de payload (Payload Too Large).
         }
       });
 
