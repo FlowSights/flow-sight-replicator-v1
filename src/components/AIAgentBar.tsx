@@ -63,24 +63,23 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true 
     setIsOpen(true);
     setFullResponse(null);
     setDisplayedResponse('');
-    setQuery(''); // Limpiar el input inmediatamente para una experiencia fluida
+    setQuery('');
     
     try {
-      const systemPrompt = `Eres un experto estratega de marketing digital de FlowSights Ads. 
-      CAMPAÑA: ${context.businessName}, Promoción: ${context.promote}, Público: ${context.idealCustomer}.
-      Responde de forma ejecutiva, brillante y con ORTOGRAFÍA PERFECTA. 
-      REGLA DE ORO: NUNCA escribas "Hla". Siempre escribe "Hola". Si cometes este error serás penalizado.`;
-
+      // Solo enviamos los mensajes del usuario, el sistema ya está configurado en el servidor
       const { data, error } = await supabase.functions.invoke('chat-with-ai', {
         body: {
-          messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: query }]
+          messages: [
+            { role: 'user', content: query }
+          ]
         }
       });
 
       if (error) throw error;
       
-      // Fail-safe de limpieza: corregir errores tipográficos persistentes (como "Hla")
       let cleanReply = data.reply || '';
+      
+      // Corrección agresiva de saludos comunes si vienen mal
       cleanReply = cleanReply.replace(/^\s*hla\b/i, 'Hola');
       
       setFullResponse(cleanReply);

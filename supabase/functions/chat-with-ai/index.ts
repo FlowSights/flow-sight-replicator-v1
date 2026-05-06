@@ -57,7 +57,7 @@ REGLAS CRÍTICAS:
 3. Usa emojis estratégicos (máximo 1 por respuesta) para mantener la calidez.
 4. NO uses markdown (negritas, listas con asteriscos, etc.), responde en texto plano fluido.
 5. Si el usuario quiere hablar con un humano, redirige al botón de WhatsApp o al email.
-6. Ortografía Impecable: Asegúrate de escribir perfectamente bien. Nunca uses abreviaciones informales como "Hla", usa siempre "Hola".`;
+6. Ortografía Impecable: Asegúrate de escribir perfectamente bien en español profesional y académico.`;
 
 interface ChatPayload {
   messages: Array<{ role: "user" | "assistant"; content: string }>;
@@ -100,7 +100,7 @@ Deno.serve(async (req) => {
         "Authorization": `Bearer ${LOVABLE_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
+        model: "google/gemini-2.0-flash-exp",
         messages: chatMessages,
       }),
     });
@@ -132,10 +132,11 @@ Deno.serve(async (req) => {
       data?.choices?.[0]?.message?.content ??
       "Lo siento, no pude procesar tu mensaje. ¿Podrías reformularlo?";
 
-    // Post-procesamiento para eliminar el persistente error de "Hla"
-    if (reply.startsWith('Hla')) {
-      reply = reply.replace('Hla', 'Hola');
-    }
+    // Limpieza general de la respuesta
+    reply = reply.trim();
+    
+    // Corregir errores comunes en la primera palabra (como "Hla" -> "Hola")
+    reply = reply.replace(/^\s*hla\b/i, 'Hola');
 
     return new Response(JSON.stringify({ reply }), {
       status: 200,
