@@ -76,29 +76,31 @@ const Index = () => {
 
       {/* SECTION 2: THE PHILOSOPHY (Apple Style Text) */}
       <section className="py-40 bg-black">
-        <div className="container px-6 max-w-5xl mx-auto">
+        <div className="container px-8 md:px-16 max-w-[1400px] mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1 }}
-            className="space-y-12"
+            className="flex flex-col lg:flex-row justify-between gap-16"
           >
-            <h2 className="text-4xl md:text-7xl font-black tracking-tight leading-[1.1]">
+            <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-[0.95] lg:max-w-4xl">
               Tu negocio genera datos. <br />
-              Nosotros generamos <span className="text-white/40">claridad.</span>
+              Nosotros generamos <span className="text-white/20">claridad.</span>
             </h2>
-            <p className="text-xl md:text-3xl text-white/50 max-w-3xl font-medium leading-relaxed">
-              La mayoría de las empresas pierden el 20% de su margen en ineficiencias invisibles. No necesitas más software, necesitas mejores respuestas.
-            </p>
+            <div className="lg:max-w-md lg:pt-8">
+              <p className="text-xl md:text-2xl text-white/40 font-medium leading-relaxed">
+                La mayoría de las empresas pierden el 20% de su margen en ineficiencias invisibles. No necesitas más software, necesitas mejores respuestas.
+              </p>
+            </div>
           </motion.div>
         </div>
       </section>
 
       {/* SECTION 3: BENTO SERVICES */}
       <section id="servicios" className="py-40 bg-black">
-        <div className="container px-6 max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[300px] md:auto-rows-[400px]">
+        <div className="container px-8 md:px-16 max-w-[1600px] mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 auto-rows-[400px] md:auto-rows-[500px]">
             {/* Main Service */}
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}

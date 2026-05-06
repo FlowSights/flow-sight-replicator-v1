@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Sparkles, ChevronRight } from "lucide-react";
+import { ArrowRight, Sparkles, ChevronRight, Layout, BarChart3, Database, MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { DataFlowVisualization } from "./DataFlowVisualization";
@@ -17,115 +17,118 @@ export const PremiumHero = ({ onContactClick }: PremiumHeroProps) => {
   });
 
   const textOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
-  const textScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.95]);
-  const bgOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0.2]);
+  const textY = useTransform(scrollYProgress, [0, 0.3], [0, -50]);
+
+  const geminiGradient = "bg-gradient-to-r from-[#4285f4] via-[#9b72cb] to-[#d96570] animate-gradient-flow bg-[length:200%_auto]";
 
   return (
-    <section ref={containerRef} className="relative min-h-[110vh] flex flex-col items-center justify-center overflow-hidden bg-black selection:bg-white/20">
-      {/* CINEMATIC LIGHTING */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-white/[0.03] blur-[120px] rounded-full" />
-        <div className="absolute bottom-[-20%] left-1/2 -translate-x-1/2 w-[1200px] h-[800px] bg-primary/5 blur-[160px] rounded-full opacity-50" />
+    <section ref={containerRef} className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-black selection:bg-white/20 pt-32 md:pt-0">
+      {/* BACKGROUND VISUAL - PUSHED TO THE BACKGROUND */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-30">
+          <DataFlowVisualization />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
       </div>
 
-      {/* CORE VISUAL - FLOATING CENTER PIECE */}
+      {/* CONTENT - EXPANDED HORIZONTALLY */}
       <motion.div 
-        style={{ opacity: bgOpacity }}
-        className="absolute inset-0 z-0 flex items-center justify-center"
+        style={{ opacity: textOpacity, y: textY }}
+        className="container relative z-10 px-8 md:px-16"
       >
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 0.6, scale: 1 }}
-          transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full h-full max-w-7xl"
-        >
-          <DataFlowVisualization />
-        </motion.div>
-        {/* Apple-style soft vignette */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,black_90%)]" />
-      </motion.div>
-
-      {/* CONTENT LAYER */}
-      <motion.div 
-        style={{ opacity: textOpacity, scale: textScale }}
-        className="container relative z-10 flex flex-col items-center"
-      >
-        <motion.div 
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="mb-10"
-        >
-          <Link
-            to="/flowsight-ads"
-            className="group relative flex items-center gap-3 px-6 py-2 rounded-full border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] transition-all duration-500 overflow-hidden"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-            <Sparkles className="w-4 h-4 text-primary animate-pulse" />
-            <span className="text-white/60 text-xs font-bold tracking-[0.2em] uppercase">Conoce Flowsight Ads</span>
-            <ChevronRight className="w-4 h-4 text-white/40 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
-          </Link>
-        </motion.div>
-
-        <div className="text-center space-y-4">
-          <motion.h1 
-            initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ duration: 1.2, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-7xl md:text-9xl lg:text-[140px] font-black tracking-[-0.06em] leading-[0.85] text-white"
-          >
-            Decisiones que <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/30">
-              multiplican.
-            </span>
-          </motion.h1>
-
-          <motion.p 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.5, delay: 1.2 }}
-            className="text-xl md:text-3xl text-white/40 max-w-2xl mx-auto font-medium tracking-tight leading-relaxed pt-6"
-          >
-            Inteligencia Operativa. Control total. <br className="hidden md:block"/>
-            Sin adivinanzas, solo resultados.
-          </motion.p>
-        </div>
-
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.5 }}
-          className="flex flex-col sm:flex-row items-center gap-6 mt-16"
-        >
-          <Button
-            size="lg"
-            className="bg-white text-black hover:bg-gray-200 rounded-full px-12 py-8 text-xl font-bold tracking-tight shadow-[0_20px_50px_rgba(255,255,255,0.15)] transition-all hover:scale-105 active:scale-95"
-            asChild
-          >
-            <a href="#contacto" onClick={onContactClick}>
-              Diagnóstico gratuito
-            </a>
-          </Button>
+        <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between gap-20">
           
-          <Link 
-            to="/diagnostico"
-            className="group flex items-center gap-2 text-white/60 hover:text-white text-lg font-bold transition-all"
+          {/* LEFT SIDE: THE MESSAGE */}
+          <div className="max-w-4xl space-y-12 text-center lg:text-left">
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1, delay: 0.5 }}
+            >
+              <Link
+                to="/flowsight-ads"
+                className={`group relative inline-flex items-center gap-3 px-8 py-3 rounded-full text-white font-black uppercase tracking-[0.2em] text-[11px] ${geminiGradient} shadow-[0_0_40px_rgba(66,133,244,0.3)] transition-all hover:scale-105 active:scale-95`}
+              >
+                <Sparkles className="w-4 h-4 text-white" />
+                Flowsight Ads — Impulsado por IA
+                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </motion.div>
+
+            <motion.h1 
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.2, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="text-6xl md:text-8xl lg:text-[130px] font-black tracking-[-0.06em] leading-[0.85] text-white"
+            >
+              Decisiones <br />
+              <span className="text-white/20">reales.</span>
+            </motion.h1>
+
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.5, delay: 1.2 }}
+              className="text-xl md:text-3xl text-white/50 max-w-2xl font-medium tracking-tight leading-relaxed"
+            >
+              Transformamos el caos en control absoluto. No más adivinanzas, solo datos que multiplican tus ganancias.
+            </motion.p>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.5 }}
+              className="flex flex-col sm:flex-row items-center gap-8"
+            >
+              <Button
+                size="lg"
+                className="bg-white text-black hover:bg-gray-200 rounded-full px-12 py-9 text-2xl font-black tracking-tight shadow-[0_20px_50px_rgba(255,255,255,0.1)] transition-all hover:scale-105"
+                asChild
+              >
+                <a href="#contacto" onClick={onContactClick}>
+                  Diagnóstico gratis
+                </a>
+              </Button>
+            </motion.div>
+          </div>
+
+          {/* RIGHT SIDE: THE "HERO MENU" (Interactive list) */}
+          <motion.div 
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1.2, delay: 1.8, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full lg:max-w-md space-y-4"
           >
-            Ver cómo funciona
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </motion.div>
+            <p className="text-primary font-black uppercase tracking-[0.3em] text-[10px] mb-8 text-center lg:text-left">Soluciones Estratégicas</p>
+            
+            {[
+              { icon: Layout, title: "Flowsight Ads", desc: "Campañas ganadoras con IA." },
+              { icon: Database, title: "Limpieza de Datos", desc: "Unifica tu inventario y ventas." },
+              { icon: BarChart3, title: "Insights 48h", desc: "Detecta fugas de dinero rápido." },
+              { icon: MessageSquare, title: "Soporte VIP", desc: "Consultoría directa 24/7." }
+            ].map((item, i) => (
+              <motion.div
+                key={item.title}
+                whileHover={{ x: 10, backgroundColor: "rgba(255,255,255,0.05)" }}
+                className="group flex items-center gap-6 p-6 rounded-[32px] bg-white/[0.02] border border-white/5 cursor-pointer transition-all duration-500"
+              >
+                <div className="p-3 rounded-2xl bg-white/5 text-white/40 group-hover:text-primary group-hover:bg-primary/10 transition-all">
+                  <item.icon className="w-6 h-6" />
+                </div>
+                <div>
+                  <h4 className="text-lg font-black text-white group-hover:text-primary transition-colors">{item.title}</h4>
+                  <p className="text-sm text-white/40 font-medium">{item.desc}</p>
+                </div>
+                <ChevronRight className="w-5 h-5 ml-auto text-white/10 group-hover:text-white transition-all" />
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
       </motion.div>
 
-      {/* SCROLL INDICATOR */}
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.5, duration: 1 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-      >
-        <div className="w-px h-12 bg-gradient-to-b from-white/0 via-white/20 to-white/0" />
-      </motion.div>
+      {/* DECORATIVE LIGHTING */}
+      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/5 blur-[150px] rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-500/5 blur-[120px] rounded-full translate-y-1/2 -translate-x-1/2 pointer-events-none" />
     </section>
   );
 };

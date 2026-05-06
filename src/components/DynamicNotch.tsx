@@ -43,8 +43,8 @@ export const DynamicNotch = ({ navLinks, logo }: DynamicNotchProps) => {
       <motion.nav
         initial={false}
         animate={{
-          width: isCollapsed ? "min(90%, 1000px)" : "100%",
-          top: isCollapsed ? "20px" : "0px",
+          width: isCollapsed ? "min(95%, 1100px)" : "100%",
+          top: isCollapsed ? "24px" : "0px",
         }}
         transition={{ 
           duration: 0.8,
@@ -55,8 +55,8 @@ export const DynamicNotch = ({ navLinks, logo }: DynamicNotchProps) => {
         <div
           className={`mx-auto pointer-events-auto transition-all duration-700 ease-[0.16,1,0.3,1] ${
             isCollapsed
-              ? "px-6 py-2.5 rounded-full bg-black/40 backdrop-blur-2xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.3)]"
-              : "px-8 md:px-12 py-6 w-full bg-transparent border-b border-white/0"
+              ? "px-8 py-4 rounded-full bg-black/40 backdrop-blur-2xl border border-white/10 shadow-[0_24px_64px_rgba(0,0,0,0.4)]"
+              : "px-10 md:px-16 py-8 w-full bg-transparent border-b border-white/0"
           }`}
         >
           <div className="flex items-center justify-between gap-8">
@@ -90,7 +90,7 @@ export const DynamicNotch = ({ navLinks, logo }: DynamicNotchProps) => {
                 <a
                   key={link.label}
                   href={link.href}
-                  className="px-4 py-2 text-[13px] font-bold text-white/50 hover:text-white transition-all duration-300 rounded-full hover:bg-white/5 tracking-tight uppercase"
+                  className="px-6 py-3 text-[14px] font-black text-white/50 hover:text-white transition-all duration-300 rounded-full hover:bg-white/5 tracking-[0.1em] uppercase"
                 >
                   <div className="flex items-center gap-2">
                     {link === navLinks[0] && (
