@@ -40,7 +40,7 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
   const [fullResponse, setFullResponse] = useState<string | null>(null);
   const [displayedResponse, setDisplayedResponse] = useState('');
   const [isOpen, setIsOpen] = useState(false);
-  const [pendingAssets, setPendingAssets] = useState<{name: string, dataUrl: string, file: File}[]>([]);
+  const [isExpanded, setIsExpanded] = useState(false);
   const typingTimerRef = useRef<NodeJS.Timeout | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -71,26 +71,7 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
     }
   }, [fullResponse]);
 
-  const handleFilePreload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    if (!files.length) return;
-    files.forEach(file => {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setPendingAssets(prev => [...prev, { 
-          name: file.name, 
-          dataUrl: event.target?.result as string,
-          file: file
-        }]);
-      };
-      reader.readAsDataURL(file);
-    });
-    if (fileInputRef.current) fileInputRef.current.value = '';
-  };
 
-  const removePendingAsset = (name: string) => {
-    setPendingAssets(prev => prev.filter(a => a.name !== name));
-  };
 
   const [showSuccess, setShowSuccess] = useState(false);
 
@@ -103,15 +84,11 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
 
   const handleAskGemini = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    if ((!query.trim() && pendingAssets.length === 0) || loading) return;
+    if (!query.trim() || loading) return;
 
     setLoading(true);
     setIsOpen(true);
-    
-    if (pendingAssets.length > 0 && onAddAssets) {
-      onAddAssets(pendingAssets.map(a => a.file));
-      setPendingAssets([]);
-    }
+    setIsExpanded(false);
 
     setFullResponse(null);
     setDisplayedResponse('');
@@ -127,24 +104,21 @@ TUS ANUNCIOS ACTUALES (Campaña Activa):
 ${JSON.stringify(context.generatedAds, null, 2)}
 
 INSTRUCCIÓN TÉCNICA OBLIGATORIA:
-Debes comportarte como un asistente proactivo. Si el usuario solo te saluda, devuélvele el saludo amablemente y pregúntale cómo puedes optimizar sus campañas. NO generes anuncios si solo te saludan.
+Debes ser extremadamente directo y conciso. Evita introducciones largas. Ve directo al grano en no más de 3 líneas a menos que sea estrictamente necesario.
+Si el usuario solo te saluda, devuélvele el saludo amablemente de forma muy breve y pregúntale cómo puedes optimizar sus campañas. NO generes anuncios si solo te saludan.
 SOLO SI el usuario te pide crear o modificar anuncios, DEBES adjuntar AL FINAL DE TU RESPUESTA exactamente este bloque JSON envuelto en etiquetas XML (usa los símbolos menor que < y mayor que >), tomando como base los anuncios actuales y aplicando ÚNICAMENTE las mejoras solicitadas:
 
 FORMATO EXACTO REQUERIDO:
 <update_ads>[{"headline": "Tu Título Atractivo", "description": "Tu descripción persuasiva aquí", "cta": "Comprar ahora", "platform": "meta"}]</update_ads>
 
-Nota: El usuario puede haber adjuntado imágenes. Si lo hizo, redacta copys acordes. No uses markdown dentro del bloque JSON. Solo envía las plataformas que fueron modificadas.`;
-
-      const currentImages = pendingAssets.map(a => a.dataUrl);
-      const existingImages = context.uploadedAssets?.map(a => a.dataUrl) || [];
-      const allImages = [...new Set([...currentImages, ...existingImages])];
+Nota: Solo envía las plataformas que fueron modificadas. No uses markdown dentro del bloque JSON.`;
 
       const { data, error } = await supabase.functions.invoke('chat-with-ai', {
         body: {
           messages: [
             { role: 'user', content: query || "Por favor, crea una nueva estrategia y optimiza los copys de mi campaña." }
           ],
-          images: allImages,
+          images: [],
           systemPrompt: systemPrompt
         }
       });
@@ -203,35 +177,7 @@ Nota: El usuario puede haber adjuntado imágenes. Si lo hizo, redacta copys acor
         onSubmit={handleAskGemini}
         className="relative flex flex-col bg-white/[0.01] backdrop-blur-[60px] border border-white/[0.05] rounded-[32px] p-2 shadow-[0_20px_80px_rgba(0,0,0,0.5)] transition-all group hover:bg-white/[0.03] hover:border-white/10"
       >
-        <AnimatePresence>
-          {pendingAssets.length > 0 && (
-            <motion.div 
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="flex gap-3 px-4 pt-4 pb-2 overflow-x-auto"
-            >
-              {pendingAssets.map((asset) => (
-                <div key={asset.name} className="relative group/asset shrink-0">
-                  <img src={asset.dataUrl} className="w-16 h-16 rounded-xl object-cover border border-white/10" />
-                  <button 
-                    type="button"
-                    onClick={() => removePendingAsset(asset.name)}
-                    className="absolute -top-2 -right-2 bg-black text-white rounded-full p-1 opacity-0 group-hover/asset:opacity-100 transition-opacity border border-white/20 z-10"
-                  >
-                    <X size={12} />
-                  </button>
-                </div>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
-
         <div className="flex items-center px-4 py-1.5">
-          <input 
-            type="file" multiple accept="image/*,video/*" className="hidden" 
-            ref={fileInputRef} onChange={handleFilePreload}
-          />
           
           <div className="mr-3 shrink-0 drop-shadow-[0_0_12px_rgba(79,172,254,0.4)]">
             <GeminiIcon />
@@ -246,20 +192,11 @@ Nota: El usuario puede haber adjuntado imágenes. Si lo hizo, redacta copys acor
           />
 
           <div className="flex items-center gap-2 ml-3">
-            <button
-              type="button"
-              disabled={!hasPaid}
-              onClick={() => fileInputRef.current?.click()}
-              className={`w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all ${!hasPaid ? 'opacity-30 cursor-not-allowed' : 'opacity-80 hover:opacity-100'}`}
-            >
-              <span className="text-xl font-light text-white leading-none">+</span>
-            </button>
-            
             <button 
               type="submit"
-              disabled={(!query.trim() && pendingAssets.length === 0) || loading || !hasPaid}
+              disabled={!query.trim() || loading || !hasPaid}
               className={`p-2.5 rounded-full transition-all flex items-center justify-center ${
-                query.trim() || pendingAssets.length > 0
+                query.trim()
                   ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.3)]' 
                   : 'bg-white/5 text-white/20'
               } disabled:opacity-50`}
@@ -291,7 +228,7 @@ Nota: El usuario puede haber adjuntado imágenes. Si lo hizo, redacta copys acor
               </button>
             </div>
 
-            <div className="text-white/70 text-base leading-relaxed font-medium min-h-[80px] whitespace-pre-wrap">
+            <div className={`text-white/70 text-base leading-relaxed font-medium min-h-[80px] whitespace-pre-wrap ${!isExpanded ? 'line-clamp-4' : ''}`}>
               {displayedResponse}
               {loading && !displayedResponse && (
                 <div className="flex gap-2 py-3">
@@ -306,6 +243,15 @@ Nota: El usuario puede haber adjuntado imágenes. Si lo hizo, redacta copys acor
                 </div>
               )}
             </div>
+            
+            {fullResponse && fullResponse.length > 250 && !loading && (
+              <button 
+                onClick={() => setIsExpanded(!isExpanded)} 
+                className="mt-3 text-[10px] font-bold text-cyan-400/80 hover:text-cyan-400 uppercase tracking-widest transition-colors flex items-center gap-1"
+              >
+                {isExpanded ? "Mostrar menos" : "Ver más"}
+              </button>
+            )}
             
             <div className="flex flex-wrap gap-3 mt-10">
               {['OPTIMIZAR CTR', 'ANÁLISIS DE AUDIENCIA', 'NUEVOS COPYS'].map(label => (
