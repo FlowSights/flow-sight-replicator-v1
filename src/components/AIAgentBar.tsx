@@ -129,6 +129,8 @@ Nota: Solo envía las plataformas que fueron modificadas. No uses markdown dentr
       const updateRegex = /[<(\[]update_ads[>)\]]([\s\S]*?)[<(\[]\/update_ads[>)\]]/gi;
       const matches = [...cleanReply.matchAll(updateRegex)];
       
+      let hasUpdated = false;
+
       if (matches.length > 0 && onUpdateAds) {
         matches.forEach(match => {
           try {
@@ -136,21 +138,42 @@ Nota: Solo envía las plataformas que fueron modificadas. No uses markdown dentr
             content = content.replace(/```json/gi, "").replace(/```/gi, "").trim();
             if (content) {
               onUpdateAds(JSON.parse(content));
-              setShowSuccess(true);
+              hasUpdated = true;
             }
           } catch (e) { console.error("JSON Parse Error:", e, content); }
         });
+      } else if (onUpdateAds) {
+        // Fallback robusto: Si la IA olvidó las etiquetas <update_ads>, buscar un array JSON crudo
+        const rawJsonMatch = cleanReply.match(/\[\s*\{[\s\S]*\}\s*\]/);
+        if (rawJsonMatch) {
+          try {
+            let content = rawJsonMatch[0].trim();
+            content = content.replace(/```json/gi, "").replace(/```/gi, "").trim();
+            const parsed = JSON.parse(content);
+            if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].headline) {
+              onUpdateAds(parsed);
+              hasUpdated = true;
+              // Remover el JSON crudo del texto para que no se vea feo
+              cleanReply = cleanReply.replace(rawJsonMatch[0], "").trim();
+            }
+          } catch (e) { console.error("Raw JSON Parse Error:", e); }
+        }
+      }
+
+      if (hasUpdated) {
+        setShowSuccess(true);
       }
 
       cleanReply = cleanReply.replace(/[<(\[]update_ads[>)\]][\s\S]*?[<(\[]\/update_ads[>)\]]/gi, "").trim();
       cleanReply = cleanReply.replace(/```json[\s\S]*?```/gi, "").trim();
       
-      if (matches.length > 0 && !cleanReply.includes("✨")) {
+      if (hasUpdated && !cleanReply.includes("✨")) {
         cleanReply += "\n\n✨ He actualizado la estrategia con éxito.";
       }
       
       setFullResponse(cleanReply || "✨ He actualizado los anuncios con las mejoras solicitadas.");
     } catch (err) {
+      console.error(err);
       setFullResponse("Error en la conexión. Por favor, intenta de nuevo.");
     } finally {
       setLoading(false);
