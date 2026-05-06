@@ -104,8 +104,7 @@ TUS ANUNCIOS ACTUALES (Campaña Activa):
 ${JSON.stringify(context.generatedAds, null, 2)}
 
 INSTRUCCIÓN TÉCNICA OBLIGATORIA:
-Debes ser extremadamente directo y conciso. Evita introducciones largas. Ve directo al grano en no más de 3 líneas a menos que sea estrictamente necesario.
-Si el usuario solo te saluda, devuélvele el saludo amablemente de forma muy breve y pregúntale cómo puedes optimizar sus campañas. NO generes anuncios si solo te saludan.
+PROHIBICIÓN ABSOLUTA: NO expliques tus pensamientos. NO escribas listas de los cambios que hiciste. NO uses viñetas ni guiones ni asteriscos. Tu respuesta en texto debe ser SOLO UNA frase corta confirmando que hiciste el trabajo (ej. '✨ He optimizado los copys.'). TODO el resto debe ser únicamente el bloque JSON.
 SOLO SI el usuario te pide crear o modificar anuncios, DEBES adjuntar AL FINAL DE TU RESPUESTA exactamente este bloque JSON envuelto en etiquetas XML (usa los símbolos menor que < y mayor que >), tomando como base los anuncios actuales y aplicando ÚNICAMENTE las mejoras solicitadas:
 
 FORMATO EXACTO REQUERIDO:
@@ -166,6 +165,9 @@ Nota: Solo envía las plataformas que fueron modificadas. No uses markdown dentr
       cleanReply = cleanReply.replace(/Aquí te presento las modificaciones en el bloque JSON:/gi, "");
       cleanReply = cleanReply.replace(/Aquí tienes el JSON.*/gi, "");
       cleanReply = cleanReply.replace(/\*\*Actualización de anuncios\*\*/gi, "");
+      
+      // Eliminar asteriscos para que la respuesta sea limpia
+      cleanReply = cleanReply.replace(/\*/g, "");
 
       cleanReply = cleanReply.trim();
       
