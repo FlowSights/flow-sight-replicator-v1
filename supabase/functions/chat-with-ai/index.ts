@@ -128,9 +128,14 @@ Deno.serve(async (req) => {
     }
 
     const data = await resp.json();
-    const reply =
+    let reply =
       data?.choices?.[0]?.message?.content ??
       "Lo siento, no pude procesar tu mensaje. ¿Podrías reformularlo?";
+
+    // Post-procesamiento para eliminar el persistente error de "Hla"
+    if (reply.startsWith('Hla')) {
+      reply = reply.replace('Hla', 'Hola');
+    }
 
     return new Response(JSON.stringify({ reply }), {
       status: 200,

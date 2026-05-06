@@ -63,11 +63,13 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true 
     setIsOpen(true);
     setFullResponse(null);
     setDisplayedResponse('');
+    setQuery(''); // Limpiar el input inmediatamente para una experiencia fluida
     
     try {
       const systemPrompt = `Eres un experto estratega de marketing digital de FlowSights Ads. 
       CAMPAÑA: ${context.businessName}, Promoción: ${context.promote}, Público: ${context.idealCustomer}.
-      Responde de forma ejecutiva y brillante. Asegúrate de escribir perfectamente bien, especialmente el saludo (siempre usa "Hola" en lugar de "Hla").`;
+      Responde de forma ejecutiva, brillante y con ORTOGRAFÍA PERFECTA. 
+      REGLA DE ORO: NUNCA escribas "Hla". Siempre escribe "Hola". Si cometes este error serás penalizado.`;
 
       const { data, error } = await supabase.functions.invoke('chat-with-ai', {
         body: {
@@ -76,7 +78,14 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true 
       });
 
       if (error) throw error;
-      setFullResponse(data.reply);
+      
+      // Fail-safe de limpieza: corregir errores tipográficos comunes en el inicio
+      let cleanReply = data.reply;
+      if (cleanReply.startsWith('Hla')) {
+        cleanReply = cleanReply.replace('Hla', 'Hola');
+      }
+      
+      setFullResponse(cleanReply);
     } catch (err) {
       setFullResponse("Error en la conexión. Por favor, intenta de nuevo.");
     } finally {
