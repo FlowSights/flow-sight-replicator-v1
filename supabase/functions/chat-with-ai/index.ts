@@ -18,14 +18,13 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const GEMINI_API_KEY = Deno.env.get("GEMINI_SECRET_KEY");
-    if (!GEMINI_API_KEY) throw new Error("GEMINI_SECRET_KEY is not configured");
+    const GROQ_API_KEY = Deno.env.get("GROQ_API_KEY");
+    if (!GROQ_API_KEY) throw new Error("GROQ_API_KEY is not configured");
 
     const body = (await req.json()) as Partial<ChatPayload>;
     const messages = Array.isArray(body.messages) ? body.messages : [];
     const images = Array.isArray(body.images) ? body.images : [];
     
-    // Si viene un systemPrompt específico en el body, lo usamos (para el AIAgentBar)
     const finalSystemPrompt = body.systemPrompt || DEFAULT_SYSTEM_PROMPT;
 
     if (messages.length === 0) {
@@ -35,58 +34,59 @@ Deno.serve(async (req) => {
       });
     }
 
-    const contents = messages.slice(-10).map((m, index) => {
+    const chatMessages = messages.map((m, index) => {
       const isLastMessage = index === messages.length - 1;
-      const parts: any[] = [{ text: m.content.toString() }];
-
-      // Si es el último mensaje y hay imágenes, las adjuntamos en el formato de Gemini
+      
       if (isLastMessage && images.length > 0) {
-        images.forEach(dataUrl => {
-          const match = dataUrl.match(/^data:(image\/[a-zA-Z]+);base64,(.+)$/);
-          if (match && match.length === 3) {
-            parts.push({
-              inlineData: {
-                mimeType: match[1],
-                data: match[2]
-              }
-            });
-          }
-        });
+        return {
+          role: m.role,
+          content: [
+            { type: "text", text: m.content.toString() },
+            ...images.map(img => ({
+              type: "image_url",
+              image_url: { url: img }
+            }))
+          ]
+        };
       }
-
+      
       return {
-        role: m.role === "assistant" ? "model" : "user",
-        parts
+        role: m.role,
+        content: m.content.toString()
       };
     });
 
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+    const groqUrl = "https://api.groq.com/openai/v1/chat/completions";
 
-    const resp = await fetch(geminiUrl, {
+    const resp = await fetch(groqUrl, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${GROQ_API_KEY}`
+      },
       body: JSON.stringify({
-        systemInstruction: { parts: [{ text: finalSystemPrompt }] },
-        contents,
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 2000,
-          topP: 0.9,
-        },
+        model: "llama-3.2-90b-vision-preview",
+        messages: [
+          { role: "system", content: finalSystemPrompt },
+          ...chatMessages
+        ],
+        temperature: 0.7,
+        max_completion_tokens: 2000,
+        top_p: 0.9,
       }),
     });
 
     const data = await resp.json();
     
     if (!resp.ok) {
-      console.error("Gemini error:", resp.status, data);
+      console.error("Groq error:", resp.status, data);
       return new Response(JSON.stringify({ error: "AI Error", details: data }), { 
         status: 502, 
         headers: { ...corsHeaders, "Content-Type": "application/json" } 
       });
     }
 
-    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+    const reply = data?.choices?.[0]?.message?.content ?? "";
 
     return new Response(JSON.stringify({ reply }), {
       status: 200,
