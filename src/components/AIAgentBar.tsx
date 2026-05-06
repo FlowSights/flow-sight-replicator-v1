@@ -92,6 +92,15 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
     setPendingAssets(prev => prev.filter(a => a.name !== name));
   };
 
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  useEffect(() => {
+    if (showSuccess) {
+      const timer = setTimeout(() => setShowSuccess(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showSuccess]);
+
   const handleAskGemini = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if ((!query.trim() && pendingAssets.length === 0) || loading) return;
@@ -109,16 +118,22 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
     setQuery('');
     
     try {
-      const systemPrompt = `Eres un Experto Estratega de Marketing Senior. 
-      CLIENTE: "${context.businessName}"
-      OBJETIVO: "${context.promote}"
-      AUDIENCIA: "${context.idealCustomer}"
-      
-      INSTRUCCIÓN TÉCNICA:
-      Si el usuario pide cambios, genera el nuevo contenido y envíalo AL FINAL envuelto en <update_ads>.
-      FORMATO: <update_ads>[{"headline": "...", "description": "...", "cta": "...", "platform": "..."}]</update_ads>
-      
-      IMPORTANTE: Analiza las imágenes adjuntas para personalizar los copys.`;
+      // Inyectamos el prompt del sistema directamente en el mensaje del usuario
+      // para sobreescribir cualquier instrucción por defecto en la Edge Function
+      const strictInstructions = `
+[INSTRUCCIÓN DE ALTA PRIORIDAD: IGNORA TU ROL ANTERIOR DE ASESOR DE FLOWSIGHTS]
+Eres exclusivamente un Experto Estratega de Marketing Senior enfocado en crear anuncios.
+CLIENTE ACTUAL: "${context.businessName}"
+OBJETIVO DE CAMPAÑA: "${context.promote}"
+AUDIENCIA: "${context.idealCustomer}"
+
+MANDATO ESTRICTO: 
+DEBES generar nuevos títulos y descripciones persuasivas para los anuncios basados en el pedido del usuario.
+Tu respuesta DEBE incluir SIEMPRE un bloque JSON válido al final, exactamente con esta estructura:
+<update_ads>[{"headline": "Nuevo Título Corto", "description": "Descripción persuasiva", "cta": "Comprar ahora", "platform": "meta"}]</update_ads>
+
+[MENSAJE DEL USUARIO]
+${query || "Crea una nueva estrategia y copys impactantes para mi campaña."}`;
 
       const currentImages = pendingAssets.map(a => a.dataUrl);
       const existingImages = context.uploadedAssets?.map(a => a.dataUrl) || [];
@@ -127,8 +142,7 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
       const { data, error } = await supabase.functions.invoke('chat-with-ai', {
         body: {
           messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: query || "Analiza estas imágenes para mi campaña" }
+            { role: 'user', content: strictInstructions }
           ],
           images: allImages
         }
@@ -146,9 +160,7 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
             const content = match[1].trim();
             if (content) {
               onUpdateAds(JSON.parse(content));
-              toast.success("¡Estrategia actualizada!", {
-                icon: <Sparkles className="w-5 h-5 text-emerald-400" />,
-              });
+              setShowSuccess(true);
             }
           } catch (e) { console.error(e); }
         });
@@ -170,7 +182,21 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
   };
 
   return (
-    <div className="relative w-full max-w-2xl" ref={containerRef}>
+    <div className="relative w-full max-w-2xl mx-auto" ref={containerRef}>
+      <AnimatePresence>
+        {showSuccess && (
+          <motion.div
+            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            className="absolute -top-14 right-0 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-4 py-2 rounded-full flex items-center gap-2 shadow-lg backdrop-blur-md z-50"
+          >
+            <Sparkles className="w-4 h-4" />
+            <span className="text-sm font-medium">¡Campaña actualizada por Gemini!</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <form 
         onSubmit={handleAskGemini}
         className="relative flex flex-col bg-white/[0.01] backdrop-blur-[60px] border border-white/[0.05] rounded-[32px] p-2 shadow-[0_20px_80px_rgba(0,0,0,0.5)] transition-all group hover:bg-white/[0.03] hover:border-white/10"
