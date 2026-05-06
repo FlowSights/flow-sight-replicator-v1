@@ -118,7 +118,7 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
     setQuery('');
     
     try {
-      const combinedPrompt = `[INSTRUCCIONES DE SISTEMA: ERES UN ESTRATEGA DE MARKETING SENIOR]
+      const systemPrompt = `Eres un Estratega de Marketing Senior experto en Ads.
 CLIENTE: "${context.businessName}"
 OBJETIVO: "${context.promote}"
 AUDIENCIA: "${context.idealCustomer}"
@@ -130,8 +130,7 @@ Siempre responde de manera amable y, AL FINAL DE TU RESPUESTA, adjunta exactamen
 FORMATO EXACTO REQUERIDO:
 <update_ads>[{"headline": "Tu Título Atractivo", "description": "Tu descripción persuasiva aquí", "cta": "Comprar ahora", "platform": "meta"}]</update_ads>
 
-[MENSAJE DEL USUARIO]
-${query || "Por favor, crea una nueva estrategia y optimiza los copys de mi campaña."}`;
+Nota: El usuario puede haber adjuntado imágenes. Si lo hizo, asume que son de excelente calidad para el producto y redacta copys acordes.`;
 
       const currentImages = pendingAssets.map(a => a.dataUrl);
       const existingImages = context.uploadedAssets?.map(a => a.dataUrl) || [];
@@ -140,9 +139,10 @@ ${query || "Por favor, crea una nueva estrategia y optimiza los copys de mi camp
       const { data, error } = await supabase.functions.invoke('chat-with-ai', {
         body: {
           messages: [
-            { role: 'user', content: combinedPrompt }
+            { role: 'user', content: query || "Por favor, crea una nueva estrategia y optimiza los copys de mi campaña." }
           ],
-          images: allImages
+          images: allImages,
+          systemPrompt: systemPrompt
         }
       });
 
