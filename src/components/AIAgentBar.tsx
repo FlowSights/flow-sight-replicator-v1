@@ -123,14 +123,17 @@ CLIENTE: "${context.businessName}"
 OBJETIVO: "${context.promote}"
 AUDIENCIA: "${context.idealCustomer}"
 
+TUS ANUNCIOS ACTUALES (Campaña Activa):
+${JSON.stringify(context.generatedAds, null, 2)}
+
 INSTRUCCIÓN TÉCNICA OBLIGATORIA:
 Debes comportarte como un asistente proactivo. Si el usuario solo te saluda, devuélvele el saludo amablemente y pregúntale cómo puedes optimizar sus campañas. NO generes anuncios si solo te saludan.
-SOLO SI el usuario te pide crear o modificar anuncios, DEBES adjuntar AL FINAL DE TU RESPUESTA exactamente este bloque JSON envuelto en etiquetas XML (usa los símbolos menor que < y mayor que >):
+SOLO SI el usuario te pide crear o modificar anuncios, DEBES adjuntar AL FINAL DE TU RESPUESTA exactamente este bloque JSON envuelto en etiquetas XML (usa los símbolos menor que < y mayor que >), tomando como base los anuncios actuales y aplicando ÚNICAMENTE las mejoras solicitadas:
 
 FORMATO EXACTO REQUERIDO:
 <update_ads>[{"headline": "Tu Título Atractivo", "description": "Tu descripción persuasiva aquí", "cta": "Comprar ahora", "platform": "meta"}]</update_ads>
 
-Nota: El usuario puede haber adjuntado imágenes. Si lo hizo, redacta copys acordes. No uses markdown dentro del bloque JSON.`;
+Nota: El usuario puede haber adjuntado imágenes. Si lo hizo, redacta copys acordes. No uses markdown dentro del bloque JSON. Solo envía las plataformas que fueron modificadas.`;
 
       const currentImages = pendingAssets.map(a => a.dataUrl);
       const existingImages = context.uploadedAssets?.map(a => a.dataUrl) || [];
