@@ -79,11 +79,9 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true 
 
       if (error) throw error;
       
-      // Fail-safe de limpieza: corregir errores tipográficos comunes en el inicio
-      let cleanReply = data.reply;
-      if (cleanReply.startsWith('Hla')) {
-        cleanReply = cleanReply.replace('Hla', 'Hola');
-      }
+      // Fail-safe de limpieza: corregir errores tipográficos persistentes (como "Hla")
+      let cleanReply = data.reply || '';
+      cleanReply = cleanReply.replace(/^\s*hla\b/i, 'Hola');
       
       setFullResponse(cleanReply);
     } catch (err) {
