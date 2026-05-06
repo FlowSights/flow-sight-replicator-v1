@@ -1152,7 +1152,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                                 }
                               }}
                               onExpand={() => { setCurrentMockupAdIndex(generatedAds.indexOf(ad)); setMockupLightboxOpen(true); }}
-                              imageUrls={imageMode === 'carousel' ? uploadedAssets.map(a => a.dataUrl) : undefined}
+                              imageUrls={uploadedAssets.length > 0 ? uploadedAssets.map(a => a.dataUrl) : ad.imageUrls}
                               isUpdating={ad.isUpdating}
                             />
                           </div>

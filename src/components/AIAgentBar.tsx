@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Loader2, X } from 'lucide-react';
+import { Send, Loader2, X, Sparkles } from 'lucide-react';
+import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import { supabase } from '@/lib/supabaseClient';
 import { logger, formatError } from '@/lib/logger';
@@ -43,6 +44,17 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
   const [isOpen, setIsOpen] = useState(false);
   const [pendingAssets, setPendingAssets] = useState<{name: string, dataUrl: string, file: File}[]>([]);
   const typingTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     if (fullResponse) {
@@ -155,6 +167,11 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
             try {
               const newAds = JSON.parse(match[1]);
               onUpdateAds(newAds);
+              toast.success("¡Estrategia actualizada!", {
+                description: "Los anuncios han sido optimizados por la IA.",
+                icon: <Sparkles className="w-5 h-5 text-emerald-400" />,
+                duration: 5000,
+              });
             } catch (e) {
               console.error("Error parsing ads update", e);
             }
@@ -179,10 +196,8 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
     } finally {
       setLoading(false);
     }
-  };
-
   return (
-    <div className="relative w-full max-w-2xl">
+    <div className="relative w-full max-w-2xl" ref={containerRef}>
       <form 
         onSubmit={handleAskGemini}
         className="relative flex flex-col bg-white/[0.01] backdrop-blur-[60px] border border-white/[0.05] rounded-[32px] p-2 shadow-[0_20px_80px_rgba(0,0,0,0.5)] transition-all group hover:bg-white/[0.03] hover:border-white/10"
