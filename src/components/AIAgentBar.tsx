@@ -191,7 +191,7 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
           )}
         </AnimatePresence>
 
-        <div className="flex items-center px-4 py-3">
+        <div className="flex items-center px-4 py-1.5">
           <input 
             type="file" 
             multiple 
@@ -201,42 +201,41 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
             onChange={handleFilePreload}
           />
           
-          <div className="mr-4 shrink-0 drop-shadow-[0_0_15px_rgba(79,172,254,0.6)]">
+          <div className="mr-3 shrink-0 drop-shadow-[0_0_12px_rgba(79,172,254,0.4)]">
             <GeminiIcon />
           </div>
 
           <Input 
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder={hasPaid ? "Pregúntale a Gemini sobre tu campaña..." : "Desbloquea premium para usar la IA"}
+            placeholder={hasPaid ? "Pregúntale a Gemini..." : "Desbloquea premium para usar la IA"}
             disabled={!hasPaid || loading}
-            className="bg-transparent border-none text-xl md:text-2xl font-medium text-white placeholder:text-white/20 focus-visible:ring-0 px-0 h-auto py-2 transition-all caret-white selection:bg-white/20 drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]"
-            style={{ textShadow: '0 0 10px rgba(255,255,255,0.2)' }}
+            className="bg-transparent border-none border-0 focus:border-0 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-lg md:text-xl font-medium text-white placeholder:text-white/20 px-0 h-10 py-0 transition-all caret-white selection:bg-white/20"
           />
 
-          <div className="flex items-center gap-2 ml-4">
+          <div className="flex items-center gap-2 ml-3">
             <button
               type="button"
               disabled={!hasPaid}
               onClick={() => fileInputRef.current?.click()}
-              className={`w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all ${!hasPaid ? 'opacity-30 cursor-not-allowed' : 'opacity-80 hover:opacity-100 hover:scale-110'}`}
+              className={`w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all ${!hasPaid ? 'opacity-30 cursor-not-allowed' : 'opacity-80 hover:opacity-100'}`}
             >
-              <span className="text-2xl font-light text-white">+</span>
+              <span className="text-xl font-light text-white leading-none">+</span>
             </button>
             
             <button 
               type="submit"
               disabled={(!query.trim() && pendingAssets.length === 0) || loading || !hasPaid}
-              className={`p-3 rounded-full transition-all flex items-center justify-center ${
+              className={`p-2.5 rounded-full transition-all flex items-center justify-center ${
                 query.trim() || pendingAssets.length > 0
-                  ? 'bg-white text-black scale-110 shadow-[0_0_20px_rgba(255,255,255,0.4)]' 
+                  ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.3)]' 
                   : 'bg-white/5 text-white/20'
               } disabled:opacity-50`}
             >
               {loading ? (
-                <Loader2 className="w-6 h-6 animate-spin" />
+                <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
-                <Send className="w-6 h-6" />
+                <Send className="w-5 h-5" />
               )}
             </button>
           </div>
