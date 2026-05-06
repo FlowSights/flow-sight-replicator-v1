@@ -58,7 +58,7 @@ const TypewriterText = ({ text, isUpdating }: { text: string; isUpdating?: boole
           clearInterval(interval);
           setIsTyping(false);
         }
-      }, 15);
+      }, 5);
       return () => clearInterval(interval);
     } else {
       setDisplayedText(text);

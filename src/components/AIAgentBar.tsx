@@ -58,7 +58,8 @@ export const AIAgentBar: React.FC<AIAgentBarProps> = ({ context, hasPaid = true,
         if (currentIndex >= fullResponse.length) {
           if (typingTimerRef.current) clearInterval(typingTimerRef.current);
         }
-      }, 20);
+      }, 5);
+      return () => clearInterval(typingTimerRef.current as NodeJS.Timeout);
     }
   }, [fullResponse]);
 
