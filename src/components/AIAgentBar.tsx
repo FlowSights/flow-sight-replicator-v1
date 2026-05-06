@@ -5,6 +5,11 @@ import { Input } from '@/components/ui/input';
 import { supabase } from '@/lib/supabaseClient';
 import { logger, formatError } from '@/lib/logger';
 
+interface AIAgentBarProps {
+  context: {
+    businessName: string;
+    promote: string;
+    idealCustomer: string;
     location: string;
     generatedAds: any[];
     uploadedAssets?: any[];
