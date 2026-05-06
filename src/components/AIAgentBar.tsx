@@ -124,8 +124,8 @@ OBJETIVO: "${context.promote}"
 AUDIENCIA: "${context.idealCustomer}"
 
 INSTRUCCIÓN TÉCNICA OBLIGATORIA:
-Debes comportarte como un asistente proactivo. Si el usuario solo te saluda, devuélvele el saludo amablemente y pregúntale cómo puedes optimizar sus campañas.
-SOLO SI el usuario te pide crear o modificar anuncios, DEBES adjuntar AL FINAL DE TU RESPUESTA exactamente este bloque JSON con los nuevos datos generados para que la interfaz se actualice:
+Debes comportarte como un asistente proactivo. Si el usuario solo te saluda, devuélvele el saludo amablemente y pregúntale cómo puedes optimizar sus campañas. NO generes anuncios si solo te saludan.
+SOLO SI el usuario te pide crear o modificar anuncios, DEBES adjuntar AL FINAL DE TU RESPUESTA exactamente este bloque JSON envuelto en etiquetas XML (usa los símbolos menor que < y mayor que >):
 
 FORMATO EXACTO REQUERIDO:
 <update_ads>[{"headline": "Tu Título Atractivo", "description": "Tu descripción persuasiva aquí", "cta": "Comprar ahora", "platform": "meta"}]</update_ads>
@@ -149,7 +149,7 @@ Nota: El usuario puede haber adjuntado imágenes. Si lo hizo, redacta copys acor
       if (error) throw error;
       
       let cleanReply = (data.reply || '').trim();
-      const updateRegex = /<update_ads>([\s\S]*?)<\/update_ads>/gi;
+      const updateRegex = /[<(\[]update_ads[>)\]]([\s\S]*?)[<(\[]\/update_ads[>)\]]/gi;
       const matches = [...cleanReply.matchAll(updateRegex)];
       
       if (matches.length > 0 && onUpdateAds) {
@@ -165,7 +165,7 @@ Nota: El usuario puede haber adjuntado imágenes. Si lo hizo, redacta copys acor
         });
       }
 
-      cleanReply = cleanReply.replace(/<update_ads>[\s\S]*?<\/update_ads>/gi, "").trim();
+      cleanReply = cleanReply.replace(/[<(\[]update_ads[>)\]][\s\S]*?[<(\[]\/update_ads[>)\]]/gi, "").trim();
       cleanReply = cleanReply.replace(/```json[\s\S]*?```/gi, "").trim();
       
       if (matches.length > 0 && !cleanReply.includes("✨")) {

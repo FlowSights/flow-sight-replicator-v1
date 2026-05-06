@@ -69,7 +69,7 @@ Deno.serve(async (req) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        systemInstruction: { parts: [{ text: finalSystemPrompt }] },
+        systemInstruction: { role: "system", parts: [{ text: finalSystemPrompt }] },
         contents,
         generationConfig: {
           temperature: 0.7,
@@ -83,8 +83,9 @@ Deno.serve(async (req) => {
     
     if (!resp.ok) {
       console.error("Gemini error:", resp.status, data);
-      return new Response(JSON.stringify({ error: "AI Error", details: data }), { 
-        status: 502, 
+      const errorDetails = data?.error?.message || JSON.stringify(data);
+      return new Response(JSON.stringify({ reply: `🔥 Error de API de Google: ${errorDetails}` }), { 
+        status: 200, 
         headers: { ...corsHeaders, "Content-Type": "application/json" } 
       });
     }
@@ -98,8 +99,8 @@ Deno.serve(async (req) => {
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Unknown error";
     console.error("Edge function error:", msg);
-    return new Response(JSON.stringify({ error: msg }), { 
-      status: 500, 
+    return new Response(JSON.stringify({ reply: `🚨 Error de Sistema: ${msg}` }), { 
+      status: 200, 
       headers: { ...corsHeaders, "Content-Type": "application/json" } 
     });
   }
