@@ -18,10 +18,21 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const GEMINI_API_KEY = Deno.env.get("GEMINI_SECRET_KEY");
-    if (!GEMINI_API_KEY) throw new Error("GEMINI_SECRET_KEY is not configured");
-
     const body = (await req.json()) as Partial<ChatPayload>;
+    const isChatbot = !body.systemPrompt;
+
+    let GEMINI_API_KEY = isChatbot 
+      ? Deno.env.get("GEMINI_KEY_CHATBOT") 
+      : Deno.env.get("GEMINI_KEY_AGENT");
+
+    // Fallback de seguridad por si alguna no está configurada aún
+    if (!GEMINI_API_KEY) {
+      GEMINI_API_KEY = Deno.env.get("GEMINI_SECRET_KEY");
+    }
+
+    if (!GEMINI_API_KEY) {
+      throw new Error("No Gemini API Keys are configured in Supabase Secrets");
+    }
     const messages = Array.isArray(body.messages) ? body.messages : [];
     const images = Array.isArray(body.images) ? body.images : [];
     
