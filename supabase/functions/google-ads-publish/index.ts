@@ -1,7 +1,4 @@
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+import { corsHeaders } from "../_shared/cors.ts";
 
 async function getAccessToken(clientId: string, clientSecret: string, refreshToken: string) {
   const response = await fetch('https://oauth2.googleapis.com/token', {
