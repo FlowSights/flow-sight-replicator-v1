@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, ShieldCheck, Lock, FileSignature, Mail } from "lucide-react";
+import { ArrowLeft, ShieldCheck, Lock, FileSignature, Mail, Database, Eye, Share2 } from "lucide-react";
 import logo from "@/assets/logo.png";
 import SEO from "@/components/SEO";
 
@@ -10,7 +10,7 @@ const Privacy = () => {
     <>
       <SEO 
         title="Política de Privacidad" 
-        description="Conoce cómo FlowSights protege tu información. Acuerdos de confidencialidad obligatorios, almacenamiento cifrado y tus derechos garantizados."
+        description="Conoce cómo FlowSights protege tu información. Acuerdos de confidencialidad obligatorios, almacenamiento cifrado y divulgación de uso de datos de Google."
         url="/privacidad"
       />
       <div className="min-h-screen">
@@ -39,7 +39,7 @@ const Privacy = () => {
           </p>
         </div>
 
-        <Card className="p-8 glass-card space-y-6 animate-fade-up">
+        <Card className="p-8 glass-card space-y-8 animate-fade-up">
           <div className="flex gap-4">
             <span className="w-11 h-11 rounded-xl bg-primary/15 text-primary grid place-items-center shrink-0">
               <FileSignature className="w-5 h-5" />
@@ -70,7 +70,55 @@ const Privacy = () => {
             </div>
           </div>
 
-          <div className="flex gap-4">
+          <div className="border-t border-border/50 pt-8 mt-4">
+            <h2 className="font-display text-2xl font-bold mb-6 flex items-center gap-3">
+              <Database className="w-6 h-6 text-primary" /> 
+              Uso de Datos de Usuario de Google
+            </h2>
+            <p className="text-muted-foreground mb-6 leading-relaxed">
+              FlowSights utiliza los Servicios de API de Google para permitir la gestión de campañas publicitarias. Nuestra aplicación cumple con la <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">Política de Datos de Usuario de los Servicios de API de Google</a>, incluyendo los requisitos de Uso Limitado.
+            </p>
+
+            <div className="space-y-6">
+              <div className="flex gap-4">
+                <span className="w-10 h-10 rounded-lg bg-primary/10 text-primary grid place-items-center shrink-0">
+                  <Eye className="w-5 h-5" />
+                </span>
+                <div>
+                  <h3 className="font-bold text-lg mb-1">Datos accedidos</h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    Accedemos a su cuenta de Google Ads (vía el scope <code className="bg-muted px-1 rounded text-xs">adwords</code>) para leer la configuración de sus campañas, grupos de anuncios y anuncios. No accedemos a sus correos electrónicos, contactos ni otros archivos personales de su cuenta de Google.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <span className="w-10 h-10 rounded-lg bg-[hsl(var(--accent-sky)/0.15)] text-[hsl(var(--accent-sky))] grid place-items-center shrink-0">
+                  <ShieldCheck className="w-5 h-5" />
+                </span>
+                <div>
+                  <h3 className="font-bold text-lg mb-1">Uso de los datos</h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    Utilizamos esta información exclusivamente para facilitar la creación, optimización y publicación de campañas publicitarias directamente desde nuestro dashboard. La inteligencia artificial de FlowSights procesa estos datos para sugerir mejoras y automatizar la publicación de anuncios bajo su consentimiento explícito.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <span className="w-10 h-10 rounded-lg bg-[hsl(var(--accent-violet)/0.15)] text-[hsl(var(--accent-violet))] grid place-items-center shrink-0">
+                  <Share2 className="w-5 h-5" />
+                </span>
+                <div>
+                  <h3 className="font-bold text-lg mb-1">Intercambio de datos</h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    No compartimos sus datos de usuario de Google con terceros, excepto cuando sea necesario para cumplir con los servicios que usted solicita activamente (por ejemplo, enviar la campaña a Google Ads). Los tokens de acceso se almacenan de forma cifrada y segura en nuestra infraestructura de base de datos.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-4 border-t border-border/50 pt-8">
             <span className="w-11 h-11 rounded-xl bg-[hsl(var(--accent-sky)/0.15)] text-[hsl(var(--accent-sky))] grid place-items-center shrink-0">
               <ShieldCheck className="w-5 h-5" />
             </span>
@@ -79,7 +127,7 @@ const Privacy = () => {
               <p className="text-muted-foreground leading-relaxed">
                 Puedes solicitar en cualquier momento acceso, rectificación o eliminación de los datos
                 que hayas compartido con nosotros. Respondemos a estas solicitudes en un plazo máximo
-                de 5 días hábiles.
+                de 5 días hábiles. Puedes revocar el acceso de FlowSights a tu cuenta de Google en cualquier momento desde la configuración de seguridad de tu cuenta de Google.
               </p>
             </div>
           </div>
@@ -105,3 +153,4 @@ const Privacy = () => {
 };
 
 export default Privacy;
+
