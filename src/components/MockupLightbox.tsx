@@ -397,12 +397,17 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
                         {isPublishing ? (
                           <>
                             <Loader2 className="w-5 h-5 animate-spin" />
-                            <span>Publicando en Meta...</span>
+                            <span>Publicando anuncio...</span>
                           </>
                         ) : platform === 'meta' && META_CONFIG.accessToken && META_CONFIG.adAccountId ? (
                           <>
                             <Zap size={20} className="text-yellow-400 fill-yellow-400" />
                             <span>Publicar con IA en Meta</span>
+                          </>
+                        ) : platform === 'google' ? (
+                          <>
+                            <Zap size={20} className="text-emerald-400 fill-emerald-400" />
+                            <span>Publicar con IA en Google</span>
                           </>
                         ) : isCopied ? (
                           <motion.div
