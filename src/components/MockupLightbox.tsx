@@ -7,6 +7,7 @@ import { VisualGuideLightbox } from '@/components/VisualGuideLightbox';
 import { GeneratedAd } from '@/types/ads';
 import { MetaPreview, GoogleAdsPreview, TikTokPreview, LinkedInPreview } from './PlatformPreviewsNative';
 import { metaApi, META_CONFIG } from '@/lib/meta-api';
+import { supabase } from '@/lib/supabaseClient';
 import { toast } from 'sonner';
 
 interface MockupLightboxProps {
