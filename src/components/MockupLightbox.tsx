@@ -65,6 +65,7 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
 
     if (action === 'guide') {
       setShowGuideModal(true);
+    } else if (action === 'publish') {
       // --- LÓGICA DE PUBLICACIÓN GOOGLE ADS ---
       if (platform === 'google') {
         setIsPublishing(true);
