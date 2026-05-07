@@ -107,7 +107,8 @@ INSTRUCCIÓN TÉCNICA OBLIGATORIA:
 1. Sé conversacional, amigable y extremadamente experto en marketing digital.
 2. Puedes responder preguntas, dar consejos sobre marketing, o charlar sobre la campaña actual.
 3. Evita introducciones largas. Sé conciso y al grano. Usa un tono persuasivo.
-4. SOLO SI el usuario te pide explícitamente modificar, optimizar, cambiar o crear anuncios (o si tu consejo implica directamente un nuevo copy que el usuario aceptaría implementar), DEBES aplicar los cambios y adjuntar AL FINAL DE TU RESPUESTA exactamente este bloque JSON envuelto en etiquetas XML:
+4. NUNCA menciones la palabra "JSON" al usuario ni ofrezcas mostrar código. Los cambios ocurren en segundo plano.
+5. SOLO SI el usuario te pide explícitamente modificar, optimizar, cambiar o crear anuncios (o si tu consejo implica directamente un nuevo copy que el usuario aceptaría implementar), DEBES aplicar los cambios adjuntando AL FINAL DE TU RESPUESTA exactamente este bloque JSON envuelto en etiquetas XML:
 
 <update_ads>[{"headline": "Tu Título Atractivo", "description": "Tu descripción persuasiva aquí", "cta": "Comprar ahora", "platform": "meta"}]</update_ads>
 
@@ -128,23 +129,35 @@ Nota sobre modificaciones: Solo incluye las plataformas que realmente modificast
       let cleanReply = (data.reply || '').trim();
       let hasUpdated = false;
 
-      // Extraer y ocultar CUALQUIER bloque de código o JSON del texto
-      let startIndex = cleanReply.indexOf('[');
-      let endIndex = cleanReply.lastIndexOf(']');
+      // 1. Extraer JSON usando etiquetas XML (Método principal)
+      const xmlMatch = cleanReply.match(/<update_ads>([\s\S]*?)<\/update_ads>/i);
+      let extractedJson = xmlMatch ? xmlMatch[1] : null;
 
-      // Validar si el bloque JSON parece ser de actualización de anuncios (revisando si hay headline, description, etc)
-      if (startIndex !== -1 && endIndex !== -1 && endIndex > startIndex) {
+      // 2. Método de respaldo: Buscar bloque markdown de json que empiece con array
+      if (!extractedJson) {
+        const markdownMatch = cleanReply.match(/```(?:json)?\s*(\[\s*\{[\s\S]*?\}\s*\])\s*```/i);
+        if (markdownMatch) {
+          extractedJson = markdownMatch[1];
+        }
+      }
+
+      // 3. Método de último recurso: Buscar un array crudo al final de la respuesta
+      if (!extractedJson) {
+        const rawArrayMatch = cleanReply.match(/(\[\s*\{\s*"headline"[\s\S]*\}\s*\])$/i);
+        if (rawArrayMatch) {
+          extractedJson = rawArrayMatch[1];
+        }
+      }
+
+      if (extractedJson) {
         try {
-          let jsonString = cleanReply.substring(startIndex, endIndex + 1);
-          jsonString = jsonString.replace(/```json/gi, "").replace(/```/gi, "").trim();
+          let jsonString = extractedJson.replace(/```json/gi, "").replace(/```/gi, "").trim();
           const parsed = JSON.parse(jsonString);
           if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].headline) {
             if (onUpdateAds) {
               onUpdateAds(parsed);
               hasUpdated = true;
             }
-            // Eliminar solo si logramos parsearlo como actualización
-            cleanReply = cleanReply.substring(0, startIndex) + cleanReply.substring(endIndex + 1);
           }
         } catch (e) {
           console.error("JSON Parse Error:", e);
@@ -155,16 +168,19 @@ Nota sobre modificaciones: Solo incluye las plataformas que realmente modificast
         setShowSuccess(true);
       }
 
-      // Limpieza de cualquier etiqueta XML y residuos
+      // Limpieza agresiva del texto visible
+      cleanReply = cleanReply.replace(/<update_ads>[\s\S]*?<\/update_ads>/gi, "");
       cleanReply = cleanReply.replace(/```json[\s\S]*?```/gi, "");
       cleanReply = cleanReply.replace(/```[\s\S]*?```/g, "");
-      cleanReply = cleanReply.replace(/<update_ads>/gi, "");
-      cleanReply = cleanReply.replace(/<\/update_ads>/gi, "");
+      cleanReply = cleanReply.replace(/\[\s*\{\s*"headline"[\s\S]*\}\s*\]/gi, ""); // Elimina arrays crudos de anuncios
       
-      // Limpiar texto que dice "Aquí tienes el JSON" o variaciones
-      cleanReply = cleanReply.replace(/Aquí te presento las modificaciones en el bloque JSON:/gi, "");
+      // Limpiar frases donde la IA anuncia el JSON
+      cleanReply = cleanReply.replace(/¿Te gustaría probar alguno de estos cambios\? Si es así, te puedo adjuntar los cambios como un bloque JSON.*/gi, "");
+      cleanReply = cleanReply.replace(/Aquí te presento las modificaciones en el bloque JSON.*/gi, "");
       cleanReply = cleanReply.replace(/Aquí tienes el JSON.*/gi, "");
+      cleanReply = cleanReply.replace(/Adjunto el bloque JSON.*/gi, "");
       cleanReply = cleanReply.replace(/\*\*Actualización de anuncios\*\*/gi, "");
+      cleanReply = cleanReply.replace(/Te adjunto los cambios.*/gi, "");
       
       // Eliminar asteriscos para que la respuesta sea limpia
       cleanReply = cleanReply.replace(/\*/g, "");
