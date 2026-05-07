@@ -65,43 +65,57 @@ export const MockupLightbox: React.FC<MockupLightboxProps> = ({
 
     if (action === 'guide') {
       setShowGuideModal(true);
-    } else if (action === 'publish') {
-      // MODO HÍBRIDO TEMPORAL: Usar flujo manual con UI de IA mientras se verifica Meta
-      // Para activar API real, descomentar el bloque siguiente y comentar la sección de "Copia Inteligente"
-      
-      /*
-      const metaToken = META_CONFIG.accessToken;
-      const adAccountId = META_CONFIG.adAccountId;
-
-      // Si tenemos API de Meta configurada y es Meta, publicar directo
-      if (platform === 'meta' && metaToken && adAccountId) {
+      // --- LÓGICA DE PUBLICACIÓN GOOGLE ADS ---
+      if (platform === 'google') {
         setIsPublishing(true);
-        const publishToast = toast.loading('Publicando anuncio en Meta...');
+        const publishToast = toast.loading('Iniciando publicación en Google Ads...');
         
         try {
-          // 1. Subir Imagen a Meta
-          const imageHash = await metaApi.uploadImage(metaToken, adAccountId, currentAd.imageUrl);
-          
-          // 2. Crear Ad Creative
-          const creativeId = await metaApi.createAdCreative(metaToken, adAccountId, {
-            name: currentAd.headline,
-            imageHash: imageHash,
-            headline: currentAd.headline,
-            body: currentAd.description,
-            link: currentAd.websiteUrl || 'https://flowsights.it',
-            callToAction: currentAd.cta,
+          // 1. Verificar si el usuario está conectado
+          const { data: userData } = await supabase.auth.getUser();
+          if (!userData.user) throw new Error('Usuario no autenticado');
+
+          const { data: integration } = await supabase
+            .from('user_integrations')
+            .select('*')
+            .eq('user_id', userData.user.id)
+            .eq('platform', 'google_ads')
+            .single();
+
+          if (!integration) {
+            toast.error('Primero debes conectar tu cuenta de Google Ads en el dashboard.', { id: publishToast });
+            setIsPublishing(false);
+            return;
+          }
+
+          // 2. Invocar la Edge Function de publicación
+          const { data: publishResult, error: publishError } = await supabase.functions.invoke('google-ads-publish', {
+            body: {
+              ad: currentAd,
+              budget: 10,
+              campaignName: `FlowSights - ${businessName} - ${new Date().toLocaleDateString()}`,
+              customer_id: integration.platform_account_id || '582-466-8194',
+              refresh_token: integration.refresh_token
+            }
           });
 
-          toast.success('¡Anuncio publicado como borrador en Meta!', { id: publishToast });
+          if (publishError) throw publishError;
+
+          toast.success('¡Campaña creada exitosamente en Google Ads!', { id: publishToast });
           setShowPublishAssistant(true);
         } catch (error: any) {
-          console.error('Meta Publish Error:', error);
-          toast.error(`Error al publicar: ${error.message}`, { id: publishToast });
+          console.error('Google Publish Error:', error);
+          toast.error(`Error al publicar en Google: ${error.message}`, { id: publishToast });
         } finally {
           setIsPublishing(false);
         }
         return;
       }
+
+      // MODO HÍBRIDO TEMPORAL PARA META:
+      /*
+      const metaToken = META_CONFIG.accessToken;
+      // ... rest of meta logic ...
       */
 
       // Copia Inteligente: Copiar descripción al portapapeles automáticamente
