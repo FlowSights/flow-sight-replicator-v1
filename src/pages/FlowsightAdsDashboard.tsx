@@ -191,11 +191,15 @@ const getSuggestedObjective = (category: string) => {
   return 'convertir atención en clientes reales para tu negocio';
 };
 
+import { useGoogleAdsAuth } from '@/hooks/useGoogleAdsAuth';
+
 const FlowsightAdsDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
   const { toast } = useToast();
   const { session, loading: authLoading, signOut } = useAuth();
+  const { isConnecting, isConnected, connectGoogleAds } = useGoogleAdsAuth();
+  
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -553,6 +557,22 @@ const FlowsightAdsDashboard: React.FC = () => {
             <h1 className="text-xl font-black tracking-tight">Flowsight <span className="text-emerald-500">Ads</span></h1>
           </div>
           <div className="flex items-center gap-4">
+            {isConnected ? (
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-xs font-bold uppercase tracking-wider">
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                Google Ads Conectado
+              </div>
+            ) : (
+              <Button 
+                variant="outline" 
+                onClick={connectGoogleAds}
+                disabled={isConnecting}
+                className="text-xs font-bold uppercase tracking-wider border-white/10 hover:bg-white/5 hover:text-white"
+              >
+                {isConnecting ? 'Conectando...' : 'Conectar Google Ads'}
+              </Button>
+            )}
+            
             <Button variant="ghost" onClick={handleLogout} className="text-gray-400 hover:text-white font-bold gap-2">
               <LogOut className="w-4 h-4" /> Salir
             </Button>
