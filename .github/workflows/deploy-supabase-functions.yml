@@ -23,4 +23,4 @@ jobs:
           version: latest
 
       - run: supabase functions deploy google-ads-auth --project-ref $PROJECT_ID
-      - run: supabase functions deploy google-ads-publish --project-ref $PROJECT_ID
+      - run: supabase functions deploy google-ads-publish --project-ref $PROJECT_ID --no-verify-jwt
