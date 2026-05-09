@@ -174,7 +174,7 @@ export const DynamicNotch = ({ navLinks, logo }: DynamicNotchProps) => {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -20, opacity: 0 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className={`fixed left-0 right-0 z-30 bg-background/95 backdrop-blur-3xl border-b border-white/10 ${
+              className={`fixed left-0 right-0 z-30 bg-background/40 backdrop-blur-2xl border-b border-white/10 ${
                 isCollapsed ? "top-20 mx-auto w-[95%] rounded-3xl border shadow-2xl" : "top-0 pt-24"
               }`}
             >
@@ -188,7 +188,7 @@ export const DynamicNotch = ({ navLinks, logo }: DynamicNotchProps) => {
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.03 }}
-                      className="group p-4 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 transition-all"
+                      className="group p-4 rounded-xl border border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 transition-all"
                     >
                       <div className="flex items-center justify-between">
                         <span className="font-medium text-foreground group-hover:text-primary transition-colors">
@@ -206,7 +206,7 @@ export const DynamicNotch = ({ navLinks, logo }: DynamicNotchProps) => {
                   <a
                     href="#contacto"
                     onClick={handleNavClick}
-                    className="w-full px-6 py-4 rounded-xl bg-primary text-primary-foreground font-bold text-center shadow-lg shadow-primary/20"
+                    className="w-full px-6 py-4 rounded-xl border border-white/10 bg-white/10 backdrop-blur-xl text-white font-bold text-center hover:bg-white/20 transition-all"
                   >
                     Solicitar diagnóstico
                   </a>

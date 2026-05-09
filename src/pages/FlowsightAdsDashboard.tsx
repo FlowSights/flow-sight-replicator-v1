@@ -540,7 +540,19 @@ const FlowsightAdsDashboard: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white selection:bg-emerald-500/30 font-sans overflow-x-hidden">
+    <div className="min-h-screen bg-[#020202] text-white selection:bg-emerald-500/30 font-sans relative overflow-x-hidden">
+      {/* Cinematic Background Elements */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute top-0 inset-x-0 h-[500px] bg-gradient-to-b from-emerald-500/[0.03] to-transparent opacity-50" />
+        <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-emerald-500/[0.05] blur-[120px] rounded-full animate-pulse" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-teal-500/[0.03] blur-[100px] rounded-full" />
+        <div className="absolute top-1/4 right-[15%] w-[300px] h-[300px] bg-cyan-500/[0.02] blur-[80px] rounded-full" />
+        
+        {/* Subtle Grid Pattern */}
+        <div className="absolute inset-0 opacity-[0.03]" 
+             style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '40px 40px' }} />
+      </div>
+
       <PremiumLoadingScreen 
         isVisible={isLoading} 
         progress={loadingProgress}
@@ -548,39 +560,44 @@ const FlowsightAdsDashboard: React.FC = () => {
         educationalFact={educationalFacts[currentEducationalFactIndex]}
       />
       
-      <header className="sticky top-0 z-40 backdrop-blur-2xl bg-black/60 border-b border-white/5">
+      <header className="sticky top-0 z-50 backdrop-blur-3xl bg-black/40 border-b border-white/[0.05]">
         <div className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl shadow-lg shadow-emerald-500/20">
-              <Sparkles className="w-5 h-5 text-white" />
+          <div className="flex items-center gap-4 group cursor-pointer" onClick={() => navigate('/')}>
+            <div className="p-2.5 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform">
+              <BarChart3 className="w-5 h-5 text-black" />
             </div>
-            <h1 className="text-xl font-black tracking-tight">Flowsight <span className="text-emerald-500">Ads</span></h1>
+            <div>
+              <h1 className="text-xl font-black tracking-tight leading-none">Flowsight <span className="text-emerald-500">Ads</span></h1>
+              <p className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mt-1">Inteligencia Operativa</p>
+            </div>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             {isConnected ? (
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-xs font-bold uppercase tracking-wider">
-                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                Google Ads Conectado
+              <div className="hidden md:flex items-center gap-2 px-4 py-2 bg-emerald-500/5 border border-emerald-500/20 rounded-full text-emerald-400 text-[10px] font-black uppercase tracking-wider">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+                Google Ads Activo
               </div>
             ) : (
               <Button 
                 variant="outline" 
                 onClick={connectGoogleAds}
                 disabled={isConnecting}
-                className="text-xs font-bold uppercase tracking-wider border-white/10 hover:bg-white/5 hover:text-white"
+                className="hidden md:flex text-[10px] h-10 font-black uppercase tracking-wider border-white/10 hover:bg-white/5 hover:text-white rounded-xl"
               >
                 {isConnecting ? 'Conectando...' : 'Conectar Google Ads'}
               </Button>
             )}
             
-            <Button variant="ghost" onClick={handleLogout} className="text-gray-400 hover:text-white font-bold gap-2">
-              <LogOut className="w-4 h-4" /> Salir
+            <div className="h-8 w-px bg-white/10 hidden md:block" />
+
+            <Button variant="ghost" onClick={handleLogout} className="text-gray-400 hover:text-white font-bold gap-2 hover:bg-white/5 px-4 h-10 rounded-xl">
+              <LogOut className="w-4 h-4" /> <span className="hidden sm:inline">Cerrar Sesión</span>
             </Button>
           </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-12">
+      <main className="max-w-7xl mx-auto px-6 py-12 relative z-10">
         <AnimatePresence mode="wait">
           {!showResults ? (
             <motion.div key="form" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="max-w-5xl mx-auto">
@@ -593,24 +610,24 @@ const FlowsightAdsDashboard: React.FC = () => {
                 >
                   <WandSparkles className="w-4 h-4" /> Estrategia guiada por IA
                 </motion.div>
-                <h2 className="text-4xl md:text-6xl font-black mb-5 tracking-tight leading-tight">
+                <h2 className="text-6xl md:text-[110px] font-black mb-10 tracking-tighter leading-[0.85] text-shadow-premium">
                   {step === 1 ? (
-                    <>Atrae más clientes <span className="text-emerald-500">sin complicaciones</span></>
+                    <>Crea tu campaña <br /><span className="text-emerald-500 italic">maestra.</span></>
                   ) : (
-                    <>Crea tu campaña <span className="text-emerald-500">maestra</span></>
+                    <>Estrategia <br /><span className="text-emerald-500 italic">Maestra</span></>
                   )}
                 </h2>
-                <p className="text-gray-400 text-lg md:text-xl font-medium max-w-3xl mx-auto">
+                <p className="text-gray-400 text-2xl md:text-3xl font-bold max-w-3xl mx-auto leading-tight tracking-tight">
                   {step === 1
-                    ? 'Cuéntanos qué vendes o promocionas. Nosotros convertimos esa información en una estrategia clara para conseguir clientes reales.'
-                    : 'Avanza paso a paso con una experiencia simple, visual y enfocada en resultados.'}
+                    ? 'Inteligencia Creativa. Simple. Bruta.'
+                    : 'Avanza paso a paso con una experiencia diseñada para maximizar tu retorno de inversión.'}
                 </p>
-                <div className="flex justify-center items-center gap-3 mt-8">
+                <div className="flex justify-center items-center gap-4 mt-10">
                   {[1, 2, 3, 4, 5].map((s) => (
                     <div
                       key={s}
-                      className={`h-1.5 rounded-full transition-all duration-500 ${
-                        s === step ? 'w-14 bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.6)]' : s < step ? 'w-7 bg-emerald-500/40' : 'w-7 bg-white/10'
+                      className={`h-1.5 rounded-full transition-all duration-700 ${
+                        s === step ? 'w-20 bg-emerald-500 shadow-[0_0_25px_rgba(16,185,129,0.7)]' : s < step ? 'w-10 bg-emerald-500/30' : 'w-10 bg-white/5'
                       }`}
                     />
                   ))}
@@ -623,237 +640,295 @@ const FlowsightAdsDashboard: React.FC = () => {
 
                 <AnimatePresence mode="wait">
                   {step === 1 && (
-                    <motion.div key="step1" initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.35 }} className="grid lg:grid-cols-[0.9fr_1.1fr] gap-6 rounded-[40px] border border-white/10 bg-white/[0.045] backdrop-blur-3xl p-6 md:p-8 shadow-2xl shadow-black/30 overflow-hidden">
-                      <div className="relative rounded-[32px] bg-gradient-to-br from-emerald-500/15 via-white/[0.04] to-transparent border border-white/10 p-7 flex flex-col justify-between min-h-[340px]">
+                    <motion.div 
+                      key="step1" 
+                      initial={{ opacity: 0, scale: 0.98, y: 10 }} 
+                      animate={{ opacity: 1, scale: 1, y: 0 }} 
+                      exit={{ opacity: 0, scale: 0.98, y: -10 }} 
+                      transition={{ duration: 0.4, ease: "easeOut" }} 
+                      className="grid lg:grid-cols-[0.9fr_1.1fr] gap-8 glass-card rounded-[48px] p-8 md:p-10 shadow-2xl relative"
+                    >
+                      <div className="relative rounded-[40px] bg-gradient-to-br from-emerald-500/[0.08] via-white/[0.02] to-transparent border border-white/[0.06] p-8 flex flex-col justify-between min-h-[400px]">
                         <div>
-                          <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center mb-6">
-                            <MessageSquareText className="w-6 h-6 text-emerald-400" />
+                          <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-8 shadow-inner shadow-emerald-500/10">
+                            <MessageSquareText className="w-7 h-7 text-emerald-400" />
                           </div>
-                          <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-400 mb-4">Cuéntame tu negocio</p>
-                          <h3 className="text-3xl font-black tracking-tight leading-tight mb-4">
-                            {config.promote ? `Atrae clientes para ${detectedBusinessLabel}` : 'Empecemos por lo más importante'}
+                          <p className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-500/80 mb-5">01. Inteligencia Creativa</p>
+                          <h3 className="text-4xl font-black tracking-tighter leading-[1.1] mb-5">
+                            {config.promote ? `Optimizando para ${detectedBusinessLabel}` : 'Define tu oferta maestra'}
                           </h3>
-                          <p className="text-gray-400 font-medium leading-relaxed">
-                            No necesitas saber de anuncios. Describe tu producto, servicio o promoción y la interfaz empezará a construir una estrategia entendible.
+                          <p className="text-gray-400 font-medium leading-relaxed text-lg">
+                            Olvídate de lo técnico. Describe tu producto o servicio con tus palabras y nosotros nos encargamos de la magia publicitaria.
                           </p>
                         </div>
-                        <motion.div animate={{ opacity: config.promote ? 1 : 0.45, y: config.promote ? 0 : 8 }} className="mt-8 p-4 rounded-2xl bg-black/30 border border-white/10">
-                          <p className="text-sm text-gray-300 font-bold">{config.promote ? `Entendido: vamos a convertir esto en una campaña para conseguir clientes.` : 'La IA reaccionará cuando empieces a escribir.'}</p>
+                        <motion.div 
+                          animate={{ opacity: config.promote ? 1 : 0.45, x: config.promote ? 0 : 5 }} 
+                          className="mt-10 p-5 rounded-[24px] bg-black/40 border border-white/[0.06] backdrop-blur-md"
+                        >
+                          <p className="text-xs text-emerald-400/80 font-black uppercase tracking-widest mb-1.5 flex items-center gap-2">
+                            <Sparkles className="w-3 h-3" /> Estado del motor
+                          </p>
+                          <p className="text-sm text-gray-300 font-bold italic">{config.promote ? `Estrategia detectada: "${detectedTone}". Pulsa continuar.` : 'Esperando señales de tu negocio...'}</p>
                         </motion.div>
                       </div>
 
-                      <div className="space-y-6">
-                        <div className="space-y-3">
-                          <label className="text-[10px] font-bold uppercase tracking-widest text-emerald-500">¿Qué quieres promocionar?</label>
-                          <Textarea
-                            placeholder="Ej: Café artesanal, desayunos para llevar y promociones de temporada para clientes cercanos al local."
-                            className="min-h-[210px] bg-white/5 border-white/10 rounded-[28px] text-xl font-bold p-6 focus-visible:ring-emerald-500/60 transition-all"
-                            value={config.promote}
-                            onChange={(e) => {
-                              setConfig({ ...config, promote: e.target.value });
-                              setPromptCopied(false);
-                            }}
-                          />
+                      <div className="flex flex-col justify-between space-y-8">
+                        <div className="space-y-4">
+                          <label className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500/60 ml-2">¿Qué quieres promocionar hoy?</label>
+                          <div className="relative group">
+                            <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 rounded-[32px] blur-md opacity-0 group-focus-within:opacity-100 transition-opacity" />
+                            <Textarea
+                              placeholder="Ej: Café artesanal de especialidad, con opciones de brunch y delivery rápido en zona norte."
+                              className="relative min-h-[260px] bg-white/[0.03] border-white/[0.08] rounded-[32px] text-xl font-bold p-8 focus-visible:ring-emerald-500/40 transition-all placeholder:text-gray-700"
+                              value={config.promote}
+                              onChange={(e) => {
+                                setConfig({ ...config, promote: e.target.value });
+                                setPromptCopied(false);
+                              }}
+                            />
+                          </div>
                         </div>
 
-                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: config.promote ? 1 : 0.55 }} className="grid sm:grid-cols-3 gap-3">
-                          <div className="p-4 rounded-2xl bg-blue-500/5 border border-blue-500/10 group hover:bg-blue-500/10 transition-colors">
-                            <Target className="w-5 h-5 text-blue-400 mb-3" />
-                            <p className="text-xs text-blue-400/70 font-black uppercase tracking-widest">Enfoque</p>
-                            <p className="text-sm font-bold mt-1">Clientes reales</p>
-                          </div>
-                          <div className="p-4 rounded-2xl bg-purple-500/5 border border-purple-500/10 group hover:bg-purple-500/10 transition-colors">
-                            <Users className="w-5 h-5 text-purple-400 mb-3" />
-                            <p className="text-xs text-purple-400/70 font-black uppercase tracking-widest">Audiencia</p>
-                            <p className="text-sm font-bold mt-1">Se detecta sola</p>
-                          </div>
-                          <div className="p-4 rounded-2xl bg-emerald-500/5 border border-emerald-500/10 group hover:bg-emerald-500/10 transition-colors">
-                            <TrendingUp className="w-5 h-5 text-emerald-400 mb-3" />
-                            <p className="text-xs text-emerald-400/70 font-black uppercase tracking-widest">Meta</p>
-                            <p className="text-sm font-bold mt-1">Más ventas</p>
-                          </div>
-                        </motion.div>
+                        <div className="grid grid-cols-3 gap-4">
+                          {[
+                            { icon: Target, label: 'Enfoque', val: 'Conversión', color: 'blue' },
+                            { icon: Users, label: 'Público', val: 'Optimizado', color: 'purple' },
+                            { icon: TrendingUp, label: 'Meta', val: 'Más Ventas', color: 'emerald' }
+                          ].map((item, idx) => (
+                            <div key={idx} className={`p-5 rounded-[24px] bg-${item.color}-500/[0.03] border border-${item.color}-500/10 group hover:bg-${item.color}-500/10 transition-all duration-300`}>
+                              <item.icon className={`w-5 h-5 text-${item.color}-400 mb-3`} />
+                              <p className={`text-[9px] text-${item.color}-400/70 font-black uppercase tracking-[0.15em]`}>{item.label}</p>
+                              <p className="text-sm font-black mt-1 text-white">{item.val}</p>
+                            </div>
+                          ))}
+                        </div>
 
-                        <Button onClick={() => setStep(2)} disabled={!config.promote.trim()} className="w-full py-8 text-xl font-black bg-emerald-500 hover:bg-emerald-600 rounded-2xl transition-all shadow-xl shadow-emerald-500/20 hover:scale-[1.01]">
-                          Continuar <ArrowRight className="ml-2 w-6 h-6" />
+                        <Button 
+                          onClick={() => setStep(2)} 
+                          disabled={!config.promote.trim()} 
+                          className="h-24 px-16 rounded-[32px] bg-white text-black hover:bg-gray-200 font-black text-2xl gap-4 shadow-[0_20px_50px_rgba(255,255,255,0.1)] transition-all hover:scale-105 active:scale-95 disabled:opacity-20"
+                        >
+                          Siguiente <ArrowRight className="w-8 h-8" />
                         </Button>
                       </div>
                     </motion.div>
                   )}
 
                   {step === 2 && (
-                    <motion.div key="step2" initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.35 }} className="space-y-7 rounded-[40px] border border-white/10 bg-white/[0.045] backdrop-blur-3xl p-6 md:p-8 shadow-2xl shadow-black/30">
-                      <div className="flex items-start justify-between gap-6 flex-col md:flex-row">
+                    <motion.div 
+                      key="step2" 
+                      initial={{ opacity: 0, scale: 0.98, y: 10 }} 
+                      animate={{ opacity: 1, scale: 1, y: 0 }} 
+                      exit={{ opacity: 0, scale: 0.98, y: -10 }} 
+                      transition={{ duration: 0.4, ease: "easeOut" }} 
+                      className="space-y-8 glass-card rounded-[48px] p-8 md:p-10 shadow-2xl relative"
+                    >
+                      <div className="flex items-start justify-between gap-8 flex-col lg:flex-row">
                         <div>
-                          <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-400 mb-3">Te entendí</p>
-                          <h3 className="text-3xl md:text-4xl font-black tracking-tight">Completa el contexto básico</h3>
-                          <p className="text-gray-400 font-medium mt-3 max-w-2xl">Usaremos tu web y redes como referencia para detectar estilo, tono y señales de confianza sin pedirte configuraciones técnicas.</p>
+                          <p className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-500/80 mb-3">02. Contexto de Marca</p>
+                          <h3 className="text-4xl md:text-5xl font-black tracking-tighter leading-tight">Define tu presencia</h3>
+                          <p className="text-gray-400 font-medium mt-4 max-w-xl text-lg">Usaremos tus redes y sitio web como señales de confianza para la IA. No necesitamos acceso, solo el enlace público.</p>
                         </div>
-                        <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-5 py-4 min-w-[220px]">
-                          <div className="flex items-center gap-3">
-                            <SparklesIcon className="w-5 h-5 text-emerald-400" />
+                        <div className="rounded-[32px] border border-emerald-500/20 bg-emerald-500/[0.05] p-6 min-w-[280px] backdrop-blur-xl">
+                          <div className="flex items-center gap-4">
+                            <div className="p-3 bg-emerald-500/10 rounded-2xl border border-emerald-500/20">
+                              <SparklesIcon className="w-6 h-6 text-emerald-400" />
+                            </div>
                             <div>
-                              <p className="text-xs text-emerald-300 font-black uppercase tracking-widest">Detectado</p>
-                              <p className="font-black text-white capitalize">{detectedBusinessLabel}</p>
+                              <p className="text-[10px] text-emerald-400/80 font-black uppercase tracking-widest">Negocio Detectado</p>
+                              <p className="font-black text-white text-lg capitalize">{detectedBusinessLabel}</p>
                             </div>
                           </div>
                         </div>
                       </div>
 
-                      <div className="grid md:grid-cols-2 gap-5">
-                        <div className="space-y-2 group md:col-span-2">
-                          <label className="text-[10px] font-black uppercase tracking-widest text-emerald-500 group-focus-within:text-emerald-400 transition-colors flex items-center gap-2">
-                            <MapPin className="w-3 h-3" /> Ubicación de la campaña (Países, ciudades o regiones)
+                      <div className="grid md:grid-cols-2 gap-6">
+                        <div className="space-y-3 md:col-span-2 group">
+                          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500/60 ml-2 flex items-center gap-2">
+                            <MapPin className="w-3.5 h-3.5" /> Ubicación de impacto (Países, ciudades o barrios)
                           </label>
-                          <LocationInput 
-                            value={config.location} 
-                            onChange={(val) => setConfig({ ...config, location: val })}
-                            placeholder="Ej: Madrid, España o Ciudad de México"
+                          <div className="relative">
+                            <LocationInput 
+                              value={config.location} 
+                              onChange={(val) => setConfig({ ...config, location: val })}
+                              placeholder="Ej: Madrid, España o cobertura nacional"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-3 group">
+                          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-cyan-500/60 ml-2">Nombre comercial</label>
+                          <Input 
+                            placeholder="Ej: FlowSights AI" 
+                            className="h-16 px-6 bg-white/[0.03] border-white/[0.08] focus:ring-2 focus:ring-cyan-500/30 rounded-2xl text-base font-bold transition-all" 
+                            value={config.businessName} 
+                            onChange={(e) => setConfig({ ...config, businessName: e.target.value })} 
                           />
                         </div>
 
-                        <div className="space-y-2 group">
-                          <label className="text-[10px] font-black uppercase tracking-widest text-cyan-500/70 group-focus-within:text-cyan-400 transition-colors">Nombre del negocio</label>
-                          <Input placeholder="Ej: Café Sol" className="py-7 bg-cyan-500/5 border-cyan-500/10 focus-visible:ring-cyan-500/50 rounded-2xl text-lg font-bold transition-all" value={config.businessName} onChange={(e) => setConfig({ ...config, businessName: e.target.value })} />
-                        </div>
-
-                        <div className="space-y-2 group">
-                          <label className="text-[10px] font-black uppercase tracking-widest text-emerald-500/70 group-focus-within:text-emerald-400 transition-colors">Sitio web / landing page</label>
+                        <div className="space-y-3 group">
+                          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500/60 ml-2">Sitio Web</label>
                           <div className="relative">
-                            <Globe className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-500/50" />
-                            <Input placeholder="https://tudominio.com" className="pl-12 py-7 bg-emerald-500/5 border-emerald-500/10 focus-visible:ring-emerald-500/50 rounded-2xl text-lg font-bold transition-all" value={config.websiteUrl} onChange={(e) => setConfig({ ...config, websiteUrl: e.target.value })} onBlur={() => fetchSiteMetadata(config.websiteUrl)} />
+                            <Globe className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-500/40" />
+                            <Input 
+                              placeholder="https://tuweb.com" 
+                              className="h-16 pl-14 bg-white/[0.03] border-white/[0.08] focus:ring-2 focus:ring-emerald-500/30 rounded-2xl text-base font-bold transition-all" 
+                              value={config.websiteUrl} 
+                              onChange={(e) => setConfig({ ...config, websiteUrl: e.target.value })} 
+                              onBlur={() => fetchSiteMetadata(config.websiteUrl)} 
+                            />
                             {siteAnalyzing && (
-                              <motion.div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                              <div className="absolute right-5 top-1/2 -translate-y-1/2 flex items-center gap-2">
                                 <RefreshCw className="w-4 h-4 text-emerald-500 animate-spin" />
-                                <span className="text-[10px] text-emerald-400/60 font-black uppercase">Analizando...</span>
-                              </motion.div>
+                              </div>
                             )}
                           </div>
                         </div>
 
-                        <div className="space-y-2 group">
-                          <label className="text-[10px] font-black uppercase tracking-widest text-purple-500/70 group-focus-within:text-purple-400 transition-colors">Instagram</label>
+                        <div className="space-y-3 group">
+                          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-purple-500/60 ml-2">Instagram</label>
                           <div className="relative">
-                            <Camera className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-500/50" />
-                            <Input placeholder="https://instagram.com/tu_negocio" className="pl-12 py-7 bg-purple-500/5 border-purple-500/10 focus-visible:ring-purple-500/50 rounded-2xl text-lg font-bold transition-all" value={config.instagramUrl} onChange={(e) => setConfig({ ...config, instagramUrl: e.target.value })} />
+                            <Camera className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-500/40" />
+                            <Input 
+                              placeholder="@tu_negocio" 
+                              className="h-16 pl-14 bg-white/[0.03] border-white/[0.08] focus:ring-2 focus:ring-purple-500/30 rounded-2xl text-base font-bold transition-all" 
+                              value={config.instagramUrl} 
+                              onChange={(e) => setConfig({ ...config, instagramUrl: e.target.value })} 
+                            />
                           </div>
                         </div>
 
-                        <div className="space-y-2 group">
-                          <label className="text-[10px] font-black uppercase tracking-widest text-blue-500/70 group-focus-within:text-blue-400 transition-colors">Facebook</label>
+                        <div className="space-y-3 group">
+                          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500/60 ml-2">Facebook</label>
                           <div className="relative">
-                            <Share2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-500/50" />
-                            <Input placeholder="https://facebook.com/tu_negocio" className="pl-12 py-7 bg-blue-500/5 border-blue-500/10 focus-visible:ring-blue-500/50 rounded-2xl text-lg font-bold transition-all" value={config.facebookUrl} onChange={(e) => setConfig({ ...config, facebookUrl: e.target.value })} />
+                            <Share2 className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-500/40" />
+                            <Input 
+                              placeholder="facebook.com/tu_negocio" 
+                              className="h-16 pl-14 bg-white/[0.03] border-white/[0.08] focus:ring-2 focus:ring-blue-500/30 rounded-2xl text-base font-bold transition-all" 
+                              value={config.facebookUrl} 
+                              onChange={(e) => setConfig({ ...config, facebookUrl: e.target.value })} 
+                            />
                           </div>
                         </div>
                       </div>
 
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div className="p-5 rounded-[24px] bg-white/5 border border-white/10">
-                          <p className="text-xs font-black uppercase tracking-widest text-emerald-400 mb-2">Estilo detectado</p>
-                          <p className="text-lg font-black capitalize">{detectedTone}</p>
-                        </div>
-                        <div className="p-5 rounded-[24px] bg-white/5 border border-white/10">
-                          <p className="text-xs font-black uppercase tracking-widest text-emerald-400 mb-2">Uso de canales</p>
-                          <p className="text-lg font-black">Web, Instagram y Facebook como referencia</p>
-                        </div>
-                      </div>
-
-                      <div className="flex gap-4 pt-2">
-                        <Button variant="ghost" onClick={() => setStep(1)} className="flex-1 py-8 rounded-2xl font-bold">Atrás</Button>
-                        <Button onClick={() => setStep(3)} disabled={!config.businessName.trim()} className="flex-[2] py-8 text-xl font-black bg-emerald-500 hover:bg-emerald-600 rounded-2xl shadow-xl shadow-emerald-500/20">Ver estrategia <ArrowRight className="ml-2 w-6 h-6" /></Button>
+                      <div className="flex gap-4 pt-6">
+                        <Button variant="ghost" onClick={() => setStep(1)} className="flex-1 h-16 rounded-2xl font-bold text-gray-400 hover:text-white hover:bg-white/5 transition-all">Atrás</Button>
+                        <Button 
+                          onClick={() => setStep(3)} 
+                          disabled={!config.businessName.trim()} 
+                          className="flex-[2] h-16 text-lg font-black bg-emerald-500 hover:bg-emerald-400 text-black rounded-2xl shadow-xl shadow-emerald-500/20 active:scale-[0.98] transition-all"
+                        >
+                          Ver estrategia <ArrowRight className="ml-2 w-5 h-5" />
+                        </Button>
                       </div>
                     </motion.div>
                   )}
 
                   {step === 3 && (
-                    <motion.div key="step3" initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.35 }} className="space-y-7 rounded-[40px] border border-white/10 bg-white/[0.045] backdrop-blur-3xl p-6 md:p-8 shadow-2xl shadow-black/30">
-                      <div className="text-center max-w-3xl mx-auto">
-                        <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-400 mb-3">Así vamos a conseguirte clientes</p>
-                        <h3 className="text-3xl md:text-4xl font-black tracking-tight">Estrategia automática generada</h3>
-                        <p className="text-gray-400 font-medium mt-3">Antes de pedirte presupuesto, te mostramos el razonamiento de campaña para que veas que entendimos el negocio.</p>
+                    <motion.div 
+                      key="step3" 
+                      initial={{ opacity: 0, scale: 0.98, y: 10 }} 
+                      animate={{ opacity: 1, scale: 1, y: 0 }} 
+                      exit={{ opacity: 0, scale: 0.98, y: -10 }} 
+                      transition={{ duration: 0.4, ease: "easeOut" }} 
+                      className="space-y-8 glass-card rounded-[48px] p-8 md:p-12 shadow-2xl relative overflow-hidden"
+                    >
+                      <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-emerald-500/[0.08] blur-[180px] rounded-full pointer-events-none" />
+
+                      <div className="text-center max-w-2xl mx-auto relative z-10">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-300 text-[10px] font-black uppercase tracking-[0.2em] mb-6">
+                          <WandSparkles className="w-4 h-4" /> 03. Plan Maestro
+                        </div>
+                        <h3 className="text-4xl md:text-6xl font-black tracking-tighter leading-[1.1]">Ruta <span className="text-emerald-500 italic">Estratégica</span></h3>
+                        <p className="text-gray-400 font-medium mt-5 text-xl leading-relaxed">Hemos diseñado la ruta óptima para tu negocio. Puedes chatear con nuestra IA para pulir cualquier detalle.</p>
                       </div>
 
-                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+                      <div className="grid md:grid-cols-3 gap-6 relative z-10">
                         {[
-                          { title: 'Tipo de campaña sugerida', value: 'Captación de alta intención', icon: Megaphone, color: 'blue' },
-                          { title: 'Público objetivo', value: suggestedAudience, icon: Users, color: 'purple' },
-                          { title: 'Tono de comunicación', value: detectedTone, icon: MessageSquareText, color: 'amber' },
-                          { title: 'Objetivo principal', value: suggestedObjective, icon: Target, color: 'emerald' },
-                          { title: 'Geolocalización Estratégica', value: config.location || 'Todo el país (recomendado)', icon: MapPin, color: 'cyan' },
-                        ].map((card, index) => {
-                          const Icon = card.icon;
-                          const colors = {
-                            blue: 'from-blue-500/10 to-blue-500/5 border-blue-500/20 text-blue-400',
-                            purple: 'from-purple-500/10 to-purple-500/5 border-purple-500/20 text-purple-400',
-                            amber: 'from-amber-500/10 to-amber-500/5 border-amber-500/20 text-amber-400',
-                            emerald: 'from-emerald-500/10 to-emerald-500/5 border-emerald-500/20 text-emerald-400',
-                            cyan: 'from-cyan-500/10 to-cyan-500/5 border-cyan-500/20 text-cyan-400',
-                          }[card.color as keyof typeof colors];
-
-                          return (
-                            <motion.div 
-                              key={card.title} 
-                              initial={{ opacity: 0, y: 18 }} 
-                              animate={{ opacity: 1, y: 0 }} 
-                              transition={{ delay: index * 0.08 }} 
-                              className={`p-6 rounded-[28px] border bg-gradient-to-br transition-all hover:scale-[1.02] ${colors}`}
-                            >
-                              <div className={`w-12 h-12 rounded-2xl bg-white/5 border border-current flex items-center justify-center mb-5`}>
-                                <Icon className="w-6 h-6" />
-                              </div>
-                              <p className="text-[10px] font-black uppercase tracking-widest opacity-70 mb-2">{card.title}</p>
-                              <p className="text-lg font-black leading-snug text-white">{card.value}</p>
-                            </motion.div>
-                          );
-                        })}
+                          { label: 'Tono', val: detectedTone, color: 'emerald' },
+                          { label: 'Público', val: suggestedAudience, color: 'purple' },
+                          { label: 'Meta', val: suggestedObjective, color: 'cyan' }
+                        ].map((item, idx) => (
+                          <motion.div 
+                            key={idx}
+                            initial={{ opacity: 0, y: 15 }} 
+                            animate={{ opacity: 1, y: 0 }} 
+                            transition={{ delay: idx * 0.1 }} 
+                            className={`p-8 rounded-[36px] border border-${item.color}-500/20 bg-gradient-to-br from-${item.color}-500/[0.08] to-transparent hover:scale-[1.02] transition-all group`}
+                          >
+                            <p className={`text-[10px] font-black uppercase tracking-[0.25em] text-${item.color}-400 mb-4 opacity-70 group-hover:opacity-100 transition-opacity`}>{item.label}</p>
+                            <p className="text-2xl font-black leading-tight text-white capitalize">{item.val}</p>
+                          </motion.div>
+                        ))}
                       </div>
 
-                      <div className="p-8 rounded-[34px] bg-white/5 border border-white/10 relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
-                          <SparklesIcon className="w-20 h-20 text-emerald-500" />
-                        </div>
-                        <div className="flex items-center gap-3 mb-4">
-                          <div className="p-1.5 bg-emerald-500/20 rounded-lg">
-                            <SparklesIcon className="w-4 h-4 text-emerald-500" />
-                          </div>
-                          <span className="text-[11px] font-black uppercase tracking-[0.2em] text-emerald-500">¿Por qué esto funcionará?</span>
-                        </div>
-                        <p className="text-gray-300 font-medium leading-relaxed relative z-10 italic text-base">
-                          "He analizado tu {detectedBusinessLabel} y detectado que un tono <span className="text-white font-bold">{detectedTone}</span> con un enfoque en <span className="text-white font-bold">{suggestedObjective}</span> es la forma más rápida de generar confianza en {suggestedAudience.toLowerCase()}."
-                        </p>
-                      </div>
+                      <motion.div 
+                        initial={{ opacity: 0, y: 12 }} 
+                        animate={{ opacity: 1, y: 0 }} 
+                        transition={{ delay: 0.3 }} 
+                        className="relative z-10 bg-black/40 border border-white/[0.06] rounded-[40px] p-2 shadow-2xl"
+                      >
+                        <AIAgentBar 
+                          context={{
+                            businessName: config.businessName,
+                            promote: config.promote,
+                            idealCustomer: `${suggestedAudience} — ${suggestedObjective}`,
+                            location: config.location,
+                            generatedAds: [],
+                            uploadedAssets: []
+                          }} 
+                          onUpdateAds={() => {}}
+                          onAddAssets={() => {}}
+                        />
+                      </motion.div>
 
-                      <div className="flex gap-4 pt-2">
-                        <Button variant="ghost" onClick={() => setStep(2)} className="flex-1 py-8 rounded-2xl font-bold">Atrás</Button>
-                        <Button onClick={() => { setConfig({ ...config, idealCustomer: `${suggestedAudience} — ${suggestedObjective}` }); setStep(4); }} className="flex-[2] py-8 text-xl font-black bg-emerald-500 hover:bg-emerald-600 rounded-2xl shadow-xl shadow-emerald-500/20">Confirmar y elegir inversión <ArrowRight className="ml-2 w-6 h-6" /></Button>
+                      <div className="flex gap-4 pt-6 relative z-10">
+                        <Button variant="ghost" onClick={() => setStep(2)} className="flex-1 h-16 rounded-2xl font-bold text-gray-400 hover:text-white">Atrás</Button>
+                        <Button 
+                          onClick={() => { setConfig({ ...config, idealCustomer: `${suggestedAudience} — ${suggestedObjective}` }); setStep(4); }} 
+                          className="flex-[2] h-16 text-xl font-black bg-emerald-500 hover:bg-emerald-400 text-black rounded-2xl shadow-xl shadow-emerald-500/20 group"
+                        >
+                          Confirmar y asignar presupuesto <ArrowRight className="ml-2 w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                        </Button>
                       </div>
                     </motion.div>
                   )}
 
                   {step === 4 && (
-                    <motion.div key="step4" initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.35 }} className="space-y-7 rounded-[40px] border border-white/10 bg-white/[0.045] backdrop-blur-3xl p-6 md:p-8 shadow-2xl shadow-black/30">
-                      <div className="text-center max-w-3xl mx-auto">
-                        <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-400 mb-3">¿Cuánto quieres invertir?</p>
-                        <h3 className="text-3xl md:text-4xl font-black tracking-tight">Presupuesto a tu medida</h3>
-                        <p className="text-gray-400 font-medium mt-3">Tú decides el monto exacto. Puedes empezar con $5, probar con $10 o escalar hasta $2,000 según tu objetivo.</p>
+                    <motion.div 
+                      key="step4" 
+                      initial={{ opacity: 0, scale: 0.98, y: 10 }} 
+                      animate={{ opacity: 1, scale: 1, y: 0 }} 
+                      exit={{ opacity: 0, scale: 0.98, y: -10 }} 
+                      transition={{ duration: 0.4, ease: "easeOut" }} 
+                      className="space-y-8 glass-card rounded-[48px] p-8 md:p-12 shadow-2xl relative overflow-hidden"
+                    >
+                      <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-emerald-500/[0.05] blur-[180px] rounded-full pointer-events-none" />
+
+                      <div className="text-center max-w-2xl mx-auto relative z-10">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-300 text-[10px] font-black uppercase tracking-[0.2em] mb-6">
+                          <CreditCard className="w-4 h-4" /> 04. Inversión Inteligente
+                        </div>
+                        <h3 className="text-4xl md:text-6xl font-black tracking-tighter leading-[1.1]">Presupuesto <span className="text-emerald-500 italic">a tu medida</span></h3>
+                        <p className="text-gray-400 font-medium mt-5 text-xl">Tú decides el ritmo. Empieza con poco o escala para dominar tu mercado.</p>
                       </div>
 
-                      <div className="rounded-[34px] border border-emerald-500/25 bg-gradient-to-br from-emerald-500/12 via-white/[0.04] to-black/20 p-6 md:p-8 shadow-2xl shadow-emerald-500/10">
-                        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8">
-                          <div>
-                            <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-300 mb-3">Inversión diaria</p>
-                            <motion.p key={config.budget} initial={{ scale: 0.96, opacity: 0.7 }} animate={{ scale: 1, opacity: 1 }} className="text-6xl md:text-7xl font-black tracking-tight text-emerald-300 drop-shadow-[0_0_28px_rgba(16,185,129,0.45)]">
-                              {formatBudget(config.budget)}
-                            </motion.p>
-                          </div>
-                          <div className="rounded-[24px] border border-white/10 bg-black/25 px-5 py-4 md:min-w-[260px]">
-                            <p className="text-xs font-black uppercase tracking-widest text-gray-500 mb-2">Recomendación</p>
-                            <p className="font-bold text-gray-200 leading-relaxed">{budgetRecommendation}</p>
-                          </div>
+                      <div className="rounded-[40px] border border-white/[0.06] bg-gradient-to-br from-white/[0.03] to-transparent p-8 md:p-12 shadow-2xl relative z-10">
+                        <div className="text-center mb-12">
+                          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500/60 mb-6">Inversión diaria sugerida</p>
+                          <motion.p 
+                            key={config.budget} 
+                            initial={{ scale: 0.95, opacity: 0.8 }} 
+                            animate={{ scale: 1, opacity: 1 }} 
+                            className="text-[110px] md:text-[160px] font-black tracking-tighter leading-none text-white drop-shadow-[0_0_80px_rgba(16,185,129,0.3)]"
+                          >
+                            {formatBudget(config.budget)}
+                          </motion.p>
+                          <p className="text-gray-400 font-bold mt-8 max-w-md mx-auto text-lg leading-relaxed">{budgetRecommendation}</p>
                         </div>
 
-                        <div className="relative pt-3 pb-8">
+                        <div className="relative pt-4 pb-12">
                           <input
                             type="range"
                             min={MIN_BUDGET}
@@ -861,10 +936,10 @@ const FlowsightAdsDashboard: React.FC = () => {
                             step={5}
                             value={config.budget}
                             onChange={(e) => setConfig({ ...config, budget: Number(e.target.value) })}
-                            className="w-full h-4 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-8 [&::-webkit-slider-thumb]:w-8 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-emerald-300 [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-black [&::-webkit-slider-thumb]:shadow-[0_0_28px_rgba(16,185,129,0.9)] [&::-moz-range-thumb]:h-8 [&::-moz-range-thumb]:w-8 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-emerald-300 [&::-moz-range-thumb]:border-4 [&::-moz-range-thumb]:border-black"
-                            style={{ background: `linear-gradient(90deg, #10b981 0%, #34d399 ${budgetSliderProgress}%, rgba(255,255,255,0.12) ${budgetSliderProgress}%, rgba(255,255,255,0.12) 100%)` }}
+                            className="w-full h-3 rounded-full appearance-none cursor-pointer bg-white/5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-10 [&::-webkit-slider-thumb]:w-10 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-emerald-500 [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-black [&::-webkit-slider-thumb]:shadow-[0_0_30px_rgba(16,185,129,0.8)] [&::-moz-range-thumb]:h-10 [&::-moz-range-thumb]:w-10 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-emerald-500 [&::-moz-range-thumb]:border-4 [&::-moz-range-thumb]:border-black"
+                            style={{ background: `linear-gradient(90deg, #10b981 0%, #34d399 ${budgetSliderProgress}%, rgba(255,255,255,0.05) ${budgetSliderProgress}%, rgba(255,255,255,0.05) 100%)` }}
                           />
-                          <div className="flex justify-between text-xs font-black uppercase tracking-widest text-gray-500 mt-4">
+                          <div className="flex justify-between text-[10px] font-black uppercase tracking-[0.2em] text-gray-600 mt-6 px-2">
                             <span>$5</span>
                             <span>$500</span>
                             <span>$1,000</span>
@@ -872,45 +947,53 @@ const FlowsightAdsDashboard: React.FC = () => {
                           </div>
                         </div>
 
-                        <div className="grid md:grid-cols-3 gap-4">
-                          <div className="p-5 rounded-[24px] bg-blue-500/5 border border-blue-500/10">
-                            <p className="text-[10px] text-blue-400/80 font-black uppercase tracking-widest mb-2">Alcance estimado</p>
-                            <p className="text-xl font-black text-white">{budgetProjection.reach}</p>
-                          </div>
-                          <div className="p-5 rounded-[24px] bg-purple-500/5 border border-purple-500/10">
-                            <p className="text-[10px] text-purple-400/80 font-black uppercase tracking-widest mb-2">Clicks estimados</p>
-                            <p className="text-xl font-black text-white">{budgetProjection.clicks}</p>
-                          </div>
-                          <div className="p-5 rounded-[24px] bg-emerald-500/10 border border-emerald-500/20 shadow-[inset_0_0_20px_rgba(16,185,129,0.05)]">
-                            <p className="text-[10px] text-emerald-400 font-black uppercase tracking-widest mb-2">Clientes potenciales</p>
-                            <p className="text-xl font-black text-white">{budgetProjection.leads}</p>
-                          </div>
+                        <div className="grid md:grid-cols-3 gap-6">
+                          {[
+                            { label: 'Alcance estimado', val: budgetProjection.reach, color: 'blue', desc: 'Personas únicas' },
+                            { label: 'Interacciones', val: budgetProjection.clicks, color: 'purple', desc: 'Clicks potenciales' },
+                            { label: 'Leads esperados', val: budgetProjection.leads, color: 'emerald', desc: 'Contactos directos' }
+                          ].map((item, idx) => (
+                            <div key={idx} className={`p-6 rounded-[32px] bg-${item.color}-500/[0.03] border border-${item.color}-500/10 backdrop-blur-sm`}>
+                              <p className={`text-[10px] text-${item.color}-400/80 font-black uppercase tracking-[0.2em] mb-3`}>{item.label}</p>
+                              <p className="text-2xl font-black text-white">{item.val.split(' ')[0]}</p>
+                              <p className="text-[10px] text-gray-500 font-bold mt-1 uppercase tracking-widest">{item.desc}</p>
+                            </div>
+                          ))}
                         </div>
                       </div>
 
-                      <div className="flex gap-4 pt-2">
-                        <Button variant="ghost" onClick={() => setStep(3)} className="flex-1 py-8 rounded-2xl font-bold">Atrás</Button>
-                        <Button onClick={() => setStep(5)} className="flex-[2] py-8 text-xl font-black bg-emerald-500 hover:bg-emerald-600 rounded-2xl shadow-xl shadow-emerald-500/20">Personalizar contenido <ArrowRight className="ml-2 w-6 h-6" /></Button>
+                      <div className="flex gap-4 pt-6">
+                        <Button variant="ghost" onClick={() => setStep(3)} className="flex-1 h-16 rounded-2xl font-bold text-gray-400 hover:text-white">Atrás</Button>
+                        <Button onClick={() => setStep(5)} className="flex-[2] h-16 text-xl font-black bg-emerald-500 hover:bg-emerald-400 text-black rounded-2xl shadow-xl shadow-emerald-500/20 active:scale-[0.98] transition-all">Personalizar contenido <ArrowRight className="ml-2 w-6 h-6" /></Button>
                       </div>
                     </motion.div>
                   )}
 
                   {step === 5 && (
-                    <motion.div key="step5" initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.35 }} className="space-y-8 rounded-[40px] border border-white/10 bg-white/[0.045] backdrop-blur-3xl p-6 md:p-8 shadow-2xl shadow-black/30">
-                      <div className="text-center max-w-3xl mx-auto">
-                        <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-400 mb-3">Personaliza si quieres</p>
-                        <h3 className="text-3xl md:text-4xl font-black tracking-tight">Contenido del anuncio</h3>
-                        <p className="text-gray-400 font-medium mt-3">Puedes lanzar solo con copy o subir material visual. También dejamos listo un prompt optimizado para herramientas externas de IA.</p>
+                    <motion.div 
+                      key="step5" 
+                      initial={{ opacity: 0, scale: 0.98, y: 10 }} 
+                      animate={{ opacity: 1, scale: 1, y: 0 }} 
+                      exit={{ opacity: 0, scale: 0.98, y: -10 }} 
+                      transition={{ duration: 0.4, ease: "easeOut" }} 
+                      className="space-y-10 glass-card rounded-[48px] p-8 md:p-12 shadow-2xl relative overflow-hidden"
+                    >
+                      <div className="text-center max-w-2xl mx-auto">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-300 text-[10px] font-black uppercase tracking-[0.2em] mb-6">
+                          <ImageIcon className="w-4 h-4" /> 05. Activos Visuales
+                        </div>
+                        <h3 className="text-4xl md:text-6xl font-black tracking-tighter leading-tight">Potencia el visual</h3>
+                        <p className="text-gray-400 font-medium mt-5 text-xl">Lanza solo con copy o eleva la campaña con tus propias piezas. Nuestra IA adaptará la estrategia al formato elegido.</p>
                       </div>
 
                       <div className="grid md:grid-cols-4 gap-4">
                         {contentTypes.map((type) => {
                           const Icon = type.icon;
                           const colorConfig = {
-                            copyonly: { border: 'hover:border-blue-500/50', bg: 'hover:bg-blue-500/5', selected: 'bg-blue-500/10 border-blue-500/40', icon: 'text-blue-400' },
-                            image: { border: 'hover:border-purple-500/50', bg: 'hover:bg-purple-500/5', selected: 'bg-purple-500/10 border-purple-500/40', icon: 'text-purple-400' },
-                            carousel: { border: 'hover:border-amber-500/50', bg: 'hover:bg-amber-500/5', selected: 'bg-amber-500/10 border-amber-500/40', icon: 'text-amber-400' },
-                            video: { border: 'hover:border-emerald-500/50', bg: 'hover:bg-emerald-500/5', selected: 'bg-emerald-500/10 border-emerald-500/40', icon: 'text-emerald-400' },
+                            copyonly: { border: 'hover:border-blue-500/50', bg: 'hover:bg-blue-500/5', selected: 'bg-blue-500/10 border-blue-500/40 shadow-[0_0_30px_rgba(59,130,246,0.2)]', icon: 'text-blue-400' },
+                            image: { border: 'hover:border-purple-500/50', bg: 'hover:bg-purple-500/5', selected: 'bg-purple-500/10 border-purple-500/40 shadow-[0_0_30px_rgba(168,85,247,0.2)]', icon: 'text-purple-400' },
+                            carousel: { border: 'hover:border-amber-500/50', bg: 'hover:bg-amber-500/5', selected: 'bg-amber-500/10 border-amber-500/40 shadow-[0_0_30px_rgba(245,158,11,0.2)]', icon: 'text-amber-400' },
+                            video: { border: 'hover:border-emerald-500/50', bg: 'hover:bg-emerald-500/5', selected: 'bg-emerald-500/10 border-emerald-500/40 shadow-[0_0_30px_rgba(16,185,129,0.2)]', icon: 'text-emerald-400' },
                           }[type.id as keyof typeof colorConfig];
 
                           const isActive = imageMode === type.id;
@@ -918,54 +1001,55 @@ const FlowsightAdsDashboard: React.FC = () => {
                           return (
                             <motion.button
                               key={type.id}
-                              whileHover={{ y: -4, scale: 1.02 }}
-                              whileTap={{ scale: 0.98 }}
+                              whileHover={{ y: -5, scale: 1.02 }}
+                              whileTap={{ scale: 0.97 }}
                               onClick={() => handleImageModeSelect(type.id)}
-                              className={`p-5 rounded-[26px] border-2 transition-all text-left relative overflow-hidden group ${isActive ? colorConfig.selected : `bg-white/5 border-white/10 ${colorConfig.border} ${colorConfig.bg}`}`}
+                              className={`p-6 rounded-[32px] border-2 transition-all text-left relative overflow-hidden group ${isActive ? colorConfig.selected : `bg-white/[0.03] border-white/[0.06] ${colorConfig.border} ${colorConfig.bg}`}`}
                             >
-                              <div className={`absolute top-0 right-0 p-4 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity ${colorConfig.icon}`}>
-                                <Icon className="w-12 h-12" />
+                              <div className={`absolute -top-2 -right-2 p-6 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity ${colorConfig.icon} group-hover:scale-125 transition-transform duration-500`}>
+                                <Icon className="w-16 h-16" />
                               </div>
-                              <Icon className={`w-7 h-7 mb-5 transition-colors ${isActive ? colorConfig.icon : `${colorConfig.icon} opacity-60 group-hover:opacity-100`}`} />
-                              <p className="font-black text-white text-lg relative z-10">{type.title}</p>
-                              <p className="text-xs text-gray-400 mt-1 font-medium relative z-10">{type.description}</p>
+                              <Icon className={`w-8 h-8 mb-6 transition-all duration-300 ${isActive ? colorConfig.icon : `${colorConfig.icon} opacity-50 group-hover:opacity-100`}`} />
+                              <p className="font-black text-white text-xl relative z-10 tracking-tight">{type.title}</p>
+                              <p className="text-[10px] text-gray-500 mt-1 font-bold uppercase tracking-widest relative z-10">{type.description}</p>
                             </motion.button>
                           );
                         })}
                       </div>
 
                       {imageMode !== 'copyonly' && (
-                        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
-                          <label className="text-xs font-black uppercase tracking-widest text-emerald-500">Sube tus archivos</label>
-                          <div onClick={() => fileInputRef.current?.click()} className="border-2 border-dashed border-white/10 rounded-[32px] p-8 flex flex-col items-center justify-center gap-4 hover:border-emerald-500/50 hover:bg-emerald-500/5 transition-all cursor-pointer group min-h-[220px]">
-                            <div className="p-5 bg-white/5 rounded-3xl group-hover:scale-110 transition-transform">
-                              <Upload className="w-10 h-10 text-emerald-500" />
+                        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+                          <label className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-500/60 ml-4">Centro de Carga</label>
+                          <div 
+                            onClick={() => fileInputRef.current?.click()} 
+                            className="border-2 border-dashed border-white/[0.08] rounded-[40px] p-12 flex flex-col items-center justify-center gap-6 hover:border-emerald-500/40 hover:bg-emerald-500/[0.02] transition-all cursor-pointer group min-h-[280px] bg-black/20"
+                          >
+                            <div className="p-6 bg-white/[0.03] rounded-[28px] border border-white/[0.06] group-hover:scale-110 group-hover:bg-emerald-500/10 group-hover:border-emerald-500/20 transition-all duration-500 shadow-xl">
+                              <Upload className="w-12 h-12 text-emerald-500" />
                             </div>
                             <div className="text-center">
-                              <p className="font-black text-white">Arrastra o selecciona tus archivos</p>
-                              <p className="text-sm text-gray-400 font-medium mt-1">Puedes cargar múltiples imágenes para carrusel o referencias visuales.</p>
+                              <p className="font-black text-white text-xl tracking-tight group-hover:text-emerald-400 transition-colors">Sube tus creativos maestros</p>
+                              <p className="text-sm text-gray-500 font-bold mt-2 max-w-sm">Aceptamos imágenes de alta resolución y video en formato vertical u horizontal.</p>
                             </div>
                             <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*,video/*" multiple className="hidden" />
                           </div>
+                          
                           {uploadedAssets.length > 0 && (
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                               {uploadedAssets.map((asset) => (
-                                <div key={asset.name} className="relative group rounded-2xl overflow-hidden border border-white/10 bg-white/5 aspect-video">
+                                <div key={asset.name} className="relative group rounded-[24px] overflow-hidden border border-white/[0.08] bg-black shadow-2xl aspect-square">
                                   {asset.type === 'video' ? (
-                                    <video src={asset.dataUrl} className="w-full h-full object-cover" muted loop autoPlay />
+                                    <video src={asset.dataUrl} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" muted loop autoPlay />
                                   ) : (
-                                    <img src={asset.dataUrl} alt={asset.name} className="w-full h-full object-cover" />
+                                    <img src={asset.dataUrl} alt={asset.name} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
                                   )}
-                                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center">
                                     <button 
                                       onClick={(e) => { e.stopPropagation(); handleRemoveAsset(asset.name); }}
-                                      className="p-2 bg-red-500 rounded-full hover:bg-red-600 transition-colors"
+                                      className="p-3 bg-red-500/80 hover:bg-red-600 rounded-2xl transition-all hover:scale-110 active:scale-95 shadow-xl"
                                     >
-                                      <X className="w-4 h-4 text-white" />
+                                      <X className="w-5 h-5 text-white" />
                                     </button>
-                                  </div>
-                                  <div className="absolute bottom-0 left-0 right-0 p-2 bg-black/60 backdrop-blur-sm">
-                                    <p className="text-[10px] text-white font-bold truncate">{asset.name}</p>
                                   </div>
                                 </div>
                               ))}
@@ -974,45 +1058,76 @@ const FlowsightAdsDashboard: React.FC = () => {
                         </motion.div>
                       )}
 
-                      <div className="grid lg:grid-cols-[1fr_0.9fr] gap-5">
-                        <div className="p-6 rounded-[30px] bg-white/5 border border-white/10">
-                          <div className="flex items-center justify-between gap-4 mb-5">
+                      <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-6">
+                        <div className="p-8 rounded-[40px] bg-white/[0.02] border border-white/[0.06] shadow-inner relative overflow-hidden group">
+                          <div className="absolute top-0 right-0 p-8 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity">
+                            <Sparkles className="w-24 h-24 text-emerald-400" />
+                          </div>
+                          <div className="flex items-center justify-between gap-6 mb-8 relative z-10">
                             <div>
-                              <p className="text-xs font-black uppercase tracking-widest text-emerald-400 mb-2">Prompt para IA externa</p>
-                              <h4 className="text-2xl font-black">Listo para copiar</h4>
+                              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500/60 mb-3">Generador de Prompts</p>
+                              <h4 className="text-3xl font-black tracking-tight">IA Engine Ready</h4>
                             </div>
-                            <Button variant="outline" onClick={handleCopyAiPrompt} className="rounded-2xl border-white/10 hover:bg-white/10 font-black gap-2">
-                              {promptCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                              {promptCopied ? 'Copiado' : 'Copiar prompt'}
+                            <Button 
+                              variant="outline" 
+                              onClick={handleCopyAiPrompt} 
+                              className="h-12 px-6 rounded-2xl border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.08] font-black gap-2 transition-all active:scale-95"
+                            >
+                              {promptCopied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                              {promptCopied ? '¡Copiado!' : 'Copiar prompt'}
                             </Button>
                           </div>
-                          <pre className="whitespace-pre-wrap text-sm text-gray-300 leading-relaxed bg-black/30 border border-white/10 rounded-2xl p-5 font-sans max-h-64 overflow-auto">{generatedAiPrompt}</pre>
+                          <div className="relative">
+                            <div className="absolute inset-0 bg-emerald-500/5 blur-xl rounded-3xl opacity-50" />
+                            <pre className="relative whitespace-pre-wrap text-sm text-gray-400 leading-relaxed bg-black/40 border border-white/[0.06] rounded-[28px] p-8 font-sans max-h-64 overflow-auto scrollbar-thin shadow-inner italic">
+                              {generatedAiPrompt}
+                            </pre>
+                          </div>
                         </div>
 
-                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-4 p-6 rounded-[30px] bg-white/5 border border-white/10">
-                          <div className="flex items-center justify-between mb-3">
-                            <label className="text-xs font-black uppercase tracking-widest text-emerald-500">Potencial de tu campaña</label>
-                            <span className="text-3xl font-black text-white">{estimatedScore}/100</span>
+                        <div className="flex flex-col justify-between p-8 rounded-[40px] bg-gradient-to-br from-emerald-500/[0.08] to-transparent border border-emerald-500/20 shadow-2xl relative overflow-hidden group">
+                          <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-emerald-500/10 blur-[60px] rounded-full" />
+                          <div>
+                            <div className="flex items-center justify-between mb-6 relative z-10">
+                              <label className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-400">Eficiencia Estimada</label>
+                              <span className="text-4xl font-black text-white tracking-tighter shadow-emerald-500/20">{estimatedScore}<span className="text-emerald-500/40">/100</span></span>
+                            </div>
+                            <div className="w-full bg-white/[0.06] rounded-full h-4 overflow-hidden shadow-inner p-0.5 border border-white/[0.04] mb-6">
+                              <motion.div 
+                                animate={{ width: `${estimatedScore}%` }} 
+                                transition={{ duration: 1.5, ease: 'easeOut' }} 
+                                className="h-full bg-gradient-to-r from-emerald-600 via-emerald-400 to-cyan-400 rounded-full shadow-[0_0_25px_rgba(16,185,129,0.5)]" 
+                              />
+                            </div>
+                            <p className="text-base text-gray-300 font-bold leading-relaxed mb-8">{getScoreMessage()}</p>
                           </div>
-                          <div className="w-full bg-white/10 rounded-full h-3 overflow-hidden shadow-inner">
-                            <motion.div 
-                              animate={{ width: `${estimatedScore}%` }} 
-                              transition={{ duration: 1, ease: 'easeOut' }} 
-                              className="h-full bg-gradient-to-r from-emerald-500 to-cyan-400 shadow-[0_0_20px_rgba(16,185,129,0.5)]" 
-                            />
+                          
+                          <div className="space-y-3 pt-6 border-t border-white/[0.08] relative z-10">
+                            {[
+                              { label: 'Formato', val: selectedContentType.title },
+                              { label: 'Inversión', val: formatBudget(config.budget) },
+                              { label: 'Objetivo', val: suggestedObjective }
+                            ].map((item, i) => (
+                              <div key={i} className="flex justify-between items-center text-xs">
+                                <span className="text-gray-500 font-black uppercase tracking-widest">{item.label}</span>
+                                <span className="text-white font-black">{item.val}</span>
+                              </div>
+                            ))}
                           </div>
-                          <p className="text-sm text-gray-400 font-medium">{getScoreMessage()}</p>
-                          <div className="pt-4 space-y-3 text-sm text-gray-300 font-bold">
-                            <p>Formato: {selectedContentType.title}</p>
-                            <p>Presupuesto: {formatBudget(config.budget)}</p>
-                            <p>Objetivo: {suggestedObjective}</p>
-                          </div>
-                        </motion.div>
+                        </div>
                       </div>
 
-                      <div className="flex gap-4 pt-2">
-                        <Button variant="ghost" onClick={() => setStep(4)} className="flex-1 py-8 rounded-2xl font-bold">Atrás</Button>
-                        <Button onClick={handleGenerate} className="flex-[2] py-8 text-xl font-black bg-emerald-500 hover:bg-emerald-600 rounded-2xl shadow-xl shadow-emerald-500/20 group">Generar Campaña Maestra <Zap className="ml-2 w-6 h-6 group-hover:animate-pulse" /></Button>
+                      <div className="flex gap-4 pt-6">
+                        <Button variant="ghost" onClick={() => setStep(4)} className="flex-1 h-20 rounded-[28px] font-black uppercase tracking-widest text-xs text-gray-500 hover:text-white hover:bg-white/5">Atrás</Button>
+                        <Button 
+                          onClick={handleGenerate} 
+                          className="flex-[2.5] h-20 text-2xl font-black bg-emerald-500 hover:bg-emerald-400 text-black rounded-[28px] shadow-[0_20px_60px_rgba(16,185,129,0.4)] transition-all active:scale-[0.98] group overflow-hidden relative"
+                        >
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                          <span className="relative z-10 flex items-center gap-3">
+                            Lanzar Estrategia Maestra <Zap className="w-7 h-7 fill-black group-hover:animate-pulse" />
+                          </span>
+                        </Button>
                       </div>
                     </motion.div>
                   )}
@@ -1020,53 +1135,62 @@ const FlowsightAdsDashboard: React.FC = () => {
               </div>
             </motion.div>
           ) : (
-            <motion.div key="results" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-12">
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-                <div className="flex-1 max-w-2xl">
-                  <h2 className="text-4xl font-black tracking-tight mb-2">Tu Estrategia <span className="text-emerald-500">Premium</span></h2>
-                  <p className="text-lg text-gray-400 font-medium mb-6">
-                    {hasPaid ? 'Análisis y activos optimizados para máxima conversión.' : 'Previsualiza tu campaña. Desbloquea para obtener el material profesional.'}
+            <motion.div key="results" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-16">
+
+              <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-10">
+                <div className="flex-1 max-w-3xl">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-400 text-[10px] font-black uppercase tracking-[0.2em] mb-6">
+                    <Sparkles className="w-4 h-4" /> Campaña Optimizada
+                  </div>
+                  <h2 className="text-5xl md:text-7xl font-black tracking-tighter mb-4 text-shadow-premium leading-[0.9]">Estrategia <span className="text-emerald-500 italic">Premium</span></h2>
+                  <p className="text-xl text-gray-400 font-medium mb-10 leading-relaxed">
+                    {hasPaid ? 'Análisis y activos optimizados por IA para máxima conversión en cada plataforma.' : 'Previsualiza tu campaña maestra. Desbloquea el material profesional para empezar a vender.'}
                   </p>
                   
-                  <AIAgentBar 
-                    context={{
-                      businessName: config.businessName,
-                      promote: config.promote,
-                      idealCustomer: config.idealCustomer,
-                      location: config.location,
-                      generatedAds: generatedAds,
-                      uploadedAssets: uploadedAssets
-                    }} 
-                    onUpdateAds={(newAds) => {
-                      setGeneratedAds(prev => {
-                        const updated = [...prev];
-                        newAds.forEach(newAd => {
-                          const idx = updated.findIndex(a => a.platform === newAd.platform);
-                          if (idx !== -1) {
-                            updated[idx] = { ...updated[idx], ...newAd, isUpdating: true };
-                            // Remover el flag después de la animación
-                            setTimeout(() => {
-                              setGeneratedAds(current => current.map(a => 
-                                a.platform === newAd.platform ? { ...a, isUpdating: false } : a
-                              ));
-                            }, 2000);
-                          } else {
-                            updated.push({ ...newAd, isUpdating: true });
-                          }
-                        });
-                        return updated;
-                      });
-                      toast.success("¡Estrategia actualizada por la IA!", {
-                        description: "Los copys y activos han sido optimizados.",
-                        icon: <Sparkles className="w-5 h-5 text-yellow-400" />,
-                        duration: 5000,
-                      });
-                    }}
-                    onAddAssets={processFiles}
-                  />
+                  <div className="relative group">
+                    <div className="absolute -inset-1 bg-emerald-500/10 rounded-[40px] blur-xl opacity-50 group-hover:opacity-100 transition-opacity" />
+                    <div className="relative bg-black/40 border border-white/[0.06] rounded-[40px] p-2 shadow-2xl backdrop-blur-3xl">
+                      <AIAgentBar 
+                        context={{
+                          businessName: config.businessName,
+                          promote: config.promote,
+                          idealCustomer: config.idealCustomer,
+                          location: config.location,
+                          generatedAds: generatedAds,
+                          uploadedAssets: uploadedAssets
+                        }} 
+                        onUpdateAds={(newAds) => {
+                          setGeneratedAds(prev => {
+                            const updated = [...prev];
+                            newAds.forEach(newAd => {
+                              const idx = updated.findIndex(a => a.platform === newAd.platform);
+                              if (idx !== -1) {
+                                updated[idx] = { ...updated[idx], ...newAd, isUpdating: true };
+                                // Remover el flag después de la animación
+                                setTimeout(() => {
+                                  setGeneratedAds(current => current.map(a => 
+                                    a.platform === newAd.platform ? { ...a, isUpdating: false } : a
+                                  ));
+                                }, 2000);
+                              } else {
+                                updated.push({ ...newAd, isUpdating: true });
+                              }
+                            });
+                            return updated;
+                          });
+                          toast.success("¡Estrategia actualizada por la IA!", {
+                            description: "Los copys y activos han sido optimizados.",
+                            icon: <Sparkles className="w-5 h-5 text-yellow-400" />,
+                            duration: 5000,
+                          });
+                        }}
+                        onAddAssets={processFiles}
+                      />
+                    </div>
+                  </div>
                 </div>
-                <Button variant="outline" onClick={() => setShowResults(false)} className="rounded-2xl font-bold px-6 py-6 border-white/10 hover:bg-white/5 shrink-0">
-                  <RefreshCw className="w-4 h-4 mr-2" /> Nueva Campaña
+                <Button variant="outline" onClick={() => setShowResults(false)} className="h-20 px-10 rounded-[28px] font-black uppercase tracking-widest text-xs border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.08] transition-all hover:scale-105 active:scale-95 group">
+                  <RefreshCw className="w-5 h-5 mr-3 group-hover:rotate-180 transition-transform duration-700" /> Nueva Campaña
                 </Button>
               </div>
 
@@ -1077,62 +1201,61 @@ const FlowsightAdsDashboard: React.FC = () => {
 
               {/* PREMIUM DELIVERY CONTAINER */}
               <div 
-                className="relative rounded-[48px] p-1 transition-all duration-700"
+                className="relative rounded-[64px] p-1.5 transition-all duration-700 shadow-2xl"
                 style={{ 
                   background: `linear-gradient(135deg, ${currentTheme.border}, transparent, ${currentTheme.border})`,
-                  boxShadow: `0 0 80px -20px ${currentTheme.glow}`
+                  boxShadow: `0 0 100px -30px ${currentTheme.glow}`
                 }}
               >
                 <div 
-                  className="rounded-[46px] p-8 lg:p-14 relative overflow-hidden"
+                  className="rounded-[60px] p-10 lg:p-20 relative overflow-hidden"
                   style={{
-                    background: 'linear-gradient(145deg, rgba(15,15,15,0.98) 0%, rgba(10,10,10,1) 100%)',
-                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04), inset 0 -1px 0 rgba(0,0,0,0.3)',
-                    backdropFilter: 'blur(40px)',
+                    background: 'linear-gradient(145deg, rgba(10,10,10,0.98) 0%, rgba(5,5,5,1) 100%)',
+                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05), inset 0 -1px 0 rgba(0,0,0,0.5)',
+                    backdropFilter: 'blur(60px)',
                   }}
                 >
                   {/* Dynamic Background with Radial Gradients */}
                   <div className="absolute inset-0 overflow-hidden pointer-events-none">
                     <div 
-                      className="absolute -top-40 -right-40 w-[600px] h-[600px] blur-[150px] rounded-full opacity-20 transition-all duration-1000"
+                      className="absolute -top-40 -right-40 w-[800px] h-[800px] blur-[200px] rounded-full opacity-25 transition-all duration-1000 animate-pulse"
                       style={{ background: currentTheme.primary }}
                     />
                     <div 
-                      className="absolute -bottom-40 -left-40 w-[500px] h-[500px] blur-[150px] rounded-full opacity-15 transition-all duration-1000"
+                      className="absolute -bottom-40 -left-40 w-[700px] h-[700px] blur-[200px] rounded-full opacity-20 transition-all duration-1000"
                       style={{ background: currentTheme.secondary || currentTheme.primary }}
                     />
                   </div>
                   
-                  {/* RESTAURADO: Platform Selector Grid original (más grande) */}
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16 relative z-10">
+                  {/* Platform Selector Grid */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20 relative z-10">
                     {(['google', 'meta', 'tiktok', 'linkedin'] as const).map((platform) => {
                       const isSelected = selectedPlatform === platform;
                       const theme = platformThemes[platform];
                       return (
                         <motion.button
                           key={platform}
-                          whileHover={{ y: -4, scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
+                          whileHover={{ y: -8, scale: 1.03 }}
+                          whileTap={{ scale: 0.97 }}
                           onClick={() => setSelectedPlatform(platform)}
-                          className={`relative p-7 rounded-[32px] flex items-center gap-5 transition-all duration-500 group overflow-hidden ${
+                          className={`relative p-8 rounded-[40px] flex flex-col items-center gap-6 transition-all duration-700 group overflow-hidden border ${
                             isSelected 
-                              ? `bg-gradient-to-br ${theme.gradient} shadow-2xl` 
-                              : 'bg-white/[0.03] hover:bg-white/[0.08] border border-white/5'
+                              ? `bg-gradient-to-br ${theme.gradient} border-white/20 shadow-2xl shadow-${platform === 'meta' ? 'blue' : 'emerald'}-500/20` 
+                              : 'bg-white/[0.02] hover:bg-white/[0.05] border-white/[0.06] hover:border-white/[0.1]'
                           }`}
                         >
-                          <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 shadow-xl flex-shrink-0 ${
-                            isSelected ? 'bg-white scale-110' : 'bg-white/10 group-hover:bg-white/20'
+                          <div className={`w-20 h-20 rounded-[28px] flex items-center justify-center transition-all duration-700 shadow-2xl flex-shrink-0 ${
+                            isSelected ? 'bg-white scale-110 shadow-white/20' : 'bg-white/[0.05] group-hover:bg-white/[0.1]'
                           }`}
-                          style={{ aspectRatio: '1 / 1' }}
                           >
-                            <PlatformIcon platform={platform} size={32} className="!w-8 !h-8" />
+                            <PlatformIcon platform={platform} size={40} className="!w-10 !h-10" />
                           </div>
-                          <div className="text-left">
-                            <p className={`text-[10px] font-black uppercase tracking-[0.2em] mb-1 ${isSelected ? 'text-white/60' : 'text-gray-500'}`}>Plataforma</p>
-                            <p className={`font-black text-base tracking-tight ${isSelected ? 'text-white' : 'text-gray-400'}`}>{platformNames[platform].split(' ')[0]}</p>
+                          <div className="text-center">
+                            <p className={`text-[10px] font-black uppercase tracking-[0.3em] mb-2 ${isSelected ? 'text-white/60' : 'text-gray-600'}`}>Plataforma</p>
+                            <p className={`font-black text-xl tracking-tighter ${isSelected ? 'text-white' : 'text-gray-400'}`}>{platformNames[platform].split(' ')[0]}</p>
                           </div>
                           {isSelected && (
-                            <motion.div layoutId="active-glow" className="absolute inset-0 bg-white/10 blur-xl pointer-events-none" />
+                            <motion.div layoutId="active-glow-main" className="absolute inset-0 bg-white/5 blur-2xl pointer-events-none" />
                           )}
                         </motion.button>
                       );
@@ -1407,6 +1530,80 @@ const FlowsightAdsDashboard: React.FC = () => {
                         </div>
                       </div>
                     </div>
+                  {/* AD CONTENT PREVIEW */}
+                  <div className="relative z-10 grid lg:grid-cols-[1fr_0.8fr] gap-12 items-start">
+                    <div className="space-y-10">
+                      <div className="space-y-4">
+                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500/60 ml-2">Copia Estratégica</p>
+                        <div className="glass-card rounded-[40px] p-10 border-white/[0.06] shadow-inner relative group overflow-hidden">
+                          <div 
+                            className="absolute -top-20 -right-20 w-64 h-64 blur-[100px] opacity-[0.05] rounded-full pointer-events-none"
+                            style={{ background: currentTheme.primary }}
+                          />
+                          <h4 className="text-3xl font-black text-white mb-6 tracking-tight">{currentAd.headline}</h4>
+                          <p className="text-lg text-gray-400 font-medium leading-relaxed italic">"{currentAd.description}"</p>
+                          
+                          <div className="mt-10 flex flex-wrap gap-3">
+                            {currentAd.keywords?.slice(0, 5).map((kw, i) => (
+                              <span key={i} className="px-4 py-2 rounded-xl bg-white/[0.03] border border-white/[0.06] text-[10px] font-black uppercase tracking-widest text-gray-500 hover:text-emerald-400 hover:border-emerald-500/20 transition-all cursor-default">
+                                {kw}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-4">
+                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500/60 ml-2">Acciones de Despliegue</p>
+                        <div className="grid sm:grid-cols-2 gap-6">
+                          <Button 
+                            variant="outline" 
+                            onClick={handleDownloadAssets} 
+                            className="h-24 rounded-[32px] border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.08] font-black text-lg gap-4 shadow-xl transition-all hover:scale-[1.02] active:scale-95 group"
+                          >
+                            <Download className="w-7 h-7 group-hover:translate-y-1 transition-transform" /> Descargar Kit
+                          </Button>
+                          
+                          {selectedPlatform === 'google' ? (
+                            <Button 
+                              onClick={() => navigate('/google-ads-config')}
+                              className="h-24 rounded-[32px] bg-white text-black hover:bg-gray-100 font-black text-lg gap-4 shadow-[0_20px_50px_rgba(255,255,255,0.1)] transition-all hover:scale-[1.02] active:scale-95"
+                            >
+                              <ExternalLink className="w-7 h-7" /> Ir a Google Ads
+                            </Button>
+                          ) : (
+                            <Button 
+                              onClick={() => window.open(platformUrls[selectedPlatform], '_blank')}
+                              className="h-24 rounded-[32px] bg-white text-black hover:bg-gray-100 font-black text-lg gap-4 shadow-[0_20px_50px_rgba(255,255,255,0.1)] transition-all hover:scale-[1.02] active:scale-95"
+                            >
+                              <Zap className="w-7 h-7 fill-black" /> Lanzar en {platformNames[selectedPlatform].split(' ')[0]}
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* MOCKUP PREVIEW */}
+                    <div className="space-y-4">
+                      <p className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500/60 ml-2 text-center lg:text-left">Visualización en Vivo</p>
+                      <div className="relative group mx-auto lg:mx-0 max-w-[380px]">
+                        <div 
+                          className="absolute -inset-4 rounded-[60px] blur-[60px] opacity-20 transition-all duration-1000 group-hover:opacity-40"
+                          style={{ background: currentTheme.primary }}
+                        />
+                        <div className="relative glass-card rounded-[54px] p-4 border-white/[0.1] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.8)]">
+                          <AdMockup
+                            platform={selectedPlatform}
+                            headline={currentAd.headline}
+                            description={currentAd.description}
+                            imageUrl={currentAd.imageUrl}
+                            businessName={config.businessName}
+                            websiteUrl={config.websiteUrl}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
                     <div className="mt-8 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/10">
                       <p className="text-[10px] font-black uppercase tracking-widest text-emerald-400 mb-1">Recomendación</p>

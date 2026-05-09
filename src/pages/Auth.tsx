@@ -136,51 +136,133 @@ const Auth = () => {
         url="/auth"
         noindex={true}
       />
-      <div className="min-h-screen bg-[#050505] text-white selection:bg-white/20">
-        <header className="fixed top-0 inset-x-0 z-50">
-          <nav className="container max-w-7xl mx-auto flex items-center justify-between h-24 px-6">
+      <div className="min-h-screen bg-[#020202] text-white selection:bg-emerald-500/30 font-sans relative overflow-hidden">
+        {/* Background Glows */}
+        <div className="fixed inset-0 pointer-events-none">
+          <div className="absolute top-[-20%] left-[30%] w-[600px] h-[600px] bg-emerald-500/[0.04] blur-[150px] rounded-full" />
+          <div className="absolute bottom-[-10%] right-[20%] w-[400px] h-[400px] bg-cyan-500/[0.03] blur-[120px] rounded-full" />
+        </div>
+
+        <header className="fixed top-0 inset-x-0 z-50 border-b border-white/5 bg-black/20 backdrop-blur-2xl">
+          <nav className="container max-w-7xl mx-auto flex items-center justify-between h-16 px-6">
             <Link 
               to="/" 
-              className="flex items-center gap-3 font-black text-2xl tracking-tighter hover:opacity-80 transition-all"
+              className="flex items-center gap-2.5 font-black text-sm tracking-widest uppercase hover:opacity-80 transition-all text-gray-400"
             >
-              <div className="w-8 h-8 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-cyan-500/20">
-                <BarChart3 className="w-5 h-5 text-white" />
-              </div>
-              <span className="bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60 font-display">FlowSights</span>
+              <ArrowLeft className="w-4 h-4" /> Volver a la web principal
             </Link>
-            <div className="flex items-center gap-6">
-              <ThemeToggle />
-              <Link to="/blog" className="text-xs font-black uppercase tracking-widest text-gray-500 hover:text-white transition-colors flex items-center gap-2 group">
-                <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" /> Blog
-              </Link>
-            </div>
+            <ThemeToggle />
           </nav>
         </header>
 
-      <section className="flex items-center justify-center min-h-screen px-6">
+      <section className="flex items-center justify-center min-h-screen px-6 relative z-10">
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-[440px]"
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="w-full max-w-[480px]"
         >
-          <div className="p-10 rounded-[32px] bg-[#0A0A0A] border border-white/[0.05] shadow-2xl relative overflow-hidden">
-            <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+          {/* Logo */}
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center gap-3 mb-3">
+              <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/25">
+                <BarChart3 className="w-7 h-7 text-black" />
+              </div>
+              <span className="text-3xl font-black tracking-tighter">Flowsight <span className="text-emerald-500">Ads</span></span>
+            </div>
+            <p className="text-gray-500 text-sm font-medium">Lanza tus campañas en todas las plataformas con IA</p>
+          </div>
+
+          <div className="p-10 rounded-[40px] bg-[#0A0A0A]/80 border border-white/[0.06] shadow-[0_40px_100px_rgba(0,0,0,0.6)] relative overflow-hidden backdrop-blur-3xl">
+            <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent" />
+            <div className="absolute bottom-0 inset-x-0 h-[200px] bg-gradient-to-t from-emerald-500/[0.02] to-transparent pointer-events-none" />
             
-            <div className="text-center mb-10">
-              <h1 className="text-4xl font-black tracking-tight mb-3">
-                {mode === "signin" ? "Inicia sesión" : "Crea tu cuenta"}
-              </h1>
-              <p className="text-gray-500 text-sm font-medium">
-                {mode === "signin"
-                  ? "Inicia sesión para participar en la conversación."
-                  : "Crea una cuenta para comentar en nuestros artículos."}
-              </p>
+            {/* Tab Switcher */}
+            <div className="flex gap-1 p-1 bg-white/[0.03] rounded-2xl border border-white/5 mb-10">
+              <button 
+                type="button"
+                onClick={() => setMode("signin")} 
+                className={`flex-1 py-3.5 rounded-xl text-sm font-black transition-all ${mode === "signin" ? 'bg-emerald-500 text-black shadow-lg shadow-emerald-500/25' : 'text-gray-500 hover:text-white'}`}
+              >
+                Entrar
+              </button>
+              <button 
+                type="button"
+                onClick={() => setMode("signup")} 
+                className={`flex-1 py-3.5 rounded-xl text-sm font-black transition-all ${mode === "signup" ? 'bg-emerald-500 text-black shadow-lg shadow-emerald-500/25' : 'text-gray-500 hover:text-white'}`}
+              >
+                Unirse
+              </button>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-6 relative z-10">
+              <form onSubmit={handleEmail} className="space-y-5">
+                {mode === "signup" && (
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-1">Nombre</label>
+                    <div className="relative">
+                      <UserIcon className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
+                      <Input 
+                        id="name" 
+                        value={name} 
+                        onChange={(e) => setName(e.target.value)} 
+                        className="h-16 pl-14 bg-white/[0.03] border-white/[0.06] rounded-2xl focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/40 transition-all text-base font-bold placeholder:text-gray-700 text-white" 
+                        placeholder="Tu nombre completo" 
+                        required 
+                      />
+                    </div>
+                  </div>
+                )}
+                
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-1">Email</label>
+                  <div className="relative">
+                    <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
+                    <Input 
+                      id="email" 
+                      type="email" 
+                      value={email} 
+                      onChange={(e) => setEmail(e.target.value)} 
+                      className="h-16 pl-14 bg-white/[0.03] border-white/[0.06] rounded-2xl focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/40 transition-all text-base font-bold placeholder:text-gray-700 text-white" 
+                      placeholder="nombre@empresa.com" 
+                      required 
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-1">Contraseña</label>
+                  <div className="relative">
+                    <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
+                    <Input 
+                      id="password" 
+                      type="password" 
+                      value={password} 
+                      onChange={(e) => setPassword(e.target.value)} 
+                      className="h-16 pl-14 bg-white/[0.03] border-white/[0.06] rounded-2xl focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/40 transition-all text-base font-bold placeholder:text-gray-700 text-white" 
+                      placeholder="Mínimo 6 caracteres" 
+                      required 
+                    />
+                  </div>
+                </div>
+
+                <Button 
+                  type="submit" 
+                  className="w-full h-16 bg-emerald-500 hover:bg-emerald-400 text-black font-black uppercase tracking-widest text-sm rounded-2xl transition-all shadow-xl shadow-emerald-500/20 mt-2" 
+                  disabled={loading}
+                >
+                  {loading ? <Loader2 className="w-5 h-5 animate-spin text-black" /> : (mode === "signin" ? "Iniciar Sesión" : "Crear Cuenta")}
+                </Button>
+              </form>
+
+              <div className="relative py-3 flex items-center justify-center">
+                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/[0.05]"></div></div>
+                <span className="relative px-4 bg-[#0A0A0A]/80 text-[10px] font-black uppercase tracking-[0.2em] text-gray-600">O continuar con</span>
+              </div>
+
               <Button 
                 type="button" 
-                className="w-full h-14 bg-black hover:bg-white/[0.03] border border-white/10 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all text-sm"
+                className="w-full h-16 bg-black hover:bg-white/[0.04] border border-white/10 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all text-base"
                 onClick={handleGoogleLogin}
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -191,83 +273,6 @@ const Auth = () => {
                 </svg>
                 Continuar con Google
               </Button>
-
-              <div className="relative py-4 flex items-center justify-center">
-                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/[0.05]"></div></div>
-                <span className="relative px-4 bg-[#0A0A0A] text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">O con email</span>
-              </div>
-
-              <form onSubmit={handleEmail} className="space-y-5">
-                {mode === "signup" && (
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-1">Nombre</label>
-                    <div className="relative">
-                      <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
-                      <Input 
-                        id="name" 
-                        value={name} 
-                        onChange={(e) => setName(e.target.value)} 
-                        className="h-14 pl-12 bg-white/[0.02] border-white/5 rounded-2xl focus:ring-1 focus:ring-white/20 transition-all text-sm font-bold placeholder:text-gray-700 text-white" 
-                        placeholder="Tu nombre" 
-                        required 
-                      />
-                    </div>
-                  </div>
-                )}
-                
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-1">Correo</label>
-                  <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
-                    <Input 
-                      id="email" 
-                      type="email" 
-                      value={email} 
-                      onChange={(e) => setEmail(e.target.value)} 
-                      className="h-14 pl-12 bg-white/[0.02] border-white/5 rounded-2xl focus:ring-1 focus:ring-white/20 transition-all text-sm font-bold placeholder:text-gray-700 text-white" 
-                      placeholder="tu@empresa.com" 
-                      required 
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-500 ml-1">Contraseña</label>
-                  <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
-                    <Input 
-                      id="password" 
-                      type="password" 
-                      value={password} 
-                      onChange={(e) => setPassword(e.target.value)} 
-                      className="h-14 pl-12 bg-white/[0.02] border-white/5 rounded-2xl focus:ring-1 focus:ring-white/20 transition-all text-sm font-bold placeholder:text-gray-700 text-white" 
-                      placeholder="Mínimo 6 caracteres" 
-                      required 
-                    />
-                  </div>
-                </div>
-
-                <Button 
-                  type="submit" 
-                  className="w-full h-14 bg-gray-200 hover:bg-white text-black font-black uppercase tracking-widest text-xs rounded-2xl transition-all shadow-xl shadow-white/5 mt-4" 
-                  disabled={loading}
-                >
-                  {loading ? <Loader2 className="w-4 h-4 animate-spin text-black" /> : (mode === "signin" ? "Entrar" : "Crear cuenta")}
-                </Button>
-              </form>
-
-              <div className="text-center pt-4">
-                <p className="text-sm font-medium text-gray-500">
-                  {mode === "signin" ? "¿No tienes cuenta?" : "¿Ya tienes cuenta?"}{" "}
-                  <button 
-                    type="button" 
-                    onClick={() => setMode(mode === "signin" ? "signup" : "signin")} 
-                    className="text-white hover:underline transition-all underline-offset-4"
-                  >
-                    {mode === "signin" ? "Regístrate" : "Inicia sesión"}
-                  </button>
-                </p>
-              </div>
             </div>
           </div>
         </motion.div>

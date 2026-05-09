@@ -36,19 +36,25 @@ export const PremiumHero = ({ onContactClick }: PremiumHeroProps) => {
       {/* IMMERSIVE BACKGROUND VISUAL */}
       <motion.div 
         style={{ scale: bgScale }}
-        className="absolute inset-0 z-0 flex items-center justify-center opacity-100 mix-blend-screen"
+        className="absolute inset-0 z-0 flex items-center justify-center opacity-100"
       >
         <motion.div
-          initial={{ opacity: 0, scale: 0.8, filter: "blur(20px)" }}
-          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-          transition={{ duration: 3, ease: "easeOut", delay: 0.2 }}
-          className="w-full h-full"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 2, ease: "easeOut", delay: 0.5 }}
+          className="absolute inset-0"
         >
-          <DataFlowVisualization />
+          <video 
+            src="/videos/demo.mp4" 
+            autoPlay 
+            muted 
+            loop 
+            playsInline
+            className="w-full h-full object-cover opacity-100"
+          />
         </motion.div>
-        {/* Dark gradient overlay to ensure text readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,black_80%)] pointer-events-none" />
+        {/* Very subtle dark gradient overlay to ensure text readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 pointer-events-none" />
       </motion.div>
 
       {/* FOREGROUND TEXT */}
@@ -56,20 +62,20 @@ export const PremiumHero = ({ onContactClick }: PremiumHeroProps) => {
         style={{ opacity: textOpacity, scale: textScale }}
         className="container relative z-10 pt-20"
       >
-        <div className="flex flex-col items-center text-center max-w-5xl mx-auto">
+        <div className="flex flex-col items-center text-center max-w-7xl mx-auto">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1.5, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-8"
+            className="mb-10"
           >
             <Link
               to="/flowsight-ads"
-              className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl text-white/80 text-sm font-medium hover:bg-white/10 transition-all"
+              className="group inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl text-white/80 text-xs font-black uppercase tracking-[0.3em] hover:bg-white/10 transition-all"
             >
-              <Sparkles className="w-4 h-4 text-primary" />
+              <Sparkles className="w-3.5 h-3.5 text-primary" />
               Conoce Flowsight Ads
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </motion.div>
 
@@ -77,10 +83,10 @@ export const PremiumHero = ({ onContactClick }: PremiumHeroProps) => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.5, delay: 1.8, ease: [0.16, 1, 0.3, 1] }}
-            className="font-display text-6xl md:text-8xl lg:text-[110px] font-bold tracking-tighter leading-[0.95] text-white"
+            className="font-display text-7xl md:text-9xl lg:text-[140px] font-black tracking-[-0.01em] leading-[0.95] text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/40 py-4"
           >
             Decisiones que <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40">
+            <span className="italic">
               multiplican ganancias.
             </span>
           </motion.h1>
@@ -103,7 +109,7 @@ export const PremiumHero = ({ onContactClick }: PremiumHeroProps) => {
           >
             <Button
               size="lg"
-              className="bg-white text-black hover:bg-white/90 rounded-full px-8 py-6 text-lg font-semibold tracking-tight"
+              className="px-10 py-7 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl text-white hover:bg-white/10 transition-all duration-300 text-lg font-bold tracking-tight shadow-none"
               asChild
             >
               <a href="#contacto" onClick={onContactClick}>
@@ -112,8 +118,7 @@ export const PremiumHero = ({ onContactClick }: PremiumHeroProps) => {
             </Button>
             <Button
               size="lg"
-              variant="outline"
-              className="border-white/20 bg-transparent text-white hover:bg-white/10 rounded-full px-8 py-6 text-lg tracking-tight backdrop-blur-md"
+              className="px-10 py-7 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl text-white hover:bg-white/10 transition-all duration-300 text-lg font-bold tracking-tight shadow-none"
               asChild
             >
               <a href="https://wa.me/message/FVHDA5OZHN66P1" target="_blank" rel="noopener noreferrer">
