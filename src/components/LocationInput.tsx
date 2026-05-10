@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, MapPin } from 'lucide-react';
+import { MapPin, ArrowRight } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { searchLocations } from '@/data/worldLocations';
 
@@ -89,14 +89,17 @@ export const LocationInput: React.FC<LocationInputProps> = ({
             initial={{ opacity: 0, y: 10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
-            className="absolute top-full left-0 right-0 mt-4 bg-black/80 backdrop-blur-3xl rounded-[32px] border border-white/[0.08] shadow-[0_40px_100px_rgba(0,0,0,0.8)] z-50 max-h-[400px] overflow-hidden"
+            className="absolute top-full left-0 right-0 mt-4 bg-black/80 backdrop-blur-3xl rounded-[32px] border border-white/[0.08] shadow-[0_40px_100px_rgba(0,0,0,0.8)] z-50 max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-thumb-emerald-500/20 scrollbar-track-transparent"
           >
             <div className="p-2">
               {suggestions.map((loc, idx) => (
                 <button
-                  type="button"
                   key={`${loc.value}-${idx}`}
-                  onClick={() => handleSelectSuggestion(loc.value)}
+                  type="button"
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    handleSelectSuggestion(loc.value);
+                  }}
                   className="w-full px-6 py-5 text-left hover:bg-emerald-500/10 rounded-2xl transition-all flex items-center gap-4 group"
                 >
                   <div className={`p-2.5 rounded-xl ${loc.type === 'country' ? 'bg-emerald-500/10' : 'bg-blue-500/10'}`}>
