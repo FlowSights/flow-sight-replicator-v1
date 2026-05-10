@@ -178,21 +178,42 @@ const FlowsightAdsLanding: React.FC = () => {
       </AnimatePresence>
 
       <div className="min-h-screen bg-[#020202] flex flex-col transition-colors selection:bg-emerald-500/30 relative overflow-hidden">
-        {/* Background Glows */}
-        <div className="fixed inset-0 pointer-events-none">
-          <div className="absolute top-[-15%] left-[25%] w-[700px] h-[700px] bg-emerald-500/[0.04] blur-[180px] rounded-full" />
-          <div className="absolute bottom-[-10%] right-[15%] w-[500px] h-[500px] bg-cyan-500/[0.03] blur-[140px] rounded-full" />
+        {/* Cinematic Background */}
+        <div className="fixed inset-0 z-0">
+          {/* Animated Aurora Effects */}
+          <motion.div 
+            animate={{ 
+              scale: [1, 1.2, 1],
+              opacity: [0.03, 0.05, 0.03],
+              rotate: [0, 45, 0]
+            }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            className="absolute top-[-20%] left-[-10%] w-[1000px] h-[1000px] bg-emerald-500/10 blur-[150px] rounded-full" 
+          />
+          <motion.div 
+            animate={{ 
+              scale: [1.2, 1, 1.2],
+              opacity: [0.02, 0.04, 0.02],
+              rotate: [0, -30, 0]
+            }}
+            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+            className="absolute bottom-[-15%] right-[-5%] w-[800px] h-[800px] bg-cyan-500/10 blur-[150px] rounded-full" 
+          />
+          
+          {/* Subtle Grid Pattern */}
+          <div className="absolute inset-0 bg-[url('https://transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03] mix-blend-overlay" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black pointer-events-none" />
         </div>
 
-        <header className="sticky top-0 z-50 backdrop-blur-2xl bg-black/40 border-b border-white/5">
+        <header className="sticky top-0 z-50 backdrop-blur-md bg-black/20 border-b border-white/[0.03]">
           <div className="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
             <Button 
               variant="ghost" 
               onClick={() => navigate('/')}
-              className="flex items-center gap-2 text-gray-500 hover:text-white transition-all text-sm font-bold tracking-wide"
+              className="flex items-center gap-2 text-gray-500 hover:text-white transition-all text-xs font-black uppercase tracking-[0.2em]"
             >
               <ArrowRight className="w-4 h-4 rotate-180" />
-              Volver a la web principal
+              Volver
             </Button>
             <ThemeToggle />
           </div>
@@ -200,173 +221,252 @@ const FlowsightAdsLanding: React.FC = () => {
 
         <div className="flex-1 flex items-center justify-center p-6 relative z-10">
           <motion.div 
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="w-full max-w-[480px]"
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full max-w-[500px]"
           >
-            {/* Logo */}
-            <div className="text-center mb-10">
+            {/* Logo Section */}
+            <div className="text-center mb-12">
               <motion.div 
-                initial={{ scale: 0.9, opacity: 0 }}
+                initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                className="flex items-center justify-center gap-3 mb-4"
+                transition={{ delay: 0.2, type: "spring", damping: 20 }}
+                className="flex flex-col items-center gap-6"
               >
-                <div className="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl shadow-2xl shadow-emerald-500/25 flex items-center justify-center">
-                  <Sparkles className="w-8 h-8 text-black" />
+                <div className="relative group">
+                  <div className="absolute -inset-4 bg-emerald-500/20 rounded-[30px] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  <div className="w-20 h-20 bg-gradient-to-br from-emerald-400 via-emerald-500 to-emerald-700 rounded-3xl shadow-[0_20px_50px_rgba(16,185,129,0.3)] flex items-center justify-center relative z-10 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent opacity-50" />
+                    <Sparkles className="w-10 h-10 text-black fill-black/20" />
+                  </div>
                 </div>
-                <h1 className="text-4xl font-black tracking-tighter text-white">
-                  Flowsight <span className="text-emerald-500">Ads</span>
-                </h1>
+                <div className="space-y-2">
+                  <h1 className="text-5xl font-black tracking-tighter text-white text-shadow-premium">
+                    Flowsight <span className="text-emerald-500 italic">Ads</span>
+                  </h1>
+                  <div className="flex items-center justify-center gap-3">
+                    <div className="h-px w-8 bg-gradient-to-r from-transparent to-emerald-500/50" />
+                    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-emerald-500/60">Intelligence & Scale</p>
+                    <div className="h-px w-8 bg-gradient-to-l from-transparent to-emerald-500/50" />
+                  </div>
+                </div>
               </motion.div>
-              <p className="text-gray-500 text-sm font-medium">Lanza tus campañas en todas las plataformas con IA</p>
             </div>
 
-            <div className="rounded-[40px] border border-white/[0.06] shadow-[0_40px_100px_rgba(0,0,0,0.6)] bg-[#0A0A0A]/80 backdrop-blur-3xl p-10 overflow-hidden relative">
-              <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent" />
-              <div className="absolute bottom-0 inset-x-0 h-[200px] bg-gradient-to-t from-emerald-500/[0.02] to-transparent pointer-events-none" />
-
-              {/* Tab Switcher */}
-              <div className="flex gap-1 p-1 bg-white/[0.03] rounded-2xl border border-white/5 mb-10 relative z-10">
-                <button 
-                  onClick={() => setIsLogin(true)}
-                  className={`flex-1 py-3.5 px-4 rounded-xl font-black text-sm transition-all ${isLogin ? 'bg-emerald-500 text-black shadow-lg shadow-emerald-500/25' : 'text-gray-500 hover:text-white'}`}
-                >
-                  Entrar
-                </button>
-                <button 
-                  onClick={() => setIsLogin(false)}
-                  className={`flex-1 py-3.5 px-4 rounded-xl font-black text-sm transition-all ${!isLogin ? 'bg-emerald-500 text-black shadow-lg shadow-emerald-500/25' : 'text-gray-500 hover:text-white'}`}
-                >
-                  Unirse
-                </button>
-              </div>
-
-              {message && (
-                <div className={`p-4 rounded-2xl mb-6 text-sm font-bold relative z-10 ${messageType === 'error' ? 'bg-red-500/10 border border-red-500/20 text-red-400' : 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400'}`}>
-                  {message}
+            {/* Main Auth Card */}
+            <div className="relative group">
+              <div className="absolute -inset-0.5 bg-gradient-to-b from-white/10 to-transparent rounded-[48px] blur-sm opacity-50" />
+              <div className="rounded-[48px] border border-white/[0.08] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)] bg-[#080808]/70 backdrop-blur-[40px] p-10 md:p-12 overflow-hidden relative">
+                {/* Decorative Elements */}
+                <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-emerald-500/40 to-transparent" />
+                <div className="absolute top-[-100px] left-[-100px] w-64 h-64 bg-emerald-500/5 blur-[80px] rounded-full pointer-events-none" />
+                
+                {/* Tab Switcher - Premium Design */}
+                <div className="flex gap-1 p-1.5 bg-white/[0.03] rounded-[24px] border border-white/[0.05] mb-12 relative z-10">
+                  <button 
+                    onClick={() => setIsLogin(true)}
+                    className={`flex-1 py-4 px-4 rounded-[18px] font-black text-[11px] uppercase tracking-widest transition-all duration-500 relative overflow-hidden group/btn ${isLogin ? 'text-black' : 'text-gray-500 hover:text-white'}`}
+                  >
+                    {isLogin && <motion.div layoutId="tab-bg" className="absolute inset-0 bg-emerald-500 shadow-[0_10px_25px_rgba(16,185,129,0.3)]" />}
+                    <span className="relative z-10">Entrar</span>
+                  </button>
+                  <button 
+                    onClick={() => setIsLogin(false)}
+                    className={`flex-1 py-4 px-4 rounded-[18px] font-black text-[11px] uppercase tracking-widest transition-all duration-500 relative overflow-hidden group/btn ${!isLogin ? 'text-black' : 'text-gray-500 hover:text-white'}`}
+                  >
+                    {!isLogin && <motion.div layoutId="tab-bg" className="absolute inset-0 bg-emerald-500 shadow-[0_10px_25px_rgba(16,185,129,0.3)]" />}
+                    <span className="relative z-10">Unirse</span>
+                  </button>
                 </div>
-              )}
 
-              <div className="relative z-10">
-                {isLogin ? (
-                  <form onSubmit={handleLogin} className="space-y-5">
-                    <div className="space-y-2">
-                      <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-1">Email</Label>
-                      <div className="relative">
-                        <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
-                        <Input 
-                          type="email" 
-                          placeholder="nombre@empresa.com" 
-                          className="h-16 pl-14 bg-white/[0.03] border-white/[0.06] rounded-2xl focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/40 transition-all text-base font-bold placeholder:text-gray-700 text-white" 
-                          value={loginData.email}
-                          onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-1">Contraseña</Label>
-                      <div className="relative">
-                        <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
-                        <Input 
-                          type={showPassword ? "text" : "password"} 
-                          className="h-16 pl-14 pr-14 bg-white/[0.03] border-white/[0.06] rounded-2xl focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/40 transition-all text-base font-bold placeholder:text-gray-700 text-white" 
-                          value={loginData.password}
-                          onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-                          required
-                        />
-                        <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-600 hover:text-emerald-400 transition-colors">
-                          {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                        </button>
-                      </div>
-                    </div>
-                    <Button type="submit" className="w-full h-16 bg-emerald-500 hover:bg-emerald-400 text-black text-base font-black rounded-2xl shadow-xl shadow-emerald-500/20 transition-all active:scale-[0.98] uppercase tracking-widest" disabled={loading}>
-                      {loading ? 'Accediendo...' : 'Iniciar Sesión'}
-                    </Button>
-                    
-                    <div className="relative my-6">
-                      <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-white/[0.05]"></span></div>
-                      <div className="relative flex justify-center text-[10px] font-black uppercase tracking-[0.2em]"><span className="bg-[#0A0A0A]/80 px-4 text-gray-600">O continuar con</span></div>
-                    </div>
-
-                    <Button type="button" variant="outline" className="w-full h-16 rounded-2xl border-white/10 bg-black hover:bg-white/[0.04] flex items-center justify-center gap-3 font-bold text-base text-white transition-all" onClick={handleLoginWithGoogle}>
-                      <svg className="w-5 h-5" viewBox="0 0 24 24">
-                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-1 .67-2.28 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 12 23 12 23z"/>
-                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
-                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                      </svg>
-                      Continuar con Google
-                    </Button>
-                  </form>
-                ) : (
-                  <form onSubmit={handleRegister} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-1">Nombre Completo</Label>
-                      <div className="relative">
-                        <User className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
-                        <Input 
-                          placeholder="Juan Pérez" 
-                          className="h-16 pl-14 bg-white/[0.03] border-white/[0.06] rounded-2xl focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/40 transition-all text-base font-bold placeholder:text-gray-700 text-white" 
-                          value={registerData.fullName}
-                          onChange={(e) => setRegisterData({ ...registerData, fullName: e.target.value })}
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-1">Email</Label>
-                      <div className="relative">
-                        <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
-                        <Input 
-                          type="email" 
-                          placeholder="nombre@empresa.com" 
-                          className="h-16 pl-14 bg-white/[0.03] border-white/[0.06] rounded-2xl focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/40 transition-all text-base font-bold placeholder:text-gray-700 text-white" 
-                          value={registerData.email}
-                          onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-1">Contraseña</Label>
-                        <div className="relative">
-                          <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
-                          <Input 
-                            type="password" 
-                            className="h-16 pl-14 bg-white/[0.03] border-white/[0.06] rounded-2xl focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/40 transition-all text-base font-bold placeholder:text-gray-700 text-white" 
-                            value={registerData.password}
-                            onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 ml-1">Confirmar</Label>
-                        <div className="relative">
-                          <Lock className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
-                          <Input 
-                            type="password" 
-                            className="h-16 pl-14 bg-white/[0.03] border-white/[0.06] rounded-2xl focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/40 transition-all text-base font-bold placeholder:text-gray-700 text-white" 
-                            value={registerData.confirmPassword}
-                            onChange={(e) => setRegisterData({ ...registerData, confirmPassword: e.target.value })}
-                            required
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <Button type="submit" className="w-full h-16 bg-emerald-500 hover:bg-emerald-400 text-black text-base font-black rounded-2xl shadow-xl shadow-emerald-500/20 transition-all active:scale-[0.98] uppercase tracking-widest mt-2" disabled={loading}>
-                      {loading ? 'Creando cuenta...' : 'Crear Cuenta'}
-                    </Button>
-                  </form>
+                {message && (
+                  <motion.div 
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    className={`p-5 rounded-2xl mb-8 text-xs font-bold relative z-10 flex items-center gap-3 ${messageType === 'error' ? 'bg-red-500/10 border border-red-500/20 text-red-400' : 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400'}`}
+                  >
+                    <Info className="w-5 h-5 shrink-0" />
+                    {message}
+                  </motion.div>
                 )}
+
+                <div className="relative z-10">
+                  <AnimatePresence mode="wait">
+                    {isLogin ? (
+                      <motion.form 
+                        key="login"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 20 }}
+                        onSubmit={handleLogin} 
+                        className="space-y-6"
+                      >
+                        <div className="space-y-3">
+                          <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500/60 ml-2">Email Empresarial</Label>
+                          <div className="relative group/input">
+                            <div className="absolute inset-0 bg-emerald-500/5 rounded-[22px] blur-xl opacity-0 group-focus-within/input:opacity-100 transition-opacity" />
+                            <Mail className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 group-focus-within/input:text-emerald-500 transition-colors" />
+                            <Input 
+                              type="email" 
+                              placeholder="nombre@empresa.com" 
+                              className="h-18 pl-16 bg-white/[0.03] border-white/[0.06] rounded-[22px] focus:ring-0 focus:border-emerald-500/50 transition-all text-base font-bold placeholder:text-gray-800 text-white shadow-inner" 
+                              value={loginData.email}
+                              onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="space-y-3">
+                          <div className="flex justify-between items-center px-2">
+                            <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500/60">Contraseña</Label>
+                            <button type="button" className="text-[9px] font-black uppercase tracking-widest text-gray-600 hover:text-emerald-400 transition-colors">Olvidé mi clave</button>
+                          </div>
+                          <div className="relative group/input">
+                            <div className="absolute inset-0 bg-emerald-500/5 rounded-[22px] blur-xl opacity-0 group-focus-within/input:opacity-100 transition-opacity" />
+                            <Lock className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 group-focus-within/input:text-emerald-500 transition-colors" />
+                            <Input 
+                              type={showPassword ? "text" : "password"} 
+                              className="h-18 pl-16 pr-16 bg-white/[0.03] border-white/[0.06] rounded-[22px] focus:ring-0 focus:border-emerald-500/50 transition-all text-base font-bold placeholder:text-gray-800 text-white shadow-inner" 
+                              value={loginData.password}
+                              onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                              required
+                            />
+                            <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-600 hover:text-emerald-400 transition-colors">
+                              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                            </button>
+                          </div>
+                        </div>
+                        
+                        <Button 
+                          type="submit" 
+                          className="w-full h-20 bg-emerald-500 hover:bg-emerald-400 text-black text-lg font-black rounded-[24px] shadow-[0_20px_40px_rgba(16,185,129,0.2)] transition-all active:scale-[0.98] uppercase tracking-[0.2em] relative overflow-hidden group/submit" 
+                          disabled={loading}
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/submit:translate-x-full transition-transform duration-1000" />
+                          <span className="relative z-10 flex items-center justify-center gap-3">
+                            {loading ? 'Validando...' : 'Iniciar Sesión'} 
+                            {!loading && <ArrowRight className="w-5 h-5 group-hover/submit:translate-x-1 transition-transform" />}
+                          </span>
+                        </Button>
+                        
+                        <div className="relative my-8">
+                          <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-white/[0.03]"></span></div>
+                          <div className="relative flex justify-center text-[9px] font-black uppercase tracking-[0.4em]"><span className="bg-[#080808] px-6 text-gray-600">Acceso Rápido</span></div>
+                        </div>
+
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          className="w-full h-18 rounded-[22px] border-white/5 bg-white/[0.02] hover:bg-white/[0.05] flex items-center justify-center gap-4 font-black text-xs uppercase tracking-widest text-white transition-all group/google" 
+                          onClick={handleLoginWithGoogle}
+                        >
+                          <svg className="w-6 h-6 grayscale group-hover/google:grayscale-0 transition-all" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-1 .67-2.28 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 12 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                          </svg>
+                          Google ID
+                        </Button>
+                      </motion.form>
+                    ) : (
+                      <motion.form 
+                        key="register"
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        onSubmit={handleRegister} 
+                        className="space-y-5"
+                      >
+                        <div className="space-y-3">
+                          <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500/60 ml-2">Nombre del Director</Label>
+                          <div className="relative group/input">
+                            <User className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 group-focus-within/input:text-emerald-500 transition-colors" />
+                            <Input 
+                              placeholder="Ej: Elon Musk" 
+                              className="h-18 pl-16 bg-white/[0.03] border-white/[0.06] rounded-[22px] focus:ring-0 focus:border-emerald-500/50 transition-all text-base font-bold placeholder:text-gray-800 text-white shadow-inner" 
+                              value={registerData.fullName}
+                              onChange={(e) => setRegisterData({ ...registerData, fullName: e.target.value })}
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="space-y-3">
+                          <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500/60 ml-2">Correo Corporativo</Label>
+                          <div className="relative group/input">
+                            <Mail className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 group-focus-within/input:text-emerald-500 transition-colors" />
+                            <Input 
+                              type="email" 
+                              placeholder="ceo@empresa.com" 
+                              className="h-18 pl-16 bg-white/[0.03] border-white/[0.06] rounded-[22px] focus:ring-0 focus:border-emerald-500/50 transition-all text-base font-bold placeholder:text-gray-800 text-white shadow-inner" 
+                              value={registerData.email}
+                              onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-3">
+                            <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500/60 ml-2">Clave Maestra</Label>
+                            <div className="relative group/input">
+                              <Lock className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
+                              <Input 
+                                type="password" 
+                                className="h-18 pl-16 bg-white/[0.03] border-white/[0.06] rounded-[22px] focus:ring-0 focus:border-emerald-500/50 transition-all text-base font-bold text-white shadow-inner" 
+                                value={registerData.password}
+                                onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
+                                required
+                              />
+                            </div>
+                          </div>
+                          <div className="space-y-3">
+                            <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500/60 ml-2">Confirmar</Label>
+                            <div className="relative group/input">
+                              <Lock className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
+                              <Input 
+                                type="password" 
+                                className="h-18 pl-16 bg-white/[0.03] border-white/[0.06] rounded-[22px] focus:ring-0 focus:border-emerald-500/50 transition-all text-base font-bold text-white shadow-inner" 
+                                value={registerData.confirmPassword}
+                                onChange={(e) => setRegisterData({ ...registerData, confirmPassword: e.target.value })}
+                                required
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <Button 
+                          type="submit" 
+                          className="w-full h-20 bg-emerald-500 hover:bg-emerald-400 text-black text-lg font-black rounded-[24px] shadow-[0_20px_40px_rgba(16,185,129,0.2)] transition-all active:scale-[0.98] uppercase tracking-[0.2em] mt-4 relative overflow-hidden group/submit" 
+                          disabled={loading}
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/submit:translate-x-full transition-transform duration-1000" />
+                          <span className="relative z-10 flex items-center justify-center gap-3">
+                            {loading ? 'Iniciando...' : 'Crear Cuenta'} 
+                            {!loading && <Sparkles className="w-5 h-5" />}
+                          </span>
+                        </Button>
+                      </motion.form>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </div>
+              
+              {/* Footer Links */}
+              <div className="mt-8 text-center space-y-4">
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-600">
+                  Trusted by +5,000 Advertisers
+                </p>
+                <div className="flex justify-center gap-6">
+                  <button className="text-[9px] font-black uppercase tracking-widest text-gray-700 hover:text-white transition-colors">Privacidad</button>
+                  <button className="text-[9px] font-black uppercase tracking-widest text-gray-700 hover:text-white transition-colors">Términos</button>
+                  <button className="text-[9px] font-black uppercase tracking-widest text-gray-700 hover:text-white transition-colors">Soporte</button>
+                </div>
               </div>
             </div>
           </motion.div>
         </div>
       </div>
+
     </>
   );
 };
