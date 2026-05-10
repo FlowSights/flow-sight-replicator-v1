@@ -620,7 +620,7 @@ const FlowsightAdsDashboard: React.FC = () => {
       <main className="max-w-7xl mx-auto px-6 py-12 relative z-10">
         <AnimatePresence mode="wait">
           {!showResults ? (
-            <motion.div key="form" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="max-w-5xl mx-auto">
+            <motion.div key="form" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="max-w-6xl mx-auto">
               <div className="text-center mb-12 relative">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.96 }}
@@ -665,8 +665,8 @@ const FlowsightAdsDashboard: React.FC = () => {
                       initial={{ opacity: 0, scale: 0.98, y: 10 }} 
                       animate={{ opacity: 1, scale: 1, y: 0 }} 
                       exit={{ opacity: 0, scale: 0.98, y: -10 }} 
-                      className="grid lg:grid-cols-2 gap-10 glass-card rounded-[48px] p-8 md:p-10 relative transition-all duration-500">
-                        <div className="relative rounded-[32px] bg-emerald-500/[0.02] dark:bg-emerald-500/[0.04] border border-emerald-500/10 p-8 md:p-10 flex flex-col justify-between min-h-[380px]">
+                      className="grid lg:grid-cols-5 gap-8 glass-card rounded-[40px] p-6 md:p-8 relative transition-all duration-500">
+                        <div className="lg:col-span-2 relative rounded-[28px] bg-emerald-500/[0.02] dark:bg-emerald-500/[0.04] border border-emerald-500/10 p-8 flex flex-col justify-between min-h-[300px]">
                           <div>
                             <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-8 shadow-inner shadow-emerald-500/10">
                               <MessageSquareText className="w-7 h-7 text-emerald-500 dark:text-emerald-400" />
@@ -697,14 +697,14 @@ const FlowsightAdsDashboard: React.FC = () => {
                           </motion.div>
                         </div>
 
-                      <div className="flex flex-col justify-between space-y-8 py-2">
+                      <div className="lg:col-span-3 flex flex-col justify-between space-y-6 py-2">
                         <div className="space-y-4">
-                          <p className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-600 dark:text-emerald-500/80 ml-2">¿Qué quieres promocionar?</p>
+                          <p className="text-[12px] font-black uppercase tracking-[0.25em] text-emerald-600 dark:text-emerald-500/80 ml-2">¿Qué quieres promocionar?</p>
                           <div className="relative group">
                             <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 rounded-[32px] blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity" />
                             <Textarea
                               placeholder="Ej: Clínica dental de alta gama con servicios de ortodoncia invisible..."
-                              className="relative min-h-[140px] bg-white/[0.03] dark:bg-white/[0.03] border-2 border-black/5 dark:border-white/10 rounded-[32px] text-xl font-bold p-8 focus-visible:ring-emerald-500/40 transition-all placeholder:text-muted-foreground/30 text-foreground backdrop-blur-md"
+                              className="relative min-h-[140px] bg-white/10 dark:bg-white/[0.03] border-2 border-white/20 dark:border-white/10 rounded-[28px] text-2xl md:text-3xl font-black p-8 focus-visible:ring-emerald-500/40 transition-all placeholder:text-foreground/20 text-foreground backdrop-blur-md leading-tight"
                               value={config.promote}
                               onChange={(e) => {
                                 setConfig({ ...config, promote: e.target.value });
