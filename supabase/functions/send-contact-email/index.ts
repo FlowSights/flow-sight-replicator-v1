@@ -13,6 +13,7 @@ const getCorsHeaders = (origin: string | null) => {
       "authorization, x-client-info, apikey, content-type",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Max-Age": "86400",
+    Vary: "Origin",
   };
 };
 
@@ -26,6 +27,7 @@ interface ContactPayload {
   email: string;
   company: string;
   message?: string;
+  website?: string;
 }
 
 function isValidEmail(s: string) {
@@ -49,15 +51,39 @@ Deno.serve(async (req) => {
     return new Response("ok", { headers: corsHeaders });
   }
 
+  if (req.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Método no permitido" }), {
+      status: 405,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   try {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
     if (!RESEND_API_KEY) throw new Error("RESEND_API_KEY is not configured");
 
-    const body = (await req.json()) as Partial<ContactPayload>;
+    let body: Partial<ContactPayload>;
+    try {
+      body = (await req.json()) as Partial<ContactPayload>;
+    } catch {
+      return new Response(JSON.stringify({ error: "JSON inválido" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const website = (body.website ?? "").toString().trim();
+    if (website) {
+      return new Response(JSON.stringify({ success: true }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const name = (body.name ?? "").toString().trim().slice(0, 100);
-    const email = (body.email ?? "").toString().trim().slice(0, 255);
+    const email = (body.email ?? "").toString().trim().toLowerCase().slice(0, 255);
     const company = (body.company ?? "").toString().trim().slice(0, 150);
     const message = (body.message ?? "").toString().trim().slice(0, 2000);
 

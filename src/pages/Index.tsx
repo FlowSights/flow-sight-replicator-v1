@@ -50,10 +50,21 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const WHATSAPP_URL = "https://wa.me/message/FVHDA5OZHN66P1";
-const EMAIL_URL = "mailto:contacto@flowsights.it.com";
+const CONTACT_EMAIL = "contacto@flowsights.it.com";
+const EMAIL_URL = `mailto:${CONTACT_EMAIL}`;
 const INSTAGRAM_URL = "https://www.instagram.com/flowsights_cr/";
 
 type HeroStat = { value: number; suffix: string; prefix?: string; label: string; decimals?: number };
+type ContactForm = {
+  name: string;
+  email: string;
+  company: string;
+  message: string;
+  website: string;
+};
+
+const EMPTY_FORM: ContactForm = { name: "", email: "", company: "", message: "", website: "" };
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const AnimatedStat = ({ stat, className = "font-display text-3xl font-bold text-gradient" }: { stat: HeroStat; className?: string }) => {
   const { value, ref } = useCountUp(stat.value, 1800, stat.decimals ?? 0);
@@ -95,7 +106,7 @@ const pickAccent = (i: number) => accentPalette[i % accentPalette.length];
 
 const Index = () => {
   const { toast } = useToast();
-  const [form, setForm] = useState({ name: "", email: "", company: "", message: "" });
+  const [form, setForm] = useState<ContactForm>(EMPTY_FORM);
   const scrolled = useScrolled(80);
 
   const navLinks = [
@@ -205,19 +216,46 @@ const Index = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (submitting) return;
+
+    const payload = {
+      name: form.name.trim(),
+      email: form.email.trim().toLowerCase(),
+      company: form.company.trim(),
+      message: form.message.trim(),
+      website: form.website.trim(),
+    };
+
+    if (!payload.name || !payload.email || !payload.company) {
+      toast({
+        title: "Faltan datos",
+        description: "Completa tu nombre, correo y empresa para solicitar el diagnóstico.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!emailPattern.test(payload.email)) {
+      toast({
+        title: "Correo inválido",
+        description: "Revisa el formato del correo electrónico antes de enviarlo.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setSubmitting(true);
     try {
       const { error } = await supabase.functions.invoke("send-contact-email", {
-        body: form,
+        body: payload,
       });
       if (error) throw error;
-      setForm({ name: "", email: "", company: "", message: "" });
+      setForm(EMPTY_FORM);
       setSubmitted(true);
     } catch (err) {
       console.error(err);
       toast({
         title: "No se pudo enviar",
-        description: "Ocurrió un error. Inténtalo de nuevo o escríbenos a contacto@flowsights.it.com",
+        description: `Ocurrió un error. Inténtalo de nuevo o escríbenos a ${CONTACT_EMAIL}`,
         variant: "destructive",
       });
     } finally {
@@ -1004,22 +1042,33 @@ const Index = () => {
                 <h3 className="font-display text-2xl font-bold">Analiza mi negocio gratis</h3>
                 <p className="text-sm text-muted-foreground mt-2">Cuéntanos un poco de tu empresa y te respondemos en menos de 24 horas.</p>
 
-                <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+                <form onSubmit={handleSubmit} className="mt-6 space-y-4" aria-busy={submitting} noValidate>
+                  <div className="hidden" aria-hidden="true">
+                    <Label htmlFor="website">Sitio web</Label>
+                    <Input
+                      id="website"
+                      name="website"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={form.website}
+                      onChange={(e) => setForm({ ...form, website: e.target.value })}
+                    />
+                  </div>
                   <div>
                     <Label htmlFor="name">Nombre completo *</Label>
-                    <Input id="name" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="mt-2 bg-gray-50 dark:bg-white/[0.03] border-gray-100 dark:border-white/5 focus:border-primary/50 transition-all duration-300" placeholder="Tu nombre" />
+                    <Input id="name" name="name" autoComplete="name" required minLength={2} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="mt-2 bg-gray-50 dark:bg-white/[0.03] border-gray-100 dark:border-white/5 focus:border-primary/50 transition-all duration-300" placeholder="Tu nombre" />
                   </div>
                   <div>
                     <Label htmlFor="email">Correo electrónico *</Label>
-                    <Input id="email" type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="mt-2 bg-gray-50 dark:bg-white/[0.03] border-gray-100 dark:border-white/5 focus:border-primary/50 transition-all duration-300" placeholder="tu@empresa.com" />
+                    <Input id="email" name="email" type="email" autoComplete="email" inputMode="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="mt-2 bg-gray-50 dark:bg-white/[0.03] border-gray-100 dark:border-white/5 focus:border-primary/50 transition-all duration-300" placeholder="tu@empresa.com" />
                   </div>
                   <div>
                     <Label htmlFor="company">Empresa *</Label>
-                    <Input id="company" required value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} className="mt-2 bg-gray-50 dark:bg-white/[0.03] border-gray-100 dark:border-white/5 focus:border-primary/50 transition-all duration-300" placeholder="Nombre de tu empresa" />
+                    <Input id="company" name="organization" autoComplete="organization" required minLength={2} value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} className="mt-2 bg-gray-50 dark:bg-white/[0.03] border-gray-100 dark:border-white/5 focus:border-primary/50 transition-all duration-300" placeholder="Nombre de tu empresa" />
                   </div>
                   <div>
                     <Label htmlFor="message">¿Qué te gustaría mejorar?</Label>
-                    <Textarea id="message" rows={4} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className="mt-2 bg-gray-50 dark:bg-white/[0.03] border-gray-100 dark:border-white/5 focus:border-primary/50 transition-all duration-300" placeholder="Ej: Quiero entender por qué mis reportes no cuadran y reducir mermas de inventario." />
+                    <Textarea id="message" name="message" rows={4} maxLength={2000} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className="mt-2 bg-gray-50 dark:bg-white/[0.03] border-gray-100 dark:border-white/5 focus:border-primary/50 transition-all duration-300" placeholder="Ej: Quiero entender por qué mis reportes no cuadran y reducir mermas de inventario." />
                   </div>
                   <Button type="submit" variant="hero" size="lg" className="w-full" disabled={submitting}>
                     {submitting ? "Enviando..." : <>Quiero mi diagnóstico gratis <ArrowRight className="ml-1" /></>}
