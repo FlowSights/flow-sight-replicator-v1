@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { useToast } from "@/hooks/use-toast";
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { AppleLoader } from '@/components/AppleLoader';
 import { logger, formatError } from '@/lib/logger';
 

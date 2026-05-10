@@ -16,7 +16,7 @@ import {
   Stethoscope, ShoppingBag, HardHat, Plus, Mail, ShieldCheck, Zap, Eye,
   TrendingUp, Clock, DollarSign, Menu, MessageCircle,
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { Instagram } from "@/components/icons/Instagram";
 import { LinkedIn } from "@/components/icons/LinkedIn";
 import heroDashboard from "@/assets/hero-dashboard.png";

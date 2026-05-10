@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Search, MapPin, Globe } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface SmartLocationSelectorProps {
   value: string;

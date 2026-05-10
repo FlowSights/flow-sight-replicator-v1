@@ -24,7 +24,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { useTheme } from 'next-themes';
 import { LocationInput } from '@/components/LocationInput';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { EditablePlatformPreview } from '@/components/EditablePlatformPreview';
 import { VisualGuideLightbox } from '@/components/VisualGuideLightbox';
 import { PremiumLoadingScreen } from '@/components/PremiumLoadingScreen';
@@ -196,7 +196,7 @@ import { useGoogleAdsAuth } from '@/hooks/useGoogleAdsAuth';
 const FlowsightAdsDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
-  const { toast } = useToast();
+  const { toast: uiToast } = useToast();
   const { session, loading: authLoading, signOut } = useAuth();
   const { isConnecting, isConnected, connectGoogleAds } = useGoogleAdsAuth();
   
@@ -390,11 +390,11 @@ const FlowsightAdsDashboard: React.FC = () => {
         setShowResults(true);
         setShowPreview(false);
         setIsLoading(false);
-        toast({ title: 'Estrategia Maestra lista' });
+        uiToast({ title: 'Estrategia Maestra lista' });
       }, 500);
     } catch (error: any) {
       setIsLoading(false);
-      toast({ title: 'Error al generar anuncios', variant: 'destructive' });
+      uiToast({ title: 'Error al generar anuncios', variant: 'destructive' });
     }
   };
 
@@ -422,12 +422,12 @@ const FlowsightAdsDashboard: React.FC = () => {
           ads: platformAds.length > 0 ? platformAds : generatedAds,
           platform: selectedPlatform,
         });
-        toast({ 
+        uiToast({ 
           title: 'Descarga iniciada', 
           description: `Tu kit con ${platformAds.length > 0 ? platformAds.length : 'todas'} las variantes para ${platformNames[selectedPlatform]} se está preparando.` 
         });
       } catch (err) {
-        toast({ title: 'Error al generar PDF', variant: 'destructive' });
+        uiToast({ title: 'Error al generar PDF', variant: 'destructive' });
       }
     } else {
       setShowPaymentModal(true);
@@ -1530,90 +1530,9 @@ const FlowsightAdsDashboard: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                  {/* AD CONTENT PREVIEW */}
-                  <div className="relative z-10 grid lg:grid-cols-[1fr_0.8fr] gap-12 items-start">
-                    <div className="space-y-10">
-                      <div className="space-y-4">
-                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500/60 ml-2">Copia Estratégica</p>
-                        <div className="glass-card rounded-[40px] p-10 border-white/[0.06] shadow-inner relative group overflow-hidden">
-                          <div 
-                            className="absolute -top-20 -right-20 w-64 h-64 blur-[100px] opacity-[0.05] rounded-full pointer-events-none"
-                            style={{ background: currentTheme.primary }}
-                          />
-                          <h4 className="text-3xl font-black text-white mb-6 tracking-tight">{currentAd.headline}</h4>
-                          <p className="text-lg text-gray-400 font-medium leading-relaxed italic">"{currentAd.description}"</p>
-                          
-                          <div className="mt-10 flex flex-wrap gap-3">
-                            {currentAd.keywords?.slice(0, 5).map((kw, i) => (
-                              <span key={i} className="px-4 py-2 rounded-xl bg-white/[0.03] border border-white/[0.06] text-[10px] font-black uppercase tracking-widest text-gray-500 hover:text-emerald-400 hover:border-emerald-500/20 transition-all cursor-default">
-                                {kw}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="space-y-4">
-                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500/60 ml-2">Acciones de Despliegue</p>
-                        <div className="grid sm:grid-cols-2 gap-6">
-                          <Button 
-                            variant="outline" 
-                            onClick={handleDownloadAssets} 
-                            className="h-24 rounded-[32px] border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.08] font-black text-lg gap-4 shadow-xl transition-all hover:scale-[1.02] active:scale-95 group"
-                          >
-                            <Download className="w-7 h-7 group-hover:translate-y-1 transition-transform" /> Descargar Kit
-                          </Button>
-                          
-                          {selectedPlatform === 'google' ? (
-                            <Button 
-                              onClick={() => navigate('/google-ads-config')}
-                              className="h-24 rounded-[32px] bg-white text-black hover:bg-gray-100 font-black text-lg gap-4 shadow-[0_20px_50px_rgba(255,255,255,0.1)] transition-all hover:scale-[1.02] active:scale-95"
-                            >
-                              <ExternalLink className="w-7 h-7" /> Ir a Google Ads
-                            </Button>
-                          ) : (
-                            <Button 
-                              onClick={() => window.open(platformUrls[selectedPlatform], '_blank')}
-                              className="h-24 rounded-[32px] bg-white text-black hover:bg-gray-100 font-black text-lg gap-4 shadow-[0_20px_50px_rgba(255,255,255,0.1)] transition-all hover:scale-[1.02] active:scale-95"
-                            >
-                              <Zap className="w-7 h-7 fill-black" /> Lanzar en {platformNames[selectedPlatform].split(' ')[0]}
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* MOCKUP PREVIEW */}
-                    <div className="space-y-4">
-                      <p className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500/60 ml-2 text-center lg:text-left">Visualización en Vivo</p>
-                      <div className="relative group mx-auto lg:mx-0 max-w-[380px]">
-                        <div 
-                          className="absolute -inset-4 rounded-[60px] blur-[60px] opacity-20 transition-all duration-1000 group-hover:opacity-40"
-                          style={{ background: currentTheme.primary }}
-                        />
-                        <div className="relative glass-card rounded-[54px] p-4 border-white/[0.1] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.8)]">
-                          <AdMockup
-                            platform={selectedPlatform}
-                            headline={currentAd.headline}
-                            description={currentAd.description}
-                            imageUrl={currentAd.imageUrl}
-                            businessName={config.businessName}
-                            websiteUrl={config.websiteUrl}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                    <div className="mt-8 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/10">
-                      <p className="text-[10px] font-black uppercase tracking-widest text-emerald-400 mb-1">Recomendación</p>
-                      <p className="text-xs text-emerald-300/80 font-bold italic leading-relaxed">
-                        Mantenla activa entre 5-7 días antes de hacer cambios para ver los mejores resultados.
-                      </p>
                     </div>
                   </div>
                 </div>
-              </div>
             </motion.div>
           )}
         </AnimatePresence>
