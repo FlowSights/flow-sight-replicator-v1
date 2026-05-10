@@ -85,6 +85,7 @@ export const PremiumHero = ({ onContactClick }: PremiumHeroProps) => {
             transition={{ duration: 1.5, delay: 1.8, ease: [0.16, 1, 0.3, 1] }}
             className="font-display text-7xl md:text-9xl lg:text-[140px] font-black tracking-[-0.01em] leading-[0.95] text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/40 py-4"
           >
+            <span className="sr-only">FlowSights: Inteligencia Operativa y Datos para PyMEs. </span>
             Decisiones que <br />
             <span className="italic">
               multiplican ganancias.
