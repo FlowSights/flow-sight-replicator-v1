@@ -662,8 +662,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                       initial={{ opacity: 0, scale: 0.98, y: 10 }} 
                       animate={{ opacity: 1, scale: 1, y: 0 }} 
                       exit={{ opacity: 0, scale: 0.98, y: -10 }} 
-                      transition={{ duration: 0.4, ease: "easeOut" }} 
-                      className="grid lg:grid-cols-2 gap-10 bg-card/40 dark:bg-[#0a0a0a]/60 backdrop-blur-[40px] rounded-[48px] p-8 md:p-10 border border-white/[0.08] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.4)] relative overflow-hidden transition-all duration-500">
+                      className="grid lg:grid-cols-2 gap-10 glass-card rounded-[48px] p-8 md:p-10 relative transition-all duration-500">
                         <div className="relative rounded-[32px] bg-emerald-500/[0.02] dark:bg-emerald-500/[0.04] border border-emerald-500/10 p-8 md:p-10 flex flex-col justify-between min-h-[380px]">
                           <div>
                             <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-8 shadow-inner shadow-emerald-500/10">
@@ -702,7 +701,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                             <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 rounded-[32px] blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity" />
                             <Textarea
                               placeholder="Ej: Clínica dental de alta gama con servicios de ortodoncia invisible..."
-                              className="relative min-h-[140px] bg-muted/40 dark:bg-black/40 border-2 border-border dark:border-white/[0.05] rounded-[32px] text-xl font-bold p-8 focus-visible:ring-emerald-500/40 transition-all placeholder:text-muted-foreground/30 text-foreground"
+                              className="relative min-h-[140px] bg-white/[0.03] dark:bg-white/[0.03] border-2 border-black/5 dark:border-white/10 rounded-[32px] text-xl font-bold p-8 focus-visible:ring-emerald-500/40 transition-all placeholder:text-muted-foreground/30 text-foreground backdrop-blur-md"
                               value={config.promote}
                               onChange={(e) => {
                                 setConfig({ ...config, promote: e.target.value });
@@ -784,7 +783,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                           <label className="text-[10px] font-black uppercase tracking-[0.2em] text-cyan-500/60 ml-2">Nombre comercial</label>
                           <Input 
                             placeholder="Ej: FlowSights AI" 
-                            className="h-16 px-6 bg-white/[0.03] border-white/[0.08] focus:ring-2 focus:ring-cyan-500/30 rounded-2xl text-base font-bold transition-all" 
+                            className="h-16 px-6 bg-white/[0.03] border-white/10 focus:ring-2 focus:ring-cyan-500/30 rounded-2xl text-base font-bold transition-all backdrop-blur-md" 
                             value={config.businessName} 
                             onChange={(e) => setConfig({ ...config, businessName: e.target.value })} 
                           />
@@ -796,7 +795,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                             <Globe className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-500/40" />
                             <Input 
                               placeholder="https://tuweb.com" 
-                              className="h-16 pl-14 bg-white/[0.03] border-white/[0.08] focus:ring-2 focus:ring-emerald-500/30 rounded-2xl text-base font-bold transition-all" 
+                              className="h-16 pl-14 bg-white/[0.03] border-white/10 focus:ring-2 focus:ring-emerald-500/30 rounded-2xl text-base font-bold transition-all backdrop-blur-md" 
                               value={config.websiteUrl} 
                               onChange={(e) => setConfig({ ...config, websiteUrl: e.target.value })} 
                               onBlur={() => fetchSiteMetadata(config.websiteUrl)} 
