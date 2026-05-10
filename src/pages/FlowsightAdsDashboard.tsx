@@ -658,21 +658,21 @@ const FlowsightAdsDashboard: React.FC = () => {
                       animate={{ opacity: 1, scale: 1, y: 0 }} 
                       exit={{ opacity: 0, scale: 0.98, y: -10 }} 
                       transition={{ duration: 0.4, ease: "easeOut" }} 
-                      className="grid lg:grid-cols-[0.85fr_1.15fr] gap-8 bg-card/60 dark:bg-card/40 backdrop-blur-3xl rounded-[48px] p-8 md:p-12 border border-border/50 shadow-2xl relative overflow-hidden transition-all duration-500">
-                        <div className="relative rounded-[40px] bg-emerald-500/[0.02] dark:bg-emerald-500/[0.04] border border-emerald-500/10 p-10 flex flex-col justify-between min-h-[480px]">
+                      className="grid lg:grid-cols-2 gap-10 bg-card/40 dark:bg-[#0a0a0a]/60 backdrop-blur-[40px] rounded-[48px] p-8 md:p-10 border border-white/[0.08] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.4)] relative overflow-hidden transition-all duration-500">
+                        <div className="relative rounded-[32px] bg-emerald-500/[0.02] dark:bg-emerald-500/[0.04] border border-emerald-500/10 p-8 md:p-10 flex flex-col justify-between min-h-[380px]">
                           <div>
-                            <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-10 shadow-inner shadow-emerald-500/10">
-                              <MessageSquareText className="w-8 h-8 text-emerald-500 dark:text-emerald-400" />
+                            <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-8 shadow-inner shadow-emerald-500/10">
+                              <MessageSquareText className="w-7 h-7 text-emerald-500 dark:text-emerald-400" />
                             </div>
-                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-600 dark:text-emerald-500/80 mb-6">Cuéntame tu negocio</p>
-                            <h3 className="text-5xl font-black tracking-tighter leading-[1.05] mb-6 text-foreground">
+                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-600 dark:text-emerald-500/80 mb-5">Cuéntame tu negocio</p>
+                            <h3 className="text-4xl md:text-5xl font-black tracking-tighter leading-[1.05] mb-5 text-foreground">
                               {config.promote ? (
                                 <>Atraeremos <br />clientes para <span className="text-emerald-500">{detectedBusinessLabel}</span></>
                               ) : (
                                 <>Define tu <br />oferta maestra</>
                               )}
                             </h3>
-                            <p className="text-muted-foreground font-medium leading-relaxed text-xl">
+                            <p className="text-muted-foreground font-medium leading-relaxed text-lg max-w-[90%]">
                               Describe qué ofreces. La IA procesará tu idea en tiempo real y construirá una estrategia letal.
                             </p>
                           </div>
@@ -680,7 +680,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                           <motion.div 
                             initial={{ opacity: 0 }}
                             animate={{ opacity: config.promote ? 1 : 0.4 }}
-                            className="mt-12 p-6 rounded-[28px] border border-border dark:border-white/[0.08] bg-muted/30 dark:bg-black/20"
+                            className="mt-8 p-5 rounded-[24px] border border-border dark:border-white/[0.08] bg-muted/30 dark:bg-black/20"
                           >
                             <p className="text-sm text-foreground dark:text-gray-200 font-bold leading-snug">
                               {config.promote 
@@ -690,14 +690,14 @@ const FlowsightAdsDashboard: React.FC = () => {
                           </motion.div>
                         </div>
 
-                      <div className="flex flex-col justify-between space-y-10 py-2">
-                        <div className="space-y-6">
+                      <div className="flex flex-col justify-between space-y-8 py-2">
+                        <div className="space-y-4">
                           <p className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-600 dark:text-emerald-500/80 ml-2">¿Qué quieres promocionar?</p>
                           <div className="relative group">
                             <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 rounded-[32px] blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity" />
                             <Textarea
                               placeholder="Ej: Clínica dental de alta gama con servicios de ortodoncia invisible..."
-                              className="relative min-h-[180px] bg-muted/40 dark:bg-black/40 border-2 border-border dark:border-white/[0.05] rounded-[32px] text-2xl font-bold p-10 focus-visible:ring-emerald-500/40 transition-all placeholder:text-muted-foreground/30 text-foreground"
+                              className="relative min-h-[140px] bg-muted/40 dark:bg-black/40 border-2 border-border dark:border-white/[0.05] rounded-[32px] text-xl font-bold p-8 focus-visible:ring-emerald-500/40 transition-all placeholder:text-muted-foreground/30 text-foreground"
                               value={config.promote}
                               onChange={(e) => {
                                 setConfig({ ...config, promote: e.target.value });
@@ -707,14 +707,14 @@ const FlowsightAdsDashboard: React.FC = () => {
                           </div>
                         </div>
 
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-3 gap-3">
                           {[
                             { icon: Target, label: 'Enfoque', val: 'Clientes reales', color: 'emerald' },
                             { icon: Users, label: 'Audiencia', val: 'Detectada', color: 'blue' },
                             { icon: TrendingUp, label: 'Meta', val: 'Conversión', color: 'purple' }
                           ].map((item, idx) => (
-                            <div key={idx} className="p-6 rounded-[32px] bg-muted/20 dark:bg-white/[0.02] border border-border dark:border-white/[0.05] flex flex-col items-center text-center group hover:border-emerald-500/30 transition-all duration-300">
-                              <item.icon className="w-6 h-6 text-muted-foreground mb-4 group-hover:text-emerald-500 transition-colors" />
+                            <div key={idx} className="p-5 rounded-[28px] bg-muted/20 dark:bg-white/[0.02] border border-border dark:border-white/[0.05] flex flex-col items-center text-center group hover:border-emerald-500/30 transition-all duration-300">
+                              <item.icon className={`w-6 h-6 text-${item.color}-500 mb-3 group-hover:scale-110 transition-transform`} />
                               <p className="text-[8px] text-muted-foreground font-black uppercase tracking-[0.2em] mb-1">{item.label}</p>
                               <p className="text-xs font-black text-foreground">{item.val}</p>
                             </div>
@@ -724,10 +724,10 @@ const FlowsightAdsDashboard: React.FC = () => {
                         <Button 
                           onClick={() => setStep(2)} 
                           disabled={!config.promote.trim()} 
-                          className="h-24 px-12 rounded-[32px] bg-[#10b981] hover:bg-[#059669] text-black font-black text-2xl gap-4 shadow-[0_20px_50px_rgba(16,185,129,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-20 relative group overflow-hidden"
+                          className="h-20 px-12 rounded-[28px] bg-[#10b981] hover:bg-[#059669] text-black font-black text-xl gap-4 shadow-[0_20px_40px_rgba(16,185,129,0.3)] transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-20 relative group overflow-hidden"
                         >
                           <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                          Continuar al contexto <ArrowRight className="w-8 h-8" />
+                          Continuar al contexto <ArrowRight className="w-7 h-7" />
                         </Button>
                       </div>
                     </motion.div>
