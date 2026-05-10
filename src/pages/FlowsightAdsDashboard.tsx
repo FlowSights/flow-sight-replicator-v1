@@ -24,7 +24,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { useTheme } from 'next-themes';
 import { LocationInput } from '@/components/LocationInput';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { EditablePlatformPreview } from '@/components/EditablePlatformPreview';
 import { VisualGuideLightbox } from '@/components/VisualGuideLightbox';
 import { PremiumLoadingScreen } from '@/components/PremiumLoadingScreen';

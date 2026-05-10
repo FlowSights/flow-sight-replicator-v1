@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, ChevronLeft, ChevronRight, Download, Share2, BookOpen, Maximize2, Sparkles, CheckCircle2, Loader2, Zap, Rocket, Check, ChevronDown, Lock, ArrowRight, ShieldCheck } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { PaymentModal } from '@/components/PaymentModal';
 import { VisualGuideLightbox } from '@/components/VisualGuideLightbox';
