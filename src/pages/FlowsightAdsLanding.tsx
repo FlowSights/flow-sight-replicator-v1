@@ -189,7 +189,7 @@ const FlowsightAdsLanding: React.FC = () => {
             playsInline
             className="absolute inset-0 w-full h-full object-cover opacity-100"
           />
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+          <div className="absolute inset-0 bg-black/40" />
 
           {/* Main Aurora Blobs */}
           <motion.div 
