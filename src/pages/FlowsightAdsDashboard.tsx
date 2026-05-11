@@ -946,69 +946,77 @@ const FlowsightAdsDashboard: React.FC = () => {
                       animate={{ opacity: 1, scale: 1, y: 0 }} 
                       exit={{ opacity: 0, scale: 0.98, y: -10 }} 
                       transition={{ duration: 0.4, ease: "easeOut" }} 
-                      className="space-y-8 glass-card rounded-[48px] p-8 md:p-12 shadow-2xl relative overflow-hidden"
+                      className="grid lg:grid-cols-2 gap-10 glass-card rounded-[40px] p-8 md:p-10 relative overflow-hidden transition-all duration-500"
                     >
-                      <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-emerald-500/[0.05] blur-[180px] rounded-full pointer-events-none" />
+                      <div className="absolute -top-32 left-0 w-[600px] h-[600px] bg-emerald-500/[0.05] blur-[180px] rounded-full pointer-events-none" />
 
-                      <div className="text-center max-w-2xl mx-auto relative z-10">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-300 text-[10px] font-black uppercase tracking-[0.2em] mb-6">
-                          <CreditCard className="w-4 h-4" /> 04. Inversión Inteligente
+                      <div className="relative z-10 flex flex-col justify-between">
+                        <div>
+                          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-300 text-[10px] font-black uppercase tracking-[0.2em] mb-6">
+                            <CreditCard className="w-4 h-4" /> 04. Inversión Inteligente
+                          </div>
+                          <h3 className="text-5xl md:text-6xl font-black tracking-tighter leading-[1.05] text-foreground">Presupuesto <br/><span className="text-emerald-500 italic">a tu medida</span></h3>
+                          <p className="text-foreground/80 font-medium mt-6 text-xl leading-relaxed">Tú decides el ritmo. Empieza con poco o escala para dominar tu mercado.</p>
                         </div>
-                        <h3 className="text-4xl md:text-6xl font-black tracking-tighter leading-[1.1]">Presupuesto <span className="text-emerald-500 italic">a tu medida</span></h3>
-                        <p className="text-gray-400 font-medium mt-5 text-xl">Tú decides el ritmo. Empieza con poco o escala para dominar tu mercado.</p>
-                      </div>
-
-                      <div className="rounded-[40px] border border-white/[0.06] bg-gradient-to-br from-white/[0.03] to-transparent p-8 md:p-12 shadow-2xl relative z-10">
-                        <div className="text-center mb-12">
-                          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500/60 mb-6">Inversión diaria sugerida</p>
+                        
+                        <div className="mt-12 rounded-[32px] border border-emerald-500/10 dark:border-white/[0.06] bg-emerald-500/[0.02] dark:bg-gradient-to-br dark:from-white/[0.03] dark:to-transparent p-8 shadow-2xl relative">
+                          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-600 dark:text-emerald-500/60 mb-4">Inversión diaria sugerida</p>
                           <motion.p 
                             key={config.budget} 
                             initial={{ scale: 0.95, opacity: 0.8 }} 
                             animate={{ scale: 1, opacity: 1 }} 
-                            className="text-[110px] md:text-[160px] font-black tracking-tighter leading-none text-white drop-shadow-[0_0_80px_rgba(16,185,129,0.3)]"
+                            className="text-[80px] md:text-[100px] font-black tracking-tighter leading-none text-foreground drop-shadow-[0_0_40px_rgba(16,185,129,0.15)]"
                           >
                             {formatBudget(config.budget)}
                           </motion.p>
-                          <p className="text-gray-400 font-bold mt-8 max-w-md mx-auto text-lg leading-relaxed">{budgetRecommendation}</p>
-                        </div>
-
-                        <div className="relative pt-4 pb-12">
-                          <input
-                            type="range"
-                            min={MIN_BUDGET}
-                            max={MAX_BUDGET}
-                            step={5}
-                            value={config.budget}
-                            onChange={(e) => setConfig({ ...config, budget: Number(e.target.value) })}
-                            className="w-full h-3 rounded-full appearance-none cursor-pointer bg-white/5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-10 [&::-webkit-slider-thumb]:w-10 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-emerald-500 [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-black [&::-webkit-slider-thumb]:shadow-[0_0_30px_rgba(16,185,129,0.8)] [&::-moz-range-thumb]:h-10 [&::-moz-range-thumb]:w-10 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-emerald-500 [&::-moz-range-thumb]:border-4 [&::-moz-range-thumb]:border-black"
-                            style={{ background: `linear-gradient(90deg, #10b981 0%, #34d399 ${budgetSliderProgress}%, rgba(255,255,255,0.05) ${budgetSliderProgress}%, rgba(255,255,255,0.05) 100%)` }}
-                          />
-                          <div className="flex justify-between text-[10px] font-black uppercase tracking-[0.2em] text-gray-600 mt-6 px-2">
-                            <span>$5</span>
-                            <span>$500</span>
-                            <span>$1,000</span>
-                            <span>$2,000</span>
-                          </div>
-                        </div>
-
-                        <div className="grid md:grid-cols-3 gap-6">
-                          {[
-                            { label: 'Alcance estimado', val: budgetProjection.reach, color: 'blue', desc: 'Personas únicas' },
-                            { label: 'Interacciones', val: budgetProjection.clicks, color: 'purple', desc: 'Clicks potenciales' },
-                            { label: 'Leads esperados', val: budgetProjection.leads, color: 'emerald', desc: 'Contactos directos' }
-                          ].map((item, idx) => (
-                            <div key={idx} className={`p-6 rounded-[32px] bg-${item.color}-500/[0.03] border border-${item.color}-500/10 backdrop-blur-sm`}>
-                              <p className={`text-[10px] text-${item.color}-400/80 font-black uppercase tracking-[0.2em] mb-3`}>{item.label}</p>
-                              <p className="text-2xl font-black text-white">{item.val.split(' ')[0]}</p>
-                              <p className="text-[10px] text-gray-500 font-bold mt-1 uppercase tracking-widest">{item.desc}</p>
-                            </div>
-                          ))}
+                          <p className="text-foreground/60 font-bold mt-6 text-sm leading-relaxed">{budgetRecommendation}</p>
                         </div>
                       </div>
 
-                      <div className="flex gap-4 pt-6">
-                        <Button variant="ghost" onClick={() => setStep(3)} className="flex-1 h-16 rounded-2xl font-bold text-gray-400 hover:text-white">Atrás</Button>
-                        <Button onClick={() => setStep(5)} className="flex-[2] h-16 text-xl font-black bg-emerald-500 hover:bg-emerald-400 text-black rounded-2xl shadow-xl shadow-emerald-500/20 active:scale-[0.98] transition-all">Personalizar contenido <ArrowRight className="ml-2 w-6 h-6" /></Button>
+                      <div className="relative z-10 flex flex-col justify-between space-y-8 py-2">
+                        <div className="rounded-[32px] bg-white/10 dark:bg-black/20 border border-black/5 dark:border-white/10 p-8 backdrop-blur-md">
+                          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400 mb-8">Ajusta tu inversión</p>
+                          <div className="relative pb-4">
+                            <input
+                              type="range"
+                              min={MIN_BUDGET}
+                              max={MAX_BUDGET}
+                              step={5}
+                              value={config.budget}
+                              onChange={(e) => setConfig({ ...config, budget: Number(e.target.value) })}
+                              className="w-full h-3 rounded-full appearance-none cursor-pointer bg-white/30 dark:bg-white/10 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-8 [&::-webkit-slider-thumb]:w-8 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-emerald-500 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-[0_0_20px_rgba(16,185,129,0.5)]"
+                              style={{ background: `linear-gradient(90deg, #10b981 0%, #34d399 ${budgetSliderProgress}%, transparent ${budgetSliderProgress}%, transparent 100%)` }}
+                            />
+                            <div className="flex justify-between text-[10px] font-black uppercase tracking-[0.2em] text-foreground/40 mt-6">
+                              <span>$5</span>
+                              <span>$2,000</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-4">
+                          {[
+                            { label: 'Alcance', val: budgetProjection.reach.split(' ')[0], color: 'blue', desc: 'Personas' },
+                            { label: 'Clicks', val: budgetProjection.clicks.split(' ')[0], color: 'purple', desc: 'Estimados' },
+                            { label: 'Leads', val: budgetProjection.leads.split(' ')[0], color: 'emerald', desc: 'Contactos' }
+                          ].map((item, idx) => (
+                            <div key={idx} className={`p-5 rounded-[24px] bg-white/40 dark:bg-${item.color}-500/[0.05] border border-black/5 dark:border-${item.color}-500/10 backdrop-blur-sm group hover:scale-[1.02] transition-transform`}>
+                              <p className={`text-[9px] text-${item.color}-600 dark:text-${item.color}-400 font-black uppercase tracking-[0.2em] mb-2 opacity-80 group-hover:opacity-100`}>{item.label}</p>
+                              <p className="text-2xl lg:text-3xl font-black text-foreground">{item.val}</p>
+                              <p className="text-[8px] text-foreground/50 font-bold mt-1 uppercase tracking-widest">{item.desc}</p>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="flex gap-4 pt-4">
+                          <Button variant="ghost" onClick={() => setStep(3)} className="flex-1 h-16 rounded-2xl font-bold text-foreground/50 hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5 transition-all">Atrás</Button>
+                          <Button 
+                            onClick={() => setStep(5)} 
+                            className="flex-[2] h-16 text-sm md:text-lg font-black bg-emerald-500 hover:bg-emerald-400 text-black rounded-2xl shadow-[0_15px_30px_rgba(16,185,129,0.3)] hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(16,185,129,0.4)] group transition-all uppercase tracking-widest"
+                          >
+                            Personalizar contenido <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                          </Button>
+                        </div>
                       </div>
                     </motion.div>
                   )}
