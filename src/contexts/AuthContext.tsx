@@ -39,19 +39,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  // --- Inactivity Auto-Logout (5 min) ---
+  // --- Inactivity Auto-Logout (3 min) & Strict Session ---
   useEffect(() => {
     if (!session) return;
 
-    const INACTIVITY_TIMEOUT = 5 * 60 * 1000; // 5 minutes
+    const INACTIVITY_TIMEOUT = 3 * 60 * 1000; // 3 minutes
     let timeoutId: NodeJS.Timeout;
 
     const resetTimer = () => {
       if (timeoutId) clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-        console.log("Cerrando sesión por inactividad (5 min)");
+        console.log("Cerrando sesión por inactividad (3 min)");
         toast.warning("Sesión expirada", { 
-          description: "Has sido desconectado por inactividad (5 min)." 
+          description: "Has sido desconectado por inactividad (3 min)." 
         });
         signOut();
       }, INACTIVITY_TIMEOUT);
@@ -61,12 +61,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const events = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
     events.forEach(event => window.addEventListener(event, resetTimer));
 
+    // Force logout on page refresh or close
+    const handleBeforeUnload = () => {
+      // Limpiar sessionStorage asegura que la sesión de Supabase se pierda al refrescar
+      sessionStorage.clear();
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
     // Initial start
     resetTimer();
 
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
       events.forEach(event => window.removeEventListener(event, resetTimer));
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [session]);
 
