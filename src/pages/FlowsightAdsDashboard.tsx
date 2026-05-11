@@ -974,9 +974,10 @@ const FlowsightAdsDashboard: React.FC = () => {
                       </div>
 
                       <div className="relative z-10 flex flex-col justify-between space-y-8 py-2">
-                        <div className="rounded-[32px] bg-white/10 dark:bg-black/20 border border-black/5 dark:border-white/10 p-8 backdrop-blur-md">
-                          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400 mb-8">Ajusta tu inversión</p>
-                          <div className="relative pb-4">
+                        <div className="rounded-[32px] bg-white/5 dark:bg-white/[0.03] border border-black/10 dark:border-white/10 p-8 backdrop-blur-xl shadow-lg relative overflow-hidden">
+                          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/[0.02] to-transparent pointer-events-none" />
+                          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400 mb-8 relative z-10">Ajusta tu inversión</p>
+                          <div className="relative pb-4 z-10">
                             <input
                               type="range"
                               min={MIN_BUDGET}
@@ -984,7 +985,7 @@ const FlowsightAdsDashboard: React.FC = () => {
                               step={5}
                               value={config.budget}
                               onChange={(e) => setConfig({ ...config, budget: Number(e.target.value) })}
-                              className="w-full h-3 rounded-full appearance-none cursor-pointer bg-white/30 dark:bg-white/10 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-8 [&::-webkit-slider-thumb]:w-8 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-emerald-500 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-[0_0_20px_rgba(16,185,129,0.5)]"
+                              className="w-full h-3 rounded-full appearance-none cursor-pointer bg-black/5 dark:bg-white/10 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-8 [&::-webkit-slider-thumb]:w-8 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-emerald-500 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-[0_0_20px_rgba(16,185,129,0.5)]"
                               style={{ background: `linear-gradient(90deg, #10b981 0%, #34d399 ${budgetSliderProgress}%, transparent ${budgetSliderProgress}%, transparent 100%)` }}
                             />
                             <div className="flex justify-between text-[10px] font-black uppercase tracking-[0.2em] text-foreground/40 mt-6">
@@ -1000,8 +1001,8 @@ const FlowsightAdsDashboard: React.FC = () => {
                             { label: 'Clicks', val: budgetProjection.clicks.split(' ')[0], color: 'purple', desc: 'Estimados' },
                             { label: 'Leads', val: budgetProjection.leads.split(' ')[0], color: 'emerald', desc: 'Contactos' }
                           ].map((item, idx) => (
-                            <div key={idx} className={`p-5 rounded-[24px] bg-white/40 dark:bg-${item.color}-500/[0.05] border border-black/5 dark:border-${item.color}-500/10 backdrop-blur-sm group hover:scale-[1.02] transition-transform`}>
-                              <p className={`text-[9px] text-${item.color}-600 dark:text-${item.color}-400 font-black uppercase tracking-[0.2em] mb-2 opacity-80 group-hover:opacity-100`}>{item.label}</p>
+                            <div key={idx} className={`p-5 rounded-[24px] bg-white/10 dark:bg-${item.color}-500/[0.05] border border-black/10 dark:border-${item.color}-500/10 backdrop-blur-md shadow-sm group hover:scale-[1.05] hover:shadow-lg transition-all`}>
+                              <p className={`text-[9px] text-${item.color}-600 dark:text-${item.color}-400 font-black uppercase tracking-[0.2em] mb-2 opacity-80 group-hover:opacity-100 transition-opacity`}>{item.label}</p>
                               <p className="text-2xl lg:text-3xl font-black text-foreground">{item.val}</p>
                               <p className="text-[8px] text-foreground/50 font-bold mt-1 uppercase tracking-widest">{item.desc}</p>
                             </div>
@@ -1155,10 +1156,10 @@ const FlowsightAdsDashboard: React.FC = () => {
                         <Button variant="ghost" onClick={() => setStep(4)} className="w-48 h-16 rounded-2xl font-bold text-foreground/50 hover:text-foreground hover:bg-white/5 transition-all">Atrás</Button>
                         <Button 
                           onClick={handleGenerate}
-                          disabled={isGenerating || activePlatforms.length === 0}
+                          disabled={isLoading || activePlatforms.length === 0}
                           className="flex-1 h-16 text-sm md:text-lg font-black bg-emerald-500 hover:bg-emerald-400 text-black rounded-2xl shadow-[0_15px_30px_rgba(16,185,129,0.3)] hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(16,185,129,0.4)] group transition-all uppercase tracking-widest disabled:opacity-50 disabled:pointer-events-none"
                         >
-                          {isGenerating ? (
+                          {isLoading ? (
                             <span className="flex items-center">
                               <RefreshCw className="w-5 h-5 mr-3 animate-spin" /> Procesando Estrategia...
                             </span>
