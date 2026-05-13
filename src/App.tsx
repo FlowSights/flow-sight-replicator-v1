@@ -23,6 +23,12 @@ import AuthCallback from "./pages/AuthCallback";
 import { useEffect } from "react";
 import { supabase } from "./lib/supabaseClient";
 
+import { HubLayout } from "./pages/hub/HubLayout";
+import { HubOverview } from "./pages/hub/HubOverview";
+import { HubPipeline } from "./pages/hub/HubPipeline";
+import { HubCustomers } from "./pages/hub/HubCustomers";
+import { HubPlaceholder } from "./pages/hub/HubPlaceholder";
+
 const queryClient = new QueryClient();
 const ADS_AUTH_INTENT_KEY = "flowsight_ads_auth_intent";
 
@@ -71,6 +77,19 @@ const App = () => {
                 <Route path="/flowsight-ads" element={<FlowsightAdsLanding />} />
                 <Route path="/flowsight-ads/dashboard" element={<FlowsightAdsDashboard />} />
                 <Route path="/auth/callback" element={<AuthCallback />} />
+                
+                {/* FLOWSIGHTS HUB ROUTES */}
+                <Route path="/hub" element={<HubLayout><HubOverview /></HubLayout>} />
+                <Route path="/hub/customers" element={<HubLayout><HubCustomers /></HubLayout>} />
+                <Route path="/hub/pipeline" element={<HubLayout><HubPipeline /></HubLayout>} />
+                <Route path="/hub/services" element={<HubLayout><HubPlaceholder title="Services & Experiences" /></HubLayout>} />
+                <Route path="/hub/calendar" element={<HubLayout><HubPlaceholder title="Operations Calendar" /></HubLayout>} />
+                <Route path="/hub/itineraries" element={<HubLayout><HubPlaceholder title="Itinerary Builder" /></HubLayout>} />
+                <Route path="/hub/communications" element={<HubLayout><HubPlaceholder title="Communication Center" /></HubLayout>} />
+                <Route path="/hub/analytics" element={<HubLayout><HubPlaceholder title="Analytics & Reports" /></HubLayout>} />
+                <Route path="/hub/ai" element={<HubLayout><HubPlaceholder title="FlowSights AI Assistant" /></HubLayout>} />
+                <Route path="/hub/settings" element={<HubLayout><HubPlaceholder title="Hub Settings" /></HubLayout>} />
+
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
