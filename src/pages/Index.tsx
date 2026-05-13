@@ -99,6 +99,7 @@ const Index = () => {
   const scrolled = useScrolled(80);
 
   const navLinks = [
+    { label: "Flowsights Hub", href: "/hub" },
     { label: "Flowsight Ads", href: "/flowsight-ads" },
     { label: "Cómo funciona", href: "#proceso" },
     { label: "Showcase", href: "#showcase" },
